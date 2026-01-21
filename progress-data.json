@@ -1,0 +1,614 @@
+{
+  "metadata": {
+    "version": "2.0",
+    "lastUpdated": "2026-01-21T18:47:35.777Z",
+    "description": "Progress tracker for System Design & DSA learning materials - Individual concept tracking"
+  },
+  "summary": {
+    "systemDesign": {
+      "totalTopics": 7,
+      "totalConcepts": 61,
+      "completedConcepts": 12,
+      "percentage": 20
+    },
+    "dsa": {
+      "totalProblems": 17,
+      "completedProblems": 4,
+      "percentage": 24
+    }
+  },
+  "systemDesign": {
+    "topics": {
+      "system-design-intro": {
+        "id": "system-design-intro",
+        "name": "System Design Introduction",
+        "topicNumber": 0,
+        "concepts": {
+          "concept-0": {
+            "id": "concept-0",
+            "name": "System Design Tricky Lagta Hai? Let's Break It Down!",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:13.105Z"
+          },
+          "concept-1": {
+            "id": "concept-1",
+            "name": "System Design Hota Kya Hai?",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:13.924Z"
+          },
+          "concept-2": {
+            "id": "concept-2",
+            "name": "System Ka Matlab Kya? — Different Types",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:14.663Z"
+          },
+          "concept-3": {
+            "id": "concept-3",
+            "name": "Design Output: 3 Important Layers",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:15.347Z"
+          },
+          "concept-4": {
+            "id": "concept-4",
+            "name": "Approach #1: Spiral Approach",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:16.010Z"
+          },
+          "concept-5": {
+            "id": "concept-5",
+            "name": "Approach #2: Incremental MVP",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:16.708Z"
+          },
+          "concept-6": {
+            "id": "concept-6",
+            "name": "3 Golden Rules",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:17.504Z"
+          },
+          "concept-7": {
+            "id": "concept-7",
+            "name": "Universal Principle: Divide & Conquer",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:18.140Z"
+          }
+        }
+      },
+      "rest-api-guide": {
+        "id": "rest-api-guide",
+        "name": "REST API Complete Guide",
+        "topicNumber": 1,
+        "concepts": {
+          "concept-8": {
+            "id": "concept-8",
+            "name": "REST Ka Full Form Aur Uska Real Matlab",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:43.746Z"
+          },
+          "concept-9": {
+            "id": "concept-9",
+            "name": "REST Ka Core Idea: Everything is a Resource",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:50.804Z"
+          },
+          "concept-10": {
+            "id": "concept-10",
+            "name": "REST Tumhe Storage Ke Baare Mein Kuch Nahi Bolta",
+            "completed": true,
+            "completedAt": "2026-01-21T18:38:51.352Z"
+          },
+          "concept-11": {
+            "id": "concept-11",
+            "name": "Representation Ka Real Meaning",
+            "completed": true,
+            "completedAt": "2026-01-21T18:40:41.981Z"
+          },
+          "concept-12": {
+            "id": "concept-12",
+            "name": "REST vs HTTP",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-13": {
+            "id": "concept-13",
+            "name": "REST Ka Golden Rule",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-14": {
+            "id": "concept-14",
+            "name": "HTTP Tooling Aur Ecosystem",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-15": {
+            "id": "concept-15",
+            "name": "REST Ke Downsides",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "shared-database": {
+        "id": "shared-database",
+        "name": "Shared Database Pattern",
+        "topicNumber": 2,
+        "concepts": {
+          "concept-16": {
+            "id": "concept-16",
+            "name": "Microservices Ka Basic Assumption",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-17": {
+            "id": "concept-17",
+            "name": "Shared Database Pattern Kya Hai?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-18": {
+            "id": "concept-18",
+            "name": "Real Example: Blogging Platform",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-19": {
+            "id": "concept-19",
+            "name": "Log Isko Choose Kyun Karte Hain?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-20": {
+            "id": "concept-20",
+            "name": "Phir Log Bolte Kyun Hain Ki Yeh Wrong Hai?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-21": {
+            "id": "concept-21",
+            "name": "Challenge 1: Internal Details Expose",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-22": {
+            "id": "concept-22",
+            "name": "Challenge 2: Schema Change Nightmare",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-23": {
+            "id": "concept-23",
+            "name": "Challenge 3: Data Corruption Blast Radius",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-24": {
+            "id": "concept-24",
+            "name": "Challenge 4: Database Abuse & Performance",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-25": {
+            "id": "concept-25",
+            "name": "Kab Use Karna Sahi Ho Sakta Hai?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-26": {
+            "id": "concept-26",
+            "name": "Minimum Guardrails",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "database-per-service": {
+        "id": "database-per-service",
+        "name": "Database per Service",
+        "topicNumber": 3,
+        "concepts": {
+          "concept-27": {
+            "id": "concept-27",
+            "name": "Architect's Perspective: Screens vs Workloads",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-28": {
+            "id": "concept-28",
+            "name": "Chat Service → Cassandra",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-29": {
+            "id": "concept-29",
+            "name": "Auth Service → PostgreSQL",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-30": {
+            "id": "concept-30",
+            "name": "Profile Service → MongoDB",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-31": {
+            "id": "concept-31",
+            "name": "Analytics Service → Data Warehouse",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-32": {
+            "id": "concept-32",
+            "name": "Media Service → Blob Storage",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "db-per-service-tradeoffs": {
+        "id": "db-per-service-tradeoffs",
+        "name": "DB per Service: Deep Dive",
+        "topicNumber": 4,
+        "concepts": {
+          "concept-33": {
+            "id": "concept-33",
+            "name": "Developer → Architect Mindset Shift",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-34": {
+            "id": "concept-34",
+            "name": "Core Idea: Ownership",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-35": {
+            "id": "concept-35",
+            "name": "Loose Coupling = Organizational Independence",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-36": {
+            "id": "concept-36",
+            "name": "Benefit: Granular Scaling Control",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-37": {
+            "id": "concept-37",
+            "name": "Benefit: Blast Radius Reduction",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-38": {
+            "id": "concept-38",
+            "name": "Benefit: Compliance & Governance",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-39": {
+            "id": "concept-39",
+            "name": "Challenge 1: Cross-Service Transactions",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-40": {
+            "id": "concept-40",
+            "name": "Challenge 2: Data Propagation & Eventual Consistency",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-41": {
+            "id": "concept-41",
+            "name": "Challenge 3: Operational Complexity",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "db-control-independence": {
+        "id": "db-control-independence",
+        "name": "Control & Independence",
+        "topicNumber": 5,
+        "concepts": {
+          "concept-42": {
+            "id": "concept-42",
+            "name": "The Biggest Architectural Benefit: CONTROL",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-43": {
+            "id": "concept-43",
+            "name": "API Servers vs Database: Scaling Difference",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-44": {
+            "id": "concept-44",
+            "name": "Different Workloads = Different Scaling",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-45": {
+            "id": "concept-45",
+            "name": "Shared DB Pain: Coupling at Infrastructure",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-46": {
+            "id": "concept-46",
+            "name": "Cost Control & Clean Attribution",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-47": {
+            "id": "concept-47",
+            "name": "Performance Predictability",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "btree-storage": {
+        "id": "btree-storage",
+        "name": "B+Tree & Storage Internals",
+        "topicNumber": 6,
+        "concepts": {
+          "concept-48": {
+            "id": "concept-48",
+            "name": "Basic Terms",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-49": {
+            "id": "concept-49",
+            "name": "Naive Storage",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-50": {
+            "id": "concept-50",
+            "name": "Update & Delete",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-51": {
+            "id": "concept-51",
+            "name": "Find (Point Lookup)",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-52": {
+            "id": "concept-52",
+            "name": "Disk's Real Unit: Page/Block",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-53": {
+            "id": "concept-53",
+            "name": "B+Tree Core Idea",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-54": {
+            "id": "concept-54",
+            "name": "B+Tree Full Tree View",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-55": {
+            "id": "concept-55",
+            "name": "Disk Serialization: Pointers = Page IDs",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-56": {
+            "id": "concept-56",
+            "name": "Operation: Find",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-57": {
+            "id": "concept-57",
+            "name": "Operation: Insert",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-58": {
+            "id": "concept-58",
+            "name": "Operations: Update & Delete",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-59": {
+            "id": "concept-59",
+            "name": "Range Query",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-60": {
+            "id": "concept-60",
+            "name": "Storage Engine Mental Model",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      }
+    }
+  },
+  "dsa": {
+    "categories": {
+      "arrays-hashing": {
+        "name": "Arrays & Hashing",
+        "icon": "📦",
+        "problems": {
+          "contains-duplicate": {
+            "id": "contains-duplicate",
+            "name": "Contains Duplicate",
+            "difficulty": "Easy",
+            "leetcode": 217,
+            "completed": true,
+            "completedAt": "2026-01-21T18:46:56.236Z"
+          },
+          "valid-anagram": {
+            "id": "valid-anagram",
+            "name": "Valid Anagram",
+            "difficulty": "Easy",
+            "leetcode": 242,
+            "completed": true,
+            "completedAt": "2026-01-21T18:47:25.940Z"
+          },
+          "two-sum": {
+            "id": "two-sum",
+            "name": "Two Sum",
+            "difficulty": "Easy",
+            "leetcode": 1,
+            "completed": true,
+            "completedAt": "2026-01-21T18:47:32.509Z"
+          },
+          "group-anagrams": {
+            "id": "group-anagrams",
+            "name": "Group Anagrams",
+            "difficulty": "Medium",
+            "leetcode": 49,
+            "completed": true,
+            "completedAt": "2026-01-21T18:47:35.777Z"
+          },
+          "top-k-frequent": {
+            "id": "top-k-frequent",
+            "name": "Top K Frequent Elements",
+            "difficulty": "Medium",
+            "leetcode": 347,
+            "completed": false,
+            "completedAt": null
+          },
+          "encode-decode-strings": {
+            "id": "encode-decode-strings",
+            "name": "Encode and Decode Strings",
+            "difficulty": "Medium",
+            "leetcode": 271,
+            "completed": false,
+            "completedAt": null
+          },
+          "product-except-self": {
+            "id": "product-except-self",
+            "name": "Product of Array Except Self",
+            "difficulty": "Medium",
+            "leetcode": 238,
+            "completed": false,
+            "completedAt": null
+          },
+          "longest-consecutive": {
+            "id": "longest-consecutive",
+            "name": "Longest Consecutive Sequence",
+            "difficulty": "Medium",
+            "leetcode": 128,
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "two-pointers": {
+        "name": "Two Pointers",
+        "icon": "👆",
+        "problems": {
+          "valid-palindrome": {
+            "id": "valid-palindrome",
+            "name": "Valid Palindrome",
+            "difficulty": "Easy",
+            "leetcode": 125,
+            "completed": false,
+            "completedAt": null
+          },
+          "three-sum": {
+            "id": "three-sum",
+            "name": "3Sum",
+            "difficulty": "Medium",
+            "leetcode": 15,
+            "completed": false,
+            "completedAt": null
+          },
+          "container-water": {
+            "id": "container-water",
+            "name": "Container With Most Water",
+            "difficulty": "Medium",
+            "leetcode": 11,
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "sliding-window": {
+        "name": "Sliding Window",
+        "icon": "🪟",
+        "problems": {
+          "buy-sell-stock": {
+            "id": "buy-sell-stock",
+            "name": "Best Time to Buy and Sell Stock",
+            "difficulty": "Easy",
+            "leetcode": 121,
+            "completed": false,
+            "completedAt": null
+          },
+          "longest-substring": {
+            "id": "longest-substring",
+            "name": "Longest Substring Without Repeating",
+            "difficulty": "Medium",
+            "leetcode": 3,
+            "completed": false,
+            "completedAt": null
+          },
+          "character-replacement": {
+            "id": "character-replacement",
+            "name": "Longest Repeating Character Replacement",
+            "difficulty": "Medium",
+            "leetcode": 424,
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "stack": {
+        "name": "Stack",
+        "icon": "📚",
+        "problems": {
+          "valid-parentheses": {
+            "id": "valid-parentheses",
+            "name": "Valid Parentheses",
+            "difficulty": "Easy",
+            "leetcode": 20,
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "binary-search": {
+        "name": "Binary Search",
+        "icon": "🔍",
+        "problems": {
+          "find-min-rotated": {
+            "id": "find-min-rotated",
+            "name": "Find Minimum in Rotated Sorted Array",
+            "difficulty": "Medium",
+            "leetcode": 153,
+            "completed": false,
+            "completedAt": null
+          },
+          "search-rotated": {
+            "id": "search-rotated",
+            "name": "Search in Rotated Sorted Array",
+            "difficulty": "Medium",
+            "leetcode": 33,
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "sidebarCollapsed": false,
+    "theme": "dark",
+    "lastVisitedPage": ""
+  }
+}

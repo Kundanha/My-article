@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contains Duplicate - DSA Notes | Hinglish Explained</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --bg-code: #0d1117;
+            --accent-green: #00ff88;
+            --accent-blue: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-orange: #ff9f43;
+            --accent-red: #ff6b6b;
+            --accent-yellow: #ffd93d;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+            animation: float 30s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, -20px) rotate(5deg); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .header-badge::before {
+            content: '📚';
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #00d4ff 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Card */
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-3);
+        }
+
+        .difficulty-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+
+        .problem-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .problem-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        .problem-desc strong {
+            color: var(--accent-blue);
+        }
+
+        /* Section Cards */
+        .section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-number {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .section-number.approach-1 { background: var(--gradient-2); }
+        .section-number.approach-2 { background: var(--gradient-1); }
+        .section-number.approach-3 { background: var(--gradient-3); }
+        .section-number.approach-4 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .section-content {
+            padding: 2rem;
+        }
+
+        /* Subsection */
+        .subsection {
+            margin-bottom: 2rem;
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .subsection-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .subsection-title::before {
+            content: '💡';
+        }
+
+        .subsection-title.algorithm::before {
+            content: '⚡';
+        }
+
+        .subsection-title.complexity::before {
+            content: '📊';
+        }
+
+        /* Content Text */
+        .content-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        .highlight-blue {
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        .highlight-orange {
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+
+        .highlight-purple {
+            color: var(--accent-purple);
+            font-weight: 500;
+        }
+
+        /* Algorithm Steps */
+        .steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps li {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .code-lang::before {
+            content: '🐍';
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #ff79c6; }
+        .function { color: #50fa7b; }
+        .class-name { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .number { color: #bd93f9; }
+        .comment { color: #6272a4; }
+        .operator { color: #ff79c6; }
+        .builtin { color: #8be9fd; }
+        .param { color: #ffb86c; }
+
+        /* Complexity Box */
+        .complexity-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .complexity-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .complexity-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .complexity-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .complexity-value.good { color: var(--accent-green); }
+        .complexity-value.medium { color: var(--accent-yellow); }
+        .complexity-value.bad { color: var(--accent-red); }
+
+        /* Pitfalls Section */
+        .pitfall-card {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pitfall-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-red);
+            margin-bottom: 1rem;
+        }
+
+        .pitfall-title::before {
+            content: '⚠️';
+        }
+
+        /* Comparison Code */
+        .code-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .code-comparison {
+                grid-template-columns: 1fr;
+            }
+            .complexity-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-wrong {
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+
+        .code-wrong .code-header {
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .code-correct {
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .code-correct .code-header {
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .code-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+        }
+
+        .code-label.wrong {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent-red);
+        }
+
+        .code-label.correct {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-table th {
+            color: var(--accent-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-table td {
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .best-tag {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Hinglish Note */
+        .hinglish-note {
+            background: rgba(168, 85, 247, 0.1);
+            border-left: 4px solid var(--accent-purple);
+            padding: 1rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-badge">DSA Notes - Hinglish Edition</div>
+            <h1>Contains Duplicate</h1>
+            <p class="header-subtitle">Array mein duplicate elements dhundne ke 4 tarike — simple se optimized tak! 🚀</p>
+        </header>
+
+        <!-- Problem Card -->
+        <div class="problem-card">
+            <span class="difficulty-tag">🟢 Easy Level</span>
+            <h2 class="problem-title">Problem Kya Hai?</h2>
+            <p class="problem-desc">
+                Ek integer array <strong>nums</strong> diya gaya hai. Tumhe batana hai ki array mein koi <strong>duplicate value</strong> hai ya nahi. 
+                Agar koi bhi value <span class="highlight">ek se zyada baar</span> aati hai, toh <strong>true</strong> return karo, 
+                warna <strong>false</strong>.
+            </p>
+            <div class="hinglish-note">
+                🎯 <strong>Example:</strong> [1, 2, 3, 1] → true (kyunki 1 do baar aa raha hai)<br>
+                🎯 <strong>Example:</strong> [1, 2, 3, 4] → false (sab unique hain)
+            </div>
+        </div>
+
+        <!-- Approach 1: Brute Force -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number approach-1">1</div>
+                <h2 class="section-title">Brute Force Approach</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title">Intuition (Sochne Ka Tarika)</h3>
+                    <p class="content-text">
+                        Sabse <span class="highlight">simple</span> aur <span class="highlight-orange">seedha</span> tarika — 
+                        har ek element ko baaki saare elements ke saath compare kar lo! 🔍
+                    </p>
+                    <p class="content-text">
+                        Matlab agar array mein 5 elements hain, toh pehle element ko baaki 4 se compare karo, 
+                        phir doosre ko baaki 3 se, aur aisa hi chalte jao. Agar kabhi bhi <span class="highlight-blue">do same values</span> mil gayi, 
+                        toh duplicate mil gaya!
+                    </p>
+                    <div class="hinglish-note">
+                        💭 Socho jaise class mein sabke birthdays check kar rahe ho — har student ko har doosre student se poochna padega!
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title algorithm">Algorithm (Steps)</h3>
+                    <ol class="steps">
+                        <li>Do nested loops lagao — outer loop <code>i</code> ke liye, inner loop <code>j</code> ke liye</li>
+                        <li>Inner loop <span class="highlight">i + 1</span> se start karo (khud se compare mat karo!)</li>
+                        <li>Agar <code>nums[i] == nums[j]</code> toh turant <span class="highlight-blue">true</span> return karo</li>
+                        <li>Saari pairs check hone ke baad koi match nahi mila? <span class="highlight-orange">false</span> return karo</li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Python</span>
+                    </div>
+                    <div class="code-content">
+<pre><span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">hasDuplicate</span>(<span class="param">self</span>, <span class="param">nums</span>: <span class="builtin">List</span>[<span class="builtin">int</span>]) -> <span class="builtin">bool</span>:
+        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="builtin">len</span>(nums)):
+            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i + <span class="number">1</span>, <span class="builtin">len</span>(nums)):
+                <span class="keyword">if</span> nums[i] == nums[j]:
+                    <span class="keyword">return</span> <span class="builtin">True</span>
+        <span class="keyword">return</span> <span class="builtin">False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title complexity">Time & Space Complexity</h3>
+                    <div class="complexity-box">
+                        <div class="complexity-item">
+                            <div class="complexity-label">⏱️ Time Complexity</div>
+                            <div class="complexity-value bad">O(n²)</div>
+                        </div>
+                        <div class="complexity-item">
+                            <div class="complexity-label">💾 Space Complexity</div>
+                            <div class="complexity-value good">O(1)</div>
+                        </div>
+                    </div>
+                    <div class="hinglish-note">
+                        😅 Slow hai bhai! n elements ke liye n×n comparisons — 1000 elements = 10 lakh operations!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Approach 2: Sorting -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number approach-2">2</div>
+                <h2 class="section-title">Sorting Approach</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title">Intuition (Sochne Ka Tarika)</h3>
+                    <p class="content-text">
+                        Agar array ko <span class="highlight">sort</span> kar dein, toh jo bhi duplicate elements honge, 
+                        wo <span class="highlight-blue">ek doosre ke paas</span> aa jayenge! 📊
+                    </p>
+                    <p class="content-text">
+                        Phir bas ek simple loop lagao aur har element ko uske <span class="highlight-orange">pichle wale</span> se compare karo. 
+                        Agar dono same hain = duplicate found! ✅
+                    </p>
+                    <div class="hinglish-note">
+                        💭 Jaise students ko height ke hisaab se line mein khada karo — same height wale automatically paas paas aa jayenge!
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title algorithm">Algorithm (Steps)</h3>
+                    <ol class="steps">
+                        <li>Array ko <span class="highlight">sort</span> karo (chhote se bade)</li>
+                        <li>Index 1 se loop start karo (0 se nahi, kyunki pehle element ka previous nahi hota)</li>
+                        <li>Har element ko uske <span class="highlight-blue">previous element</span> se compare karo</li>
+                        <li>Agar dono equal hain → <span class="highlight">true</span> return karo</li>
+                        <li>Loop khatam ho gaya bina match ke? → <span class="highlight-orange">false</span></li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Python</span>
+                    </div>
+                    <div class="code-content">
+<pre><span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">hasDuplicate</span>(<span class="param">self</span>, <span class="param">nums</span>: <span class="builtin">List</span>[<span class="builtin">int</span>]) -> <span class="builtin">bool</span>:
+        nums.sort()  <span class="comment"># Array ko sort kar do</span>
+        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, <span class="builtin">len</span>(nums)):
+            <span class="keyword">if</span> nums[i] == nums[i - <span class="number">1</span>]:
+                <span class="keyword">return</span> <span class="builtin">True</span>
+        <span class="keyword">return</span> <span class="builtin">False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title complexity">Time & Space Complexity</h3>
+                    <div class="complexity-box">
+                        <div class="complexity-item">
+                            <div class="complexity-label">⏱️ Time Complexity</div>
+                            <div class="complexity-value medium">O(n log n)</div>
+                        </div>
+                        <div class="complexity-item">
+                            <div class="complexity-label">💾 Space Complexity</div>
+                            <div class="complexity-value good">O(1)</div>
+                        </div>
+                    </div>
+                    <div class="hinglish-note">
+                        🤔 Better than brute force! Sorting mein n log n lagta hai, jo n² se kaafi better hai. 
+                        Space O(1) ya O(n) — sorting algorithm pe depend karta hai.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Approach 3: Hash Set -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number approach-3">3</div>
+                <h2 class="section-title">Hash Set Approach</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title">Intuition (Sochne Ka Tarika)</h3>
+                    <p class="content-text">
+                        <span class="highlight">Hash Set</span> ek aisi data structure hai jo sirf <span class="highlight-blue">unique values</span> store karti hai, 
+                        aur kisi bhi value ko <span class="highlight-orange">O(1)</span> time mein dhundh sakti hai! 🔥
+                    </p>
+                    <p class="content-text">
+                        Idea simple hai: Ek empty set lo. Array mein ghoomte jao — agar current number <span class="highlight">pehle se set mein hai</span>, 
+                        toh duplicate mil gaya! Warna use set mein daal do. 
+                    </p>
+                    <div class="hinglish-note">
+                        💭 Socho jaise ek register maintain kar rahe ho — har naya naam aane pe pehle check karo kahin pehle se toh nahi likha, 
+                        agar hai toh duplicate, warna likh do!
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title algorithm">Algorithm (Steps)</h3>
+                    <ol class="steps">
+                        <li>Ek <span class="highlight">empty set</span> banao (seen = set())</li>
+                        <li>Array ke har number pe loop lagao</li>
+                        <li>Check karo: kya ye number <span class="highlight-blue">pehle se set mein hai</span>?</li>
+                        <li>Agar hai → <span class="highlight">true</span> return (duplicate mila!)</li>
+                        <li>Nahi hai → set mein <span class="highlight-orange">add</span> kar do</li>
+                        <li>Loop khatam, koi duplicate nahi → <span class="highlight-purple">false</span></li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Python</span>
+                    </div>
+                    <div class="code-content">
+<pre><span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">hasDuplicate</span>(<span class="param">self</span>, <span class="param">nums</span>: <span class="builtin">List</span>[<span class="builtin">int</span>]) -> <span class="builtin">bool</span>:
+        seen = <span class="builtin">set</span>()  <span class="comment"># Empty set banao</span>
+        <span class="keyword">for</span> num <span class="keyword">in</span> nums:
+            <span class="keyword">if</span> num <span class="keyword">in</span> seen:  <span class="comment"># Pehle dekha hai?</span>
+                <span class="keyword">return</span> <span class="builtin">True</span>
+            seen.add(num)  <span class="comment"># Set mein daal do</span>
+        <span class="keyword">return</span> <span class="builtin">False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title complexity">Time & Space Complexity</h3>
+                    <div class="complexity-box">
+                        <div class="complexity-item">
+                            <div class="complexity-label">⏱️ Time Complexity</div>
+                            <div class="complexity-value good">O(n)</div>
+                        </div>
+                        <div class="complexity-item">
+                            <div class="complexity-label">💾 Space Complexity</div>
+                            <div class="complexity-value medium">O(n)</div>
+                        </div>
+                    </div>
+                    <div class="hinglish-note">
+                        🚀 <strong>Best time complexity!</strong> Har element ko sirf ek baar dekhte hain. 
+                        Lekin extra space lagti hai set ke liye — classic time-space tradeoff!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Approach 4: Hash Set Length -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number approach-4">4</div>
+                <h2 class="section-title">Hash Set Length (One-Liner) 🎯</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title">Intuition (Sochne Ka Tarika)</h3>
+                    <p class="content-text">
+                        Ye previous approach ka <span class="highlight">shortcut version</span> hai! 
+                        Set <span class="highlight-blue">automatically duplicates remove</span> kar deta hai.
+                    </p>
+                    <p class="content-text">
+                        Toh agar original array ki length <span class="highlight-orange">set ki length se zyada</span> hai, 
+                        iska matlab kuch elements remove ho gaye — yani <span class="highlight">duplicates the</span>! 🧠
+                    </p>
+                    <div class="hinglish-note">
+                        💭 Jaise 10 students ki class mein agar unique roll numbers 8 hi nikle, toh 2 duplicates zaroor hain!
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title algorithm">Algorithm (Steps)</h3>
+                    <ol class="steps">
+                        <li>Array ko <span class="highlight">set mein convert</span> karo (duplicates auto-remove)</li>
+                        <li>Set ki length ko <span class="highlight-blue">array ki length</span> se compare karo</li>
+                        <li>Agar set chhota hai → <span class="highlight">true</span> (duplicates the!)</li>
+                        <li>Dono barabar → <span class="highlight-orange">false</span> (sab unique the)</li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">Python</span>
+                    </div>
+                    <div class="code-content">
+<pre><span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">hasDuplicate</span>(<span class="param">self</span>, <span class="param">nums</span>: <span class="builtin">List</span>[<span class="builtin">int</span>]) -> <span class="builtin">bool</span>:
+        <span class="keyword">return</span> <span class="builtin">len</span>(<span class="builtin">set</span>(nums)) < <span class="builtin">len</span>(nums)</pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title complexity">Time & Space Complexity</h3>
+                    <div class="complexity-box">
+                        <div class="complexity-item">
+                            <div class="complexity-label">⏱️ Time Complexity</div>
+                            <div class="complexity-value good">O(n)</div>
+                        </div>
+                        <div class="complexity-item">
+                            <div class="complexity-label">💾 Space Complexity</div>
+                            <div class="complexity-value medium">O(n)</div>
+                        </div>
+                    </div>
+                    <div class="hinglish-note">
+                        ✨ <strong>Cleanest code!</strong> Ek line mein kaam ho gaya. Interview mein impress karne ke liye perfect!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Pitfalls -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);">⚠️</div>
+                <h2 class="section-title">Common Galtiyan (Pitfalls)</h2>
+            </div>
+            <div class="section-content">
+                <div class="pitfall-card">
+                    <h4 class="pitfall-title">Galat Comparison in Brute Force</h4>
+                    <p class="content-text">
+                        Nested loops mein sabse common mistake — inner loop ko <code>i</code> se start karna 
+                        instead of <code>i + 1</code>. Isse element <span class="highlight-orange">khud se compare</span> ho jata hai!
+                    </p>
+                    <div class="code-comparison">
+                        <div class="code-block code-wrong">
+                            <div class="code-header">
+                                <span class="code-lang">Python</span>
+                                <span class="code-label wrong">❌ Wrong</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="comment"># Element khud se compare ho raha hai!</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="builtin">len</span>(nums)):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(<span class="builtin">len</span>(nums)):
+        <span class="keyword">if</span> nums[i] == nums[j]:
+            <span class="keyword">return</span> <span class="builtin">True</span></pre>
+                            </div>
+                        </div>
+                        <div class="code-block code-correct">
+                            <div class="code-header">
+                                <span class="code-lang">Python</span>
+                                <span class="code-label correct">✅ Correct</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="comment"># i+1 se start = no self-compare</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="builtin">len</span>(nums)):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i + <span class="number">1</span>, <span class="builtin">len</span>(nums)):
+        <span class="keyword">if</span> nums[i] == nums[j]:
+            <span class="keyword">return</span> <span class="builtin">True</span></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pitfall-card">
+                    <h4 class="pitfall-title">Original Array Modify Karna</h4>
+                    <p class="content-text">
+                        Sorting approach mein <code>nums.sort()</code> use karne se <span class="highlight-orange">original array badal jata hai</span>! 
+                        Agar original order chahiye, toh <span class="highlight">copy bana ke sort</span> karo.
+                    </p>
+                    <div class="code-comparison">
+                        <div class="code-block code-wrong">
+                            <div class="code-header">
+                                <span class="code-lang">Python</span>
+                                <span class="code-label wrong">⚠️ Risky</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="comment"># Original array badal jayega!</span>
+nums.sort()</pre>
+                            </div>
+                        </div>
+                        <div class="code-block code-correct">
+                            <div class="code-header">
+                                <span class="code-lang">Python</span>
+                                <span class="code-label correct">✅ Safe</span>
+                            </div>
+                            <div class="code-content">
+<pre><span class="comment"># Copy pe sort = original safe</span>
+sorted_nums = <span class="builtin">sorted</span>(nums)</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <div class="summary-card">
+            <h3 class="summary-title">📋 Quick Comparison Table</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Time</th>
+                        <th>Space</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Brute Force</td>
+                        <td style="color: var(--accent-red);">O(n²)</td>
+                        <td style="color: var(--accent-green);">O(1)</td>
+                        <td>Slow but simple</td>
+                    </tr>
+                    <tr>
+                        <td>Sorting</td>
+                        <td style="color: var(--accent-yellow);">O(n log n)</td>
+                        <td style="color: var(--accent-green);">O(1)*</td>
+                        <td>Better, but modifies array</td>
+                    </tr>
+                    <tr>
+                        <td>Hash Set</td>
+                        <td style="color: var(--accent-green);">O(n)</td>
+                        <td style="color: var(--accent-yellow);">O(n)</td>
+                        <td>Fast! Extra space needed</td>
+                    </tr>
+                    <tr>
+                        <td>Set Length <span class="best-tag">BEST</span></td>
+                        <td style="color: var(--accent-green);">O(n)</td>
+                        <td style="color: var(--accent-yellow);">O(n)</td>
+                        <td>Clean one-liner! ✨</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with 💜 for DSA learners | Hinglish mein samjho, English mein code karo! 🚀</p>
+            <p style="margin-top: 0.5rem;">Content inspired by <a href="https://neetcode.io" target="_blank">NeetCode.io</a></p>
+        </footer>
+    </div>
+</body>
+</html>
