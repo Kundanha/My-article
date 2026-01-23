@@ -2559,7 +2559,7 @@
         <div class="progress-section">
             <div class="progress-header">
                 <span class="progress-label">📊 Progress</span>
-                <span class="progress-count" id="progressCount">0/18 completed</span>
+                <span class="progress-count" id="progressCount">0/19 completed</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill" style="width: 0%"></div>
@@ -2745,13 +2745,19 @@
                     <span class="category-icon">🔗</span>
                     Linked List
                 </span>
-                <span class="category-count">1</span>
+                <span class="category-count">2</span>
                 <span class="category-toggle">▼</span>
             </div>
             <div class="category-items">
                 <a href="#reverse-linked-list" class="nav-item" data-difficulty="easy">
                     <span class="nav-number green">18</span>
                     <span class="nav-text">Reverse Linked List</span>
+                    <span class="nav-difficulty easy"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+                <a href="#merge-two-sorted-lists" class="nav-item" data-difficulty="easy">
+                    <span class="nav-number green">19</span>
+                    <span class="nav-text">Merge Two Sorted Lists</span>
                     <span class="nav-difficulty easy"></span>
                     <span class="nav-check">✓</span>
                 </a>
@@ -11688,6 +11694,709 @@ print(linked_list_to_array(result4))  # Output: [1] ✅</code></pre>
             </div>
         </section>
 
+        <!-- ==================== PROBLEM #19: MERGE TWO SORTED LISTS ==================== -->
+        <section class="problem-section" id="merge-two-sorted-lists">
+            <div class="problem-header">
+                <div class="problem-badge">Problem #19</div>
+                <h2 class="problem-title">Merge Two Sorted Lists</h2>
+                <div class="problem-meta">
+                    <span class="difficulty easy">Easy</span>
+                    <span class="tag">Linked List</span>
+                    <span class="tag">Recursion</span>
+                    <span class="tag">Two Pointers</span>
+                </div>
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="content-card">
+                <h3 class="card-title">📝 Problem Statement</h3>
+                <p>You are given the heads of two sorted linked lists <code>list1</code> and <code>list2</code>.</p>
+                <p>Merge the two lists into one <strong>sorted</strong> list. The list should be made by splicing together the nodes of the first two lists.</p>
+                <p>Return <em>the head of the merged linked list</em>.</p>
+                
+                <div class="example-box">
+                    <h4>Example 1:</h4>
+                    <pre><code>Input: list1 = [1,2,4], list2 = [1,3,4]
+Output: [1,1,2,3,4,4]</code></pre>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2:</h4>
+                    <pre><code>Input: list1 = [], list2 = []
+Output: []</code></pre>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 3:</h4>
+                    <pre><code>Input: list1 = [], list2 = [0]
+Output: [0]</code></pre>
+                </div>
+                
+                <div class="constraints-box">
+                    <h4>Constraints:</h4>
+                    <ul>
+                        <li>The number of nodes in both lists is in the range <code>[0, 50]</code></li>
+                        <li><code>-100 <= Node.val <= 100</code></li>
+                        <li>Both <code>list1</code> and <code>list2</code> are sorted in <strong>non-decreasing</strong> order</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Prerequisites Section -->
+            <div class="prerequisites-section">
+                <h3 class="prereq-title">📚 Prerequisites — Pehle Ye Samjho!</h3>
+                
+                <div class="prereq-card">
+                    <h4>🔗 Two Sorted Lists Merge Concept</h4>
+                    <p>Imagine karo tumhare paas do <strong>already sorted</strong> lines hain (like 2 queues sorted by height):</p>
+                    
+<pre class="visual-diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                 DO SORTED LINKED LISTS                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   list1:  [1] → [2] → [4] → NULL                               │
+│            ↑                                                    │
+│          sorted!                                                │
+│                                                                 │
+│   list2:  [1] → [3] → [4] → NULL                               │
+│            ↑                                                    │
+│          sorted!                                                │
+│                                                                 │
+│   ═══════════════════════════════════════════                   │
+│                                                                 │
+│   MERGE KARNA HAI (Sorted order mein):                          │
+│                                                                 │
+│   result: [1] → [1] → [2] → [3] → [4] → [4] → NULL             │
+│            ↑                                                    │
+│          Still sorted!                                          │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+</pre>
+                    
+                    <div class="hinglish-note">
+                        🎯 <strong>Real-life Example:</strong> Do sorted playlists ko ek sorted playlist mein merge karna! 
+                        Dono mein se chota wala pehle add karo, phir aage badho! 🎵
+                    </div>
+                </div>
+                
+                <div class="prereq-card">
+                    <h4>⚡ Comparison Logic — Chhota Pehle!</h4>
+                    <p>Har step pe compare karo — jo <strong>CHHOTA</strong> hai wo pehle aayega!</p>
+                    
+<pre class="visual-diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                 MERGE COMPARISON LOGIC                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Step 1: Compare list1.val vs list2.val                        │
+│           1 vs 1 → Pick list1's 1 (tie: either works)          │
+│                                                                 │
+│   Step 2: Compare 2 vs 1                                        │
+│           list2's 1 is smaller → Pick it!                       │
+│                                                                 │
+│   Step 3: Compare 2 vs 3                                        │
+│           list1's 2 is smaller → Pick it!                       │
+│                                                                 │
+│   ... and so on until both lists exhausted!                     │
+│                                                                 │
+│   ┌─────────────────────────────────────────────┐               │
+│   │ KEY INSIGHT: Dono lists sorted hain,        │               │
+│   │ toh HAMESHA chhota wala head lena safe hai! │               │
+│   └─────────────────────────────────────────────┘               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+</pre>
+                </div>
+            </div>
+
+            <!-- Visual Representation -->
+            <div class="content-card">
+                <h3 class="card-title">🎨 Visual Representation — Dekh Ke Samjho!</h3>
+                
+<pre class="visual-diagram">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    MERGE TWO SORTED LISTS - COMPLETE FLOW                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   INPUT LISTS:                                                                  │
+│   ───────────                                                                   │
+│   list1: [1] → [2] → [4] → NULL                                                │
+│   list2: [1] → [3] → [4] → NULL                                                │
+│                                                                                 │
+│   STEP-BY-STEP MERGE PROCESS:                                                   │
+│   ════════════════════════════                                                  │
+│                                                                                 │
+│   Step 1: Compare 1 vs 1 → Pick list1's 1                                       │
+│   result: [1] →                                                                 │
+│                                                                                 │
+│   Step 2: Compare 2 vs 1 → Pick list2's 1                                       │
+│   result: [1] → [1] →                                                          │
+│                                                                                 │
+│   Step 3: Compare 2 vs 3 → Pick list1's 2                                       │
+│   result: [1] → [1] → [2] →                                                    │
+│                                                                                 │
+│   Step 4: Compare 4 vs 3 → Pick list2's 3                                       │
+│   result: [1] → [1] → [2] → [3] →                                              │
+│                                                                                 │
+│   Step 5: Compare 4 vs 4 → Pick list1's 4                                       │
+│   result: [1] → [1] → [2] → [3] → [4] →                                        │
+│                                                                                 │
+│   Step 6: list1 empty → Attach remaining list2                                  │
+│   result: [1] → [1] → [2] → [3] → [4] → [4] → NULL                             │
+│                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────┐           │
+│   │ FINAL OUTPUT: [1] → [1] → [2] → [3] → [4] → [4] → NULL  ✅      │           │
+│   └─────────────────────────────────────────────────────────────────┘           │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+
+            <!-- Approach 1: Recursion -->
+            <div class="approach-section">
+                <div class="approach-header">
+                    <span class="approach-number">Approach 1</span>
+                    <h3 class="approach-title">🔄 Recursion — "Chhota Chun, Baaki Recursion Pe Chhod!"</h3>
+                </div>
+                
+                <div class="intuition-box">
+                    <h4>🧠 Hinglish Intuition — Aise Socho!</h4>
+                    <p>Soch ye hai: <strong>"Jo chhota hai, wo pehle aayega. Baaki ka kaam recursion karegi!"</strong></p>
+                    <ul>
+                        <li>📍 <strong>Step 1:</strong> Dono lists ke heads compare karo</li>
+                        <li>📍 <strong>Step 2:</strong> Jo chhota hai, usse pick karo as current head</li>
+                        <li>📍 <strong>Step 3:</strong> Uska <code>.next</code> = recursively merge remaining lists</li>
+                        <li>📍 <strong>Step 4:</strong> Current head return karo — done! 🎉</li>
+                    </ul>
+                    
+                    <div class="hinglish-note" style="margin-top: 15px;">
+                        🍕 <strong>Pizza Analogy:</strong> Do sorted pizza slices ki lines hain. Chhota slice pehle plate mein daalo, 
+                        baaki line ka kaam baad mein (recursively) hoga! 🍕
+                    </div>
+                </div>
+
+                <!-- Recursion Flow Diagram -->
+                <div class="diagram-card">
+                    <h4>📊 Recursion Call Flow — Step by Step</h4>
+<pre class="visual-diagram">
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│                      RECURSION FLOW DIAGRAM                                       │
+├───────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                   │
+│   merge([1,2,4], [1,3,4])                                                        │
+│   │                                                                               │
+│   │  1 <= 1? YES → Pick list1's 1                                                │
+│   │  list1.next = merge([2,4], [1,3,4])                                          │
+│   │              │                                                                │
+│   │              │  2 <= 1? NO → Pick list2's 1                                  │
+│   │              │  list2.next = merge([2,4], [3,4])                             │
+│   │              │              │                                                 │
+│   │              │              │  2 <= 3? YES → Pick list1's 2                  │
+│   │              │              │  list1.next = merge([4], [3,4])                │
+│   │              │              │              │                                  │
+│   │              │              │              │  4 <= 3? NO → Pick list2's 3    │
+│   │              │              │              │  list2.next = merge([4], [4])   │
+│   │              │              │              │              │                   │
+│   │              │              │              │              │  4 <= 4? YES     │
+│   │              │              │              │              │  list1.next =    │
+│   │              │              │              │              │  merge([], [4])  │
+│   │              │              │              │              │         │        │
+│   │              │              │              │              │         ↓        │
+│   │              │              │              │              │  return [4]      │
+│   │              │              │              │              │         │        │
+│   │              │              │              │              ↓         │        │
+│   │              │              │              │         return [4]→[4] │        │
+│   │              │              │              ↓                        │        │
+│   │              │              │         return [3]→[4]→[4]           │        │
+│   │              │              ↓                                       │        │
+│   │              │         return [2]→[3]→[4]→[4]                      │        │
+│   │              ↓                                                      │        │
+│   │         return [1]→[2]→[3]→[4]→[4]                                 │        │
+│   ↓                                                                     │        │
+│   return [1]→[1]→[2]→[3]→[4]→[4] ✅ FINAL ANSWER!                      │        │
+│                                                                                   │
+└───────────────────────────────────────────────────────────────────────────────────┘
+</pre>
+                </div>
+
+                <!-- Algorithm Steps -->
+                <div class="algorithm-steps">
+                    <h4>📋 Algorithm Steps:</h4>
+                    <ol>
+                        <li><strong>Base Case 1:</strong> Agar <code>list1</code> empty hai → return <code>list2</code></li>
+                        <li><strong>Base Case 2:</strong> Agar <code>list2</code> empty hai → return <code>list1</code></li>
+                        <li><strong>Compare:</strong> <code>list1.val</code> vs <code>list2.val</code></li>
+                        <li><strong>If list1.val <= list2.val:</strong>
+                            <ul>
+                                <li><code>list1.next</code> = recursively merge remaining</li>
+                                <li>Return <code>list1</code></li>
+                            </ul>
+                        </li>
+                        <li><strong>Else:</strong>
+                            <ul>
+                                <li><code>list2.next</code> = recursively merge remaining</li>
+                                <li>Return <code>list2</code></li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Code -->
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Python - Recursion</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre class="line-numbers"><code class="language-python"># Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        # Base Case 1: list1 khatam → bacha hua list2 return karo
+        if list1 is None:
+            return list2
+        
+        # Base Case 2: list2 khatam → bacha hua list1 return karo    
+        if list2 is None:
+            return list1
+        
+        # Compare & Pick smaller one
+        if list1.val <= list2.val:
+            # list1 chhota hai → pick list1, baaki merge karo
+            list1.next = self.mergeTwoLists(list1.next, list2)
+            return list1  # list1 is head of merged list
+        else:
+            # list2 chhota hai → pick list2, baaki merge karo
+            list2.next = self.mergeTwoLists(list1, list2.next)
+            return list2  # list2 is head of merged list</code></pre>
+                </div>
+
+                <!-- Complexity -->
+                <div class="complexity-box">
+                    <h4>⏱️ Time & Space Complexity</h4>
+                    <div class="complexity-grid">
+                        <div class="complexity-item">
+                            <span class="complexity-type">Time:</span>
+                            <span class="complexity-value good">O(n + m)</span>
+                            <p>Har node exactly ek baar visit hota hai</p>
+                        </div>
+                        <div class="complexity-item">
+                            <span class="complexity-type">Space:</span>
+                            <span class="complexity-value medium">O(n + m)</span>
+                            <p>Recursion stack depth = total nodes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dry Run -->
+                <div class="dry-run-section">
+                    <h4>🔍 Dry Run — Trace Karo Step by Step</h4>
+                    <p><strong>Input:</strong> list1 = [1,2,4], list2 = [1,3,4]</p>
+                    <div class="dry-run-table-container">
+                        <table class="dry-run-table">
+                            <thead>
+                                <tr>
+                                    <th>Call #</th>
+                                    <th>list1</th>
+                                    <th>list2</th>
+                                    <th>Compare</th>
+                                    <th>Action</th>
+                                    <th>Return</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>[1,2,4]</td>
+                                    <td>[1,3,4]</td>
+                                    <td>1 <= 1 ✓</td>
+                                    <td>Pick list1's 1</td>
+                                    <td>Wait for recursion</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>[2,4]</td>
+                                    <td>[1,3,4]</td>
+                                    <td>2 <= 1 ✗</td>
+                                    <td>Pick list2's 1</td>
+                                    <td>Wait for recursion</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>[2,4]</td>
+                                    <td>[3,4]</td>
+                                    <td>2 <= 3 ✓</td>
+                                    <td>Pick list1's 2</td>
+                                    <td>Wait for recursion</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>[4]</td>
+                                    <td>[3,4]</td>
+                                    <td>4 <= 3 ✗</td>
+                                    <td>Pick list2's 3</td>
+                                    <td>Wait for recursion</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>[4]</td>
+                                    <td>[4]</td>
+                                    <td>4 <= 4 ✓</td>
+                                    <td>Pick list1's 4</td>
+                                    <td>Wait for recursion</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>[]</td>
+                                    <td>[4]</td>
+                                    <td>Base case!</td>
+                                    <td>list1 empty</td>
+                                    <td>return [4]</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td>UNWIND</td>
+                                    <td colspan="5">Recursion unwinds: [1]→[1]→[2]→[3]→[4]→[4] ✅</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approach 2: Iteration -->
+            <div class="approach-section optimal">
+                <div class="approach-header">
+                    <span class="approach-number">Approach 2</span>
+                    <span class="optimal-badge">✨ OPTIMAL</span>
+                    <h3 class="approach-title">⚡ Iteration with Dummy Node — "Step by Step Chhota Chuno!"</h3>
+                </div>
+                
+                <div class="intuition-box">
+                    <h4>🧠 Hinglish Intuition — Aise Socho!</h4>
+                    <p>Idea ye hai: <strong>"Ek dummy node se start karo, phir har step mein chhota wala attach karo!"</strong></p>
+                    <ul>
+                        <li>📍 <strong>Dummy Node:</strong> Ek fake starting point (head handle karna easy ho jaata hai)</li>
+                        <li>📍 <strong>node Pointer:</strong> Current position track karta hai (merged list ka end)</li>
+                        <li>📍 <strong>Loop:</strong> Jab tak dono lists mein nodes hain, compare & attach</li>
+                        <li>📍 <strong>Cleanup:</strong> Jo list bacha, usse end mein attach karo</li>
+                    </ul>
+                    
+                    <div class="hinglish-note" style="margin-top: 15px;">
+                        🎯 <strong>Key Advantage:</strong> No recursion stack! O(1) extra space! Interview mein ye approach 
+                        pehle batao because it's space efficient! 💪
+                    </div>
+                </div>
+
+                <!-- Iteration Flow Diagram -->
+                <div class="diagram-card">
+                    <h4>📊 Iteration Flow — Step by Step Visualization</h4>
+<pre class="visual-diagram">
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│                    ITERATION WITH DUMMY NODE                                      │
+├───────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                   │
+│   INITIAL STATE:                                                                  │
+│   ──────────────                                                                  │
+│   list1: [1] → [2] → [4] → NULL                                                  │
+│           ↑                                                                       │
+│   list2: [1] → [3] → [4] → NULL                                                  │
+│           ↑                                                                       │
+│   dummy: [X] →  (X = placeholder value, we return dummy.next)                    │
+│           ↑                                                                       │
+│          node                                                                     │
+│                                                                                   │
+│   ═══════════════════════════════════════════════════════════════════════════    │
+│                                                                                   │
+│   STEP 1: Compare 1 vs 1 → list1.val <= list2.val → Pick list1's 1              │
+│   ────────────────────────────────────────────────────────────────────           │
+│   dummy: [X] → [1] →                                                             │
+│                 ↑                                                                 │
+│                node                                                               │
+│   list1: [2] → [4] → NULL    (moved forward)                                     │
+│           ↑                                                                       │
+│   list2: [1] → [3] → [4] → NULL    (unchanged)                                   │
+│           ↑                                                                       │
+│                                                                                   │
+│   STEP 2: Compare 2 vs 1 → list2.val < list1.val → Pick list2's 1               │
+│   ────────────────────────────────────────────────────────────────────           │
+│   dummy: [X] → [1] → [1] →                                                       │
+│                       ↑                                                           │
+│                      node                                                         │
+│   list1: [2] → [4] → NULL    (unchanged)                                         │
+│           ↑                                                                       │
+│   list2: [3] → [4] → NULL    (moved forward)                                     │
+│           ↑                                                                       │
+│                                                                                   │
+│   STEP 3: Compare 2 vs 3 → list1.val < list2.val → Pick list1's 2               │
+│   ────────────────────────────────────────────────────────────────────           │
+│   dummy: [X] → [1] → [1] → [2] →                                                 │
+│                             ↑                                                     │
+│                            node                                                   │
+│   list1: [4] → NULL    (moved forward)                                           │
+│           ↑                                                                       │
+│   list2: [3] → [4] → NULL    (unchanged)                                         │
+│           ↑                                                                       │
+│                                                                                   │
+│   STEP 4: Compare 4 vs 3 → list2.val < list1.val → Pick list2's 3               │
+│   ────────────────────────────────────────────────────────────────────           │
+│   dummy: [X] → [1] → [1] → [2] → [3] →                                           │
+│                                   ↑                                               │
+│                                  node                                             │
+│   list1: [4] → NULL    (unchanged)                                               │
+│           ↑                                                                       │
+│   list2: [4] → NULL    (moved forward)                                           │
+│           ↑                                                                       │
+│                                                                                   │
+│   STEP 5: Compare 4 vs 4 → list1.val <= list2.val → Pick list1's 4              │
+│   ────────────────────────────────────────────────────────────────────           │
+│   dummy: [X] → [1] → [1] → [2] → [3] → [4] →                                     │
+│                                         ↑                                         │
+│                                        node                                       │
+│   list1: NULL    (EMPTY!)                                                        │
+│   list2: [4] → NULL    (still has nodes)                                         │
+│           ↑                                                                       │
+│                                                                                   │
+│   STEP 6: list1 is empty → Attach remaining list2                                │
+│   ────────────────────────────────────────────────────────────────────           │
+│   dummy: [X] → [1] → [1] → [2] → [3] → [4] → [4] → NULL                          │
+│                                               ↑                                   │
+│                                         attached!                                 │
+│                                                                                   │
+│   ┌─────────────────────────────────────────────────────────────────────┐         │
+│   │ RETURN: dummy.next = [1] → [1] → [2] → [3] → [4] → [4] → NULL ✅   │         │
+│   └─────────────────────────────────────────────────────────────────────┘         │
+│                                                                                   │
+└───────────────────────────────────────────────────────────────────────────────────┘
+</pre>
+                </div>
+
+                <!-- Algorithm Steps -->
+                <div class="algorithm-steps">
+                    <h4>📋 Algorithm Steps:</h4>
+                    <ol>
+                        <li><strong>Create Dummy:</strong> <code>dummy = node = ListNode()</code></li>
+                        <li><strong>Loop:</strong> While both lists have nodes:
+                            <ul>
+                                <li>Compare <code>list1.val</code> vs <code>list2.val</code></li>
+                                <li>Attach smaller one to <code>node.next</code></li>
+                                <li>Move that list's pointer forward</li>
+                                <li>Move <code>node</code> to <code>node.next</code></li>
+                            </ul>
+                        </li>
+                        <li><strong>Attach Remaining:</strong> <code>node.next = list1 or list2</code></li>
+                        <li><strong>Return:</strong> <code>dummy.next</code> (skip the dummy!)</li>
+                    </ol>
+                </div>
+
+                <!-- Code -->
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-lang">Python - Iteration (OPTIMAL)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre class="line-numbers"><code class="language-python"># Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def mergeTwoLists(self, list1: ListNode, list2: ListNode) -> ListNode:
+        # Dummy node se start karo — head handling easy ho jaati hai
+        dummy = node = ListNode()
+        
+        # Jab tak dono lists mein nodes hain
+        while list1 and list2:
+            if list1.val < list2.val:
+                # list1 chhota hai → attach karo
+                node.next = list1
+                list1 = list1.next  # list1 aage badho
+            else:
+                # list2 chhota ya equal hai → attach karo
+                node.next = list2
+                list2 = list2.next  # list2 aage badho
+            
+            node = node.next  # node bhi aage badho
+        
+        # Jo bhi list bacha hai, usse attach karo
+        # (Python trick: list1 or list2 returns non-None one)
+        node.next = list1 or list2
+        
+        # dummy.next return karo (dummy skip karo!)
+        return dummy.next</code></pre>
+                </div>
+
+                <!-- Complexity -->
+                <div class="complexity-box">
+                    <h4>⏱️ Time & Space Complexity</h4>
+                    <div class="complexity-grid">
+                        <div class="complexity-item">
+                            <span class="complexity-type">Time:</span>
+                            <span class="complexity-value good">O(n + m)</span>
+                            <p>Har node exactly ek baar visit</p>
+                        </div>
+                        <div class="complexity-item">
+                            <span class="complexity-type">Space:</span>
+                            <span class="complexity-value good">O(1)</span>
+                            <p>Sirf dummy node + pointers! 🎉</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dry Run -->
+                <div class="dry-run-section">
+                    <h4>🔍 Dry Run — Trace Karo Step by Step</h4>
+                    <p><strong>Input:</strong> list1 = [1,2,4], list2 = [1,3,4]</p>
+                    <div class="dry-run-table-container">
+                        <table class="dry-run-table">
+                            <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>list1</th>
+                                    <th>list2</th>
+                                    <th>Compare</th>
+                                    <th>Action</th>
+                                    <th>Merged So Far</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Init</td>
+                                    <td>[1,2,4]</td>
+                                    <td>[1,3,4]</td>
+                                    <td>—</td>
+                                    <td>Create dummy</td>
+                                    <td>[dummy]</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>[1,2,4]</td>
+                                    <td>[1,3,4]</td>
+                                    <td>1 < 1? No</td>
+                                    <td>Attach list2's 1</td>
+                                    <td>[dummy]→[1]</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>[1,2,4]</td>
+                                    <td>[3,4]</td>
+                                    <td>1 < 3? Yes</td>
+                                    <td>Attach list1's 1</td>
+                                    <td>[dummy]→[1]→[1]</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>[2,4]</td>
+                                    <td>[3,4]</td>
+                                    <td>2 < 3? Yes</td>
+                                    <td>Attach list1's 2</td>
+                                    <td>[dummy]→[1]→[1]→[2]</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>[4]</td>
+                                    <td>[3,4]</td>
+                                    <td>4 < 3? No</td>
+                                    <td>Attach list2's 3</td>
+                                    <td>[dummy]→[1]→[1]→[2]→[3]</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>[4]</td>
+                                    <td>[4]</td>
+                                    <td>4 < 4? No</td>
+                                    <td>Attach list2's 4</td>
+                                    <td>[dummy]→[1]→[1]→[2]→[3]→[4]</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>[4]</td>
+                                    <td>[]</td>
+                                    <td>Loop ends</td>
+                                    <td>Attach remaining [4]</td>
+                                    <td>[dummy]→[1]→[1]→[2]→[3]→[4]→[4]</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td>Final</td>
+                                    <td colspan="5">Return dummy.next = [1]→[1]→[2]→[3]→[4]→[4] ✅</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Pitfalls -->
+            <div class="pitfalls-section">
+                <h3 class="pitfalls-title">⚠️ Common Pitfalls — In Galtiyon Se Bacho!</h3>
+                <div class="pitfalls-grid">
+                    <div class="pitfall-card">
+                        <div class="pitfall-icon">🚫</div>
+                        <h4>Empty List Check Bhoolna</h4>
+                        <p><strong>Galti:</strong> Directly merge start kar diya bina check kiye ki ek list empty hai!</p>
+                        <p><strong>Fix:</strong> Pehle check karo — <code>if not list1: return list2</code> (and vice versa)</p>
+                    </div>
+                    <div class="pitfall-card">
+                        <div class="pitfall-icon">🔗</div>
+                        <h4>Remaining Nodes Attach Bhoolna</h4>
+                        <p><strong>Galti:</strong> Loop ke baad jo list bacha, usse attach nahi kiya!</p>
+                        <p><strong>Fix:</strong> Loop ke baad <code>node.next = list1 or list2</code> likhna mat bhoolo!</p>
+                    </div>
+                    <div class="pitfall-card">
+                        <div class="pitfall-icon">📍</div>
+                        <h4>Wrong Head Return Karna</h4>
+                        <p><strong>Galti:</strong> <code>dummy</code> return kar diya instead of <code>dummy.next</code>!</p>
+                        <p><strong>Fix:</strong> <code>dummy.next</code> return karo — dummy sirf placeholder hai!</p>
+                    </div>
+                    <div class="pitfall-card">
+                        <div class="pitfall-icon">🔄</div>
+                        <h4>node Pointer Move Bhoolna</h4>
+                        <p><strong>Galti:</strong> Node attach kiya but <code>node = node.next</code> bhool gaye!</p>
+                        <p><strong>Fix:</strong> Har attachment ke baad <code>node</code> ko aage move karo!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-card theme-green">
+                <h3 class="summary-title">📋 Quick Comparison Table</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Time</th>
+                            <th>Space</th>
+                            <th>Hinglish Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Recursion</td>
+                            <td style="color: var(--accent-green);">O(n+m)</td>
+                            <td style="color: var(--accent-orange);">O(n+m)</td>
+                            <td>"Chhota chun, baaki recursion pe chhod!" 🔄</td>
+                        </tr>
+                        <tr>
+                            <td>Iteration <span class="best-tag">BEST</span></td>
+                            <td style="color: var(--accent-green);">O(n+m)</td>
+                            <td style="color: var(--accent-green);">O(1)</td>
+                            <td>Dummy node + step-by-step attach! ⚡</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    📌 <strong>Key Pattern:</strong> Merge = <strong>Compare → Pick Smaller → Move Forward</strong>! 
+                    Dummy node use karo toh head handling super easy! 🔑<br><br>
+                    💡 <strong>Interview Tip:</strong> Interviewer ko pehle <strong>dummy node concept</strong> explain karo 
+                    ("It simplifies head handling"), phir code likho. Space O(1) mention karo — shows optimization awareness! 🎯
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="footer">
             <p>Made with 💜 for DSA learners | Hinglish mein samjho, English mein code karo! 🚀</p>
@@ -11788,7 +12497,8 @@ print(linked_list_to_array(result4))  # Output: [1] ✅</code></pre>
                 'valid-parentheses': 'stack',
                 'find-min-rotated': 'binary-search',
                 'search-rotated': 'binary-search',
-                'reverse-linked-list': 'linked-list'
+                'reverse-linked-list': 'linked-list',
+                'merge-two-sorted-lists': 'linked-list'
             };
             
             const category = categoryMap[problemId];
