@@ -2559,7 +2559,7 @@
         <div class="progress-section">
             <div class="progress-header">
                 <span class="progress-label">📊 Progress</span>
-                <span class="progress-count" id="progressCount">0/17 completed</span>
+                <span class="progress-count" id="progressCount">0/18 completed</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill" style="width: 0%"></div>
@@ -2733,6 +2733,26 @@
                     <span class="nav-number blue">17</span>
                     <span class="nav-text">Search in Rotated Sorted Array</span>
                     <span class="nav-difficulty medium"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Linked List Category -->
+        <div class="category-group" id="linkedlist-category">
+            <div class="category-header" onclick="toggleCategory('linkedlist-category')">
+                <span class="category-title">
+                    <span class="category-icon">🔗</span>
+                    Linked List
+                </span>
+                <span class="category-count">1</span>
+                <span class="category-toggle">▼</span>
+            </div>
+            <div class="category-items">
+                <a href="#reverse-linked-list" class="nav-item" data-difficulty="easy">
+                    <span class="nav-number green">18</span>
+                    <span class="nav-text">Reverse Linked List</span>
+                    <span class="nav-difficulty easy"></span>
                     <span class="nav-check">✓</span>
                 </a>
             </div>
@@ -10899,6 +10919,775 @@ print(search([1, 2, 3, 4, 5], 3))         # Output: 2 ✅ (not rotated)</code></
             </div>
         </section>
 
+        <!-- ==================== PROBLEM 18: Reverse Linked List ==================== -->
+        <section class="problem-section" id="reverse-linked-list">
+            <header class="problem-header prob-1">
+                <div class="problem-badge">🔗 Problem #18</div>
+                <h2>Reverse Linked List</h2>
+                <p class="problem-subtitle">Linked List ko ulta karo — DSA ka Classic Problem! 🔄</p>
+            </header>
+
+            <!-- Problem Card -->
+            <div class="problem-card theme-green">
+                <span class="difficulty-tag easy">🟢 Easy Level</span>
+                <h3 class="problem-title">Problem Kya Hai?</h3>
+                <p class="problem-desc">
+                    Ek <strong>singly linked list</strong> ka head diya gaya hai. Tumhe list ko <span class="highlight">reverse</span> karke 
+                    <span class="highlight-green">new head return</span> karna hai.
+                </p>
+                <div class="hinglish-note">
+                    🎯 <strong>Simple Words Mein:</strong> List ulti kar do!<br>
+                    📌 <code>1 → 2 → 3 → 4 → 5</code> ban jaayega <code>5 → 4 → 3 → 2 → 1</code><br>
+                    🔄 Har node ka <code>next</code> pointer peeche wale node ki taraf point karega!
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 1:</strong></p>
+                    <code>head = [1, 2, 3, 4, 5]</code>
+                    <p>Output: <strong>[5, 4, 3, 2, 1]</strong></p>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 2:</strong></p>
+                    <code>head = [1, 2]</code>
+                    <p>Output: <strong>[2, 1]</strong></p>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 3:</strong></p>
+                    <code>head = []</code>
+                    <p>Output: <strong>[]</strong> — Empty list remains empty!</p>
+                </div>
+            </div>
+
+            <!-- Linked List Basics (Prerequisites) -->
+            <div class="visual-box" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1)); border: 1px solid rgba(0, 255, 136, 0.3);">
+                <h4>🎓 Prerequisites: Linked List Kya Hai? (Basics Samjho Pehle!)</h4>
+                <pre class="visual-diagram">
+┌──────────────────────────────────────────────────────────────────┐
+│                    SINGLY LINKED LIST                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Array vs Linked List:                                          │
+│   ═══════════════════════                                        │
+│                                                                  │
+│   Array:  [10][20][30][40][50]  ← Continuous memory blocks       │
+│            ↑  ↑  ↑  ↑  ↑                                        │
+│            0  1  2  3  4  (index se direct access!)              │
+│                                                                  │
+│   Linked List:                                                   │
+│   ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐           │
+│   │ 10  │───→│ 20  │───→│ 30  │───→│ 40  │───→│ 50  │───→ NULL  │
+│   └─────┘    └─────┘    └─────┘    └─────┘    └─────┘           │
+│    HEAD                                         TAIL             │
+│                                                                  │
+│   Har "box" = NODE                                               │
+│   - val: value store karta hai                                   │
+│   - next: agla node ka address (pointer)                         │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   🔧 Node Structure:                                              │
+│   ┌─────────────────┐                                            │
+│   │  ListNode       │                                            │
+│   ├─────────────────┤                                            │
+│   │  val: int       │  ← Data store hota hai                     │
+│   │  next: ListNode │  ← Agla node ka address                    │
+│   └─────────────────┘                                            │
+│                                                                  │
+│   Python mein:                                                   │
+│   class ListNode:                                                │
+│       def __init__(self, val=0, next=None):                      │
+│           self.val = val                                         │
+│           self.next = next                                       │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Visual Representation -->
+            <div class="visual-box">
+                <h4>🔄 Reverse Karna Matlab Kya?</h4>
+                <pre class="visual-diagram">
+┌──────────────────────────────────────────────────────────────────┐
+│                    REVERSING A LINKED LIST                       │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   BEFORE (Original):                                             │
+│   ════════════════════                                           │
+│       HEAD                                                       │
+│        ↓                                                         │
+│   ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐           │
+│   │  1  │───→│  2  │───→│  3  │───→│  4  │───→│  5  │───→ NULL  │
+│   └─────┘    └─────┘    └─────┘    └─────┘    └─────┘           │
+│                                                                  │
+│   Direction: 1 → 2 → 3 → 4 → 5 → NULL                           │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   AFTER (Reversed):                                              │
+│   ═══════════════════                                            │
+│                                                     NEW HEAD     │
+│                                                        ↓         │
+│   NULL ←───┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐    ┌─────┐  │
+│            │  1  │←───│  2  │←───│  3  │←───│  4  │←───│  5  │  │
+│            └─────┘    └─────┘    └─────┘    └─────┘    └─────┘  │
+│                                                                  │
+│   Direction: NULL ← 1 ← 2 ← 3 ← 4 ← 5 (New Head = 5)            │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   🎯 KEY OBSERVATION:                                             │
+│   • Har node ka 'next' pointer peeche wale node ko point karega  │
+│   • Jo pehle HEAD tha (1), wo ab TAIL ban gaya                   │
+│   • Jo pehle TAIL tha (5), wo ab HEAD ban gaya                   │
+│   • Values same hain, sirf ARROWS (pointers) palat gaye!         │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <!-- Approach 1: Recursion -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-1">1</div>
+                    <h3 class="section-title">Recursion Approach</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            Recursion ka logic hai: <span class="highlight">"Baaki list reverse kar, phir current node fix kar!"</span> 🔄
+                        </p>
+                        <p class="content-text">
+                            <strong>Step-by-step sochne ka tarika:</strong>
+                        </p>
+                        <ul class="bullet-list">
+                            <li>Jab tum recursively list ke end tak jaate ho, last node <strong>new head</strong> ban jaata hai</li>
+                            <li>Jab recursion <strong>unwind</strong> hota hai (wapas aata hai), har node apne aage wale node ko apni taraf point karwa deta hai</li>
+                            <li>Finally, original head ka <code>next</code> NULL set karo — taaki cycle na bane!</li>
+                        </ul>
+                        <div class="hinglish-note">
+                            💭 <strong>Analogy:</strong> Train ke dabbe imagine karo. Recursion mein pehle last dabbe tak jaate ho, phir wapas aate waqt har dabbe ka connection ulta kar dete ho! 🚂
+                        </div>
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>🔄 Recursion Flow Visualized</h4>
+                        <pre class="visual-diagram">
+┌──────────────────────────────────────────────────────────────────┐
+│               RECURSION: "Reverse the rest, then fix me!"        │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   List: 1 → 2 → 3 → NULL                                         │
+│                                                                  │
+│   ═══════════════════════════════════════════════════════════    │
+│   📍 GOING DOWN (Recursive calls):                               │
+│   ═══════════════════════════════════════════════════════════    │
+│                                                                  │
+│   Call 1: reverseList(1)                                         │
+│           head = 1, head.next = 2 (not null)                     │
+│           → Call reverseList(2)                                  │
+│                                                                  │
+│   Call 2: reverseList(2)                                         │
+│           head = 2, head.next = 3 (not null)                     │
+│           → Call reverseList(3)                                  │
+│                                                                  │
+│   Call 3: reverseList(3)                                         │
+│           head = 3, head.next = NULL ✅                           │
+│           → BASE CASE! Return 3 as newHead                       │
+│                                                                  │
+│   ═══════════════════════════════════════════════════════════    │
+│   📍 COMING BACK UP (Unwinding + Fixing pointers):               │
+│   ═══════════════════════════════════════════════════════════    │
+│                                                                  │
+│   Back to Call 2: (head = 2, newHead = 3)                        │
+│           head.next.next = head  →  3.next = 2                   │
+│           head.next = NULL       →  2.next = NULL                │
+│                                                                  │
+│           Before: 2 → 3 → NULL                                   │
+│           After:  2 ← 3          (3 → 2, 2 → NULL)               │
+│           Return newHead (3)                                     │
+│                                                                  │
+│   Back to Call 1: (head = 1, newHead = 3)                        │
+│           head.next.next = head  →  2.next = 1                   │
+│           head.next = NULL       →  1.next = NULL                │
+│                                                                  │
+│           Before: 1 → 2   (and 3 → 2)                            │
+│           After:  1 ← 2 ← 3      (2 → 1, 1 → NULL)               │
+│           Return newHead (3)                                     │
+│                                                                  │
+│   ═══════════════════════════════════════════════════════════    │
+│   FINAL RESULT:                                                  │
+│   NULL ← 1 ← 2 ← 3   (Head = 3)                                  │
+│   ═══════════════════════════════════════════════════════════    │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm Steps</h4>
+                        <div class="steps-container">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <strong>Base Case:</strong> Agar list empty hai (<code>head == null</code>) toh <code>null</code> return karo
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <strong>Recursive Call:</strong> <code>head.next</code> pe function call karo — baaki list reverse ho jaayegi
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <strong>Fix Pointer:</strong> <code>head.next.next = head</code> — agla node ab peeche point karega
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <strong>Break Cycle:</strong> <code>head.next = null</code> — cycle avoid karo!
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">5</span>
+                                <div class="step-content">
+                                    <strong>Return:</strong> <code>newHead</code> return karo — jo deepest call se mila
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Python Code</h4>
+                        <div class="code-block">
+                            <pre><code class="language-python"># ============================================
+# 🔄 RECURSION: Reverse Linked List
+# ============================================
+# "Baaki list reverse kar, phir current node fix kar!"
+# Call stack naturally pointers ko reverse karne mein help karta hai
+#
+# 💡 Key Insight:
+# Recursion mein pehle end tak jaate ho,
+# Phir wapas aate waqt har node ka pointer flip karte ho!
+
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def reverseList(self, head):
+        """
+        Recursive Approach to Reverse Linked List
+        
+        🎯 Logic:
+        1. Base case: Empty list ya single node → return as is
+        2. Recursively reverse the rest of the list
+        3. While unwinding, flip the pointers
+        4. Set original head's next to None (avoid cycle!)
+        
+        Time: O(n) — Har node ek baar visit hoti hai
+        Space: O(n) — Recursion call stack (n calls)
+        """
+        
+        # ========================================
+        # 📍 BASE CASE: Empty list
+        # ========================================
+        if not head:
+            return None
+        
+        # 🎯 newHead initially current head hai
+        # Agar koi next nahi hai, yahi final answer hai
+        newHead = head
+        
+        # ========================================
+        # 📍 RECURSIVE CASE: List mein aur nodes hain
+        # ========================================
+        if head.next:
+            # 🔄 Recursively baaki list reverse karo
+            # newHead = reversed list ka head (last node of original)
+            newHead = self.reverseList(head.next)
+            
+            # ========================================
+            # 📍 FIX POINTER (Magic happens here!)
+            # ========================================
+            # head.next = agla node (jo pehle se point ho raha hai)
+            # head.next.next = us agle node ka next
+            # 
+            # BEFORE: head → head.next → ???
+            # AFTER:  head ← head.next (next now points back!)
+            head.next.next = head
+        
+        # ========================================
+        # 📍 BREAK THE CYCLE
+        # ========================================
+        # Original head ab tail ban gaya, iska next NULL hona chahiye
+        # Agar ye nahi karoge → cycle ban jaayega!
+        head.next = None
+        
+        # ✅ Return the new head (jo deepest call se mila)
+        return newHead
+
+
+# 🧪 Testing Helper Functions
+def create_linked_list(arr):
+    """Array se Linked List banao"""
+    if not arr:
+        return None
+    head = ListNode(arr[0])
+    current = head
+    for val in arr[1:]:
+        current.next = ListNode(val)
+        current = current.next
+    return head
+
+def linked_list_to_array(head):
+    """Linked List se Array banao"""
+    result = []
+    while head:
+        result.append(head.val)
+        head = head.next
+    return result
+
+# 🧪 Test Cases
+sol = Solution()
+
+# Test 1: Normal list
+head1 = create_linked_list([1, 2, 3, 4, 5])
+result1 = sol.reverseList(head1)
+print(linked_list_to_array(result1))  # Output: [5, 4, 3, 2, 1] ✅
+
+# Test 2: Two nodes
+head2 = create_linked_list([1, 2])
+result2 = sol.reverseList(head2)
+print(linked_list_to_array(result2))  # Output: [2, 1] ✅
+
+# Test 3: Empty list
+head3 = create_linked_list([])
+result3 = sol.reverseList(head3)
+print(linked_list_to_array(result3))  # Output: [] ✅
+
+# Test 4: Single node
+head4 = create_linked_list([1])
+result4 = sol.reverseList(head4)
+print(linked_list_to_array(result4))  # Output: [1] ✅</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Dry Run Example</h4>
+                        <div class="dry-run-box">
+                            <p><strong>Input:</strong> <code>head = [1, 2, 3]</code></p>
+                            <table class="dry-run-table">
+                                <thead>
+                                    <tr><th>Call</th><th>head.val</th><th>head.next</th><th>Action</th><th>Return</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>1</td><td>→2</td><td>Call reverseList(2)</td><td>-</td></tr>
+                                    <tr><td>2</td><td>2</td><td>→3</td><td>Call reverseList(3)</td><td>-</td></tr>
+                                    <tr class="highlight-row"><td>3</td><td>3</td><td>NULL</td><td>BASE CASE!</td><td>3</td></tr>
+                                    <tr><td>2↑</td><td>2</td><td>→3</td><td>3.next=2, 2.next=NULL</td><td>3</td></tr>
+                                    <tr><td>1↑</td><td>1</td><td>→2</td><td>2.next=1, 1.next=NULL</td><td>3</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="dry-run-result">Final: <strong>3 → 2 → 1 → NULL</strong>, newHead = 3 ✅</p>
+                        </div>
+                    </div>
+
+                    <div class="complexity-badges">
+                        <div class="badge time good">⏱️ Time: O(n)</div>
+                        <div class="badge space okay">💾 Space: O(n) — Call stack!</div>
+                    </div>
+                    <div class="hinglish-note" style="margin-top: 10px;">
+                        ⚠️ <strong>Space O(n) Kyun?</strong> Recursion mein har node ke liye ek function call stack pe jaati hai. 
+                        n nodes = n calls = O(n) stack space. Iterative approach mein ye nahi hoga! 👇
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 2: Iteration -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-4">2</div>
+                    <h3 class="section-title">Iteration Approach <span class="optimal-badge">✨ OPTIMAL</span></h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            Linked list ko iteratively reverse karna matlab <span class="highlight">ek-ek karke pointers flip karna</span>! 🔄
+                        </p>
+                        <p class="content-text">
+                            Hum list mein left se right traverse karte hain, aur <strong>har node ka next pointer peeche wale node ki taraf point</strong> kara dete hain.
+                        </p>
+                        <p class="content-text">
+                            <strong>3 Pointers rakhne padte hain taaki list kho na jaaye:</strong>
+                        </p>
+                        <ul class="bullet-list">
+                            <li><code>curr</code> → Current node jisko hum process kar rahe hain</li>
+                            <li><code>prev</code> → Previous node (jo reverse hone ke baad curr ke aage aayega)</li>
+                            <li><code>temp</code> → Next node ka reference (taaki chain na toote!)</li>
+                        </ul>
+                        <div class="hinglish-note">
+                            💭 <strong>Analogy:</strong> Imagine karo tum ek line mein khade logon ko ulta karwa rahe ho. Har aadmi ko bolo "peeche dekho!" — lekin pehle uske aage wale ka address yaad rakho, nahi toh wo kho jaayega! 🧑‍🤝‍🧑
+                        </div>
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>🔄 Iteration Flow Visualized (Step-by-Step)</h4>
+                        <pre class="visual-diagram">
+┌──────────────────────────────────────────────────────────────────┐
+│            ITERATION: Flip Pointers One by One                   │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Initial State:                                                 │
+│   ══════════════                                                 │
+│   prev = NULL                                                    │
+│   curr = 1 → 2 → 3 → NULL                                        │
+│                                                                  │
+│   ─────────────────────────────────────────────────────────────  │
+│   📍 ITERATION 1: (curr = 1)                                     │
+│   ─────────────────────────────────────────────────────────────  │
+│                                                                  │
+│   Step 1: temp = curr.next        →  temp = 2                    │
+│           (Agle node ka reference save karo!)                    │
+│                                                                  │
+│   Step 2: curr.next = prev        →  1.next = NULL               │
+│           (Pointer flip! Ab 1 peeche point karta hai)            │
+│                                                                  │
+│   Step 3: prev = curr             →  prev = 1                    │
+│           (prev aage badha do)                                   │
+│                                                                  │
+│   Step 4: curr = temp             →  curr = 2                    │
+│           (curr aage badha do)                                   │
+│                                                                  │
+│   State After:                                                   │
+│   NULL ← 1   2 → 3 → NULL                                        │
+│          ↑   ↑                                                   │
+│        prev curr                                                 │
+│                                                                  │
+│   ─────────────────────────────────────────────────────────────  │
+│   📍 ITERATION 2: (curr = 2)                                     │
+│   ─────────────────────────────────────────────────────────────  │
+│                                                                  │
+│   Step 1: temp = curr.next        →  temp = 3                    │
+│   Step 2: curr.next = prev        →  2.next = 1                  │
+│   Step 3: prev = curr             →  prev = 2                    │
+│   Step 4: curr = temp             →  curr = 3                    │
+│                                                                  │
+│   State After:                                                   │
+│   NULL ← 1 ← 2   3 → NULL                                        │
+│              ↑   ↑                                               │
+│            prev curr                                             │
+│                                                                  │
+│   ─────────────────────────────────────────────────────────────  │
+│   📍 ITERATION 3: (curr = 3)                                     │
+│   ─────────────────────────────────────────────────────────────  │
+│                                                                  │
+│   Step 1: temp = curr.next        →  temp = NULL                 │
+│   Step 2: curr.next = prev        →  3.next = 2                  │
+│   Step 3: prev = curr             →  prev = 3                    │
+│   Step 4: curr = temp             →  curr = NULL                 │
+│                                                                  │
+│   State After:                                                   │
+│   NULL ← 1 ← 2 ← 3   NULL                                        │
+│                  ↑    ↑                                          │
+│                prev  curr                                        │
+│                                                                  │
+│   ─────────────────────────────────────────────────────────────  │
+│   📍 LOOP ENDS: curr = NULL                                      │
+│   ─────────────────────────────────────────────────────────────  │
+│                                                                  │
+│   🎉 FINAL RESULT:                                                │
+│   Return prev = 3 (new head!)                                    │
+│                                                                  │
+│   NULL ← 1 ← 2 ← 3                                               │
+│                  ↑                                               │
+│              NEW HEAD                                            │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm Steps</h4>
+                        <div class="steps-container">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <strong>Initialize:</strong> <code>prev = null</code>, <code>curr = head</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <strong>While curr exists:</strong>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <strong>Save next:</strong> <code>temp = curr.next</code> (taaki chain na toote!)
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <strong>Flip pointer:</strong> <code>curr.next = prev</code> (pointer ulta karo!)
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">5</span>
+                                <div class="step-content">
+                                    <strong>Move prev:</strong> <code>prev = curr</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">6</span>
+                                <div class="step-content">
+                                    <strong>Move curr:</strong> <code>curr = temp</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">7</span>
+                                <div class="step-content">
+                                    <strong>Return:</strong> <code>prev</code> — ye naya head hai!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Python Code</h4>
+                        <div class="code-block">
+                            <pre><code class="language-python"># ============================================
+# ✨ ITERATION: Reverse Linked List (OPTIMAL)
+# ============================================
+# Ek-ek karke pointers flip karo — left to right traverse!
+# 
+# 💡 Key Insight:
+# 3 pointers use karo:
+# - prev: peeche wala node (jo reverse ke baad aage aayega)
+# - curr: current node jisko process kar rahe ho
+# - temp: agle node ka backup (taaki lose na ho!)
+
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def reverseList(self, head):
+        """
+        Iterative Approach to Reverse Linked List
+        
+        🎯 Logic:
+        1. Initialize prev = None, curr = head
+        2. While curr is not None:
+           - Save next node (temp = curr.next)
+           - Flip pointer (curr.next = prev)
+           - Move prev forward (prev = curr)
+           - Move curr forward (curr = temp)
+        3. Return prev (new head)
+        
+        Time: O(n) — Single pass through the list
+        Space: O(1) — Only using 3 pointers!
+        """
+        
+        # ========================================
+        # 📍 INITIALIZE POINTERS
+        # ========================================
+        prev = None   # Peeche kuch nahi hai initially
+        curr = head   # Start from head
+        
+        # ========================================
+        # 📍 ITERATE THROUGH THE LIST
+        # ========================================
+        while curr:
+            # 🔴 Step 1: SAVE next node (CRITICAL!)
+            # Agar ye nahi karoge, chain toot jaayegi!
+            temp = curr.next
+            
+            # 🔴 Step 2: FLIP the pointer
+            # Current node ab peeche wale ko point karega
+            curr.next = prev
+            
+            # 🔴 Step 3: MOVE prev forward
+            # prev ab current node pe aa gaya
+            prev = curr
+            
+            # 🔴 Step 4: MOVE curr forward
+            # curr ab agle node pe aa gaya (jo humne save kiya tha)
+            curr = temp
+        
+        # ========================================
+        # 📍 RETURN NEW HEAD
+        # ========================================
+        # Loop khatam hone pe curr = NULL
+        # prev = last node = new head!
+        return prev
+
+
+# 🧪 Testing Helper Functions
+def create_linked_list(arr):
+    """Array se Linked List banao"""
+    if not arr:
+        return None
+    head = ListNode(arr[0])
+    current = head
+    for val in arr[1:]:
+        current.next = ListNode(val)
+        current = current.next
+    return head
+
+def linked_list_to_array(head):
+    """Linked List se Array banao"""
+    result = []
+    while head:
+        result.append(head.val)
+        head = head.next
+    return result
+
+# 🧪 Test Cases
+sol = Solution()
+
+# Test 1: Normal list
+head1 = create_linked_list([1, 2, 3, 4, 5])
+result1 = sol.reverseList(head1)
+print(linked_list_to_array(result1))  # Output: [5, 4, 3, 2, 1] ✅
+
+# Test 2: Two nodes
+head2 = create_linked_list([1, 2])
+result2 = sol.reverseList(head2)
+print(linked_list_to_array(result2))  # Output: [2, 1] ✅
+
+# Test 3: Empty list
+head3 = create_linked_list([])
+result3 = sol.reverseList(head3)
+print(linked_list_to_array(result3))  # Output: [] ✅
+
+# Test 4: Single node
+head4 = create_linked_list([1])
+result4 = sol.reverseList(head4)
+print(linked_list_to_array(result4))  # Output: [1] ✅</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Dry Run Table</h4>
+                        <div class="dry-run-box">
+                            <p><strong>Input:</strong> <code>head = [1, 2, 3, 4, 5]</code></p>
+                            <table class="dry-run-table">
+                                <thead>
+                                    <tr><th>Iter</th><th>prev</th><th>curr</th><th>temp</th><th>Action</th><th>List State</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Init</td><td>NULL</td><td>1</td><td>-</td><td>Start</td><td>1→2→3→4→5→NULL</td></tr>
+                                    <tr><td>1</td><td>1</td><td>2</td><td>2</td><td>1.next=NULL</td><td>NULL←1  2→3→4→5→NULL</td></tr>
+                                    <tr><td>2</td><td>2</td><td>3</td><td>3</td><td>2.next=1</td><td>NULL←1←2  3→4→5→NULL</td></tr>
+                                    <tr><td>3</td><td>3</td><td>4</td><td>4</td><td>3.next=2</td><td>NULL←1←2←3  4→5→NULL</td></tr>
+                                    <tr><td>4</td><td>4</td><td>5</td><td>5</td><td>4.next=3</td><td>NULL←1←2←3←4  5→NULL</td></tr>
+                                    <tr class="highlight-row"><td>5</td><td>5</td><td>NULL</td><td>NULL</td><td>5.next=4</td><td>NULL←1←2←3←4←5</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="dry-run-result">Final: prev = 5 = <strong>New Head</strong> ✅</p>
+                        </div>
+                    </div>
+
+                    <div class="complexity-badges">
+                        <div class="badge time best">⏱️ Time: O(n)</div>
+                        <div class="badge space best">💾 Space: O(1)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Pitfalls -->
+            <div class="pitfall-section">
+                <h3 class="pitfall-title">⚠️ Common Galtiyan (Pitfalls)</h3>
+                <div class="pitfall-grid">
+                    <div class="pitfall-card">
+                        <div class="pitfall-header">
+                            <span class="pitfall-icon">❌</span>
+                            <h4>Next Node Ka Reference Lose Karna</h4>
+                        </div>
+                        <p>Iterative approach mein <code>curr.next = prev</code> likhne se <strong>PEHLE</strong> <code>curr.next</code> save karna zaroori hai! Nahi toh baaki list kho jaayegi!</p>
+                        <div class="pitfall-fix">
+                            <strong>✅ Fix:</strong> Hamesha <code>temp = curr.next</code> pehle likho, phir <code>curr.next = prev</code>!
+                        </div>
+                    </div>
+                    <div class="pitfall-card">
+                        <div class="pitfall-header">
+                            <span class="pitfall-icon">❌</span>
+                            <h4>Original Head Ka Next NULL Na Karna (Recursion)</h4>
+                        </div>
+                        <p>Recursive approach mein <code>head.next = null</code> bhool jaana <strong>cycle</strong> create karta hai! Last 2 nodes ek dusre ko point karte rahenge — infinite loop! 🔄💀</p>
+                        <div class="pitfall-fix">
+                            <strong>✅ Fix:</strong> <code>head.next.next = head</code> ke baad <code>head.next = null</code> zaroor likho!
+                        </div>
+                    </div>
+                    <div class="pitfall-card">
+                        <div class="pitfall-header">
+                            <span class="pitfall-icon">❌</span>
+                            <h4>Empty List Handle Na Karna</h4>
+                        </div>
+                        <p><code>head = None</code> hone pe NullPointerException aa sakti hai agar check nahi kiya!</p>
+                        <div class="pitfall-fix">
+                            <strong>✅ Fix:</strong> Function start mein <code>if not head: return None</code> likho!
+                        </div>
+                    </div>
+                    <div class="pitfall-card">
+                        <div class="pitfall-header">
+                            <span class="pitfall-icon">❌</span>
+                            <h4>Wrong Head Return Karna</h4>
+                        </div>
+                        <p>Iterative mein <code>curr</code> return karna galat hai — loop end pe <code>curr = NULL</code> hota hai. <code>prev</code> return karo!</p>
+                        <div class="pitfall-fix">
+                            <strong>✅ Fix:</strong> <code>return prev</code> (not <code>return curr</code>)!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-card theme-green">
+                <h3 class="summary-title">📋 Quick Comparison Table</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Time</th>
+                            <th>Space</th>
+                            <th>Hinglish Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Recursion</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-orange);">O(n)</td>
+                            <td>"Baaki reverse kar, phir mujhe fix kar!" 🔄</td>
+                        </tr>
+                        <tr>
+                            <td>Iteration <span class="best-tag">BEST</span></td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-green);">O(1)</td>
+                            <td>3 pointers, ek-ek karke flip karo! ⚡</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    📌 <strong>Key Pattern:</strong> Linked List reverse karna = <strong>pointers flip karna</strong>! 
+                    Iteration mein <code>temp</code> save karna CRITICAL hai — nahi toh list kho jaayegi! 🔑<br><br>
+                    💡 <strong>Interview Tip:</strong> Interviewer ko pehle <strong>3-pointer approach</strong> explain karo (prev, curr, temp), 
+                    phir code likho. Ye shows you understand the logic, not just memorized the solution! 🎯
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="footer">
             <p>Made with 💜 for DSA learners | Hinglish mein samjho, English mein code karo! 🚀</p>
@@ -10998,7 +11787,8 @@ print(search([1, 2, 3, 4, 5], 3))         # Output: 2 ✅ (not rotated)</code></
                 'character-replacement': 'sliding-window',
                 'valid-parentheses': 'stack',
                 'find-min-rotated': 'binary-search',
-                'search-rotated': 'binary-search'
+                'search-rotated': 'binary-search',
+                'reverse-linked-list': 'linked-list'
             };
             
             const category = categoryMap[problemId];
