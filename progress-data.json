@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.0",
-    "lastUpdated": "2026-01-23T08:37:34.958Z",
+    "lastUpdated": "2026-01-23T09:20:00.842Z",
     "description": "Progress tracker for System Design & DSA learning materials - Individual concept tracking"
   },
   "summary": {
@@ -9,7 +9,7 @@
       "totalTopics": 8,
       "totalConcepts": 72,
       "completedConcepts": 25,
-      "percentage": 41
+      "percentage": 35
     },
     "dsa": {
       "totalProblems": 17,
