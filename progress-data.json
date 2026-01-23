@@ -1,20 +1,20 @@
 {
   "metadata": {
     "version": "2.0",
-    "lastUpdated": "2026-01-21T18:47:35.777Z",
+    "lastUpdated": "2026-01-23T08:37:34.958Z",
     "description": "Progress tracker for System Design & DSA learning materials - Individual concept tracking"
   },
   "summary": {
     "systemDesign": {
       "totalTopics": 7,
       "totalConcepts": 61,
-      "completedConcepts": 12,
-      "percentage": 20
+      "completedConcepts": 25,
+      "percentage": 41
     },
     "dsa": {
       "totalProblems": 17,
-      "completedProblems": 4,
-      "percentage": 24
+      "completedProblems": 6,
+      "percentage": 35
     }
   },
   "systemDesign": {
@@ -106,26 +106,26 @@
           "concept-12": {
             "id": "concept-12",
             "name": "REST vs HTTP",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:29:09.546Z"
           },
           "concept-13": {
             "id": "concept-13",
             "name": "REST Ka Golden Rule",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:36:42.818Z"
           },
           "concept-14": {
             "id": "concept-14",
             "name": "HTTP Tooling Aur Ecosystem",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:38:55.697Z"
           },
           "concept-15": {
             "id": "concept-15",
             "name": "REST Ke Downsides",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:44:42.801Z"
           }
         }
       },
@@ -137,56 +137,56 @@
           "concept-16": {
             "id": "concept-16",
             "name": "Microservices Ka Basic Assumption",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:45:37.501Z"
           },
           "concept-17": {
             "id": "concept-17",
             "name": "Shared Database Pattern Kya Hai?",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:47:04.018Z"
           },
           "concept-18": {
             "id": "concept-18",
             "name": "Real Example: Blogging Platform",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:47:59.985Z"
           },
           "concept-19": {
             "id": "concept-19",
             "name": "Log Isko Choose Kyun Karte Hain?",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:49:19.070Z"
           },
           "concept-20": {
             "id": "concept-20",
             "name": "Phir Log Bolte Kyun Hain Ki Yeh Wrong Hai?",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:50:50.788Z"
           },
           "concept-21": {
             "id": "concept-21",
             "name": "Challenge 1: Internal Details Expose",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:51:30.362Z"
           },
           "concept-22": {
             "id": "concept-22",
             "name": "Challenge 2: Schema Change Nightmare",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:52:44.300Z"
           },
           "concept-23": {
             "id": "concept-23",
             "name": "Challenge 3: Data Corruption Blast Radius",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:53:17.697Z"
           },
           "concept-24": {
             "id": "concept-24",
             "name": "Challenge 4: Database Abuse & Performance",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-22T06:57:51.405Z"
           },
           "concept-25": {
             "id": "concept-25",
@@ -479,16 +479,16 @@
             "name": "Top K Frequent Elements",
             "difficulty": "Medium",
             "leetcode": 347,
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-23T08:29:04.803Z"
           },
           "encode-decode-strings": {
             "id": "encode-decode-strings",
             "name": "Encode and Decode Strings",
             "difficulty": "Medium",
             "leetcode": 271,
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-23T08:37:34.958Z"
           },
           "product-except-self": {
             "id": "product-except-self",
