@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Design & Software Concepts | Hinglish Explained</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Prism.js for Beautiful Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
@@ -907,12 +907,12 @@
         /* Code Block */
         .code-block {
             position: relative;
-            background: linear-gradient(145deg, #1a1b26 0%, #0d1117 100%);
-            border-radius: 10px;
-            margin: 0.5rem 0;
+            background: linear-gradient(145deg, #1e1e2e 0%, #11111b 100%);
+            border-radius: 12px;
+            margin: 1rem 0;
             overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .code-block::before {
@@ -921,33 +921,127 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #00ff88, #00d4ff, #a855f7, #f5576c);
+            height: 4px;
+            background: linear-gradient(90deg, #9945FF, #14F195, #00d4ff, #f5576c);
         }
 
-        .code-block::after {
-            content: '● ● ●';
-            position: absolute;
-            top: 12px;
-            left: 16px;
-            font-size: 10px;
-            letter-spacing: 6px;
-            color: rgba(255, 255, 255, 0.3);
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .code-header .code-lang {
+            background: linear-gradient(135deg, #9945FF, #14F195);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-header .code-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
         .code-block pre {
             margin: 0;
-            padding: 1.5rem 0.75rem 0.75rem 0.75rem;
+            padding: 1.25rem;
             overflow-x: auto;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            line-height: 1.4;
+            font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
             background: transparent !important;
+            tab-size: 4;
         }
 
         .code-block code {
-            font-family: 'Fira Code', monospace;
+            font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
             background: transparent !important;
+            color: #cdd6f4;
+        }
+
+        /* C# Syntax Highlighting - Catppuccin Mocha Theme */
+        .code-block .token.comment,
+        .code-block .token.prolog,
+        .code-block .token.doctype,
+        .code-block .token.cdata {
+            color: #6c7086;
+            font-style: italic;
+        }
+
+        .code-block .token.punctuation {
+            color: #9399b2;
+        }
+
+        .code-block .token.namespace {
+            color: #f9e2af;
+        }
+
+        .code-block .token.property,
+        .code-block .token.tag,
+        .code-block .token.boolean,
+        .code-block .token.number,
+        .code-block .token.constant,
+        .code-block .token.symbol {
+            color: #fab387;
+        }
+
+        .code-block .token.selector,
+        .code-block .token.attr-name,
+        .code-block .token.string,
+        .code-block .token.char,
+        .code-block .token.builtin {
+            color: #a6e3a1;
+        }
+
+        .code-block .token.operator,
+        .code-block .token.entity,
+        .code-block .token.url,
+        .code-block .token.variable {
+            color: #89dceb;
+        }
+
+        .code-block .token.atrule,
+        .code-block .token.attr-value,
+        .code-block .token.function,
+        .code-block .token.class-name {
+            color: #89b4fa;
+        }
+
+        .code-block .token.keyword {
+            color: #cba6f7;
+            font-weight: 500;
+        }
+
+        .code-block .token.regex,
+        .code-block .token.important {
+            color: #f9e2af;
+        }
+
+        .code-block .token.important,
+        .code-block .token.bold {
+            font-weight: bold;
+        }
+
+        .code-block .token.italic {
+            font-style: italic;
+        }
+
+        /* C# specific tokens */
+        .code-block .token.type-name {
+            color: #74c7ec;
+        }
+
+        .code-block .token.generic-method {
+            color: #f9e2af;
         }
 
         /* Visual Diagram Box */
@@ -9387,9 +9481,12 @@ public class BotMetricsService : IBotMetricsService
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Prism.js -->
+    <!-- Prism.js with C# support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
     <script>
