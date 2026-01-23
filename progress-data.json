@@ -6,8 +6,8 @@
   },
   "summary": {
     "systemDesign": {
-      "totalTopics": 7,
-      "totalConcepts": 61,
+      "totalTopics": 8,
+      "totalConcepts": 72,
       "completedConcepts": 25,
       "percentage": 41
     },
@@ -429,6 +429,79 @@
           "concept-60": {
             "id": "concept-60",
             "name": "Storage Engine Mental Model",
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "food-delivery-chatbot": {
+        "id": "food-delivery-chatbot",
+        "name": "Food Delivery Support Chatbot System",
+        "topicNumber": 7,
+        "concepts": {
+          "concept-62": {
+            "id": "concept-62",
+            "name": "Real-World Pain Point: Kyun Chatbot Zaroori Hai?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-63": {
+            "id": "concept-63",
+            "name": "Decision Tree Architecture: Fancy NLP Ki Zaroorat Nahi!",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-64": {
+            "id": "concept-64",
+            "name": "Data-Driven Tree Design: Historical Data Se Nodes Banao",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-65": {
+            "id": "concept-65",
+            "name": "WebView Architecture: Kyun Native Screens Nahi?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-66": {
+            "id": "concept-66",
+            "name": "Complete System Architecture: Components & Flow",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-67": {
+            "id": "concept-67",
+            "name": "State Management: Conversation State Kaise Store Karein?",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-68": {
+            "id": "concept-68",
+            "name": "Fraud Detection: Chatbot Ka Dark Side!",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-69": {
+            "id": "concept-69",
+            "name": "Agent Escalation: Clean Context Transfer!",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-70": {
+            "id": "concept-70",
+            "name": "BCP (Business Continuity Plan): Jab Bot Down Ho!",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-71": {
+            "id": "concept-71",
+            "name": "Metrics: Bot Efficacy & Beyond",
+            "completed": false,
+            "completedAt": null
+          },
+          "concept-72": {
+            "id": "concept-72",
+            "name": "Tech Stack: Real Companies Kya Use Karte Hain?",
             "completed": false,
             "completedAt": null
           }
