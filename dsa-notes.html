@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSA Notes | Hinglish Explained | NeetCode Problems</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter + JetBrains Mono + Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Prism.js for Beautiful Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
@@ -2339,6 +2340,673 @@
             margin: 1rem 0;
             font-style: italic;
             color: var(--text-secondary);
+        }
+
+        /* ==================== VISUAL DIAGRAM STYLING ==================== */
+        .visual-diagram {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: #e6edf3;
+            overflow-x: auto;
+            white-space: pre;
+            position: relative;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .visual-diagram::before {
+            content: '📊 Diagram';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        /* Scrollbar for diagrams */
+        .visual-diagram::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .visual-diagram::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .visual-diagram::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 4px;
+        }
+
+        /* Light theme diagram */
+        [data-theme="light"] .visual-diagram {
+            background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #1e293b;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        [data-theme="light"] .visual-diagram::before {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        /* ==================== DIAGRAM CARD STYLING ==================== */
+        .diagram-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-green));
+        }
+
+        .diagram-card h4 {
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* ==================== PREREQUISITES SECTION ==================== */
+        .prerequisites-section {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .prerequisites-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .prereq-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .prereq-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prereq-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .prereq-card h4 {
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .prereq-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ==================== APPROACH SECTION STYLING ==================== */
+        .approach-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .approach-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+        }
+
+        .approach-section.optimal::before {
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue), var(--accent-green));
+        }
+
+        .approach-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .approach-number {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .optimal-badge {
+            background: linear-gradient(135deg, var(--accent-green), #00cc6a);
+            color: #0f0f23;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            animation: pulse-optimal 2s infinite;
+        }
+
+        @keyframes pulse-optimal {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
+        }
+
+        .approach-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ==================== INTUITION BOX ==================== */
+        .intuition-box {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .intuition-box h4 {
+            color: var(--accent-purple);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .intuition-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .intuition-box ul {
+            margin: 1rem 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .intuition-box ul li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .intuition-box ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+
+        /* ==================== ALGORITHM STEPS ==================== */
+        .algorithm-steps {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .algorithm-steps h4 {
+            color: var(--accent-green);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .algorithm-steps ol {
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .algorithm-steps ol li {
+            padding: 0.5rem 0;
+            line-height: 1.6;
+        }
+
+        .algorithm-steps ol li ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .algorithm-steps ol li ul li {
+            padding: 0.3rem 0;
+        }
+
+        /* ==================== CODE CONTAINER ==================== */
+        .code-container {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            border: 1px solid rgba(139, 233, 253, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-container .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .code-container .code-header::before {
+            content: '● ● ●';
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, #ff5f56, #ffbd2e, #27ca40);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .code-container .code-lang {
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        .code-container .copy-btn {
+            position: static;
+            opacity: 1;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .code-container .copy-btn:hover {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        .code-container pre {
+            margin: 0 !important;
+            padding: 1.5rem !important;
+            background: transparent !important;
+            font-size: 0.88rem !important;
+            line-height: 1.8 !important;
+            overflow-x: auto;
+        }
+
+        .code-container pre code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+            font-size: 0.88rem !important;
+        }
+
+        /* ==================== COMPLEXITY BOX ENHANCED ==================== */
+        .complexity-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .complexity-box h4 {
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .complexity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .complexity-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .complexity-type {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .complexity-value {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            margin-bottom: 0.3rem;
+        }
+
+        .complexity-value.good { color: var(--accent-green); }
+        .complexity-value.medium { color: var(--accent-orange); }
+        .complexity-value.bad { color: var(--accent-red); }
+
+        .complexity-item p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* ==================== DRY RUN SECTION ==================== */
+        .dry-run-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .dry-run-section h4 {
+            color: var(--accent-orange);
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .dry-run-section > p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .dry-run-table-container {
+            overflow-x: auto;
+        }
+
+        .dry-run-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 600px;
+        }
+
+        .dry-run-table th,
+        .dry-run-table td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dry-run-table th {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-blue);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dry-run-table td {
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .dry-run-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .dry-run-table tr.highlight-row td {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* ==================== PITFALLS SECTION ==================== */
+        .pitfalls-section {
+            margin: 2rem 0;
+        }
+
+        .pitfalls-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pitfalls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .pitfall-card {
+            background: rgba(255, 107, 107, 0.08);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pitfall-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));
+        }
+
+        .pitfall-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .pitfall-card h4 {
+            color: var(--accent-red);
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pitfall-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .pitfall-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ==================== CONTENT CARD ==================== */
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .content-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .example-box pre {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+
+        .example-box pre code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        /* Constraints Box */
+        .constraints-box {
+            background: rgba(255, 159, 67, 0.1);
+            border: 1px solid rgba(255, 159, 67, 0.3);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .constraints-box h4 {
+            color: var(--accent-orange);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .constraints-box ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .constraints-box ul li {
+            padding: 0.3rem 0;
+        }
+
+        /* Summary Card Theme Green */
+        .summary-card.theme-green {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .summary-card.theme-green .summary-table th {
+            color: var(--accent-green);
+        }
+
+        /* ==================== RESPONSIVE DIAGRAM ==================== */
+        @media (max-width: 768px) {
+            .visual-diagram {
+                font-size: 0.7rem;
+                padding: 1rem;
+            }
+
+            .visual-diagram::before {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+            }
+
+            .complexity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pitfalls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .approach-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dry-run-table {
+                font-size: 0.75rem;
+            }
+
+            .dry-run-table th,
+            .dry-run-table td {
+                padding: 0.5rem;
+            }
         }
 
         /* Divider */
