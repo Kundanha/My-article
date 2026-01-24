@@ -171,6 +171,72 @@ app.post('/api/progress/bulk', (req, res) => {
     }
 });
 
+// POST - Update a script's completion status
+app.post('/api/progress/scripts', (req, res) => {
+    const { scriptId, completed } = req.body;
+    
+    if (!scriptId) {
+        return res.status(400).json({ error: 'scriptId is required' });
+    }
+
+    const data = readProgressData();
+    if (!data) {
+        return res.status(500).json({ error: 'Failed to read progress data' });
+    }
+
+    // Initialize scripts section if not exists
+    if (!data.scripts) {
+        data.scripts = {
+            items: {}
+        };
+    }
+    if (!data.summary.scripts) {
+        data.summary.scripts = {
+            totalScripts: 7,
+            completedScripts: 0,
+            percentage: 0
+        };
+    }
+
+    // Update or create the script entry
+    if (!data.scripts.items[scriptId]) {
+        data.scripts.items[scriptId] = {
+            id: scriptId,
+            name: scriptId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            completed: false,
+            completedAt: null
+        };
+    }
+    
+    data.scripts.items[scriptId].completed = completed;
+    data.scripts.items[scriptId].completedAt = completed ? new Date().toISOString() : null;
+
+    // Update scripts summary counts
+    let completedCount = 0;
+    let totalCount = Object.keys(data.scripts.items).length;
+    for (const key in data.scripts.items) {
+        if (data.scripts.items[key].completed) {
+            completedCount++;
+        }
+    }
+    data.summary.scripts.completedScripts = completedCount;
+    data.summary.scripts.totalScripts = Math.max(totalCount, 7);
+    data.summary.scripts.percentage = data.summary.scripts.totalScripts > 0 
+        ? Math.round((completedCount / data.summary.scripts.totalScripts) * 100) 
+        : 0;
+
+    if (writeProgressData(data)) {
+        res.json({ 
+            success: true, 
+            scriptId, 
+            completed,
+            summary: data.summary.scripts
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to save progress' });
+    }
+});
+
 // POST - Reset all progress
 app.post('/api/progress/reset', (req, res) => {
     const data = readProgressData();
@@ -200,11 +266,23 @@ app.post('/api/progress/reset', (req, res) => {
         }
     }
 
+    // Reset all scripts
+    if (data.scripts && data.scripts.items) {
+        for (const key in data.scripts.items) {
+            data.scripts.items[key].completed = false;
+            data.scripts.items[key].completedAt = null;
+        }
+    }
+
     // Reset summary
     data.summary.systemDesign.completedConcepts = 0;
     data.summary.systemDesign.percentage = 0;
     data.summary.dsa.completedProblems = 0;
     data.summary.dsa.percentage = 0;
+    if (data.summary.scripts) {
+        data.summary.scripts.completedScripts = 0;
+        data.summary.scripts.percentage = 0;
+    }
 
     if (writeProgressData(data)) {
         res.json({ success: true, message: 'All progress reset successfully' });
@@ -224,6 +302,7 @@ app.listen(PORT, () => {
 ║                                                            ║
 ║  📄 System Design:  http://localhost:${PORT}/system-design.html  
 ║  📄 DSA Notes:      http://localhost:${PORT}/dsa-notes.html      
+║  🎬 Reel Scripts:   http://localhost:${PORT}/reel-scripts.html      
 ║                                                            ║
 ║  ✅ JSON file will auto-update when you check boxes!       ║
 ║                                                            ║

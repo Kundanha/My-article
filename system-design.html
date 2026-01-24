@@ -8,6 +8,8 @@
     <!-- Prism.js for Beautiful Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <!-- Mermaid.js for Beautiful Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         :root {
             --bg-primary: #0f0f23;
@@ -1071,6 +1073,35 @@
             color: var(--text-secondary);
         }
 
+        /* Mermaid Diagram Container */
+        .mermaid-container {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .mermaid-container .diagram-label {
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
         /* Summary Card */
         .summary-card {
             background: var(--bg-card);
@@ -1503,27 +1534,31 @@
 
                         <div class="visual-box">
                             <h4>📋 Is Topic Mein Kya Cover Karenge?</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                   SYSTEM DESIGN ROADMAP                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   1️⃣  System Design Kya Hai? — Definition & Scope              │
-│                                                                 │
-│   2️⃣  "System" Ka Matlab Kya? — Different Types               │
-│                                                                 │
-│   3️⃣  Design Output — 3 Layers (High-Level, Logical, Physical)│
-│                                                                 │
-│   4️⃣  Approach #1: Spiral Approach — Core se Outward          │
-│                                                                 │
-│   5️⃣  Approach #2: Incremental MVP — Evolve as You Scale      │
-│                                                                 │
-│   6️⃣  3 Golden Rules — Scope, Clarify, Challenge              │
-│                                                                 │
-│   7️⃣  Universal Principle — Divide & Conquer                  │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">📋 System Design Roadmap</div>
+                                <div class="mermaid">
+flowchart TD
+    subgraph ROADMAP["🚀 SYSTEM DESIGN ROADMAP"]
+        A["1️⃣ System Design Kya Hai?<br/>Definition & Scope"]
+        B["2️⃣ System Ka Matlab Kya?<br/>Different Types"]
+        C["3️⃣ Design Output<br/>3 Layers: High-Level, Logical, Physical"]
+        D["4️⃣ Spiral Approach<br/>Core se Outward"]
+        E["5️⃣ Incremental MVP<br/>Evolve as You Scale"]
+        F["6️⃣ 3 Golden Rules<br/>Scope, Clarify, Challenge"]
+        G["7️⃣ Universal Principle<br/>Divide & Conquer"]
+    end
+    
+    A --> B --> C --> D --> E --> F --> G
+    
+    style A fill:#667eea,color:#fff
+    style B fill:#764ba2,color:#fff
+    style C fill:#f093fb,color:#fff
+    style D fill:#11998e,color:#fff
+    style E fill:#ff9f43,color:#fff
+    style F fill:#ffd93d,color:#000
+    style G fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
@@ -1545,39 +1580,44 @@
 
                         <div class="visual-box">
                             <h4>🛤️ Need se System Tak Ka Journey</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│              CUSTOMER NEED → WORKING SYSTEM                     │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   👤 CUSTOMER                                                   │
-│   ─────────────────────────────────────────                     │
-│   "Mujhe live classes chahiye"                                  │
-│   "Mujhe real-time interaction chahiye"                         │
-│   "Mujhe apna data upload karke safe store karna hai"           │
-│   "Mujhe payment system chahiye"                                │
-│   "Mujhe notifications chahiye"                                 │
-│               │                                                 │
-│               ▼                                                 │
-│   📋 PRODUCT & BUSINESS                                         │
-│   ─────────────────────────────────────────                     │
-│   Need → Business Requirement                                   │
-│   PM & Business team requirement define karti hai               │
-│   Product team usko shape deti hai                              │
-│               │                                                 │
-│               ▼                                                 │
-│   👨‍💻 ENGINEER (YOU!)                                           │
-│   ─────────────────────────────────────────                     │
-│   Requirement → Working System                                  │
-│                                                                 │
-│   Tumhara job:                                                  │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │  Need ko ek WORKING SYSTEM mein convert karna           │   │
-│   │  jo RELIABLE ho, SCALABLE ho, aur TIME PE SHIP ho! 🚀   │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🛤️ Customer Need → Working System</div>
+                                <div class="mermaid">
+flowchart TD
+    subgraph Customer["👤 CUSTOMER"]
+        C1["Mujhe live classes chahiye"]
+        C2["Real-time interaction chahiye"]
+        C3["Payment system chahiye"]
+        C4["Notifications chahiye"]
+    end
+    
+    subgraph Business["📋 PRODUCT & BUSINESS"]
+        B1["Need → Business Requirement"]
+        B2["PM & Business team<br/>requirement define karti hai"]
+    end
+    
+    subgraph Engineer["👨‍💻 ENGINEER - YOU!"]
+        E1["Requirement → Working System"]
+        E2["✅ RELIABLE"]
+        E3["✅ SCALABLE"]
+        E4["✅ SHIP ON TIME 🚀"]
+    end
+    
+    Customer --> Business
+    Business --> Engineer
+    
+    style C1 fill:#ff006e,color:#fff
+    style C2 fill:#ff006e,color:#fff
+    style C3 fill:#ff006e,color:#fff
+    style C4 fill:#ff006e,color:#fff
+    style B1 fill:#8338ec,color:#fff
+    style B2 fill:#8338ec,color:#fff
+    style E1 fill:#06d6a0,color:#fff
+    style E2 fill:#06d6a0,color:#fff
+    style E3 fill:#06d6a0,color:#fff
+    style E4 fill:#06d6a0,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note">
@@ -1600,40 +1640,26 @@
 
                         <div class="visual-box">
                             <h4>🎭 System Ke Different Types</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│              "SYSTEM" KA MATLAB — MULTIPLE FORMS                │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  🌐 END-TO-END APPLICATION                                      │
-│     ─────────────────────────────────────────                   │
-│     Frontend + Backend dono ho, users daily use karein          │
-│     Example: Swiggy, Instagram, Netflix                         │
-│                                                                 │
-│  ⚙️ MICROSERVICE                                                 │
-│     ─────────────────────────────────────────                   │
-│     Ek service jo kisi aur service ko feature provide kare      │
-│     Example: Payment Service, Notification Service              │
-│                                                                 │
-│  🔧 INTERNAL ENGINEERING SOLUTION                               │
-│     ─────────────────────────────────────────                   │
-│     Customer end-user nahi, balki internal team hoti hai        │
-│     Example: CI/CD Pipeline, Monitoring System                  │
-│                                                                 │
-│  📚 LIBRARY / SDK                                               │
-│     ─────────────────────────────────────────                   │
-│     Developers ka life easy banao                               │
-│     Example: React, Express.js, AWS SDK                         │
-│                                                                 │
-│  🔌 HARDWARE / EMBEDDED SYSTEM                                  │
-│     ─────────────────────────────────────────                   │
-│     Product requirement ko actual device mein ship karo         │
-│     Example: IoT devices, Smart Home systems                    │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-
-   💡 KEY INSIGHT: Pehle scope samjho, phir design karo!
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🎭 System Ka Matlab — Multiple Forms</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Types["SYSTEM KE DIFFERENT TYPES"]
+        A["🌐 END-TO-END APPLICATION<br/>Frontend + Backend<br/>Example: Swiggy, Instagram, Netflix"]
+        B["⚙️ MICROSERVICE<br/>Ek service jo aur services ko<br/>feature provide kare<br/>Example: Payment, Notification"]
+        C["🔧 INTERNAL TOOL<br/>Customer nahi, internal team<br/>Example: CI/CD, Monitoring"]
+        D["📚 LIBRARY / SDK<br/>Developers ka life easy<br/>Example: React, Express.js"]
+        E["🔌 HARDWARE / EMBEDDED<br/>Device mein ship karo<br/>Example: IoT, Smart Home"]
+    end
+    
+    style A fill:#ff006e,color:#fff
+    style B fill:#8338ec,color:#fff
+    style C fill:#3a86ff,color:#fff
+    style D fill:#06d6a0,color:#fff
+    style E fill:#ffbe0b,color:#fff
+                                </div>
+                            </div>
+                            <p style="text-align: center; color: var(--accent-green); font-weight: 600; margin-top: 1rem;">💡 KEY INSIGHT: Pehle scope samjho, phir design karo!</p>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
@@ -1660,97 +1686,105 @@
 
                         <div class="visual-box">
                             <h4>🏗️ Layer 1: High-Level Architecture Diagram</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│            HIGH-LEVEL ARCHITECTURE (Bird's Eye View)            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Ye "BIG PICTURE" communicate karta hai:                       │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │     ┌────────┐    ┌────────┐    ┌────────┐             │   │
-│   │     │ Client │───▶│  API   │───▶│   DB   │             │   │
-│   │     │  App   │    │Gateway │    │        │             │   │
-│   │     └────────┘    └───┬────┘    └────────┘             │   │
-│   │                       │                                 │   │
-│   │            ┌──────────┴──────────┐                      │   │
-│   │            ▼                     ▼                      │   │
-│   │       ┌────────┐            ┌────────┐                  │   │
-│   │       │User Svc│            │Order Svc│                 │   │
-│   │       └────────┘            └────────┘                  │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   📌 Kya dikhata hai?                                           │
-│      • Kaunse components honge                                  │
-│      • Kaunsi services hongi                                    │
-│      • Kaunse databases use honge                               │
-│      • External integrations                                    │
-│      • Request ka overall flow                                  │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🏗️ High-Level Architecture (Bird's Eye View)</div>
+                                <div class="mermaid">
+flowchart LR
+    subgraph Client["📱 CLIENT"]
+        CA["Client App"]
+    end
+    
+    subgraph Gateway["🚪 API GATEWAY"]
+        AG["API Gateway"]
+    end
+    
+    subgraph Services["⚙️ SERVICES"]
+        US["User Service"]
+        OS["Order Service"]
+    end
+    
+    subgraph Database["🗄️ DATABASE"]
+        DB["Database"]
+    end
+    
+    CA --> AG
+    AG --> US
+    AG --> OS
+    US --> DB
+    OS --> DB
+    
+    style CA fill:#ff006e,color:#fff
+    style AG fill:#8338ec,color:#fff
+    style US fill:#3a86ff,color:#fff
+    style OS fill:#3a86ff,color:#fff
+    style DB fill:#06d6a0,color:#fff
+                                </div>
+                            </div>
+                            <p style="margin-top: 1rem; color: var(--text-secondary);">📌 <strong>Kya dikhata hai?</strong> Components, Services, Databases, External integrations, Request flow</p>
                         </div>
 
                         <div class="visual-box">
                             <h4>🧠 Layer 2: Logical Design (The "How Exactly" Layer)</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    LOGICAL DESIGN                               │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Thoda deep jaate ho — "HOW EXACTLY" define karte ho:          │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │  📋 Business Logic        🧮 Algorithms                 │   │
-│   │  📦 Core Data Structures  💾 Storage Patterns           │   │
-│   │  🚀 Caching Strategies    🔄 Idempotency                │   │
-│   │  ⚖️ Consistency Model     🚦 Rate Limiting              │   │
-│   │  🔁 Retry Patterns        🔒 Auth/Security              │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   Example Questions at this level:                              │
-│   ─────────────────────────────────────────                     │
-│   "SQL use karein ya NoSQL?"                                    │
-│   "Queue kyun use karein?"                                      │
-│   "Retry kaise handle karein?"                                  │
-│   "Caching kahaan lagayein?"                                    │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🧠 Logical Design — HOW Exactly</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Logic["LOGICAL DESIGN DECISIONS"]
+        A["📋 Business Logic"]
+        B["🧮 Algorithms"]
+        C["📦 Data Structures"]
+        D["💾 Storage Patterns"]
+        E["🚀 Caching Strategies"]
+        F["🔄 Idempotency"]
+        G["⚖️ Consistency Model"]
+        H["🚦 Rate Limiting"]
+        I["🔁 Retry Patterns"]
+        J["🔒 Auth/Security"]
+    end
+    
+    style A fill:#667eea,color:#fff
+    style B fill:#764ba2,color:#fff
+    style C fill:#f093fb,color:#fff
+    style D fill:#11998e,color:#fff
+    style E fill:#ff9f43,color:#fff
+    style F fill:#ffd93d,color:#000
+    style G fill:#00ff88,color:#000
+    style H fill:#00d4ff,color:#000
+    style I fill:#ff6b6b,color:#fff
+    style J fill:#a855f7,color:#fff
+                                </div>
+                            </div>
+                            <p style="margin-top: 1rem; color: var(--text-secondary);">📌 <strong>Example Questions:</strong> SQL ya NoSQL? Queue kyun? Retry kaise? Caching kahaan?</p>
                         </div>
 
                         <div class="visual-box">
                             <h4>🖥️ Layer 3: Physical Design (Real-World Delivery)</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    PHYSICAL DESIGN                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Infrastructure level decisions:                               │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │  🖥️ Instance type (t2.micro, c5.xlarge, etc.)          │   │
-│   │  📊 Capacity planning (CPU, RAM)                        │   │
-│   │  💾 Storage sizing & type (SSD, HDD, EBS)               │   │
-│   │  🔄 Backup/Restore strategy                             │   │
-│   │  📈 Throughput limits                                   │   │
-│   │  🌍 Regions & Zones (us-east, ap-south, etc.)           │   │
-│   │  🎮 GPU/CPU requirements                                │   │
-│   │  🌐 Network configuration                               │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   ⚠️ INTERVIEW TIP:                                             │
-│   Sab kuch cover karne ki koshish mat karo!                     │
-│   Ek strong direction pick karo aur usko SOLID DEPTH mein solve │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🖥️ Physical Design — Infrastructure</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Infra["INFRASTRUCTURE DECISIONS"]
+        A["🖥️ Instance Type<br/>t2.micro, c5.xlarge"]
+        B["📊 Capacity Planning<br/>CPU, RAM"]
+        C["💾 Storage<br/>SSD, HDD, EBS"]
+        D["🔄 Backup/Restore"]
+        E["📈 Throughput Limits"]
+        F["🌍 Regions & Zones<br/>us-east, ap-south"]
+        G["🎮 GPU/CPU Requirements"]
+        H["🌐 Network Config"]
+    end
+    
+    style A fill:#ff006e,color:#fff
+    style B fill:#8338ec,color:#fff
+    style C fill:#3a86ff,color:#fff
+    style D fill:#06d6a0,color:#fff
+    style E fill:#ffbe0b,color:#000
+    style F fill:#00f5d4,color:#000
+    style G fill:#ff9f43,color:#fff
+    style H fill:#a855f7,color:#fff
+                                </div>
+                            </div>
+                            <p style="margin-top: 1rem; color: var(--accent-yellow);">⚠️ <strong>INTERVIEW TIP:</strong> Sab kuch cover mat karo! Ek strong direction pick karo aur SOLID DEPTH mein solve karo!</p>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
@@ -1777,92 +1811,85 @@
 
                         <div class="visual-box">
                             <h4>🌀 Spiral Approach — Layer by Layer Growth</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    SPIRAL APPROACH                              │
-│              "Core se Outward Build Karo"                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Step-by-step growth:                                          │
-│                                                                 │
-│                    ┌─────────────────────┐                      │
-│              ┌─────│  Background Jobs    │─────┐                │
-│              │     └─────────────────────┘     │                │
-│              │   ┌───────────────────────┐     │                │
-│              │   │     🔄 Caching        │     │                │
-│              │   │  ┌─────────────────┐  │     │                │
-│              │   │  │  📊 Monitoring  │  │     │                │
-│              │   │  │ ┌─────────────┐ │  │     │                │
-│              │   │  │ │ 🔐 Auth     │ │  │     │                │
-│              │   │  │ │ ┌─────────┐ │ │  │     │                │
-│              │   │  │ │ │🌐 API   │ │ │  │     │                │
-│              │   │  │ │ │ ┌─────┐ │ │ │  │     │                │
-│              │   │  │ │ │ │ 🗄️  │ │ │ │  │     │                │
-│              │   │  │ │ │ │ DB  │ │ │ │  │     │  ← CORE       │
-│              │   │  │ │ │ └─────┘ │ │ │  │     │                │
-│              │   │  │ │ └─────────┘ │ │  │     │                │
-│              │   │  │ └─────────────┘ │  │     │                │
-│              │   │  └─────────────────┘  │     │                │
-│              │   └───────────────────────┘     │                │
-│              └─────────────────────────────────┘                │
-│                                                                 │
-│   Build Order:                                                  │
-│   ─────────────────────────────────────────                     │
-│   1. 🗄️ Database — Data kahaan store hoga?                      │
-│   2. 🌐 API Service — Database ke upar basic CRUD               │
-│   3. 🔐 Auth Layer — Security add karo                          │
-│   4. 📊 Monitoring — Observability add karo                     │
-│   5. 🔄 Caching — Performance boost                             │
-│   6. ⚡ Background Jobs — Async processing                      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🌀 SPIRAL APPROACH — Core se Outward Build</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Spiral["SPIRAL BUILD ORDER"]
+        direction TB
+        DB["🗄️ Database<br/>Data kahaan store hoga?"]
+        API["🌐 API Service<br/>Basic CRUD"]
+        Auth["🔐 Auth Layer<br/>Security"]
+        Monitor["📊 Monitoring<br/>Observability"]
+        Cache["🔄 Caching<br/>Performance boost"]
+        Jobs["⚡ Background Jobs<br/>Async processing"]
+        
+        DB --> API
+        API --> Auth
+        Auth --> Monitor
+        Monitor --> Cache
+        Cache --> Jobs
+    end
+    
+    style DB fill:#ff006e,color:#fff
+    style API fill:#8338ec,color:#fff
+    style Auth fill:#3a86ff,color:#fff
+    style Monitor fill:#06d6a0,color:#fff
+    style Cache fill:#ffbe0b,color:#000
+    style Jobs fill:#00f5d4,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="visual-box">
                             <h4>📱 Real Example: E-commerce System Spiral</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│            SPIRAL EXAMPLE: E-COMMERCE SYSTEM                    │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   STEP 1: Core Database                                         │
-│   ─────────────────────────────────────────                     │
-│   ┌──────────────┐                                              │
-│   │   OrderDB    │  ← Start with data storage                   │
-│   └──────────────┘                                              │
-│                                                                 │
-│   STEP 2: Basic Service                                         │
-│   ─────────────────────────────────────────                     │
-│   ┌──────────────┐                                              │
-│   │ Order Service│ → Read/Write from DB                         │
-│   └──────┬───────┘                                              │
-│          │                                                      │
-│   ┌──────▼───────┐                                              │
-│   │   OrderDB    │                                              │
-│   └──────────────┘                                              │
-│                                                                 │
-│   STEP 3: Add Payment                                           │
-│   ─────────────────────────────────────────                     │
-│   "Achha, payment module bhi chahiye!"                          │
-│   → Payment Service banao                                       │
-│   → Payment Gateway integration add karo                        │
-│                                                                 │
-│   STEP 4: Handle Failures                                       │
-│   ─────────────────────────────────────────                     │
-│   "Payments fail ho sakti hain!"                                │
-│   → Retry mechanism add karo                                    │
-│   → Dead Letter Queue add karo                                  │
-│   → Idempotency keys add karo                                   │
-│                                                                 │
-│   STEP 5: Add Auditing                                          │
-│   ─────────────────────────────────────────                     │
-│   "Auditing chahiye!"                                           │
-│   → Logging add karo                                            │
-│   → Event stream add karo                                       │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">📱 E-COMMERCE SPIRAL EXAMPLE</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Step1["STEP 1: Core Database"]
+        D1["🗄️ OrderDB"]
+    end
+    
+    subgraph Step2["STEP 2: Basic Service"]
+        S1["📦 Order Service"] --> D2["🗄️ OrderDB"]
+    end
+    
+    subgraph Step3["STEP 3: Add Payment"]
+        S2["📦 Order Service"] --> D3["🗄️ OrderDB"]
+        P1["💳 Payment Service"] --> PG["🔗 Payment Gateway"]
+    end
+    
+    subgraph Step4["STEP 4: Handle Failures"]
+        R["🔁 Retry Mechanism"]
+        DLQ["📭 Dead Letter Queue"]
+        IK["🔑 Idempotency Keys"]
+    end
+    
+    subgraph Step5["STEP 5: Auditing"]
+        L["📝 Logging"]
+        ES["📊 Event Stream"]
+    end
+    
+    Step1 -.->|evolves to| Step2
+    Step2 -.->|evolves to| Step3
+    Step3 -.->|adds| Step4
+    Step4 -.->|adds| Step5
+    
+    style D1 fill:#ff006e,color:#fff
+    style S1 fill:#8338ec,color:#fff
+    style D2 fill:#ff006e,color:#fff
+    style S2 fill:#8338ec,color:#fff
+    style D3 fill:#ff006e,color:#fff
+    style P1 fill:#06d6a0,color:#fff
+    style PG fill:#3a86ff,color:#fff
+    style R fill:#ffbe0b,color:#000
+    style DLQ fill:#ff6b6b,color:#fff
+    style IK fill:#a855f7,color:#fff
+    style L fill:#00d4ff,color:#000
+    style ES fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
@@ -1894,76 +1921,55 @@
 
                         <div class="visual-box">
                             <h4>📈 Incremental MVP — Stage by Stage Evolution</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│               INCREMENTAL MVP APPROACH                          │
-│            "Ship First, Evolve With Scale"                      │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   DAY 0: Simple Start                                           │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│      ┌────────────┐      ┌────────────┐                         │
-│      │ API Server │ ───▶ │  Database  │                         │
-│      └────────────┘      └────────────┘                         │
-│                                                                 │
-│      Bas! Itna hi. Working solution ship karo first!            │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   SCALE PROBLEM 1: Traffic badh gaya!                           │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│   ❌ Ek server handle nahi kar pa raha                          │
-│   ✅ Solution: Load Balancer + Multiple Servers                 │
-│                                                                 │
-│              ┌─────────────────┐                                │
-│              │  Load Balancer  │                                │
-│              └────────┬────────┘                                │
-│           ┌───────────┼───────────┐                             │
-│           ▼           ▼           ▼                             │
-│      ┌────────┐  ┌────────┐  ┌────────┐                         │
-│      │Server 1│  │Server 2│  │Server 3│                         │
-│      └────────┘  └────────┘  └────────┘                         │
-│           └───────────┼───────────┘                             │
-│                       ▼                                         │
-│              ┌─────────────────┐                                │
-│              │    Database     │                                │
-│              └─────────────────┘                                │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   SCALE PROBLEM 2: Database choke ho raha!                      │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│   ❌ Database slow ho gaya, queries timeout                     │
-│   ✅ Solution: Read Replicas + Caching                          │
-│                                                                 │
-│              ┌─────────────────┐                                │
-│              │     Primary     │ ← Writes                       │
-│              └────────┬────────┘                                │
-│           ┌───────────┼───────────┐                             │
-│           ▼           ▼           ▼                             │
-│      ┌────────┐  ┌────────┐  ┌────────┐                         │
-│      │Replica1│  │Replica2│  │Replica3│ ← Reads                 │
-│      └────────┘  └────────┘  └────────┘                         │
-│                       +                                         │
-│              ┌─────────────────┐                                │
-│              │   Redis Cache   │ ← Hot data                     │
-│              └─────────────────┘                                │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   SCALE PROBLEM 3: Heavy tasks slow kar rahe!                   │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│   ❌ Synchronous processing se request slow                     │
-│   ✅ Solution: Message Broker + Background Workers              │
-│                                                                 │
-│      ┌────────┐      ┌────────────┐      ┌────────────┐         │
-│      │  API   │ ───▶ │   Kafka/   │ ───▶ │  Workers   │         │
-│      │ Server │      │    SQS     │      │ (Async)    │         │
-│      └────────┘      └────────────┘      └────────────┘         │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">📈 INCREMENTAL MVP — Ship First, Evolve With Scale</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Day0["DAY 0: Simple Start"]
+        A1["🖥️ API Server"] --> D1["🗄️ Database"]
+    end
+    
+    subgraph Scale1["SCALE PROBLEM 1: Traffic badh gaya!"]
+        LB["⚖️ Load Balancer"]
+        LB --> S1["🖥️ Server 1"]
+        LB --> S2["🖥️ Server 2"]
+        LB --> S3["🖥️ Server 3"]
+        S1 & S2 & S3 --> DB1["🗄️ Database"]
+    end
+    
+    subgraph Scale2["SCALE PROBLEM 2: DB choke ho raha!"]
+        P["🗄️ Primary"] -->|Writes| R1["📖 Replica 1"]
+        P -->|Writes| R2["📖 Replica 2"]
+        P -->|Writes| R3["📖 Replica 3"]
+        RC["🔴 Redis Cache"]
+    end
+    
+    subgraph Scale3["SCALE PROBLEM 3: Heavy tasks slow!"]
+        API2["🖥️ API"] --> Q["📬 Kafka/SQS"]
+        Q --> W["⚡ Workers"]
+    end
+    
+    Day0 -.->|traffic badha| Scale1
+    Scale1 -.->|DB slow| Scale2
+    Scale2 -.->|sync slow| Scale3
+    
+    style A1 fill:#3a86ff,color:#fff
+    style D1 fill:#ff006e,color:#fff
+    style LB fill:#ffbe0b,color:#000
+    style S1 fill:#8338ec,color:#fff
+    style S2 fill:#8338ec,color:#fff
+    style S3 fill:#8338ec,color:#fff
+    style DB1 fill:#ff006e,color:#fff
+    style P fill:#ff006e,color:#fff
+    style R1 fill:#06d6a0,color:#fff
+    style R2 fill:#06d6a0,color:#fff
+    style R3 fill:#06d6a0,color:#fff
+    style RC fill:#ff6b6b,color:#fff
+    style API2 fill:#3a86ff,color:#fff
+    style Q fill:#a855f7,color:#fff
+    style W fill:#00f5d4,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
@@ -1977,31 +1983,52 @@
 
                         <div class="visual-box">
                             <h4>🎯 Quick Decision Guide: Spiral vs MVP?</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│              WHICH APPROACH TO PICK?                            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   🌀 SPIRAL APPROACH                  📈 MVP APPROACH           │
-│   ─────────────────────────           ─────────────────────     │
-│                                                                 │
-│   ✅ Solution well understood         ✅ Uncertain about future │
-│   ✅ Confident about decisions        ✅ Requirements vague     │
-│   ✅ Experienced in domain            ✅ Scaling unknown        │
-│   ✅ Pattern production-tested        ✅ Want to validate first │
-│   ✅ Need fast delivery               ✅ Avoid over-engineering │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │   SIMPLE RULE:                                          │   │
-│   │   ─────────────────────────────────────────             │   │
-│   │   Confident? → Spiral                                   │   │
-│   │   Uncertain? → MVP                                      │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🎯 WHICH APPROACH TO PICK?</div>
+                                <div class="mermaid">
+flowchart TB
+    Q["🤔 System Design<br/>Approach Selection"]
+    
+    Q --> C1{"Confident about<br/>solution?"}
+    
+    C1 -->|YES| SP["🌀 SPIRAL APPROACH"]
+    C1 -->|NO| MV["📈 MVP APPROACH"]
+    
+    subgraph SpiralWhen["✅ Spiral Best When"]
+        S1["Solution well understood"]
+        S2["Confident about decisions"]
+        S3["Experienced in domain"]
+        S4["Pattern production-tested"]
+        S5["Need fast delivery"]
+    end
+    
+    subgraph MVPWhen["✅ MVP Best When"]
+        M1["Uncertain about future"]
+        M2["Requirements vague"]
+        M3["Scaling unknown"]
+        M4["Want to validate first"]
+        M5["Avoid over-engineering"]
+    end
+    
+    SP --> SpiralWhen
+    MV --> MVPWhen
+    
+    style Q fill:#667eea,color:#fff
+    style C1 fill:#ffd93d,color:#000
+    style SP fill:#00ff88,color:#000
+    style MV fill:#ff9f43,color:#fff
+    style S1 fill:#06d6a0,color:#fff
+    style S2 fill:#06d6a0,color:#fff
+    style S3 fill:#06d6a0,color:#fff
+    style S4 fill:#06d6a0,color:#fff
+    style S5 fill:#06d6a0,color:#fff
+    style M1 fill:#ff6b6b,color:#fff
+    style M2 fill:#ff6b6b,color:#fff
+    style M3 fill:#ff6b6b,color:#fff
+    style M4 fill:#ff6b6b,color:#fff
+    style M5 fill:#ff6b6b,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
@@ -2024,117 +2051,118 @@
                     <div class="section-content">
                         <div class="visual-box">
                             <h4>🥇 Rule 1: SCOPE FENCE KARO — Time Limited Hai!</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    RULE #1: SCOPE FENCE                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   ⚠️ Reality Check:                                             │
-│   ─────────────────────────────────────────                     │
-│   Har system INFINITELY buildable hota hai.                     │
-│   Features aur complexity endless add kar sakte ho.             │
-│                                                                 │
-│   LEKIN:                                                        │
-│   • Job mein time limited hota hai                              │
-│   • Interview mein time limited hota hai (45-60 min)            │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │   ✅ DO:                                                │   │
-│   │   "Is discussion mein main YE solve kar raha hoon"      │   │
-│   │   "Ye deliberately OUT OF SCOPE rakh raha hoon"         │   │
-│   │                                                         │   │
-│   │   ❌ DON'T:                                             │   │
-│   │   Sab kuch cover karne ki koshish                       │   │
-│   │   Endless features discuss karna                        │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   💡 Ye MATURITY ka sign hai!                                   │
-│      Interviewer ko bhi pasand aata hai.                        │
-│      Workplace mein bhi ye skill CRITICAL hoti hai.             │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🥇 RULE #1: SCOPE FENCE</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Reality["⚠️ REALITY CHECK"]
+        R1["Har system INFINITELY buildable"]
+        R2["Features endless add ho sakte"]
+    end
+    
+    subgraph But["LEKIN"]
+        B1["⏰ Job mein time limited"]
+        B2["⏰ Interview 45-60 min"]
+    end
+    
+    subgraph Do["✅ DO"]
+        D1["'YE solve kar raha hoon'"]
+        D2["'YE deliberately OUT OF SCOPE'"]
+    end
+    
+    subgraph Dont["❌ DON'T"]
+        N1["Sab kuch cover karna"]
+        N2["Endless features discuss"]
+    end
+    
+    Reality --> But
+    But --> Do
+    But --> Dont
+    
+    Result["💡 Ye MATURITY ka sign hai!<br/>Interviewer ko pasand aata hai"]
+    Do --> Result
+    
+    style R1 fill:#ff6b6b,color:#fff
+    style R2 fill:#ff6b6b,color:#fff
+    style B1 fill:#ffbe0b,color:#000
+    style B2 fill:#ffbe0b,color:#000
+    style D1 fill:#06d6a0,color:#fff
+    style D2 fill:#06d6a0,color:#fff
+    style N1 fill:#ff006e,color:#fff
+    style N2 fill:#ff006e,color:#fff
+    style Result fill:#a855f7,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="visual-box">
                             <h4>🥈 Rule 2: CLARIFICATIONS LO — Assume Mat Karo!</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                   RULE #2: CLARIFICATIONS                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   System design problems AMBIGUOUS hote hain!                   │
-│   Koi bhi problem statement 100% clear nahi hota.               │
-│                                                                 │
-│   PUCHHO:                                                       │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │   📊 "Traffic kitna hai?"                               │   │
-│   │      → 100 users ya 100M users?                         │   │
-│   │                                                         │   │
-│   │   ⏱️ "Latency requirement kya hai?"                      │   │
-│   │      → 100ms ok hai ya 10ms chahiye?                    │   │
-│   │                                                         │   │
-│   │   ⚖️ "Strong consistency chahiye ya eventual chalegi?"   │   │
-│   │      → Bank transfer vs Instagram likes                 │   │
-│   │                                                         │   │
-│   │   🔄 "Downtime allowed hai ya zero-downtime chahiye?"   │   │
-│   │      → Maintenance window ok hai ya 99.99% uptime?      │   │
-│   │                                                         │   │
-│   │   📚 "Data retention kitna hai?"                        │   │
-│   │      → 7 days ya 7 years?                               │   │
-│   │                                                         │   │
-│   │   📖 "Read heavy hai ya write heavy?"                   │   │
-│   │      → News site vs Chat app                            │   │
-│   │                                                         │   │
-│   │   🌍 "Geographic distribution chahiye?"                 │   │
-│   │      → Single region ya multi-region?                   │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   💡 Ye questions RIGHT design decisions tak le jaate hain!     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🥈 RULE #2: CLARIFICATIONS</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Questions["📊 PUCHHO YE QUESTIONS"]
+        Q1["📊 Traffic kitna hai?<br/>100 users ya 100M?"]
+        Q2["⏱️ Latency requirement?<br/>100ms ya 10ms?"]
+        Q3["⚖️ Strong ya Eventual<br/>Consistency?"]
+        Q4["🔄 Zero-downtime ya<br/>Maintenance window ok?"]
+        Q5["📚 Data retention?<br/>7 days ya 7 years?"]
+        Q6["📖 Read heavy ya<br/>Write heavy?"]
+        Q7["🌍 Single region ya<br/>Multi-region?"]
+    end
+    
+    Result["💡 Ye questions RIGHT<br/>design decisions tak le jaate hain!"]
+    
+    Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7 --> Result
+    
+    style Q1 fill:#3a86ff,color:#fff
+    style Q2 fill:#8338ec,color:#fff
+    style Q3 fill:#ff006e,color:#fff
+    style Q4 fill:#06d6a0,color:#fff
+    style Q5 fill:#ffbe0b,color:#000
+    style Q6 fill:#00f5d4,color:#000
+    style Q7 fill:#a855f7,color:#fff
+    style Result fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="visual-box">
                             <h4>🥉 Rule 3: CRITICAL QUESTIONS PUCHO — Challenge The Design!</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│               RULE #3: CRITICAL QUESTIONS                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Ye SABSE POWERFUL habit hai!                                  │
-│   Ek critical question POORI ARCHITECTURE change kar sakta hai! │
-│                                                                 │
-│   EXAMPLE QUESTIONS:                                            │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │   🤔 "HTTP use kar rahe hain, par gRPC better hoga kya?"│   │
-│   │                                                         │   │
-│   │   🤔 "WebSockets chahiye ya polling enough hai?"        │   │
-│   │                                                         │   │
-│   │   🤔 "Real-time TRULY required hai                      │   │
-│   │       ya near-real-time chalega?"                       │   │
-│   │                                                         │   │
-│   │   🤔 "Strong consistency chahiye                        │   │
-│   │       ya eventual consistency acceptable hai?"          │   │
-│   │                                                         │   │
-│   │   🤔 "Is flow ko synchronous rakhna zaroori hai         │   │
-│   │       ya async kar sakte hain?"                         │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   💡 Jab tum aise questions puchte ho:                          │
-│      → Interviewer/Senior ko dikhta hai tum INDEPENDENT THINKER │
-│      → Tum blindly follow nahi kar rahe                         │
-│      → Tum TRADE-OFFS samajh rahe ho                            │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🥉 RULE #3: CRITICAL QUESTIONS</div>
+                                <div class="mermaid">
+flowchart TB
+    Title["🤔 SABSE POWERFUL HABIT!<br/>Ek question POORI ARCHITECTURE change kar sakta hai!"]
+    
+    subgraph CriticalQ["EXAMPLE QUESTIONS"]
+        Q1["🤔 HTTP ya gRPC better hoga?"]
+        Q2["🤔 WebSockets ya polling enough?"]
+        Q3["🤔 Real-time TRULY required ya<br/>near-real-time chalega?"]
+        Q4["🤔 Strong consistency chahiye ya<br/>eventual acceptable?"]
+        Q5["🤔 Synchronous zaroori ya<br/>async kar sakte?"]
+    end
+    
+    subgraph Impact["💡 JAB TUM AISE PUCHO"]
+        I1["Dikhta hai: INDEPENDENT THINKER"]
+        I2["Blindly follow nahi kar rahe"]
+        I3["TRADE-OFFS samajh rahe ho"]
+    end
+    
+    Title --> CriticalQ
+    CriticalQ --> Impact
+    
+    style Title fill:#ffd93d,color:#000
+    style Q1 fill:#3a86ff,color:#fff
+    style Q2 fill:#8338ec,color:#fff
+    style Q3 fill:#ff006e,color:#fff
+    style Q4 fill:#06d6a0,color:#fff
+    style Q5 fill:#ff9f43,color:#fff
+    style I1 fill:#00ff88,color:#000
+    style I2 fill:#00ff88,color:#000
+    style I3 fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
@@ -2161,51 +2189,46 @@
 
                         <div class="visual-box">
                             <h4>🧩 Divide & Conquer — Problem Ko Tod Do!</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    DIVIDE & CONQUER                             │
-│            "Big Problem → Small Manageable Parts"               │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   BIG SCARY PROBLEM:                                            │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │        "Design Instagram" 😱                            │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│                        DIVIDE! ✂️                               │
-│                          │                                      │
-│      ┌───────────────────┼───────────────────┐                  │
-│      │                   │                   │                  │
-│      ▼                   ▼                   ▼                  │
-│   ┌────────┐        ┌────────┐        ┌────────┐               │
-│   │ User   │        │ Feed   │        │ Story  │               │
-│   │ Service│        │ Service│        │ Service│               │
-│   └────────┘        └────────┘        └────────┘               │
-│      │                   │                   │                  │
-│      ▼                   ▼                   ▼                  │
-│   ┌────────┐        ┌────────┐        ┌────────┐               │
-│   │ Auth   │        │ CDN    │        │ Notif. │               │
-│   └────────┘        └────────┘        └────────┘               │
-│                                                                 │
-│   Pehle ek subsystem solve karo.                                │
-│   Phir next subsystem solve karo.                               │
-│   Step by step conquer karo! 🏆                                 │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   BOTH APPROACHES USE THIS PRINCIPLE:                           │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│   🌀 Spiral: Core se outward grow — step by step                │
-│   📈 MVP: Har stage pe ek bottleneck solve — step by step       │
-│                                                                 │
-│   💡 Underlying spirit = DIVIDE & CONQUER!                      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🧩 DIVIDE & CONQUER — Big Problem → Small Parts</div>
+                                <div class="mermaid">
+flowchart TB
+    Big["😱 'Design Instagram'<br/>BIG SCARY PROBLEM"]
+    
+    Big -->|"DIVIDE! ✂️"| D1
+    Big -->|"DIVIDE! ✂️"| D2
+    Big -->|"DIVIDE! ✂️"| D3
+    
+    subgraph Services["SMALLER SERVICES"]
+        D1["👤 User Service"]
+        D2["📰 Feed Service"]
+        D3["📖 Story Service"]
+    end
+    
+    D1 --> S1["🔐 Auth"]
+    D2 --> S2["🌐 CDN"]
+    D3 --> S3["🔔 Notifications"]
+    
+    subgraph Approaches["BOTH APPROACHES USE THIS!"]
+        SP["🌀 Spiral: Core se outward<br/>step by step"]
+        MV["📈 MVP: Har stage pe<br/>ek bottleneck solve"]
+    end
+    
+    S1 & S2 & S3 --> Result["🏆 Step by step CONQUER!"]
+    Result --> Approaches
+    
+    style Big fill:#ff6b6b,color:#fff
+    style D1 fill:#3a86ff,color:#fff
+    style D2 fill:#8338ec,color:#fff
+    style D3 fill:#ff006e,color:#fff
+    style S1 fill:#06d6a0,color:#fff
+    style S2 fill:#ffbe0b,color:#000
+    style S3 fill:#a855f7,color:#fff
+    style Result fill:#00ff88,color:#000
+    style SP fill:#00f5d4,color:#000
+    style MV fill:#ff9f43,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
@@ -2225,40 +2248,65 @@
 
                     <div class="visual-box">
                         <h4>📋 Complete Recap</h4>
-                        <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                  SYSTEM DESIGN SUMMARY                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   📌 WHAT IS SYSTEM DESIGN?                                     │
-│   Customer need → Product requirement → Reliable, Scalable,     │
-│   Maintainable WORKING SYSTEM                                   │
-│                                                                 │
-│   📌 "SYSTEM" CAN BE:                                           │
-│   App, Microservice, Internal Tool, Library, Hardware           │
-│                                                                 │
-│   📌 DESIGN OUTPUT (3 LAYERS):                                  │
-│   High-Level (bird's eye) → Logical (how exactly) → Physical    │
-│                                                                 │
-│   📌 TWO APPROACHES:                                            │
-│   ┌───────────────────┬─────────────────────────────────────┐   │
-│   │ 🌀 SPIRAL         │ Core decide → Layer by layer build  │   │
-│   │                   │ Best when: Confident & Experienced  │   │
-│   ├───────────────────┼─────────────────────────────────────┤   │
-│   │ 📈 MVP            │ Simple start → Evolve with scale    │   │
-│   │                   │ Best when: Uncertain & Exploring    │   │
-│   └───────────────────┴─────────────────────────────────────┘   │
-│                                                                 │
-│   📌 3 GOLDEN RULES:                                            │
-│   1️⃣ Scope Fence Karo — Time limited hai                        │
-│   2️⃣ Clarifications Lo — Assume mat karo                        │
-│   3️⃣ Critical Questions Pucho — Challenge the design           │
-│                                                                 │
-│   📌 UNIVERSAL PRINCIPLE:                                       │
-│   🧩 DIVIDE & CONQUER — Big problem → Small parts → Solve!      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                        </pre>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">📋 SYSTEM DESIGN SUMMARY</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph WhatIs["📌 WHAT IS SYSTEM DESIGN?"]
+        W1["Customer Need → Product Requirement<br/>→ Reliable, Scalable, Maintainable SYSTEM"]
+    end
+    
+    subgraph SystemTypes["📌 'SYSTEM' CAN BE"]
+        S1["App"] 
+        S2["Microservice"]
+        S3["Internal Tool"]
+        S4["Library"]
+        S5["Hardware"]
+    end
+    
+    subgraph Layers["📌 3 DESIGN LAYERS"]
+        L1["🔭 High-Level<br/>Bird's Eye"]
+        L2["🧠 Logical<br/>How Exactly"]
+        L3["🖥️ Physical<br/>Infrastructure"]
+        L1 --> L2 --> L3
+    end
+    
+    subgraph Approaches["📌 TWO APPROACHES"]
+        A1["🌀 SPIRAL<br/>Confident & Experienced"]
+        A2["📈 MVP<br/>Uncertain & Exploring"]
+    end
+    
+    subgraph Rules["📌 3 GOLDEN RULES"]
+        R1["1️⃣ Scope Fence Karo"]
+        R2["2️⃣ Clarifications Lo"]
+        R3["3️⃣ Critical Questions Pucho"]
+    end
+    
+    Universal["🧩 DIVIDE & CONQUER<br/>Universal Principle!"]
+    
+    WhatIs --> SystemTypes
+    SystemTypes --> Layers
+    Layers --> Approaches
+    Approaches --> Rules
+    Rules --> Universal
+    
+    style W1 fill:#667eea,color:#fff
+    style S1 fill:#3a86ff,color:#fff
+    style S2 fill:#3a86ff,color:#fff
+    style S3 fill:#3a86ff,color:#fff
+    style S4 fill:#3a86ff,color:#fff
+    style S5 fill:#3a86ff,color:#fff
+    style L1 fill:#ff006e,color:#fff
+    style L2 fill:#8338ec,color:#fff
+    style L3 fill:#06d6a0,color:#fff
+    style A1 fill:#00ff88,color:#000
+    style A2 fill:#ff9f43,color:#fff
+    style R1 fill:#ffbe0b,color:#000
+    style R2 fill:#ffbe0b,color:#000
+    style R3 fill:#ffbe0b,color:#000
+    style Universal fill:#a855f7,color:#fff
+                            </div>
+                        </div>
                     </div>
 
                     <div class="hinglish-note" style="margin-top: 1rem; font-size: 0.95rem; line-height: 1.6;">
@@ -2302,45 +2350,42 @@
 
                         <div class="visual-box">
                             <h4>📖 REST Full Form — Breakdown</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│              REST = Representational State Transfer             │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   📚 REPRESENTATIONAL                                           │
-│   ─────────────────────────────────────────                     │
-│   Tumhare system ki entities (Student, Book, Order, Product)    │
-│   ka data ek READABLE FORMAT mein "represent" hota hai          │
-│                                                                 │
-│   Example: Student entity → JSON format mein bhejo              │
-│   {                                                             │
-│     "id": 123,                                                  │
-│     "name": "Rahul",                                            │
-│     "department": "CS",                                         │
-│     "status": "active"                                          │
-│   }                                                             │
-│                                                                 │
-│   📊 STATE                                                      │
-│   ─────────────────────────────────────────                     │
-│   Entity ki CURRENT CONDITION kya hai?                          │
-│                                                                 │
-│   • Student ka naam kya hai?                                    │
-│   • Status active hai ya inactive?                              │
-│   • Order shipped hai ya pending?                               │
-│   • Payment complete hai ya failed?                             │
-│                                                                 │
-│   🔄 TRANSFER                                                   │
-│   ─────────────────────────────────────────                     │
-│   Yeh representation CLIENT ↔ SERVER ke beech TRAVEL karta hai  │
-│                                                                 │
-│   ┌────────┐    Request     ┌────────┐                          │
-│   │ Client │ ─────────────▶ │ Server │                          │
-│   │        │ ◀───────────── │        │                          │
-│   └────────┘    Response    └────────┘                          │
-│                (JSON/XML)                                       │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">📖 REST = Representational State Transfer</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Rep["📚 REPRESENTATIONAL"]
+        R1["Entities (Student, Book, Order)<br/>ka data READABLE FORMAT mein"]
+        R2["Example: JSON Response<br/>{'id':123, 'name':'Rahul'}"]
+    end
+    
+    subgraph State["📊 STATE"]
+        S1["Entity ki CURRENT CONDITION"]
+        S2["Student: active/inactive?"]
+        S3["Order: shipped/pending?"]
+        S4["Payment: complete/failed?"]
+    end
+    
+    subgraph Transfer["🔄 TRANSFER"]
+        Client["📱 Client"]
+        Server["🖥️ Server"]
+        Client -->|"Request"| Server
+        Server -->|"Response (JSON/XML)"| Client
+    end
+    
+    Rep --> State
+    State --> Transfer
+    
+    style R1 fill:#06d6a0,color:#fff
+    style R2 fill:#00ff88,color:#000
+    style S1 fill:#3a86ff,color:#fff
+    style S2 fill:#8338ec,color:#fff
+    style S3 fill:#8338ec,color:#fff
+    style S4 fill:#8338ec,color:#fff
+    style Client fill:#ff006e,color:#fff
+    style Server fill:#ffbe0b,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
@@ -2365,57 +2410,60 @@
 
                         <div class="visual-box">
                             <h4>📚 Resource Examples — Library Management System</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                LIBRARY MANAGEMENT SYSTEM                        │
-│              "Identify Your Resources First"                    │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   👤 STUDENT (Resource #1)                                      │
-│   ─────────────────────────────────────────                     │
-│   Student ka data tumhare paas stored hoga                      │
-│   URL: /students, /students/123                                 │
-│                                                                 │
-│   📖 BOOK (Resource #2)                                         │
-│   ─────────────────────────────────────────                     │
-│   Book ka data tum manage karoge                                │
-│   URL: /books, /books/456                                       │
-│                                                                 │
-│   📋 ISSUE/RETURN TRANSACTION (Resource #3)                     │
-│   ─────────────────────────────────────────                     │
-│   Iska bhi state hota hai (issued, returned, overdue)           │
-│   URL: /transactions, /transactions/789                         │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">📚 LIBRARY MANAGEMENT SYSTEM — Resources</div>
+                                <div class="mermaid">
+flowchart LR
+    subgraph Resources["LIBRARY RESOURCES"]
+        S["👤 STUDENT<br/>/students, /students/123"]
+        B["📖 BOOK<br/>/books, /books/456"]
+        T["📋 TRANSACTION<br/>/transactions, /transactions/789"]
+    end
+    
+    S -->|"issues/returns"| B
+    B -->|"tracked in"| T
+    T -->|"belongs to"| S
+    
+    style S fill:#3a86ff,color:#fff
+    style B fill:#06d6a0,color:#fff
+    style T fill:#ff9f43,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="visual-box">
                             <h4>🛒 Resource Examples — E-Commerce System</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    E-COMMERCE SYSTEM                            │
-│                "Every Entity is a Resource"                     │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   👤 USER          → /users, /users/123                         │
-│   📦 PRODUCT       → /products, /products/456                   │
-│   🛒 CART          → /carts, /carts/789                         │
-│   📋 ORDER         → /orders, /orders/101                       │
-│   💳 PAYMENT       → /payments, /payments/202                   │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   KEY INSIGHT:                                                  │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-│   ❌ REST mein ACTIONS ko primary NAHI banate                   │
-│   ✅ REST mein ENTITIES/RESOURCES ko primary banate hain        │
-│                                                                 │
-│   STEP 1: "Mere system mein kaun-kaun se resources hain?"       │
-│   STEP 2: "In resources pe client kya-kya actions karega?"      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🛒 E-COMMERCE SYSTEM — Every Entity is a Resource</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Ecom["E-COMMERCE RESOURCES"]
+        U["👤 USER<br/>/users/123"]
+        P["📦 PRODUCT<br/>/products/456"]
+        C["🛒 CART<br/>/carts/789"]
+        O["📋 ORDER<br/>/orders/101"]
+        PM["💳 PAYMENT<br/>/payments/202"]
+    end
+    
+    U --> C
+    P --> C
+    C --> O
+    O --> PM
+    
+    subgraph Insight["💡 KEY INSIGHT"]
+        I1["❌ Actions ko primary NAHI banate"]
+        I2["✅ RESOURCES ko primary banate hain"]
+    end
+    
+    style U fill:#3a86ff,color:#fff
+    style P fill:#06d6a0,color:#fff
+    style C fill:#ff9f43,color:#fff
+    style O fill:#8338ec,color:#fff
+    style PM fill:#ff006e,color:#fff
+    style I1 fill:#ff6b6b,color:#fff
+    style I2 fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
@@ -2442,36 +2490,29 @@
 
                         <div class="visual-box">
                             <h4>🗄️ Storage Independence — REST Doesn't Care!</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│              REST = EXTERNAL CONTRACT, NOT INTERNAL STORAGE     │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│                      ┌──────────────────┐                       │
-│                      │   REST API       │                       │
-│                      │   /students/123  │                       │
-│                      └────────┬─────────┘                       │
-│                               │                                 │
-│            ┌──────────────────┼──────────────────┐              │
-│            │                  │                  │              │
-│            ▼                  ▼                  ▼              │
-│   ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
-│   │   SQL Table     │ │    MongoDB      │ │   Cassandra     │   │
-│   │  (rows/cols)    │ │  (documents)    │ │  (wide column)  │   │
-│   └─────────────────┘ └─────────────────┘ └─────────────────┘   │
-│                                                                 │
-│   ✅ Student ko SQL table mein rows/columns mein store karo     │
-│   ✅ Chat messages ko Cassandra mein store karo                 │
-│   ✅ Product catalog ko document store mein store karo          │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   REST KO FARAK NAHI PADEGA!                                    │
-│   Because REST sirf yeh dekhta hai ki client ko tum             │
-│   response mein KYA REPRESENTATION de rahe ho.                  │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🗄️ REST = EXTERNAL CONTRACT, NOT INTERNAL STORAGE</div>
+                                <div class="mermaid">
+flowchart TB
+    API["🌐 REST API<br/>/students/123"]
+    
+    API --> SQL["🗃️ SQL Table<br/>(rows/cols)"]
+    API --> Mongo["📁 MongoDB<br/>(documents)"]
+    API --> Cass["📊 Cassandra<br/>(wide column)"]
+    
+    Note["💡 REST KO FARAK NAHI PADEGA!<br/>REST sirf external contract dekhta hai"]
+    
+    SQL --> Note
+    Mongo --> Note
+    Cass --> Note
+    
+    style API fill:#667eea,color:#fff
+    style SQL fill:#3a86ff,color:#fff
+    style Mongo fill:#06d6a0,color:#fff
+    style Cass fill:#ff9f43,color:#fff
+    style Note fill:#ffd93d,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
@@ -2496,55 +2537,37 @@
 
                         <div class="visual-box">
                             <h4>🔄 Request to Response Flow — The "Representation" Process</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                THE REPRESENTATION PROCESS                       │
-│          "Internal Format ≠ External Format"                    │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   👤 CLIENT                                                     │
-│   ─────────────────────────────────────────                     │
-│   "Mujhe student 123 ka data chahiye"                           │
-│   GET /students/123                                             │
-│               │                                                 │
-│               ▼                                                 │
-│   ┌───────────────────────────────────────────────────────────┐ │
-│   │                      SERVER                               │ │
-│   │                                                           │ │
-│   │   STEP 1: URL se resource identify karo                   │ │
-│   │           → student 123                                   │ │
-│   │                                                           │ │
-│   │   STEP 2: Database se data fetch karo                     │ │
-│   │           → Internal format (rows/columns)                │ │
-│   │           ┌────────────────────────────────────┐          │ │
-│   │           │ id │ name  │ dept │ status        │          │ │
-│   │           │ 123│ Rahul │ CS   │ active        │          │ │
-│   │           └────────────────────────────────────┘          │ │
-│   │                                                           │ │
-│   │   STEP 3: Data ko "REPRESENT" karo                        │ │
-│   │           → External format (JSON)                        │ │
-│   │           {                                               │ │
-│   │             "id": 123,                                    │ │
-│   │             "name": "Rahul",                              │ │
-│   │             "department": "CS",                           │ │
-│   │             "status": "active"                            │ │
-│   │           }                                               │ │
-│   │                                                           │ │
-│   │   STEP 4: Client ko response bhej do                      │ │
-│   │                                                           │ │
-│   └───────────────────────────────────────────────────────────┘ │
-│               │                                                 │
-│               ▼                                                 │
-│   👤 CLIENT receives JSON (readable format!)                    │
-│                                                                 │
-│   ─────────────────────────────────────────                     │
-│   💡 KEY INSIGHT:                                               │
-│   Internal representation aur external representation           │
-│   DIFFERENT ho sakte hain — aur yahi REST ka natural design!    │
-│   ─────────────────────────────────────────                     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🔄 THE REPRESENTATION PROCESS — Internal ≠ External</div>
+                                <div class="mermaid">
+flowchart TB
+    Client["👤 CLIENT<br/>GET /students/123"]
+    
+    subgraph Server["🖥️ SERVER PROCESSING"]
+        S1["📍 STEP 1<br/>URL se resource identify<br/>→ student 123"]
+        S2["💾 STEP 2<br/>Database se fetch<br/>Internal format (rows)"]
+        S3["🔄 STEP 3<br/>REPRESENT karo<br/>External format (JSON)"]
+        S4["📤 STEP 4<br/>Response bhej do"]
+        
+        S1 --> S2
+        S2 --> S3
+        S3 --> S4
+    end
+    
+    Client -->|"Request"| S1
+    S4 -->|"JSON Response"| Response["👤 CLIENT<br/>receives readable JSON!"]
+    
+    Insight["💡 Internal ≠ External representation<br/>Yahi REST ka natural design!"]
+    
+    style Client fill:#3a86ff,color:#fff
+    style S1 fill:#8338ec,color:#fff
+    style S2 fill:#ff006e,color:#fff
+    style S3 fill:#06d6a0,color:#fff
+    style S4 fill:#ffbe0b,color:#000
+    style Response fill:#00ff88,color:#000
+    style Insight fill:#a855f7,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note">
@@ -2571,49 +2594,36 @@
 
                         <div class="visual-box">
                             <h4>🤝 REST vs HTTP — The Difference</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    REST vs HTTP                                 │
-│           "Style vs Protocol — Not The Same!"                   │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │   🎨 REST                    🔌 HTTP                    │   │
-│   │   ════════════               ════════════               │   │
-│   │   Architectural Style        Actual Protocol            │   │
-│   │   Design Guidelines          Rules to send req/res      │   │
-│   │   "How to think"             "How to communicate"       │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   LEKIN practical world mein REST implement karne ka            │
-│   SABSE COMMON WAY HTTP hi bana, kyunki:                        │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                                                         │   │
-│   │   ✅ URL path se RESOURCE identify ho jaata hai         │   │
-│   │      → /students/123, /orders/456                       │   │
-│   │                                                         │   │
-│   │   ✅ Methods/Verbs se ACTION clear ho jaata hai         │   │
-│   │      → GET, POST, PUT, DELETE                           │   │
-│   │                                                         │   │
-│   │   ✅ Headers se content types, auth, caching handle     │   │
-│   │      → Content-Type, Authorization, Cache-Control       │   │
-│   │                                                         │   │
-│   │   ✅ Status codes se RESULT standard ho jaata hai       │   │
-│   │      → 200 OK, 404 Not Found, 500 Error                 │   │
-│   │                                                         │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│   Isliye REST aur HTTP itne strongly MERGE ho gaye ki log       │
-│   bolne lage: "REST API" = "HTTP API"                           │
-│                                                                 │
-│   ⚠️ LEKIN strictly speaking:                                   │
-│   REST = ek STYLE hai | HTTP = ek PROTOCOL hai                  │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🤝 REST vs HTTP — Style vs Protocol</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Comparison["REST vs HTTP"]
+        REST["🎨 REST<br/>Architectural Style<br/>Design Guidelines<br/>'How to think'"]
+        HTTP["🔌 HTTP<br/>Actual Protocol<br/>Rules for req/res<br/>'How to communicate'"]
+    end
+    
+    subgraph WhyHTTP["✅ WHY HTTP fits REST perfectly"]
+        W1["📍 URL → Resource<br/>/students/123"]
+        W2["🔧 Methods → Action<br/>GET, POST, PUT, DELETE"]
+        W3["📋 Headers → Metadata<br/>Content-Type, Auth"]
+        W4["📊 Status → Result<br/>200 OK, 404 Not Found"]
+    end
+    
+    REST -.->|"best implemented via"| HTTP
+    HTTP --> WhyHTTP
+    
+    Note["⚠️ REST = STYLE | HTTP = PROTOCOL<br/>Not the same, but best friends!"]
+    
+    style REST fill:#8338ec,color:#fff
+    style HTTP fill:#3a86ff,color:#fff
+    style W1 fill:#06d6a0,color:#fff
+    style W2 fill:#ff9f43,color:#fff
+    style W3 fill:#ff006e,color:#fff
+    style W4 fill:#ffbe0b,color:#000
+    style Note fill:#ffd93d,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
@@ -2640,60 +2650,62 @@
 
                         <div class="visual-box">
                             <h4>✅ CORRECT REST Style — URL = Resource, Method = Action</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    CORRECT REST STYLE                           │
-│              "URL identifies WHAT, Method identifies HOW"       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   ┌──────────────┬─────────────────────┬────────────────────┐   │
-│   │    METHOD    │        URL          │      ACTION        │   │
-│   ├──────────────┼─────────────────────┼────────────────────┤   │
-│   │     GET      │  /students/123      │  Fetch student 123 │   │
-│   │     PUT      │  /students/123      │  Update student 123│   │
-│   │    DELETE    │  /students/123      │  Delete student 123│   │
-│   │     POST     │  /students          │  Create new student│   │
-│   │     GET      │  /students          │  List all students │   │
-│   └──────────────┴─────────────────────┴────────────────────┘   │
-│                                                                 │
-│   💡 Notice: URL SAME resource ko represent karta hai           │
-│      Method ACTION ko represent karta hai                       │
-│                                                                 │
-│   Isse API PREDICTABLE, STANDARD aur CONSISTENT lagti hai!      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">✅ CORRECT REST STYLE — URL = WHAT, Method = HOW</div>
+                                <div class="mermaid">
+flowchart LR
+    subgraph Correct["CORRECT REST ENDPOINTS"]
+        G1["GET /students/123<br/>→ Fetch student"]
+        P1["PUT /students/123<br/>→ Update student"]
+        D1["DELETE /students/123<br/>→ Delete student"]
+        P2["POST /students<br/>→ Create new"]
+        G2["GET /students<br/>→ List all"]
+    end
+    
+    Note["💡 URL = Same resource<br/>Method = Different action<br/>API is PREDICTABLE!"]
+    
+    Correct --> Note
+    
+    style G1 fill:#06d6a0,color:#fff
+    style P1 fill:#ffbe0b,color:#000
+    style D1 fill:#ff6b6b,color:#fff
+    style P2 fill:#3a86ff,color:#fff
+    style G2 fill:#8338ec,color:#fff
+    style Note fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="visual-box">
                             <h4>❌ WRONG Non-REST Style — Action in URL</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    WRONG NON-REST STYLE                         │
-│              "Don't put actions in URL!"                        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   ┌──────────────┬─────────────────────┬────────────────────┐   │
-│   │    METHOD    │        URL          │      PROBLEM       │   │
-│   ├──────────────┼─────────────────────┼────────────────────┤   │
-│   │     POST     │  /getStudent        │  Action in URL! ❌  │   │
-│   │     POST     │  /deleteStudent     │  Action in URL! ❌  │   │
-│   │     POST     │  /updateStudent     │  Action in URL! ❌  │   │
-│   │     POST     │  /createStudent     │  Action in URL! ❌  │   │
-│   └──────────────┴─────────────────────┴────────────────────┘   │
-│                                                                 │
-│   ⚠️ Problems:                                                  │
-│   • URL mein action daal rahe ho                                │
-│   • Method bas ek generic "POST" ban gaya                       │
-│   • API inconsistent aur unpredictable lagti hai                │
-│                                                                 │
-│   Yeh approach KAAM kar sakta hai, lekin yeh REST mindset       │
-│   NAHI hai, kyunki REST chahta hai:                             │
-│   • ACTION → verbs (methods) mein ho                            │
-│   • RESOURCE → URL mein ho                                      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">❌ WRONG STYLE — Don't put actions in URL!</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Wrong["WRONG ENDPOINTS"]
+        W1["POST /getStudent ❌"]
+        W2["POST /deleteStudent ❌"]
+        W3["POST /updateStudent ❌"]
+        W4["POST /createStudent ❌"]
+    end
+    
+    subgraph Problems["⚠️ PROBLEMS"]
+        P1["Action in URL!"]
+        P2["Method just generic POST"]
+        P3["API unpredictable"]
+    end
+    
+    Wrong --> Problems
+    
+    style W1 fill:#ff6b6b,color:#fff
+    style W2 fill:#ff6b6b,color:#fff
+    style W3 fill:#ff6b6b,color:#fff
+    style W4 fill:#ff6b6b,color:#fff
+    style P1 fill:#ff006e,color:#fff
+    style P2 fill:#ff006e,color:#fff
+    style P3 fill:#ff006e,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
@@ -2718,44 +2730,62 @@
 
                         <div class="visual-box">
                             <h4>🌍 HTTP Ecosystem Benefits</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│              WHY REST OVER HTTP BECAME DEFAULT                  │
-│              "Instant Ecosystem Support!"                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   🔧 TESTING & DEBUGGING                                        │
-│   ─────────────────────────────────────────                     │
-│   • curl aur Postman se instantly test kar sakte ho             │
-│   • Browser se basic requests bhi possible hain                 │
-│   • Chrome DevTools mein network tab se debug                   │
-│                                                                 │
-│   🌐 INFRASTRUCTURE                                             │
-│   ─────────────────────────────────────────                     │
-│   • Nginx/Proxy/CDN se caching aur routing easy                 │
-│   • Load balancers HTTP traffic distribute karne mein experts   │
-│   • API Gateways ready-made HTTP support dete hain              │
-│                                                                 │
-│   📊 MONITORING & OBSERVABILITY                                 │
-│   ─────────────────────────────────────────                     │
-│   • Monitoring tools HTTP traces easily capture kar lete hain   │
-│   • Logging libraries HTTP requests log karna jaanti hain       │
-│   • APM tools (Datadog, New Relic) HTTP first-class support     │
-│                                                                 │
-│   🔐 SECURITY                                                   │
-│   ─────────────────────────────────────────                     │
-│   • TLS/SSL encryption out-of-the-box                           │
-│   • Auth headers (Bearer tokens, API keys) standard             │
-│   • CORS handling browser-level                                 │
-│                                                                 │
-│   📦 COMPRESSION & OPTIMIZATION                                 │
-│   ─────────────────────────────────────────                     │
-│   • Gzip/Brotli compression built-in                            │
-│   • HTTP/2 multiplexing                                         │
-│   • Caching headers (ETag, Cache-Control)                       │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🌍 WHY REST OVER HTTP BECAME DEFAULT</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph Testing["🔧 TESTING & DEBUGGING"]
+        T1["curl & Postman"]
+        T2["Browser requests"]
+        T3["Chrome DevTools"]
+    end
+    
+    subgraph Infra["🌐 INFRASTRUCTURE"]
+        I1["Nginx/Proxy/CDN"]
+        I2["Load Balancers"]
+        I3["API Gateways"]
+    end
+    
+    subgraph Monitor["📊 MONITORING"]
+        M1["HTTP traces"]
+        M2["Logging libraries"]
+        M3["APM tools"]
+    end
+    
+    subgraph Security["🔐 SECURITY"]
+        S1["TLS/SSL encryption"]
+        S2["Auth headers"]
+        S3["CORS handling"]
+    end
+    
+    subgraph Optimize["📦 OPTIMIZATION"]
+        O1["Gzip compression"]
+        O2["HTTP/2 multiplexing"]
+        O3["Caching headers"]
+    end
+    
+    Result["💡 Instant Ecosystem Support!"]
+    
+    Testing & Infra & Monitor & Security & Optimize --> Result
+    
+    style T1 fill:#3a86ff,color:#fff
+    style T2 fill:#3a86ff,color:#fff
+    style T3 fill:#3a86ff,color:#fff
+    style I1 fill:#06d6a0,color:#fff
+    style I2 fill:#06d6a0,color:#fff
+    style I3 fill:#06d6a0,color:#fff
+    style M1 fill:#ff9f43,color:#fff
+    style M2 fill:#ff9f43,color:#fff
+    style M3 fill:#ff9f43,color:#fff
+    style S1 fill:#ff006e,color:#fff
+    style S2 fill:#ff006e,color:#fff
+    style S3 fill:#ff006e,color:#fff
+    style O1 fill:#8338ec,color:#fff
+    style O2 fill:#8338ec,color:#fff
+    style O3 fill:#8338ec,color:#fff
+    style Result fill:#ffd93d,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
@@ -2784,57 +2814,60 @@
 
                         <div class="visual-box">
                             <h4>⚠️ REST Downsides — Know The Trade-offs</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    REST DOWNSIDES                               │
-│              "No Technology is Perfect!"                        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   1️⃣ REST CLIENTS KO "EXTRA WORK" KARNA PADTA HAI               │
-│   ─────────────────────────────────────────                     │
-│   RPC mein tumhe stubs mil jaate hain jo language-native        │
-│   objects return kar dete hain.                                 │
-│                                                                 │
-│   REST mein:                                                    │
-│   • JSON aata hai → parse karna padta hai                       │
-│   • Mapping karni padti hai (JSON → Class)                      │
-│   • Validations manually manage karni padti hain                │
-│   • Latency aur dev effort DONO badh sakte hain                 │
-│                                                                 │
-│   2️⃣ REPETITION ACROSS SERVICES                                 │
-│   ─────────────────────────────────────────                     │
-│   Har service ko SAME logic likhna padta hai:                   │
-│   • Retry logic                                                 │
-│   • Timeout handling                                            │
-│   • Authentication                                              │
-│   • Error mapping                                               │
-│                                                                 │
-│   Isliye companies INTERNAL SHARED SDK banati hain,             │
-│   warna har team apni-apni way mein implement karti rahegi!     │
-│                                                                 │
-│   3️⃣ JSON HEAVY HOTA HAI                                        │
-│   ─────────────────────────────────────────                     │
-│   JSON human-readable hota hai, lekin COMPACT nahi hota:        │
-│   • Quotes, commas, key names REPEAT hote hain                  │
-│   • Low latency systems mein overhead NOTICEABLE ho sakta hai   │
-│   • Binary formats (Protobuf, Avro) zyada efficient hain        │
-│                                                                 │
-│   4️⃣ VERB SUPPORT LIMITATIONS                                   │
-│   ─────────────────────────────────────────                     │
-│   Kuch proxies ya older systems PUT/DELETE ko BLOCK kar dete:   │
-│   • Tab REST purity COMPROMISE karni padti hai                  │
-│   • Awkward endpoints banane padte hain                         │
-│   • POST /students/123/delete type workarounds                  │
-│                                                                 │
-│   5️⃣ PROTOCOL FLEXIBILITY LIMITED                               │
-│   ─────────────────────────────────────────                     │
-│   HTTP mostly TCP based hai:                                    │
-│   • Agar UDP jaisi approach chahiye (ultra low-latency)         │
-│   • REST over HTTP naturally fit NAHI hoga                      │
-│   • Gaming, video streaming mein different protocols better     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">⚠️ REST DOWNSIDES — No Technology is Perfect!</div>
+                                <div class="mermaid">
+flowchart TB
+    subgraph D1["1️⃣ CLIENT EXTRA WORK"]
+        C1["JSON parse karna padta"]
+        C2["Manual mapping needed"]
+        C3["Validations manually"]
+    end
+    
+    subgraph D2["2️⃣ REPETITION"]
+        R1["Retry logic"]
+        R2["Timeout handling"]
+        R3["Auth & Error mapping"]
+    end
+    
+    subgraph D3["3️⃣ JSON HEAVY"]
+        J1["Not compact"]
+        J2["Quotes, commas repeat"]
+        J3["Binary formats better"]
+    end
+    
+    subgraph D4["4️⃣ VERB LIMITATIONS"]
+        V1["Proxies block PUT/DELETE"]
+        V2["Awkward workarounds"]
+    end
+    
+    subgraph D5["5️⃣ PROTOCOL LIMITED"]
+        P1["HTTP = TCP based"]
+        P2["UDP alternatives needed"]
+        P3["Gaming/streaming different"]
+    end
+    
+    Note["💡 Know trade-offs = Mature Engineer!"]
+    
+    D1 & D2 & D3 & D4 & D5 --> Note
+    
+    style C1 fill:#ff6b6b,color:#fff
+    style C2 fill:#ff6b6b,color:#fff
+    style C3 fill:#ff6b6b,color:#fff
+    style R1 fill:#ff9f43,color:#fff
+    style R2 fill:#ff9f43,color:#fff
+    style R3 fill:#ff9f43,color:#fff
+    style J1 fill:#ffbe0b,color:#000
+    style J2 fill:#ffbe0b,color:#000
+    style J3 fill:#ffbe0b,color:#000
+    style V1 fill:#8338ec,color:#fff
+    style V2 fill:#8338ec,color:#fff
+    style P1 fill:#3a86ff,color:#fff
+    style P2 fill:#3a86ff,color:#fff
+    style P3 fill:#3a86ff,color:#fff
+    style Note fill:#06d6a0,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
@@ -2854,43 +2887,55 @@
 
                     <div class="visual-box">
                         <h4>📋 Final Takeaway</h4>
-                        <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    REST API SUMMARY                             │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   📌 FULL FORM:                                                 │
-│   Representational State Transfer                               │
-│                                                                 │
-│   📌 WHAT IT IS:                                                │
-│   Architectural STYLE (not a framework, not a protocol)         │
-│   Guidelines for clean, predictable client-server communication │
-│                                                                 │
-│   📌 CORE PHILOSOPHY:                                           │
-│   "Everything is a RESOURCE"                                    │
-│   → Resources ko URLs se identify karo                          │
-│   → Actions ko HTTP verbs se express karo                       │
-│   → State ko representation format (JSON) mein transfer karo    │
-│                                                                 │
-│   📌 GOLDEN RULE:                                               │
-│   URL = RESOURCE (noun) | Method = ACTION (verb)                │
-│                                                                 │
-│   📌 STORAGE INDEPENDENCE:                                      │
-│   REST EXTERNAL contract define karta hai                       │
-│   INTERNAL storage kuch bhi ho sakta hai                        │
-│                                                                 │
-│   📌 REST vs HTTP:                                              │
-│   REST = Style | HTTP = Protocol                                │
-│   But in practice, they're best friends!                        │
-│                                                                 │
-│   📌 BENEFITS:                                                  │
-│   Predictable, Standard, Ecosystem support, Easy debugging      │
-│                                                                 │
-│   📌 DOWNSIDES:                                                 │
-│   Extra parsing, Repetition, JSON overhead, Verb limitations    │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-                        </pre>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">📋 REST API SUMMARY</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph FullForm["📌 REST = Representational State Transfer"]
+        F1["Architectural STYLE<br/>Not framework, not protocol"]
+    end
+    
+    subgraph Core["📌 CORE PHILOSOPHY"]
+        C1["Everything is a RESOURCE"]
+        C2["URLs identify resources"]
+        C3["HTTP verbs = actions"]
+        C4["JSON = representation"]
+    end
+    
+    subgraph Golden["📌 GOLDEN RULE"]
+        G1["URL = RESOURCE (noun)"]
+        G2["Method = ACTION (verb)"]
+    end
+    
+    subgraph Storage["📌 STORAGE INDEPENDENCE"]
+        S1["REST = External contract"]
+        S2["Internal = anything"]
+    end
+    
+    subgraph Comparison["📌 REST vs HTTP"]
+        R1["REST = Style"]
+        H1["HTTP = Protocol"]
+        R1 -.->|"best friends"| H1
+    end
+    
+    FullForm --> Core
+    Core --> Golden
+    Golden --> Storage
+    Storage --> Comparison
+    
+    style F1 fill:#667eea,color:#fff
+    style C1 fill:#3a86ff,color:#fff
+    style C2 fill:#3a86ff,color:#fff
+    style C3 fill:#3a86ff,color:#fff
+    style C4 fill:#3a86ff,color:#fff
+    style G1 fill:#06d6a0,color:#fff
+    style G2 fill:#ff9f43,color:#fff
+    style S1 fill:#8338ec,color:#fff
+    style S2 fill:#8338ec,color:#fff
+    style R1 fill:#ff006e,color:#fff
+    style H1 fill:#ffbe0b,color:#000
+                            </div>
+                        </div>
                     </div>
 
                     <div class="hinglish-note" style="margin-top: 1rem; font-size: 0.95rem; line-height: 1.6;">
@@ -2933,29 +2978,31 @@
                         
                         <div class="visual-box">
                             <h4>🎯 Ideal Microservices Architecture</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                    IDEAL MICROSERVICES                        │
-│                  "Each Service Owns Its Data"                  │
-└─────────────────────────────────────────────────────────────────┘
-
-    ┌─────────────────┐         ┌─────────────────┐
-    │  Blog Service   │───API───│ Analytics Service│
-    │   (Owner)       │         │   (Consumer)     │
-    └────────┬────────┘         └─────────────────┘
-             │                        
-             │ (Only Blog Service                   
-             │  touches BlogDB)                    
-             ▼                        
-    ┌─────────────────┐
-    │    🗄️ BlogDB     │
-    │   (Protected)   │
-    └─────────────────┘
-
-    ✅ Blog Service = Single Owner of BlogDB
-    ✅ Analytics gets data via API calls
-    ✅ Contract defined at API level, not schema level
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">🎯 IDEAL MICROSERVICES — Each Service Owns Its Data</div>
+                                <div class="mermaid">
+flowchart TB
+    BS["📝 Blog Service<br/>(Owner)"]
+    AS["📊 Analytics Service<br/>(Consumer)"]
+    DB["🗄️ BlogDB<br/>(Protected)"]
+    
+    BS <-->|"API"| AS
+    BS -->|"Only Blog Service<br/>touches BlogDB"| DB
+    
+    subgraph Benefits["✅ BENEFITS"]
+        B1["Single Owner of BlogDB"]
+        B2["Data via API calls"]
+        B3["Contract at API level"]
+    end
+    
+    style BS fill:#3a86ff,color:#fff
+    style AS fill:#8338ec,color:#fff
+    style DB fill:#06d6a0,color:#fff
+    style B1 fill:#00ff88,color:#000
+    style B2 fill:#00ff88,color:#000
+    style B3 fill:#00ff88,color:#000
+                                </div>
+                            </div>
                         </div>
 
                         <p class="content-text">
@@ -2985,27 +3032,38 @@
 
                         <div class="visual-box">
                             <h4>⚠️ Shared Database Pattern (Anti-Pattern)</h4>
-                            <pre class="visual-diagram">
-┌─────────────────────────────────────────────────────────────────┐
-│                SHARED DATABASE PATTERN                        │
-│             "Multiple Services, One Database"                 │
-└─────────────────────────────────────────────────────────────────┘
-
-    ┌─────────────────┐    ┌─────────────────┐   ┌─────────────────┐
-    │  Blog Service   │    │Analytics Service│   │  Recommend Svc  │
-    └────────┬────────┘    └────────┬────────┘   └────────┬────────┘
-             │                   │                      │
-             │                   │                      │
-             │         ┌────────┴───────────┐            │
-             └────────►│   🗄️ BlogDB     │◄───────────┘
-                       │    (SHARED!)    │
-                       └──────────────────┘
-
-    ❌ Multiple services directly hitting same database
-    ❌ No API layer between them
-    ❌ Schema becomes shared contract
-    ❌ Tight coupling created!
-                            </pre>
+                            <div class="mermaid-container">
+                                <div class="diagram-label">⚠️ SHARED DATABASE PATTERN — Multiple Services, One Database</div>
+                                <div class="mermaid">
+flowchart TB
+    BS["📝 Blog Service"]
+    AS["📊 Analytics Service"]
+    RS["🎯 Recommend Service"]
+    DB["🗄️ BlogDB<br/>(SHARED!)"]
+    
+    BS --> DB
+    AS --> DB
+    RS --> DB
+    
+    subgraph Problems["❌ PROBLEMS"]
+        P1["Multiple services hitting same DB"]
+        P2["No API layer between them"]
+        P3["Schema becomes shared contract"]
+        P4["TIGHT COUPLING created!"]
+    end
+    
+    DB --> Problems
+    
+    style BS fill:#3a86ff,color:#fff
+    style AS fill:#8338ec,color:#fff
+    style RS fill:#ff9f43,color:#fff
+    style DB fill:#ff6b6b,color:#fff
+    style P1 fill:#ff006e,color:#fff
+    style P2 fill:#ff006e,color:#fff
+    style P3 fill:#ff006e,color:#fff
+    style P4 fill:#ff006e,color:#fff
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hinglish-note" style="background: rgba(255, 107, 107, 0.1); border-left-color: var(--accent-red);">
@@ -3932,6 +3990,21 @@ Month 8:  └─── + verified_badge_state
                         <p class="content-text">
                             Ab analytics ko dekho — yahan game <span class="highlight">completely change</span> ho jaata hai! Analytics ka workload transactional workloads se <strong>fundamentally different</strong> hota hai.
                         </p>
+
+                        <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                            📚 <strong>OLTP vs OLAP — Full Forms Samjho Pehle:</strong><br><br>
+                            <strong>OLTP = Online Transaction Processing</strong><br>
+                            → Day-to-day operations ke liye. Jaise user login karna, order place karna, payment karna.<br>
+                            → Fast, small queries. Ek user ka ek record access karo.<br>
+                            → Example: "User 123 ka profile dikhao" → Milliseconds mein answer!<br><br>
+                            
+                            <strong>OLAP = Online Analytical Processing</strong><br>
+                            → Analytics aur reporting ke liye. Business insights nikalna.<br>
+                            → Slow but powerful. Lakho-crore rows scan karo, aggregate karo, patterns dhundho.<br>
+                            → Example: "Last 6 months mein kis product ne sabse zyada revenue diya?" → Minutes bhi lag sakte hain!<br><br>
+                            
+                            <em>Simple yaad rakho: <strong>OLTP = Users ke liye (fast)</strong> | <strong>OLAP = Business ke liye (heavy analysis)</strong></em>
+                        </div>
 
                         <div class="visual-box">
                             <h4>📈 OLTP vs OLAP: Different Beasts!</h4>
@@ -9575,6 +9648,44 @@ public class BotMetricsService : IBotMetricsService
                 }, 100); // Wait for CSS transition to begin
             }
         }
+
+        // Initialize Mermaid.js with dark theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#667eea',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#764ba2',
+                lineColor: '#9ca3af',
+                secondaryColor: '#1a1a2e',
+                tertiaryColor: '#0f0f1a',
+                background: '#0f0f1a',
+                mainBkg: '#1a1a2e',
+                secondBkg: '#0f0f1a',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '14px',
+                nodeBorder: '#667eea',
+                clusterBkg: 'rgba(102,126,234,0.1)',
+                clusterBorder: '#667eea',
+                edgeLabelBackground: '#1a1a2e',
+                actorBkg: '#667eea',
+                actorBorder: '#764ba2',
+                actorTextColor: '#fff',
+                signalColor: '#9ca3af',
+                signalTextColor: '#fff'
+            },
+            flowchart: {
+                curve: 'basis',
+                padding: 20,
+                useMaxWidth: true
+            },
+            sequence: {
+                useMaxWidth: true,
+                actorMargin: 50,
+                showSequenceNumbers: false
+            }
+        });
 
         // Initialize all sections as collapsible AND collapsed by default
         document.addEventListener('DOMContentLoaded', () => {

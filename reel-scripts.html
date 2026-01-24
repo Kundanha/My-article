@@ -220,6 +220,83 @@
             letter-spacing: 1px;
         }
 
+        /* Progress Bar */
+        .progress-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .progress-stats {
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: var(--gradient-reel);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gradient-reel);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 100%
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-percentage {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
         /* Category Groups */
         .category-group {
             margin-bottom: 1rem;
@@ -415,7 +492,154 @@
             background: var(--gradient-reel);
         }
 
-        /* Reel Header */
+        .reel-card.completed {
+            border-color: rgba(6, 214, 160, 0.4);
+        }
+
+        .reel-card.completed::before {
+            background: linear-gradient(90deg, #06d6a0, #00f5d4);
+        }
+
+        /* Collapsible Header */
+        .reel-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(180deg, rgba(255, 0, 110, 0.05) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .reel-card-header:hover {
+            background: linear-gradient(180deg, rgba(255, 0, 110, 0.1) 0%, transparent 100%);
+        }
+
+        .reel-card.completed .reel-card-header {
+            background: linear-gradient(180deg, rgba(6, 214, 160, 0.1) 0%, transparent 100%);
+        }
+
+        .reel-card.completed .reel-card-header:hover {
+            background: linear-gradient(180deg, rgba(6, 214, 160, 0.15) 0%, transparent 100%);
+        }
+
+        .reel-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        /* Custom Checkbox */
+        .reel-checkbox-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reel-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .reel-checkbox:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
+        }
+
+        .reel-checkbox:checked {
+            background: linear-gradient(135deg, #06d6a0, #00f5d4);
+            border-color: #06d6a0;
+        }
+
+        .reel-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0a0a0f;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Header Info */
+        .reel-header-info {
+            flex: 1;
+        }
+
+        .reel-header-top {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .reel-header-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .reel-header-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Expand/Collapse Icon */
+        .reel-expand-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .reel-card-header:hover .reel-expand-icon {
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+
+        .reel-card.expanded .reel-expand-icon {
+            transform: rotate(180deg);
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        /* Collapsible Content */
+        .reel-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .reel-card.expanded .reel-card-content {
+            max-height: none;
+        }
+
+        /* Reel Header (inside content) */
         .reel-header {
             padding: 2rem 2.5rem;
             background: linear-gradient(180deg, rgba(255, 0, 110, 0.05) 0%, transparent 100%);
@@ -1629,8 +1853,20 @@
 
             <!-- Script Count -->
             <div class="script-count">
-                <div class="script-count-number">6</div>
+                <div class="script-count-number">12</div>
                 <div class="script-count-label">Scripts Ready</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-title">📊 Completion</span>
+                    <span class="progress-stats" id="progressStats">0/12</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0% Complete</div>
             </div>
 
             <!-- Design Patterns Category -->
@@ -1640,7 +1876,7 @@
                         <span class="category-icon">🎨</span>
                         Design Patterns
                     </span>
-                    <span class="category-count">6</span>
+                    <span class="category-count">7</span>
                 </div>
                 <div class="category-items">
                     <a href="#strategy-pattern" class="nav-item">
@@ -1666,6 +1902,43 @@
                     <a href="#singleton-pattern" class="nav-item">
                         <span class="nav-number">06</span>
                         <span>Singleton Pattern</span>
+                    </a>
+                    <a href="#factory-pattern" class="nav-item">
+                        <span class="nav-number">07</span>
+                        <span>Factory Pattern</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- System Design Fundamentals Category -->
+            <div class="category-group" id="system-design-fundamentals">
+                <div class="category-header" onclick="toggleCategory('system-design-fundamentals')">
+                    <span class="category-title">
+                        <span class="category-icon">🏗️</span>
+                        System Design Basics
+                    </span>
+                    <span class="category-count">5</span>
+                </div>
+                <div class="category-items">
+                    <a href="#system-design-intro" class="nav-item">
+                        <span class="nav-number">08</span>
+                        <span>System Design Intro</span>
+                    </a>
+                    <a href="#system-types-layers" class="nav-item">
+                        <span class="nav-number">09</span>
+                        <span>Types & Layers</span>
+                    </a>
+                    <a href="#spiral-approach" class="nav-item">
+                        <span class="nav-number">10</span>
+                        <span>Spiral Approach</span>
+                    </a>
+                    <a href="#mvp-approach" class="nav-item">
+                        <span class="nav-number">11</span>
+                        <span>MVP Approach</span>
+                    </a>
+                    <a href="#golden-rules" class="nav-item">
+                        <span class="nav-number">12</span>
+                        <span>3 Golden Rules</span>
                     </a>
                 </div>
             </div>
@@ -1709,10 +1982,45 @@
                             <span>💼</span> LinkedIn
                         </span>
                     </div>
+                    <div class="progress-badge-wrapper" style="margin-top: 1.5rem;">
+                        <span class="progress-badge" style="
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            padding: 0.6rem 1.2rem;
+                            background: linear-gradient(135deg, rgba(6, 214, 160, 0.2), rgba(0, 245, 212, 0.2));
+                            border: 1px solid rgba(6, 214, 160, 0.3);
+                            border-radius: 50px;
+                            color: #06d6a0;
+                            font-size: 0.9rem;
+                            font-weight: 600;
+                        ">✅ 0/7 Completed</span>
+                    </div>
                 </header>
 
                 <!-- ==================== REEL #1: STRATEGY PATTERN ==================== -->
-                <article class="reel-card" id="strategy-pattern">
+                <article class="reel-card" id="strategy-pattern" data-reel="1">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-strategy" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #01</span>
+                                    <span class="reel-duration">⏱️ 45 sec</span>
+                                    <span class="reel-category">Design Pattern</span>
+                                </div>
+                                <h2 class="reel-header-title">Strategy Pattern — ChatGPT Instant vs Thinking Mode</h2>
+                                <p class="reel-header-subtitle">Same feature, multiple behaviors — production-safe design!</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
                     <!-- Reel Header -->
                     <div class="reel-header">
                         <div class="reel-meta">
@@ -2164,10 +2472,30 @@ class ChatService
                             </div>
                         </div>
                     </div>
-                </article>
-
-                <!-- ==================== REEL #2: ORCHESTRATOR PATTERN ==================== -->
-                <article class="reel-card" id="orchestrator-pattern">
+                    </div>
+                </article> -->
+                <article class="reel-card" id="orchestrator-pattern" data-reel="2">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-orchestrator" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #02</span>
+                                    <span class="reel-duration">⏱️ 50 sec</span>
+                                    <span class="reel-category">Architecture Pattern</span>
+                                </div>
+                                <h2 class="reel-header-title">Orchestrator Pattern — RAG Pipeline Architecture</h2>
+                                <p class="reel-header-subtitle">Services ko seedha baat nahi karni chahiye — ek conductor chahiye!</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
                     <!-- Reel Header -->
                     <div class="reel-header">
                         <div class="reel-meta">
@@ -2734,10 +3062,32 @@ public async Task&lt;IActionResult&gt; Ingest(
                             <p class="bottom-line-text">"Services ko smart mat banao. Services ko <span class="emphasis">single-purpose</span> rakho. Workflow ko orchestrator ke under <span class="emphasis">smart</span> banao."</p>
                         </div>
                     </div>
+                    </div>
                 </article>
 
                 <!-- ==================== REEL #3: RESULT PATTERN ==================== -->
-                <article class="reel-card" id="result-pattern">
+                <article class="reel-card" id="result-pattern" data-reel="3">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-result" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #03</span>
+                                    <span class="reel-duration">⏱️ 45 sec</span>
+                                    <span class="reel-category">Error Handling</span>
+                                </div>
+                                <h2 class="reel-header-title">Result Pattern — Exception Hell Se Bachao!</h2>
+                                <p class="reel-header-subtitle">Expected failures ko exceptions mat banao — clean response return karo!</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
                     <!-- Reel Header -->
                     <div class="reel-header">
                         <div class="reel-meta">
@@ -3295,10 +3645,32 @@ public async Task&lt;IActionResult&gt; Get(int id)
                             </p>
                         </div>
                     </div>
+                    </div>
                 </article>
 
                 <!-- ==================== REEL #4: REPOSITORY PATTERN ==================== -->
-                <article class="reel-card" id="repository-pattern">
+                <article class="reel-card" id="repository-pattern" data-reel="4">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-repository" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #04</span>
+                                    <span class="reel-duration">⏱️ 50 sec</span>
+                                    <span class="reel-category">Design Pattern</span>
+                                </div>
+                                <h2 class="reel-header-title">Repository Pattern — Netflix AI Recommendations</h2>
+                                <p class="reel-header-subtitle">Database change ho jaaye, AI logic safe rahe! 🚀</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
                     <!-- Reel Header -->
                     <div class="reel-header">
                         <div class="reel-meta">
@@ -3450,9 +3822,9 @@ flowchart LR
     style RS fill:#ff006e,color:#fff
     style CALL fill:#8338ec,color:#fff
     style IR fill:#667eea,color:#fff
-    style P fill:#06d6a0,color:#000
+    style P fill:#06d6a0,color:#1a1a2e
     style A fill:#3a86ff,color:#fff
-    style M fill:#ffbe0b,color:#000
+    style M fill:#ffbe0b,color:#1a1a2e
                             </div>
                         </div>
 
@@ -4031,10 +4403,32 @@ var app = builder.Build();</code></pre>
                             </p>
                         </div>
                     </div>
+                    </div>
                 </article>
 
                 <!-- ==================== REEL #5: SEPARATION OF CONCERNS ==================== -->
-                <article class="reel-card" id="separation-of-concerns">
+                <article class="reel-card" id="separation-of-concerns" data-reel="5">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-soc" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #05</span>
+                                    <span class="reel-duration">⏱️ 45 sec</span>
+                                    <span class="reel-category">Architecture Principle</span>
+                                </div>
+                                <h2 class="reel-header-title">Separation of Concerns — Interview Ready Answer</h2>
+                                <p class="reel-header-subtitle">SoC = macro level, SRP = micro level — dono alag hai!</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
                     <!-- Reel Header -->
                     <div class="reel-header">
                         <div class="reel-meta">
@@ -4135,8 +4529,8 @@ flowchart TB
     
     style C fill:#667eea,color:#fff
     style M fill:#8338ec,color:#fff
-    style S fill:#06d6a0,color:#000
-    style V fill:#00f5d4,color:#000
+    style S fill:#06d6a0,color:#1a1a2e
+    style V fill:#00f5d4,color:#1a1a2e
     style R fill:#3a86ff,color:#fff
     style DB fill:#ff006e,color:#fff
                             </div>
@@ -4216,9 +4610,9 @@ flowchart LR
     
     SRP ---|"Both work together!"| SoC
     
-    style S1 fill:#ffbe0b,color:#000
-    style S2 fill:#ffbe0b,color:#000
-    style S3 fill:#ffbe0b,color:#000
+    style S1 fill:#ffbe0b,color:#1a1a2e
+    style S2 fill:#ffbe0b,color:#1a1a2e
+    style S3 fill:#ffbe0b,color:#1a1a2e
     style C1 fill:#667eea,color:#fff
     style C2 fill:#667eea,color:#fff
     style C3 fill:#667eea,color:#fff
@@ -4620,10 +5014,32 @@ public class ProfileController : ControllerBase
                             </p>
                         </div>
                     </div>
+                    </div>
                 </article>
 
                 <!-- ==================== REEL #6: SINGLETON PATTERN ==================== -->
-                <article class="reel-card" id="singleton-pattern">
+                <article class="reel-card" id="singleton-pattern" data-reel="6">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-singleton" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #06</span>
+                                    <span class="reel-duration">⏱️ 45 sec</span>
+                                    <span class="reel-category">Design Pattern</span>
+                                </div>
+                                <h2 class="reel-header-title">Singleton Pattern — Azure OpenAI Client Optimization</h2>
+                                <p class="reel-header-subtitle">Ek class ka sirf ek instance — memory stable, system scalable! 🚀</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
                     <!-- Reel Header -->
                     <div class="reel-header">
                         <div class="reel-meta">
@@ -4746,7 +5162,7 @@ flowchart TB
     style R2 fill:#667eea,color:#fff
     style R3 fill:#667eea,color:#fff
     style R4 fill:#667eea,color:#fff
-    style S fill:#06d6a0,color:#000,stroke-width:3px
+    style S fill:#06d6a0,color:#1a1a2e,stroke-width:3px
     style API fill:#ff006e,color:#fff
                             </div>
                         </div>
@@ -4818,12 +5234,12 @@ flowchart LR
         SI2["Use for: HttpClient, SDK Clients"]
     end
     
-    style T1 fill:#ffbe0b,color:#000
-    style T2 fill:#ffbe0b,color:#000
+    style T1 fill:#ffbe0b,color:#1a1a2e
+    style T2 fill:#ffbe0b,color:#1a1a2e
     style S1 fill:#8338ec,color:#fff
     style S2 fill:#8338ec,color:#fff
-    style SI1 fill:#06d6a0,color:#000
-    style SI2 fill:#06d6a0,color:#000
+    style SI1 fill:#06d6a0,color:#1a1a2e
+    style SI2 fill:#06d6a0,color:#1a1a2e
                             </div>
                         </div>
                     </div>
@@ -5159,6 +5575,1622 @@ services.AddScoped&lt;RequestContext&gt;();    // ✅ CORRECT!
                             </p>
                         </div>
                     </div>
+                    </div>
+                </article>
+
+                <!-- ==================== REEL #7: FACTORY PATTERN ==================== -->
+                <article class="reel-card" id="factory-pattern" data-reel="7">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-factory" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #07</span>
+                                    <span class="reel-duration">⏱️ 50 sec</span>
+                                    <span class="reel-category">Design Pattern</span>
+                                </div>
+                                <h2 class="reel-header-title">Factory Pattern — Azure Search Client Creation</h2>
+                                <p class="reel-header-subtitle">Tum bas order do, banana mera kaam hai! 🏭</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
+                    <!-- Reel Header -->
+                    <div class="reel-header">
+                        <div class="reel-meta">
+                            <span class="reel-number">Reel #07</span>
+                            <span class="reel-duration">⏱️ 50 sec</span>
+                            <span class="reel-category">Design Pattern</span>
+                        </div>
+                        <h2 class="reel-title">Factory Pattern — Azure Search Client Creation</h2>
+                        <p class="reel-subtitle">Tum bas order do, banana mera kaam hai! 🏭</p>
+                    </div>
+
+                    <!-- Hook Section -->
+                    <div class="hook-section">
+                        <div class="hook-label">🎣 HOOK — Record This First!</div>
+                        <p class="hook-text">Production code me har jagah <code>new</code> keyword dikh raha hai? Samajh jao <strong>Factory missing hai</strong>.</p>
+                    </div>
+
+                    <!-- Script Section -->
+                    <div class="script-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <div>
+                                <div class="section-title">50-Sec Hinglish Script</div>
+                                <div class="section-subtitle">Natural flow, English letters</div>
+                            </div>
+                        </div>
+
+                        <div class="script-content">
+                            <div class="script-text">
+                                <div class="script-para">
+                                    <span class="question">Suppose tum ek project pe kaam kar rahe ho aur tumhe Azure Search se data fetch karna hai.</span><br>
+                                    Simple lagta hai na? Tum seedha code likhte ho: <span class="highlight">new SearchClient</span>, endpoint do, index name do, api key do, kaam khatam.
+                                </div>
+                                
+                                <div class="script-para">
+                                    Ab problem yahan start hoti hai. Kal ko <span class="emphasis">Azure Search ka version change</span> ho gaya, ya credential ka type change ho gaya, ya tumhe testing ke time <span class="highlight">fake client inject</span> karna hai. Ab tumhare codebase ke <span class="emphasis">10 jagah pe new SearchClient</span> likha hua hai. Ek choti si change ke liye pura code hilega.
+                                </div>
+
+                                <div class="script-para">
+                                    Toh architect kya karta hai? Wo bolta hai, bhai <span class="highlight">object banana client ka kaam nahi hai</span>. Client ka kaam hai <span class="emphasis">use karna</span>. Banana kisi aur ka kaam hona chahiye. Yahin se <span class="highlight">Factory Pattern</span> aata hai.
+                                </div>
+
+                                <div class="script-para">
+                                    Ab scenario dekho. Tum .NET me <span class="emphasis">Dependency Injection</span> use kar rahe ho. Startup ya DI file me tum likhte ho: <code style="background: rgba(58, 134, 255, 0.2); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--accent-blue);">services.AddSingleton</code> aur uske andar ek function. Wo function configuration uthata hai, endpoint read karta hai, api key banata hai aur ek <span class="highlight">fully ready SearchClient</span> return kar deta hai.
+                                </div>
+
+                                <div class="script-para">
+                                    Ab jo bhi class ko SearchClient chahiye, wo sirf <span class="emphasis">constructor me maangta hai</span>. Use ye nahi pata ye kaise bana, kaha se bana, kis config se bana. <span class="highlight">Yehi Factory Pattern hai.</span>
+                                </div>
+
+                                <div class="script-para">
+                                    Simple language me, <span class="highlight">Factory bolta hai: tum bas order do, banana mera kaam hai.</span>
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="highlight">Interview Answer:</span><br>
+                                    Factory Pattern <span class="emphasis">object creation ko centralize</span> karta hai, creation logic ko hide karta hai, aur DI containers like .NET ka built-in container actually <span class="emphasis">ek real-world factory</span> hi hote hain.
+                                </div>
+
+                                <div class="script-para" style="margin-top: 1rem; padding: 1rem; background: rgba(255, 190, 11, 0.1); border-radius: 8px; border-left: 3px solid var(--accent-yellow);">
+                                    <span class="highlight">🎯 Remember:</span><br>
+                                    Production code me har jagah <span class="emphasis">new keyword</span> dikh raha hai? Samajh jao <span class="emphasis">factory missing hai</span>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Diagram Section -->
+                    <div class="diagram-section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <div>
+                                <div class="section-title">Visual Architecture Diagram</div>
+                                <div class="section-subtitle">Factory Pattern — Centralized Object Creation</div>
+                            </div>
+                        </div>
+
+                        <!-- Factory Concept Diagram -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">📐 Factory Pattern Concept</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Consumers["📦 CONSUMERS"]
+        S1[SearchService]
+        S2[IndexService]
+        S3[QueryService]
+    end
+    
+    subgraph Factory["🏭 FACTORY / DI CONTAINER"]
+        F["services.AddSingleton\n(Factory Function)"]
+        F --> C["SearchClient"]
+    end
+    
+    subgraph Config["⚙️ CONFIGURATION"]
+        E[Endpoint]
+        K[API Key]
+        I[Index Name]
+    end
+    
+    Config --> F
+    S1 -->|"Inject"| C
+    S2 -->|"Inject"| C
+    S3 -->|"Inject"| C
+    
+    style S1 fill:#667eea,color:#fff
+    style S2 fill:#667eea,color:#fff
+    style S3 fill:#667eea,color:#fff
+    style F fill:#ffbe0b,color:#1a1a2e,stroke-width:3px
+    style C fill:#06d6a0,color:#1a1a2e
+    style E fill:#8338ec,color:#fff
+    style K fill:#8338ec,color:#fff
+    style I fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+
+                        <!-- Bad vs Good Comparison -->
+                        <div class="architecture-diagram">
+                            <h4>⚔️ Direct Instantiation vs Factory Pattern</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <!-- Direct Instantiation -->
+                                <div class="mermaid-container" style="border-color: rgba(239, 71, 111, 0.4);">
+                                    <div class="diagram-label" style="background: rgba(239, 71, 111, 0.2); border-color: rgba(239, 71, 111, 0.4); color: #ef476f;">❌ Direct new Everywhere</div>
+                                    <div class="mermaid">
+flowchart TD
+    A[Service A] --> N1["new SearchClient(...)"]
+    B[Service B] --> N2["new SearchClient(...)"]
+    C[Service C] --> N3["new SearchClient(...)"]
+    
+    D["💀 10 places to change!\n💀 Hardcoded config\n💀 Can't mock for tests"]
+    
+    style A fill:#2d1f1f,stroke:#ef476f,color:#fff
+    style B fill:#2d1f1f,stroke:#ef476f,color:#fff
+    style C fill:#2d1f1f,stroke:#ef476f,color:#fff
+    style N1 fill:#2d1f1f,stroke:#ef476f,color:#fff
+    style N2 fill:#2d1f1f,stroke:#ef476f,color:#fff
+    style N3 fill:#2d1f1f,stroke:#ef476f,color:#fff
+    style D fill:#2d1f1f,stroke:#ef476f,color:#fff
+                                    </div>
+                                </div>
+
+                                <!-- Factory Pattern -->
+                                <div class="mermaid-container" style="border-color: rgba(6, 214, 160, 0.4);">
+                                    <div class="diagram-label" style="background: rgba(6, 214, 160, 0.2); border-color: rgba(6, 214, 160, 0.4); color: #06d6a0;">✅ Factory Pattern</div>
+                                    <div class="mermaid">
+flowchart TD
+    F["🏭 Factory"] --> SC["SearchClient"]
+    A[Service A] -->|inject| SC
+    B[Service B] -->|inject| SC
+    C[Service C] -->|inject| SC
+    
+    D["✅ One place to change!\n✅ Config centralized\n✅ Easy to mock!"]
+    
+    style F fill:#ffbe0b,color:#1a1a2e,stroke-width:3px
+    style SC fill:#06d6a0,color:#1a1a2e
+    style A fill:#1f2d1f,stroke:#06d6a0,color:#fff
+    style B fill:#1f2d1f,stroke:#06d6a0,color:#fff
+    style C fill:#1f2d1f,stroke:#06d6a0,color:#fff
+    style D fill:#1f2d1f,stroke:#06d6a0,color:#fff
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Factory Types Diagram -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🏭 Types of Factories in .NET</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Simple["📦 SIMPLE FACTORY"]
+        S1["DI Registration"]
+        S2["services.AddSingleton()"]
+    end
+    
+    subgraph Method["🔧 FACTORY METHOD"]
+        M1["Interface-based"]
+        M2["ISearchClientFactory"]
+    end
+    
+    subgraph Abstract["🏗️ ABSTRACT FACTORY"]
+        A1["Family of objects"]
+        A2["IAzureServiceFactory"]
+    end
+    
+    style S1 fill:#06d6a0,color:#1a1a2e
+    style S2 fill:#06d6a0,color:#1a1a2e
+    style M1 fill:#667eea,color:#fff
+    style M2 fill:#667eea,color:#fff
+    style A1 fill:#ff006e,color:#fff
+    style A2 fill:#ff006e,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Section - Comparison -->
+                    <div class="code-section">
+                        <div class="section-header">
+                            <div class="section-icon">💻</div>
+                            <div>
+                                <div class="section-title">Code Comparison — Direct new vs Factory</div>
+                                <div class="section-subtitle">Show both in reel for impact</div>
+                            </div>
+                        </div>
+
+                        <div class="code-comparison">
+                            <!-- Bad Code -->
+                            <div class="code-block naive">
+                                <div class="code-header">
+                                    <div class="code-header-left">
+                                        <div class="code-dots">
+                                            <span class="code-dot red"></span>
+                                            <span class="code-dot yellow"></span>
+                                            <span class="code-dot green"></span>
+                                        </div>
+                                        <span class="code-lang">C#</span>
+                                        <span class="code-label naive">❌ DIRECT NEW</span>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                </div>
+                                <pre><code class="language-csharp">// Creating client directly in service 💀
+public class SearchService
+{
+    public async Task&lt;List&lt;Result&gt;&gt; SearchAsync(string query)
+    {
+        // 💀 Hardcoded everywhere!
+        var client = new SearchClient(
+            new Uri("https://mysearch.search.windows.net"),
+            "my-index",
+            new AzureKeyCredential("my-api-key"));
+        
+        var results = await client.SearchAsync&lt;Product&gt;(query);
+        return results.Value.GetResults().ToList();
+    }
+}
+
+// Problems:
+// 💀 Config hardcoded in 10 places
+// 💀 Can't change endpoint without code change
+// 💀 Can't mock for unit tests
+// 💀 Credential management nightmare</code></pre>
+                            </div>
+
+                            <!-- Good Code -->
+                            <div class="code-block fixed">
+                                <div class="code-header">
+                                    <div class="code-header-left">
+                                        <div class="code-dots">
+                                            <span class="code-dot red"></span>
+                                            <span class="code-dot yellow"></span>
+                                            <span class="code-dot green"></span>
+                                        </div>
+                                        <span class="code-lang">C#</span>
+                                        <span class="code-label fixed">✅ FACTORY</span>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                </div>
+                                <pre><code class="language-csharp">// Client injected via DI ✨
+public class SearchService
+{
+    private readonly SearchClient _client;
+
+    public SearchService(SearchClient client)
+    {
+        _client = client; // Factory created this!
+    }
+
+    public async Task&lt;List&lt;Result&gt;&gt; SearchAsync(string query)
+    {
+        var results = await _client.SearchAsync&lt;Product&gt;(query);
+        return results.Value.GetResults().ToList();
+    }
+}
+
+// Benefits:
+// ✅ Config in one place
+// ✅ Easy to change endpoint
+// ✅ Easy to mock for tests
+// ✅ Clean, focused service</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Code Section -->
+                    <div class="full-code-section">
+                        <div class="section-header">
+                            <div class="section-icon">📦</div>
+                            <div>
+                                <div class="section-title">Complete Production Code</div>
+                                <div class="section-subtitle">Factory Pattern with DI Container</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: DI Registration (Factory) -->
+                        <div class="code-step">
+                            <div class="code-step-header">
+                                <span class="step-number">1</span>
+                                <span class="step-title">Factory Registration — The Magic Happens Here</span>
+                            </div>
+                            <div class="code-block fixed">
+                                <div class="code-header">
+                                    <div class="code-header-left">
+                                        <div class="code-dots">
+                                            <span class="code-dot red"></span>
+                                            <span class="code-dot yellow"></span>
+                                            <span class="code-dot green"></span>
+                                        </div>
+                                        <span class="code-lang">Program.cs</span>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                </div>
+                                <pre><code class="language-csharp">var builder = WebApplication.CreateBuilder(args);
+
+// 🏭 Factory Function for SearchClient
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService&lt;IConfiguration&gt;();
+    
+    // Read config from appsettings.json
+    var endpoint = config["AzureSearch:Endpoint"]!;
+    var indexName = config["AzureSearch:IndexName"]!;
+    var apiKey = config["AzureSearch:ApiKey"]!;
+    
+    // Create and return fully configured client
+    return new SearchClient(
+        new Uri(endpoint),
+        indexName,
+        new AzureKeyCredential(apiKey));
+});
+
+// 🏭 Factory for OpenAI Client
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService&lt;IConfiguration&gt;();
+    return new OpenAIClient(
+        new Uri(config["Azure:OpenAI:Endpoint"]!),
+        new AzureKeyCredential(config["Azure:OpenAI:ApiKey"]!));
+});
+
+// 🏭 Factory for Blob Service Client
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService&lt;IConfiguration&gt;();
+    return new BlobServiceClient(config["Azure:Storage:ConnectionString"]!);
+});
+
+// Services that USE these clients
+builder.Services.AddScoped&lt;ISearchService, SearchService&gt;();
+builder.Services.AddScoped&lt;IChatService, ChatService&gt;();</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Custom Factory Interface -->
+                        <div class="code-step">
+                            <div class="code-step-header">
+                                <span class="step-number">2</span>
+                                <span class="step-title">Custom Factory Interface — For Multiple Instances</span>
+                            </div>
+                            <div class="code-block fixed">
+                                <div class="code-header">
+                                    <div class="code-header-left">
+                                        <div class="code-dots">
+                                            <span class="code-dot red"></span>
+                                            <span class="code-dot yellow"></span>
+                                            <span class="code-dot green"></span>
+                                        </div>
+                                        <span class="code-lang">ISearchClientFactory.cs</span>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                </div>
+                                <pre><code class="language-csharp">// When you need to create multiple clients dynamically
+public interface ISearchClientFactory
+{
+    SearchClient CreateClient(string indexName);
+}
+
+public class SearchClientFactory : ISearchClientFactory
+{
+    private readonly IConfiguration _config;
+    private readonly ConcurrentDictionary&lt;string, SearchClient&gt; _clients = new();
+
+    public SearchClientFactory(IConfiguration config)
+    {
+        _config = config;
+    }
+
+    public SearchClient CreateClient(string indexName)
+    {
+        // Cache clients per index (Flyweight + Factory!)
+        return _clients.GetOrAdd(indexName, name =>
+        {
+            var endpoint = _config["AzureSearch:Endpoint"]!;
+            var apiKey = _config["AzureSearch:ApiKey"]!;
+            
+            return new SearchClient(
+                new Uri(endpoint),
+                name,
+                new AzureKeyCredential(apiKey));
+        });
+    }
+}
+
+// Registration
+builder.Services.AddSingleton&lt;ISearchClientFactory, SearchClientFactory&gt;();</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Using Factory -->
+                        <div class="code-step">
+                            <div class="code-step-header">
+                                <span class="step-number">3</span>
+                                <span class="step-title">Service Using Factory — Clean & Testable</span>
+                            </div>
+                            <div class="code-block fixed">
+                                <div class="code-header">
+                                    <div class="code-header-left">
+                                        <div class="code-dots">
+                                            <span class="code-dot red"></span>
+                                            <span class="code-dot yellow"></span>
+                                            <span class="code-dot green"></span>
+                                        </div>
+                                        <span class="code-lang">SearchService.cs</span>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                </div>
+                                <pre><code class="language-csharp">public class SearchService : ISearchService
+{
+    private readonly SearchClient _client;
+    private readonly ILogger&lt;SearchService&gt; _logger;
+
+    // Client is injected - we don't care HOW it was created!
+    public SearchService(SearchClient client, ILogger&lt;SearchService&gt; logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
+
+    public async Task&lt;SearchResult&lt;T&gt;&gt; SearchAsync&lt;T&gt;(string query, SearchOptions? options = null)
+    {
+        _logger.LogInformation("Searching for: {Query}", query);
+        
+        var response = await _client.SearchAsync&lt;T&gt;(query, options);
+        
+        _logger.LogInformation("Found {Count} results", response.Value.TotalCount);
+        
+        return new SearchResult&lt;T&gt;
+        {
+            Results = response.Value.GetResults().Select(r => r.Document).ToList(),
+            TotalCount = response.Value.TotalCount ?? 0
+        };
+    }
+}
+
+// In tests - easy to mock!
+[Fact]
+public async Task Search_ReturnsResults()
+{
+    var mockClient = new Mock&lt;SearchClient&gt;(); // Easy!
+    var service = new SearchService(mockClient.Object, _logger);
+    // ... test logic
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Abstract Factory -->
+                        <div class="code-step">
+                            <div class="code-step-header">
+                                <span class="step-number">4</span>
+                                <span class="step-title">Abstract Factory — Family of Related Objects</span>
+                            </div>
+                            <div class="code-block fixed">
+                                <div class="code-header">
+                                    <div class="code-header-left">
+                                        <div class="code-dots">
+                                            <span class="code-dot red"></span>
+                                            <span class="code-dot yellow"></span>
+                                            <span class="code-dot green"></span>
+                                        </div>
+                                        <span class="code-lang">IAzureClientFactory.cs</span>
+                                    </div>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                </div>
+                                <pre><code class="language-csharp">// Abstract Factory - creates family of related Azure clients
+public interface IAzureClientFactory
+{
+    SearchClient CreateSearchClient();
+    OpenAIClient CreateOpenAIClient();
+    BlobServiceClient CreateBlobClient();
+}
+
+public class AzureClientFactory : IAzureClientFactory
+{
+    private readonly IConfiguration _config;
+
+    public AzureClientFactory(IConfiguration config) => _config = config;
+
+    public SearchClient CreateSearchClient()
+    {
+        return new SearchClient(
+            new Uri(_config["Azure:Search:Endpoint"]!),
+            _config["Azure:Search:Index"]!,
+            new AzureKeyCredential(_config["Azure:Search:Key"]!));
+    }
+
+    public OpenAIClient CreateOpenAIClient()
+    {
+        return new OpenAIClient(
+            new Uri(_config["Azure:OpenAI:Endpoint"]!),
+            new AzureKeyCredential(_config["Azure:OpenAI:Key"]!));
+    }
+
+    public BlobServiceClient CreateBlobClient()
+    {
+        return new BlobServiceClient(_config["Azure:Storage:ConnectionString"]!);
+    }
+}
+
+// Usage
+public class RAGService
+{
+    public RAGService(IAzureClientFactory factory)
+    {
+        _searchClient = factory.CreateSearchClient();
+        _openAIClient = factory.CreateOpenAIClient();
+    }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Takeaway Section -->
+                    <div class="takeaway-section">
+                        <div class="section-header">
+                            <div class="section-icon">🧠</div>
+                            <div>
+                                <div class="section-title">Key Takeaways</div>
+                                <div class="section-subtitle">Interview-ready points</div>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-box">
+                            <div class="takeaway-label">💡 Factory Pattern Benefits</div>
+                            <p class="takeaway-text">
+                                <span class="highlight">Centralized Creation</span> — One place to create objects<br>
+                                <span class="highlight">Hidden Complexity</span> — Consumer doesn't know creation details<br>
+                                <span class="highlight">Easy Testing</span> — Mock the factory or inject fake objects<br>
+                                <span class="highlight">Config Flexibility</span> — Change config without touching services<br>
+                                <span class="highlight">Consistent Objects</span> — All instances created the same way
+                            </p>
+
+                            <div class="future-ideas">
+                                <span class="future-idea">Simple Factory</span>
+                                <span class="future-idea">Factory Method</span>
+                                <span class="future-idea">Abstract Factory</span>
+                                <span class="future-idea">IHttpClientFactory</span>
+                            </div>
+                        </div>
+
+                        <div class="bottom-line-box">
+                            <div class="bottom-line-label">📌 INTERVIEW ANSWER</div>
+                            <p class="bottom-line-text">
+                                <span class="emphasis">Factory Pattern</span> = Object creation ko centralize karta hai<br>
+                                <span class="emphasis">DI Container</span> = .NET ka built-in factory hai<br>
+                                <span class="emphasis">Rule</span> = Har jagah <code>new</code> dikh raha hai? Factory missing hai!<br><br>
+                                "Tum bas order do, banana mera kaam hai!" 🏭
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </article>
+
+                <!-- ==================== SYSTEM DESIGN FUNDAMENTALS SECTION ==================== -->
+                
+                <!-- ==================== REEL #8: SYSTEM DESIGN INTRODUCTION ==================== -->
+                <article class="reel-card" id="system-design-intro" data-reel="8">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-sd-intro" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #08</span>
+                                    <span class="reel-duration">⏱️ 45 sec</span>
+                                    <span class="reel-category">System Design</span>
+                                </div>
+                                <h2 class="reel-header-title">System Design Kya Hai? — Complete Intro</h2>
+                                <p class="reel-header-subtitle">Customer need se working system tak ka journey! 🚀</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
+                    <!-- Reel Header -->
+                    <div class="reel-header">
+                        <div class="reel-meta">
+                            <span class="reel-number">Reel #08</span>
+                            <span class="reel-duration">⏱️ 45 sec</span>
+                            <span class="reel-category">System Design</span>
+                        </div>
+                        <h2 class="reel-title">System Design Kya Hai? — Complete Intro</h2>
+                        <p class="reel-subtitle">Customer need se working system tak ka journey! 🚀</p>
+                    </div>
+
+                    <!-- Hook Section -->
+                    <div class="hook-section">
+                        <div class="hook-label">🎣 HOOK — Record This First!</div>
+                        <p class="hook-text">System Design sunke lagta hai bohot mushkil cheez hai? <strong>Galat!</strong> Aaj main tumhe 45 seconds mein samjhata hoon.</p>
+                    </div>
+
+                    <!-- Script Section -->
+                    <div class="script-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <div>
+                                <div class="section-title">45-Sec Hinglish Script</div>
+                                <div class="section-subtitle">Natural flow, English letters</div>
+                            </div>
+                        </div>
+
+                        <div class="script-content">
+                            <div class="script-text">
+                                <div class="script-para">
+                                    <span class="question">System Design sunke lagta hai bohot mushkil cheez hai?</span><br>
+                                    Honestly bolu toh <span class="highlight">difficult hona zaroori nahi hai</span>! Bas samajhna padta hai ki ye actually hai kya.
+                                </div>
+                                
+                                <div class="script-para">
+                                    Dekho, har software ka <span class="emphasis">journey same hota hai</span>. Customer aata hai aur bolta hai — <span class="highlight">"Mujhe live classes chahiye"</span>, <span class="highlight">"Real-time notifications chahiye"</span>, <span class="highlight">"Payment system chahiye"</span>.
+                                </div>
+
+                                <div class="script-para">
+                                    Phir <span class="highlight">Product aur Business team</span> us need ko <span class="emphasis">requirement mein convert</span> karti hai. Aur phir aata hai <span class="highlight">TUMHARA kaam</span> — as an engineer.
+                                </div>
+
+                                <div class="script-para">
+                                    Tumhara job hai us requirement ko ek <span class="emphasis">WORKING SYSTEM</span> mein convert karna — jo <span class="highlight">reliable ho</span>, <span class="highlight">scalable ho</span>, aur <span class="highlight">time pe ship ho</span>!
+                                </div>
+
+                                <div class="script-para">
+                                    Toh basically <span class="highlight">System Design</span> = Customer need ko product requirement mein translate karke ek <span class="emphasis">reliable, scalable, aur maintainable system</span> banana.
+                                </div>
+
+                                <div class="script-para">
+                                    Ye sirf coding nahi hai — ye <span class="highlight">architecture, decisions, aur trade-offs</span> hai!
+                                </div>
+
+                                <div class="script-para" style="margin-top: 1rem; padding: 1rem; background: rgba(0, 245, 212, 0.1); border-radius: 8px; border-left: 3px solid var(--accent-cyan);">
+                                    <span class="highlight">🎯 Remember:</span><br>
+                                    Interview mein sirf final diagram nahi, balki <span class="emphasis">"humne ye choice KYUN ki"</span> — yahi understanding tumhe strong banati hai!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Diagram Section -->
+                    <div class="diagram-section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <div>
+                                <div class="section-title">Visual Architecture Diagram</div>
+                                <div class="section-subtitle">Customer Need to Working System Journey</div>
+                            </div>
+                        </div>
+
+                        <!-- Journey Diagram -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🛤️ Need se System Tak Ka Journey</div>
+                            <div class="mermaid">
+flowchart TD
+    subgraph Customer["👤 CUSTOMER"]
+        C1["Mujhe live classes chahiye"]
+        C2["Real-time interaction chahiye"]
+        C3["Payment system chahiye"]
+    end
+    
+    subgraph Business["📋 PRODUCT & BUSINESS"]
+        B1["Need → Business Requirement"]
+        B2["PM & Business team<br/>requirement define karti hai"]
+    end
+    
+    subgraph Engineer["👨‍💻 ENGINEER - YOU!"]
+        E1["Requirement → Working System"]
+        E2["Reliable ✓"]
+        E3["Scalable ✓"]
+        E4["Ship on Time ✓"]
+    end
+    
+    Customer --> Business
+    Business --> Engineer
+    
+    style C1 fill:#ff006e,color:#fff
+    style C2 fill:#ff006e,color:#fff
+    style C3 fill:#ff006e,color:#fff
+    style B1 fill:#8338ec,color:#fff
+    style B2 fill:#8338ec,color:#fff
+    style E1 fill:#06d6a0,color:#fff
+    style E2 fill:#06d6a0,color:#fff
+    style E3 fill:#06d6a0,color:#fff
+    style E4 fill:#06d6a0,color:#fff
+                            </div>
+                        </div>
+
+                        <!-- System Design Components -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🧩 System Design = Architecture + Decisions + Trade-offs</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Input["📥 INPUT"]
+        R["Customer\nRequirement"]
+    end
+    
+    subgraph Process["⚙️ SYSTEM DESIGN PROCESS"]
+        A["🏗️ Architecture"]
+        D["🤔 Decisions"]
+        T["⚖️ Trade-offs"]
+    end
+    
+    subgraph Output["📤 OUTPUT"]
+        S["Working\nSystem"]
+    end
+    
+    R --> A
+    A --> D
+    D --> T
+    T --> S
+    
+    style R fill:#ff006e,color:#fff
+    style A fill:#3a86ff,color:#fff
+    style D fill:#8338ec,color:#fff
+    style T fill:#ffbe0b,color:#fff
+    style S fill:#06d6a0,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Takeaway Section -->
+                    <div class="takeaway-section">
+                        <div class="section-header">
+                            <div class="section-icon">🧠</div>
+                            <div>
+                                <div class="section-title">Key Takeaways</div>
+                                <div class="section-subtitle">Interview-ready points</div>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-box">
+                            <div class="takeaway-label">💡 System Design in One Line</div>
+                            <p class="takeaway-text">
+                                <span class="highlight">Definition</span> — Customer need ko working system mein convert karna<br>
+                                <span class="highlight">Focus</span> — Reliable, Scalable, Maintainable<br>
+                                <span class="highlight">Key Skill</span> — Reasoning ability (WHY behind decisions)
+                            </p>
+                        </div>
+
+                        <div class="bottom-line-box">
+                            <div class="bottom-line-label">📌 INTERVIEW ANSWER</div>
+                            <p class="bottom-line-text">
+                                <span class="emphasis">System Design</span> = Customer need → Business requirement → Working system<br>
+                                <span class="emphasis">Not just coding</span> — Architecture, decisions, trade-offs<br>
+                                <span class="emphasis">Goal</span> = Reliable + Scalable + Ship on time! 🚀
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </article>
+
+                <!-- ==================== REEL #9: SYSTEM TYPES & DESIGN LAYERS ==================== -->
+                <article class="reel-card" id="system-types-layers" data-reel="9">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-sd-types" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #09</span>
+                                    <span class="reel-duration">⏱️ 50 sec</span>
+                                    <span class="reel-category">System Design</span>
+                                </div>
+                                <h2 class="reel-header-title">System Types & 3 Design Layers</h2>
+                                <p class="reel-header-subtitle">"System" ka matlab sirf website nahi hota! 🎭</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
+                    <!-- Reel Header -->
+                    <div class="reel-header">
+                        <div class="reel-meta">
+                            <span class="reel-number">Reel #09</span>
+                            <span class="reel-duration">⏱️ 50 sec</span>
+                            <span class="reel-category">System Design</span>
+                        </div>
+                        <h2 class="reel-title">System Types & 3 Design Layers</h2>
+                        <p class="reel-subtitle">"System" ka matlab sirf website nahi hota! 🎭</p>
+                    </div>
+
+                    <!-- Hook Section -->
+                    <div class="hook-section">
+                        <div class="hook-label">🎣 HOOK — Record This First!</div>
+                        <p class="hook-text">Jab koi bole "design a system" — toh pehle ye clarify karo ki <strong>system ka scope kya hai</strong>!</p>
+                    </div>
+
+                    <!-- Script Section -->
+                    <div class="script-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <div>
+                                <div class="section-title">50-Sec Hinglish Script</div>
+                                <div class="section-subtitle">Natural flow, English letters</div>
+                            </div>
+                        </div>
+
+                        <div class="script-content">
+                            <div class="script-text">
+                                <div class="script-para">
+                                    <span class="question">Jab interview mein ya job mein koi bole "design a system" — toh kya samjhoge?</span><br>
+                                    Bhai, <span class="highlight">"System" ek generic word hai</span>. System ka matlab sirf ek website ya app <span class="emphasis">NAHI</span> hota!
+                                </div>
+                                
+                                <div class="script-para">
+                                    System ho sakta hai — <span class="highlight">End-to-End Application</span> jaise Swiggy, Instagram. Ya phir ek <span class="highlight">Microservice</span> jaise Payment Service. Ya fir <span class="highlight">Internal Tool</span> jaise CI/CD Pipeline. Ya even <span class="highlight">Library/SDK</span> jaise React!
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="emphasis">Pehle scope samjho, phir design karo!</span>
+                                </div>
+
+                                <div class="script-para">
+                                    Ab jab design karte ho, output <span class="highlight">3 layers</span> mein aa sakta hai:
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="highlight">Layer 1: High-Level Architecture</span> — Bird's eye view. Kaunse components, services, databases honge.<br><br>
+                                    <span class="highlight">Layer 2: Logical Design</span> — HOW exactly kaam karega. Business logic, algorithms, caching strategies.<br><br>
+                                    <span class="highlight">Layer 3: Physical Design</span> — Infrastructure level. Instance types, capacity, regions.
+                                </div>
+
+                                <div class="script-para" style="margin-top: 1rem; padding: 1rem; background: rgba(255, 190, 11, 0.1); border-radius: 8px; border-left: 3px solid var(--accent-yellow);">
+                                    <span class="highlight">⚠️ Interview Tip:</span><br>
+                                    Sab kuch cover karne ki koshish mat karo! Ek <span class="emphasis">strong direction</span> pick karo aur usko <span class="emphasis">SOLID DEPTH</span> mein solve karo.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Diagram Section -->
+                    <div class="diagram-section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <div>
+                                <div class="section-title">Visual Architecture Diagram</div>
+                                <div class="section-subtitle">System Types & Design Layers</div>
+                            </div>
+                        </div>
+
+                        <!-- System Types Diagram -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🎭 System Ke Different Types</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Types["SYSTEM KA MATLAB — MULTIPLE FORMS"]
+        A["🌐 End-to-End App\nSwiggy, Instagram, Netflix"]
+        B["⚙️ Microservice\nPayment Service, Notification Service"]
+        C["🔧 Internal Tool\nCI/CD Pipeline, Monitoring System"]
+        D["📚 Library/SDK\nReact, Express.js, AWS SDK"]
+        E["🔌 Hardware/Embedded\nIoT devices, Smart Home"]
+    end
+    
+    style A fill:#ff006e,color:#fff
+    style B fill:#8338ec,color:#fff
+    style C fill:#3a86ff,color:#fff
+    style D fill:#06d6a0,color:#fff
+    style E fill:#ffbe0b,color:#fff
+                            </div>
+                        </div>
+
+                        <!-- 3 Layers Diagram -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🏗️ 3 Design Output Layers</div>
+                            <div class="mermaid">
+flowchart TD
+    subgraph L1["🦅 LAYER 1: HIGH-LEVEL ARCHITECTURE"]
+        H1["Bird's Eye View"]
+        H2["Components & Services"]
+        H3["Databases & APIs"]
+    end
+    
+    subgraph L2["🧠 LAYER 2: LOGICAL DESIGN"]
+        M1["HOW Exactly"]
+        M2["Business Logic & Algorithms"]
+        M3["Caching, Retry, Auth"]
+    end
+    
+    subgraph L3["🖥️ LAYER 3: PHYSICAL DESIGN"]
+        P1["Infrastructure Level"]
+        P2["Instance Types, Capacity"]
+        P3["Regions & Zones"]
+    end
+    
+    L1 --> L2
+    L2 --> L3
+    
+    style H1 fill:#ff006e,color:#fff
+    style H2 fill:#ff006e,color:#fff
+    style H3 fill:#ff006e,color:#fff
+    style M1 fill:#8338ec,color:#fff
+    style M2 fill:#8338ec,color:#fff
+    style M3 fill:#8338ec,color:#fff
+    style P1 fill:#06d6a0,color:#fff
+    style P2 fill:#06d6a0,color:#fff
+    style P3 fill:#06d6a0,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Takeaway Section -->
+                    <div class="takeaway-section">
+                        <div class="section-header">
+                            <div class="section-icon">🧠</div>
+                            <div>
+                                <div class="section-title">Key Takeaways</div>
+                                <div class="section-subtitle">Interview-ready points</div>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-box">
+                            <div class="takeaway-label">💡 Remember These</div>
+                            <p class="takeaway-text">
+                                <span class="highlight">System Types</span> — App, Microservice, Tool, SDK, Embedded<br>
+                                <span class="highlight">Layer 1</span> — High-Level (What components)<br>
+                                <span class="highlight">Layer 2</span> — Logical (How it works)<br>
+                                <span class="highlight">Layer 3</span> — Physical (Where it runs)
+                            </p>
+                        </div>
+
+                        <div class="bottom-line-box">
+                            <div class="bottom-line-label">📌 INTERVIEW ANSWER</div>
+                            <p class="bottom-line-text">
+                                <span class="emphasis">First clarify</span> — System ka type kya hai?<br>
+                                <span class="emphasis">Then design</span> — High-Level → Logical → Physical<br>
+                                <span class="emphasis">Pro tip</span> — Depth over breadth. Sab cover mat karo! 🎯
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </article>
+
+                <!-- ==================== REEL #10: SPIRAL APPROACH ==================== -->
+                <article class="reel-card" id="spiral-approach" data-reel="10">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-sd-spiral" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #10</span>
+                                    <span class="reel-duration">⏱️ 50 sec</span>
+                                    <span class="reel-category">System Design</span>
+                                </div>
+                                <h2 class="reel-header-title">Spiral Approach — Core se Outward</h2>
+                                <p class="reel-header-subtitle">Confident ho? Seedha core pe land karo! 🌀</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
+                    <!-- Reel Header -->
+                    <div class="reel-header">
+                        <div class="reel-meta">
+                            <span class="reel-number">Reel #10</span>
+                            <span class="reel-duration">⏱️ 50 sec</span>
+                            <span class="reel-category">System Design</span>
+                        </div>
+                        <h2 class="reel-title">Spiral Approach — Core se Outward</h2>
+                        <p class="reel-subtitle">Confident ho? Seedha core pe land karo! 🌀</p>
+                    </div>
+
+                    <!-- Hook Section -->
+                    <div class="hook-section">
+                        <div class="hook-label">🎣 HOOK — Record This First!</div>
+                        <p class="hook-text">System design ke do powerful approaches hain. Pehla hai <strong>Spiral Approach</strong> — jab tum <strong>confident</strong> ho!</p>
+                    </div>
+
+                    <!-- Script Section -->
+                    <div class="script-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <div>
+                                <div class="section-title">50-Sec Hinglish Script</div>
+                                <div class="section-subtitle">Natural flow, English letters</div>
+                            </div>
+                        </div>
+
+                        <div class="script-content">
+                            <div class="script-text">
+                                <div class="script-para">
+                                    <span class="question">System design kaise approach karte ho?</span><br>
+                                    Jab tum <span class="highlight">confident ho</span> ki solution kya hoga — tab <span class="emphasis">Spiral Approach</span> use karo!
+                                </div>
+                                
+                                <div class="script-para">
+                                    Isme tum pehle system ka <span class="highlight">CORE</span> decide karte ho, aur phir us core ke around system ko <span class="emphasis">layer by layer</span> build karte ho. Spiral ki tarah outward grow karta hai!
+                                </div>
+
+                                <div class="script-para">
+                                    Example dekho: <span class="highlight">E-commerce system</span> bana rahe ho.<br><br>
+                                    <span class="emphasis">Step 1:</span> Core Database — OrderDB<br>
+                                    <span class="emphasis">Step 2:</span> Basic Service — Order Service<br>
+                                    <span class="emphasis">Step 3:</span> Payment module add karo<br>
+                                    <span class="emphasis">Step 4:</span> Failure handling — Retry, Dead Letter Queue<br>
+                                    <span class="emphasis">Step 5:</span> Auditing — Logging, Event stream
+                                </div>
+
+                                <div class="script-para">
+                                    Har step pe ek <span class="highlight">new layer</span> add hoti hai, system <span class="emphasis">grow karta</span> rehta hai!
+                                </div>
+
+                                <div class="script-para" style="margin-top: 1rem; padding: 1rem; background: rgba(0, 245, 212, 0.1); border-radius: 8px; border-left: 3px solid var(--accent-cyan);">
+                                    <span class="highlight">✅ Spiral Best Hai Jab:</span><br>
+                                    • Solution <span class="emphasis">well understood</span> hai<br>
+                                    • Tum domain mein <span class="emphasis">experienced</span> ho<br>
+                                    • Pattern <span class="emphasis">production-tested</span> hai<br>
+                                    • <span class="emphasis">Fast delivery</span> chahiye
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Diagram Section -->
+                    <div class="diagram-section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <div>
+                                <div class="section-title">Visual Architecture Diagram</div>
+                                <div class="section-subtitle">Spiral Approach — Layer by Layer Growth</div>
+                            </div>
+                        </div>
+
+                        <!-- Spiral Growth Diagram -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🌀 Spiral Approach — Core se Outward</div>
+                            <div class="mermaid">
+flowchart TD
+    subgraph Core["🎯 CORE"]
+        DB["🗄️ Database"]
+    end
+    
+    subgraph L1["Layer 1"]
+        API["🌐 API Service"]
+    end
+    
+    subgraph L2["Layer 2"]
+        AUTH["🔐 Auth Layer"]
+    end
+    
+    subgraph L3["Layer 3"]
+        MON["📊 Monitoring"]
+    end
+    
+    subgraph L4["Layer 4"]
+        CACHE["🔄 Caching"]
+    end
+    
+    subgraph L5["Layer 5"]
+        BG["⚡ Background Jobs"]
+    end
+    
+    DB --> API
+    API --> AUTH
+    AUTH --> MON
+    MON --> CACHE
+    CACHE --> BG
+    
+    style DB fill:#ff006e,color:#fff,stroke-width:3px
+    style API fill:#8338ec,color:#fff
+    style AUTH fill:#3a86ff,color:#fff
+    style MON fill:#06d6a0,color:#fff
+    style CACHE fill:#ffbe0b,color:#fff
+    style BG fill:#00f5d4,color:#fff
+                            </div>
+                        </div>
+
+                        <!-- E-commerce Example -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">📱 E-commerce System Spiral Example</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph S1["Step 1"]
+        D1["OrderDB"]
+    end
+    
+    subgraph S2["Step 2"]
+        D2["OrderDB"]
+        O2["Order Service"]
+        D2 --- O2
+    end
+    
+    subgraph S3["Step 3"]
+        D3["OrderDB"]
+        O3["Order Service"]
+        P3["Payment Service"]
+        D3 --- O3
+        O3 --- P3
+    end
+    
+    subgraph S4["Step 4"]
+        D4["OrderDB"]
+        O4["Order + Payment"]
+        R4["Retry + DLQ"]
+        D4 --- O4
+        O4 --- R4
+    end
+    
+    S1 -->|"Add Service"| S2
+    S2 -->|"Add Payment"| S3
+    S3 -->|"Handle Failures"| S4
+    
+    style D1 fill:#ff006e,color:#fff
+    style D2 fill:#ff006e,color:#fff
+    style O2 fill:#8338ec,color:#fff
+    style D3 fill:#ff006e,color:#fff
+    style O3 fill:#8338ec,color:#fff
+    style P3 fill:#06d6a0,color:#fff
+    style D4 fill:#ff006e,color:#fff
+    style O4 fill:#8338ec,color:#fff
+    style R4 fill:#ffbe0b,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Takeaway Section -->
+                    <div class="takeaway-section">
+                        <div class="section-header">
+                            <div class="section-icon">🧠</div>
+                            <div>
+                                <div class="section-title">Key Takeaways</div>
+                                <div class="section-subtitle">Interview-ready points</div>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-box">
+                            <div class="takeaway-label">💡 Spiral Approach Summary</div>
+                            <p class="takeaway-text">
+                                <span class="highlight">Core First</span> — Database, main service<br>
+                                <span class="highlight">Layer by Layer</span> — Auth, Monitoring, Caching<br>
+                                <span class="highlight">When to Use</span> — Confident, experienced, known patterns
+                            </p>
+                        </div>
+
+                        <div class="bottom-line-box">
+                            <div class="bottom-line-label">📌 INTERVIEW ANSWER</div>
+                            <p class="bottom-line-text">
+                                <span class="emphasis">Spiral Approach</span> = Core decide karo, layer by layer build karo<br>
+                                <span class="emphasis">Use when</span> = Solution well understood, pattern tested<br>
+                                <span class="emphasis">Benefit</span> = Fast delivery, directly land on right core! 🌀
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </article>
+
+                <!-- ==================== REEL #11: MVP APPROACH ==================== -->
+                <article class="reel-card" id="mvp-approach" data-reel="11">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-sd-mvp" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #11</span>
+                                    <span class="reel-duration">⏱️ 55 sec</span>
+                                    <span class="reel-category">System Design</span>
+                                </div>
+                                <h2 class="reel-header-title">Incremental MVP — Ship First, Scale Later</h2>
+                                <p class="reel-header-subtitle">Uncertain ho? Simple start karo, evolve karo! 📈</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
+                    <!-- Reel Header -->
+                    <div class="reel-header">
+                        <div class="reel-meta">
+                            <span class="reel-number">Reel #11</span>
+                            <span class="reel-duration">⏱️ 55 sec</span>
+                            <span class="reel-category">System Design</span>
+                        </div>
+                        <h2 class="reel-title">Incremental MVP — Ship First, Scale Later</h2>
+                        <p class="reel-subtitle">Uncertain ho? Simple start karo, evolve karo! 📈</p>
+                    </div>
+
+                    <!-- Hook Section -->
+                    <div class="hook-section">
+                        <div class="hook-label">🎣 HOOK — Record This First!</div>
+                        <p class="hook-text">Agar tum <strong>sure nahi ho</strong> ki exact solution kya hoga — toh <strong>MVP Approach</strong> use karo!</p>
+                    </div>
+
+                    <!-- Script Section -->
+                    <div class="script-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <div>
+                                <div class="section-title">55-Sec Hinglish Script</div>
+                                <div class="section-subtitle">Natural flow, English letters</div>
+                            </div>
+                        </div>
+
+                        <div class="script-content">
+                            <div class="script-text">
+                                <div class="script-para">
+                                    <span class="question">Agar tum sure nahi ho ki exact solution kya hoga — kya karoge?</span><br>
+                                    Tab <span class="highlight">Incremental MVP</span> approach use karo! MVP matlab <span class="emphasis">Minimum Viable Product</span>.
+                                </div>
+                                
+                                <div class="script-para">
+                                    <span class="highlight">Day-0</span> pe bilkul simple start karo — bas ek <span class="emphasis">API Server + Database</span>. Bas! Working solution ship karo first!
+                                </div>
+
+                                <div class="script-para">
+                                    Ab <span class="highlight">Problem 1</span> aaya: Traffic badh gaya, ek server handle nahi kar pa raha!<br>
+                                    <span class="emphasis">Solution:</span> Load Balancer + Multiple Servers add karo.
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="highlight">Problem 2</span> aaya: Database choke ho raha, queries timeout!<br>
+                                    <span class="emphasis">Solution:</span> Read Replicas + Redis Cache add karo.
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="highlight">Problem 3</span> aaya: Heavy tasks requests slow kar rahe!<br>
+                                    <span class="emphasis">Solution:</span> Message Broker (Kafka/SQS) + Background Workers add karo.
+                                </div>
+
+                                <div class="script-para">
+                                    Dekha? <span class="highlight">Problem aaya</span>, tab solution add kiya. <span class="emphasis">Real signals</span> ke basis pe evolve kiya!
+                                </div>
+
+                                <div class="script-para" style="margin-top: 1rem; padding: 1rem; background: rgba(255, 157, 67, 0.1); border-radius: 8px; border-left: 3px solid var(--accent-orange);">
+                                    <span class="highlight">✅ MVP Best Hai Jab:</span><br>
+                                    • Requirements <span class="emphasis">vague</span> hain<br>
+                                    • Scaling journey <span class="emphasis">unknown</span> hai<br>
+                                    • <span class="emphasis">Over-engineering</span> avoid karna hai<br>
+                                    • <span class="emphasis">Real signals</span> ke basis pe evolve karna hai
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Diagram Section -->
+                    <div class="diagram-section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <div>
+                                <div class="section-title">Visual Architecture Diagram</div>
+                                <div class="section-subtitle">MVP Evolution — Problem → Solution</div>
+                            </div>
+                        </div>
+
+                        <!-- Day 0 to Scale -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">📈 MVP Evolution Journey</div>
+                            <div class="mermaid">
+flowchart TD
+    subgraph D0["DAY 0: Simple Start"]
+        A0["API Server"] --> DB0["Database"]
+    end
+    
+    subgraph S1["SCALE 1: Traffic ↑"]
+        LB1["Load Balancer"]
+        LB1 --> S1A["Server 1"]
+        LB1 --> S1B["Server 2"]
+        LB1 --> S1C["Server 3"]
+        S1A --> DB1["Database"]
+        S1B --> DB1
+        S1C --> DB1
+    end
+    
+    subgraph S2["SCALE 2: DB Choke"]
+        S2S["Servers"]
+        S2S --> CACHE["Redis Cache"]
+        S2S --> PRI["Primary DB"]
+        PRI --> REP1["Replica 1"]
+        PRI --> REP2["Replica 2"]
+    end
+    
+    D0 -->|"Traffic problem"| S1
+    S1 -->|"DB problem"| S2
+    
+    style A0 fill:#06d6a0,color:#fff
+    style DB0 fill:#3a86ff,color:#fff
+    style LB1 fill:#ff006e,color:#fff
+    style CACHE fill:#ffbe0b,color:#fff
+    style PRI fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+
+                        <!-- Spiral vs MVP Decision -->
+                        <div class="architecture-diagram">
+                            <h4>⚔️ Spiral vs MVP — Quick Decision Guide</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <!-- Spiral -->
+                                <div class="mermaid-container" style="border-color: rgba(6, 214, 160, 0.4);">
+                                    <div class="diagram-label" style="background: rgba(6, 214, 160, 0.2); border-color: rgba(6, 214, 160, 0.4); color: #06d6a0;">🌀 Spiral — CONFIDENT</div>
+                                    <div class="mermaid">
+flowchart TD
+    A["✅ Solution understood"]
+    B["✅ Domain experienced"]
+    C["✅ Pattern tested"]
+    D["✅ Fast delivery needed"]
+    
+    style A fill:#1f2d1f,stroke:#06d6a0,color:#fff
+    style B fill:#1f2d1f,stroke:#06d6a0,color:#fff
+    style C fill:#1f2d1f,stroke:#06d6a0,color:#fff
+    style D fill:#1f2d1f,stroke:#06d6a0,color:#fff
+                                    </div>
+                                </div>
+
+                                <!-- MVP -->
+                                <div class="mermaid-container" style="border-color: rgba(255, 157, 67, 0.4);">
+                                    <div class="diagram-label" style="background: rgba(255, 157, 67, 0.2); border-color: rgba(255, 157, 67, 0.4); color: #ff9f43;">📈 MVP — UNCERTAIN</div>
+                                    <div class="mermaid">
+flowchart TD
+    A["✅ Requirements vague"]
+    B["✅ Scaling unknown"]
+    C["✅ Avoid over-engineering"]
+    D["✅ Evolve with real data"]
+    
+    style A fill:#2d2a1f,stroke:#ff9f43,color:#fff
+    style B fill:#2d2a1f,stroke:#ff9f43,color:#fff
+    style C fill:#2d2a1f,stroke:#ff9f43,color:#fff
+    style D fill:#2d2a1f,stroke:#ff9f43,color:#fff
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Takeaway Section -->
+                    <div class="takeaway-section">
+                        <div class="section-header">
+                            <div class="section-icon">🧠</div>
+                            <div>
+                                <div class="section-title">Key Takeaways</div>
+                                <div class="section-subtitle">Interview-ready points</div>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-box">
+                            <div class="takeaway-label">💡 MVP Approach Summary</div>
+                            <p class="takeaway-text">
+                                <span class="highlight">Day 0</span> — Simple start, ship fast<br>
+                                <span class="highlight">Problem → Solution</span> — Evolve as needed<br>
+                                <span class="highlight">When to Use</span> — Uncertain, vague requirements
+                            </p>
+
+                            <div class="future-ideas">
+                                <span class="future-idea">Load Balancer</span>
+                                <span class="future-idea">Read Replicas</span>
+                                <span class="future-idea">Redis Cache</span>
+                                <span class="future-idea">Message Broker</span>
+                            </div>
+                        </div>
+
+                        <div class="bottom-line-box">
+                            <div class="bottom-line-label">📌 INTERVIEW ANSWER</div>
+                            <p class="bottom-line-text">
+                                <span class="emphasis">MVP Approach</span> = Simple start, evolve with scale<br>
+                                <span class="emphasis">Rule</span> = Confident? Spiral. Uncertain? MVP.<br>
+                                <span class="emphasis">Benefit</span> = No over-engineering, real data driven! 📈
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </article>
+
+                <!-- ==================== REEL #12: 3 GOLDEN RULES ==================== -->
+                <article class="reel-card" id="golden-rules" data-reel="12">
+                    <!-- Collapsible Header -->
+                    <div class="reel-card-header" onclick="toggleReel(this)">
+                        <div class="reel-header-left">
+                            <div class="reel-checkbox-wrapper" onclick="event.stopPropagation()">
+                                <input type="checkbox" class="reel-checkbox" id="check-sd-rules" onchange="toggleComplete(this)">
+                            </div>
+                            <div class="reel-header-info">
+                                <div class="reel-header-top">
+                                    <span class="reel-number">Reel #12</span>
+                                    <span class="reel-duration">⏱️ 60 sec</span>
+                                    <span class="reel-category">System Design</span>
+                                </div>
+                                <h2 class="reel-header-title">3 Golden Rules + Divide & Conquer</h2>
+                                <p class="reel-header-subtitle">Ye rules hamesha yaad rakho! 🏆</p>
+                            </div>
+                        </div>
+                        <div class="reel-expand-icon">▼</div>
+                    </div>
+                    
+                    <!-- Collapsible Content -->
+                    <div class="reel-card-content">
+                    <!-- Reel Header -->
+                    <div class="reel-header">
+                        <div class="reel-meta">
+                            <span class="reel-number">Reel #12</span>
+                            <span class="reel-duration">⏱️ 60 sec</span>
+                            <span class="reel-category">System Design</span>
+                        </div>
+                        <h2 class="reel-title">3 Golden Rules + Divide & Conquer</h2>
+                        <p class="reel-subtitle">Ye rules hamesha yaad rakho! 🏆</p>
+                    </div>
+
+                    <!-- Hook Section -->
+                    <div class="hook-section">
+                        <div class="hook-label">🎣 HOOK — Record This First!</div>
+                        <p class="hook-text">System design ke <strong>3 Golden Rules</strong> jo har interview aur job mein kaam aayenge!</p>
+                    </div>
+
+                    <!-- Script Section -->
+                    <div class="script-section">
+                        <div class="section-header">
+                            <div class="section-icon">📝</div>
+                            <div>
+                                <div class="section-title">60-Sec Hinglish Script</div>
+                                <div class="section-subtitle">Natural flow, English letters</div>
+                            </div>
+                        </div>
+
+                        <div class="script-content">
+                            <div class="script-text">
+                                <div class="script-para">
+                                    <span class="question">System design ke 3 Golden Rules jo har interview aur job mein kaam aayenge!</span>
+                                </div>
+                                
+                                <div class="script-para">
+                                    <span class="highlight">🥇 Rule 1: SCOPE FENCE KARO</span><br>
+                                    Har system infinitely buildable hota hai. Par time limited hai! Interview mein 45-60 min hai. Toh clearly bolo — <span class="emphasis">"Ye IN SCOPE hai, ye OUT OF SCOPE hai"</span>. Ye <span class="highlight">maturity</span> ka sign hai!
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="highlight">🥈 Rule 2: CLARIFICATIONS LO</span><br>
+                                    Problem statements ambiguous hote hain! Puchho — <span class="emphasis">"Traffic kitna hai?"</span>, <span class="emphasis">"Latency requirement kya hai?"</span>, <span class="emphasis">"Strong consistency chahiye ya eventual?"</span>. Ye questions <span class="highlight">RIGHT design decisions</span> tak le jaate hain!
+                                </div>
+
+                                <div class="script-para">
+                                    <span class="highlight">🥉 Rule 3: CRITICAL QUESTIONS PUCHO</span><br>
+                                    Blindly follow mat karo! Puchho — <span class="emphasis">"HTTP use karein ya gRPC better hoga?"</span>, <span class="emphasis">"WebSockets chahiye ya polling enough hai?"</span>. Ek critical question <span class="highlight">POORI ARCHITECTURE</span> change kar sakta hai!
+                                </div>
+
+                                <div class="script-para">
+                                    Aur ek <span class="highlight">Universal Principle</span>: <span class="emphasis">DIVIDE & CONQUER!</span><br>
+                                    Big scary problem like "Design Instagram" — isko <span class="highlight">small parts</span> mein todo: User Service, Feed Service, Story Service. Pehle ek solve karo, phir next. <span class="emphasis">Step by step conquer karo!</span>
+                                </div>
+
+                                <div class="script-para" style="margin-top: 1rem; padding: 1rem; background: rgba(255, 217, 61, 0.1); border-radius: 8px; border-left: 3px solid var(--accent-yellow);">
+                                    <span class="highlight">🎯 Remember:</span><br>
+                                    <span class="emphasis">Scope Fence</span> → Time limited hai<br>
+                                    <span class="emphasis">Clarify</span> → Assume mat karo<br>
+                                    <span class="emphasis">Challenge</span> → Critical questions pucho<br>
+                                    <span class="emphasis">Divide & Conquer</span> → Big → Small parts
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Diagram Section -->
+                    <div class="diagram-section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <div>
+                                <div class="section-title">Visual Architecture Diagram</div>
+                                <div class="section-subtitle">3 Golden Rules + Divide & Conquer</div>
+                            </div>
+                        </div>
+
+                        <!-- 3 Golden Rules -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🏆 3 Golden Rules</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph R1["🥇 RULE 1: SCOPE FENCE"]
+        S1["Time Limited Hai!"]
+        S2["IN SCOPE vs OUT OF SCOPE"]
+        S3["Maturity ka sign 💪"]
+    end
+    
+    subgraph R2["🥈 RULE 2: CLARIFICATIONS"]
+        C1["Traffic kitna?"]
+        C2["Latency requirement?"]
+        C3["Consistency model?"]
+    end
+    
+    subgraph R3["🥉 RULE 3: CRITICAL QUESTIONS"]
+        Q1["HTTP ya gRPC?"]
+        Q2["WebSockets ya Polling?"]
+        Q3["Sync ya Async?"]
+    end
+    
+    style S1 fill:#ffd93d,color:#fff
+    style S2 fill:#ffd93d,color:#fff
+    style S3 fill:#ffd93d,color:#fff
+    style C1 fill:#c0c0c0,color:#fff
+    style C2 fill:#c0c0c0,color:#fff
+    style C3 fill:#c0c0c0,color:#fff
+    style Q1 fill:#cd7f32,color:#fff
+    style Q2 fill:#cd7f32,color:#fff
+    style Q3 fill:#cd7f32,color:#fff
+                            </div>
+                        </div>
+
+                        <!-- Divide & Conquer -->
+                        <div class="mermaid-container">
+                            <div class="diagram-label">🧩 Divide & Conquer — Big Problem → Small Parts</div>
+                            <div class="mermaid">
+flowchart TD
+    BIG["😱 Design Instagram"]
+    
+    BIG --> U["👤 User Service"]
+    BIG --> F["📰 Feed Service"]
+    BIG --> S["📸 Story Service"]
+    BIG --> N["🔔 Notification Service"]
+    BIG --> C["📁 CDN"]
+    
+    U --> AUTH["🔐 Auth"]
+    F --> CACHE["🔄 Cache"]
+    S --> STORAGE["💾 Storage"]
+    
+    style BIG fill:#ef476f,color:#fff,stroke-width:3px
+    style U fill:#3a86ff,color:#fff
+    style F fill:#8338ec,color:#fff
+    style S fill:#06d6a0,color:#fff
+    style N fill:#ffbe0b,color:#fff
+    style C fill:#ff006e,color:#fff
+    style AUTH fill:#3a86ff,color:#fff
+    style CACHE fill:#8338ec,color:#fff
+    style STORAGE fill:#06d6a0,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Takeaway Section -->
+                    <div class="takeaway-section">
+                        <div class="section-header">
+                            <div class="section-icon">🧠</div>
+                            <div>
+                                <div class="section-title">Key Takeaways</div>
+                                <div class="section-subtitle">Interview-ready points</div>
+                            </div>
+                        </div>
+
+                        <div class="takeaway-box">
+                            <div class="takeaway-label">💡 The 3 Golden Rules</div>
+                            <p class="takeaway-text">
+                                <span class="highlight">🥇 Scope Fence</span> — Define what's IN and OUT of scope<br>
+                                <span class="highlight">🥈 Clarifications</span> — Ask about traffic, latency, consistency<br>
+                                <span class="highlight">🥉 Critical Questions</span> — Challenge assumptions
+                            </p>
+
+                            <div class="future-ideas">
+                                <span class="future-idea">HTTP vs gRPC</span>
+                                <span class="future-idea">WebSockets vs Polling</span>
+                                <span class="future-idea">Strong vs Eventual</span>
+                                <span class="future-idea">Sync vs Async</span>
+                            </div>
+                        </div>
+
+                        <div class="bottom-line-box">
+                            <div class="bottom-line-label">📌 INTERVIEW ANSWER</div>
+                            <p class="bottom-line-text">
+                                <span class="emphasis">Rule 1</span> = Scope fence karo, time limited hai<br>
+                                <span class="emphasis">Rule 2</span> = Clarifications lo, assume mat karo<br>
+                                <span class="emphasis">Rule 3</span> = Critical questions pucho<br>
+                                <span class="emphasis">Universal</span> = Divide & Conquer — big problem ko small parts mein todo! 🏆
+                            </p>
+                        </div>
+                    </div>
+                    </div>
                 </article>
 
                 <!-- Footer -->
@@ -5270,6 +7302,193 @@ services.AddScoped&lt;RequestContext&gt;();    // ✅ CORRECT!
                 actorMargin: 50,
                 showSequenceNumbers: false
             }
+        });
+
+        // ==================== COLLAPSIBLE REEL FUNCTIONS ====================
+        
+        // Toggle reel expand/collapse
+        function toggleReel(header) {
+            const card = header.closest('.reel-card');
+            const isExpanding = !card.classList.contains('expanded');
+            
+            // Store current scroll position and card's position relative to viewport
+            const cardRect = card.getBoundingClientRect();
+            const scrollY = window.scrollY;
+            const cardTopRelativeToViewport = cardRect.top;
+            
+            // Collapse all other expanded cards
+            document.querySelectorAll('.reel-card.expanded').forEach(otherCard => {
+                if (otherCard !== card) {
+                    otherCard.classList.remove('expanded');
+                    const otherIcon = otherCard.querySelector('.reel-expand-icon');
+                    if (otherIcon) {
+                        otherIcon.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+            
+            // Toggle current card
+            card.classList.toggle('expanded');
+            
+            // Update icon rotation
+            const icon = header.querySelector('.reel-expand-icon');
+            if (card.classList.contains('expanded')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+            
+            // Restore scroll position to keep the clicked card in the same viewport position
+            requestAnimationFrame(() => {
+                const newCardRect = card.getBoundingClientRect();
+                const scrollAdjustment = newCardRect.top - cardTopRelativeToViewport;
+                window.scrollTo({
+                    top: scrollY + scrollAdjustment,
+                    behavior: 'instant'
+                });
+            });
+        }
+        
+        // Toggle completion checkbox
+        function toggleComplete(checkbox) {
+            const card = checkbox.closest('.reel-card');
+            const scriptId = checkbox.id.replace('check-', '');
+            
+            if (checkbox.checked) {
+                card.classList.add('completed');
+            } else {
+                card.classList.remove('completed');
+            }
+            
+            // Save to server and localStorage
+            saveProgress(scriptId, checkbox.checked);
+        }
+        
+        // Save progress to server and localStorage
+        async function saveProgress(scriptId, completed) {
+            const checkboxes = document.querySelectorAll('.reel-checkbox');
+            const progress = {};
+            
+            checkboxes.forEach(cb => {
+                progress[cb.id] = cb.checked;
+            });
+            
+            // Save to localStorage as backup
+            localStorage.setItem('reelScriptsProgress', JSON.stringify(progress));
+            
+            // Save to server
+            try {
+                const response = await fetch('/api/progress/scripts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        scriptId: scriptId,
+                        completed: completed
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Progress saved to server:', data);
+                }
+            } catch (error) {
+                console.log('Server not available, using localStorage only');
+            }
+            
+            updateProgressDisplay();
+        }
+        
+        // Load progress from server or localStorage
+        async function loadProgress() {
+            let progressLoaded = false;
+            
+            // Try to load from server first
+            try {
+                const response = await fetch('/api/progress');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.scripts && data.scripts.items) {
+                        Object.keys(data.scripts.items).forEach(key => {
+                            const script = data.scripts.items[key];
+                            const checkbox = document.getElementById('check-' + script.id);
+                            if (checkbox) {
+                                checkbox.checked = script.completed;
+                                if (script.completed) {
+                                    checkbox.closest('.reel-card').classList.add('completed');
+                                }
+                            }
+                        });
+                        progressLoaded = true;
+                        console.log('Progress loaded from server');
+                    }
+                }
+            } catch (error) {
+                console.log('Server not available, loading from localStorage');
+            }
+            
+            // Fallback to localStorage
+            if (!progressLoaded) {
+                const saved = localStorage.getItem('reelScriptsProgress');
+                if (saved) {
+                    const progress = JSON.parse(saved);
+                    
+                    Object.keys(progress).forEach(id => {
+                        const checkbox = document.getElementById(id);
+                        if (checkbox) {
+                            checkbox.checked = progress[id];
+                            if (progress[id]) {
+                                checkbox.closest('.reel-card').classList.add('completed');
+                            }
+                        }
+                    });
+                }
+            }
+            updateProgressDisplay();
+        }
+        
+        // Update progress display (progress bar)
+        function updateProgressDisplay() {
+            const total = document.querySelectorAll('.reel-checkbox').length;
+            const completed = document.querySelectorAll('.reel-checkbox:checked').length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            // Update progress stats
+            const progressStats = document.getElementById('progressStats');
+            if (progressStats) {
+                progressStats.textContent = `${completed}/${total}`;
+            }
+            
+            // Update progress bar
+            const progressBarFill = document.getElementById('progressBarFill');
+            if (progressBarFill) {
+                progressBarFill.style.width = `${percentage}%`;
+            }
+            
+            // Update percentage text
+            const progressPercentage = document.getElementById('progressPercentage');
+            if (progressPercentage) {
+                progressPercentage.textContent = `${percentage}% Complete`;
+            }
+            
+            // Update progress badge if exists
+            const badge = document.querySelector('.progress-badge');
+            if (badge) {
+                badge.textContent = `${completed}/${total} Completed`;
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved progress
+            loadProgress();
+            
+            // All reels start collapsed (no 'expanded' class by default)
+            // Initialize expand icons to default rotation
+            document.querySelectorAll('.reel-expand-icon').forEach(icon => {
+                icon.style.transform = 'rotate(0deg)';
+            });
         });
     </script>
 </body>

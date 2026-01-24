@@ -1,20 +1,101 @@
 {
   "metadata": {
-    "version": "2.0",
-    "lastUpdated": "2026-01-23T09:20:00.842Z",
-    "description": "Progress tracker for System Design & DSA learning materials - Individual concept tracking"
+    "version": "2.1",
+    "lastUpdated": "2026-01-24T18:08:27.892Z",
+    "description": "Progress tracker for System Design, DSA & Reel Scripts learning materials - Individual concept tracking"
   },
   "summary": {
     "systemDesign": {
       "totalTopics": 8,
       "totalConcepts": 72,
-      "completedConcepts": 25,
-      "percentage": 35
+      "completedConcepts": 33,
+      "percentage": 46
     },
     "dsa": {
       "totalProblems": 17,
       "completedProblems": 6,
       "percentage": 35
+    },
+    "scripts": {
+      "totalScripts": 12,
+      "completedScripts": 0,
+      "percentage": 0
+    }
+  },
+  "scripts": {
+    "items": {
+      "strategy": {
+        "id": "strategy",
+        "name": "Strategy Pattern",
+        "completed": false,
+        "completedAt": null
+      },
+      "orchestrator": {
+        "id": "orchestrator",
+        "name": "Orchestrator Pattern",
+        "completed": false,
+        "completedAt": null
+      },
+      "result": {
+        "id": "result",
+        "name": "Result Pattern",
+        "completed": false,
+        "completedAt": null
+      },
+      "repository": {
+        "id": "repository",
+        "name": "Repository Pattern",
+        "completed": false,
+        "completedAt": null
+      },
+      "soc": {
+        "id": "soc",
+        "name": "Separation of Concerns",
+        "completed": false,
+        "completedAt": null
+      },
+      "singleton": {
+        "id": "singleton",
+        "name": "Singleton Pattern",
+        "completed": false,
+        "completedAt": null
+      },
+      "factory": {
+        "id": "factory",
+        "name": "Factory Pattern",
+        "completed": false,
+        "completedAt": null
+      },
+      "sd-intro": {
+        "id": "sd-intro",
+        "name": "System Design Introduction",
+        "completed": false,
+        "completedAt": null
+      },
+      "sd-types": {
+        "id": "sd-types",
+        "name": "System Types & Layers",
+        "completed": false,
+        "completedAt": null
+      },
+      "sd-spiral": {
+        "id": "sd-spiral",
+        "name": "Spiral Approach",
+        "completed": false,
+        "completedAt": null
+      },
+      "sd-mvp": {
+        "id": "sd-mvp",
+        "name": "MVP Approach",
+        "completed": false,
+        "completedAt": null
+      },
+      "sd-rules": {
+        "id": "sd-rules",
+        "name": "3 Golden Rules",
+        "completed": false,
+        "completedAt": null
+      }
     }
   },
   "systemDesign": {
@@ -191,14 +272,14 @@
           "concept-25": {
             "id": "concept-25",
             "name": "Kab Use Karna Sahi Ho Sakta Hai?",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T17:17:11.732Z"
           },
           "concept-26": {
             "id": "concept-26",
             "name": "Minimum Guardrails",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T17:40:10.831Z"
           }
         }
       },
@@ -210,38 +291,38 @@
           "concept-27": {
             "id": "concept-27",
             "name": "Architect's Perspective: Screens vs Workloads",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T17:43:35.681Z"
           },
           "concept-28": {
             "id": "concept-28",
             "name": "Chat Service → Cassandra",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T17:50:14.599Z"
           },
           "concept-29": {
             "id": "concept-29",
             "name": "Auth Service → PostgreSQL",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T17:53:43.364Z"
           },
           "concept-30": {
             "id": "concept-30",
             "name": "Profile Service → MongoDB",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T17:58:27.351Z"
           },
           "concept-31": {
             "id": "concept-31",
             "name": "Analytics Service → Data Warehouse",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T18:05:44.397Z"
           },
           "concept-32": {
             "id": "concept-32",
             "name": "Media Service → Blob Storage",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-24T18:08:27.892Z"
           }
         }
       },
