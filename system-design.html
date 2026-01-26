@@ -4805,12 +4805,164 @@ Failure at Step 3 (Payment Fail Hua):
                             📚 <strong>Messaging/Event Terms Samjho:</strong><br><br>
                             • <strong>Kafka</strong> = Ek message queue system. WhatsApp group socho — message bhejo, sab receive karein jab online aayein!<br><br>
                             • <strong>SQS</strong> = Amazon ka Simple Queue Service. Line mein khade hoke ek-ek ko serve karna!<br><br>
+                            • <strong>Azure Service Bus</strong> = Microsoft ka enterprise message broker. Ye <strong>Kafka ka enterprise cousin</strong> hai — queue aur topic dono support karta hai!<br><br>
                             • <strong>Event Bus</strong> = Central jagah jahan sab services events publish aur subscribe karein<br><br>
                             • <strong>Publish</strong> = Event/message ko queue mein daal do. "Ye hua, sunlo sab!"<br><br>
                             • <strong>Subscribe/Consume</strong> = Queue se messages padhna. "Main interested hoon, mujhe batao!"<br><br>
                             • <strong>Async Messaging</strong> = Message bhejo aur wait mat karo. Reply baad mein aayega! (Non-blocking)<br><br>
                             • <strong>Event</strong> = Kuch hua! Jaise "post.created", "order.placed", "payment.failed"<br><br>
                             • <strong>Propagation Delay</strong> = Data ek jagah se dusri jagah pahunchne mein time lagta hai. Real-time nahi!
+                        </div>
+
+                        <!-- Azure Service Bus Deep Dive -->
+                        <div class="visual-box" style="background: linear-gradient(135deg, rgba(0, 120, 212, 0.15) 0%, rgba(80, 230, 255, 0.1) 100%); border-color: rgba(0, 120, 212, 0.5);">
+                            <h4 style="color: #50e6ff;">☁️ Azure Service Bus — Deep Dive Example</h4>
+                            <pre class="visual-diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│      AZURE SERVICE BUS — Enterprise Message Broker              │
+└─────────────────────────────────────────────────────────────────┘
+
+🔵 Azure Service Bus ke 2 main modes:
+
+1️⃣ QUEUE MODE (Point-to-Point)
+────────────────────────────────────────────────────
+   ┌──────────────┐         ┌────────────────┐         ┌────────────────┐
+   │ Order Service│ ──────► │  Service Bus   │ ──────► │ Payment Service│
+   │   (Sender)   │  Send   │     QUEUE      │ Receive │   (Receiver)   │
+   └──────────────┘         └────────────────┘         └────────────────┘
+                                   │
+                            Ek message = Ek receiver!
+                            FIFO guaranteed! 🎯
+
+2️⃣ TOPIC MODE (Pub-Sub / Fan-out)
+────────────────────────────────────────────────────
+   ┌──────────────┐         ┌────────────────┐    
+   │ Post Service │ ──────► │  Service Bus   │    
+   │  (Publisher) │ Publish │     TOPIC      │    
+   └──────────────┘         └───────┬────────┘    
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                    ▼               ▼               ▼
+            ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+            │Subscription1│ │Subscription2│ │Subscription3│
+            │ Feed Service│ │Notif Service│ │Analytics Svc│
+            └─────────────┘ └─────────────┘ └─────────────┘
+
+            Ek message = Multiple subscribers ko milta hai! 📢
+                            </pre>
+                        </div>
+
+                        <div class="hinglish-note" style="background: rgba(0, 120, 212, 0.15); border-left-color: #0078d4;">
+                            🎯 <strong>Azure Service Bus Kaise Kaam Karta Hai?</strong><br><br>
+                            
+                            <strong>📨 Step 1: Message Send Karo (Producer Side)</strong><br>
+                            Tumhara Post Service ek naya post create karta hai. Ab ye Service Bus ke <strong>Topic</strong> pe message <em>publish</em> karta hai:<br>
+                            <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">{"event": "post.created", "postId": 123, "userId": 456}</code><br><br>
+
+                            <strong>🚀 Step 2: Service Bus Store Karta Hai</strong><br>
+                            Message Service Bus ke Topic mein <strong>persist</strong> ho jaata hai. Ye message <strong>durable</strong> hai — agar koi subscriber offline hai, toh message wait karega!<br><br>
+
+                            <strong>📥 Step 3: Subscriptions Receive Kartein Hain</strong><br>
+                            Har <strong>Subscription</strong> apna copy of message receive karti hai:<br>
+                            • <strong>Feed Subscription</strong> → Feed Service ko bolti "Feed update kar!"<br>
+                            • <strong>Notification Subscription</strong> → Notification Service ko bolti "User ke followers ko notify kar!"<br>
+                            • <strong>Analytics Subscription</strong> → Analytics Service ko bolti "Post metrics track kar!"<br><br>
+
+                            <strong>✅ Step 4: Acknowledgment (ACK)</strong><br>
+                            Jab subscriber message <strong>successfully process</strong> kar leta hai, toh <strong>ACK</strong> bhejta hai. Service Bus message delete kar deta hai.<br>
+                            Agar ACK nahi aaya (service crashed?) → Message <strong>retry</strong> hota hai ya <strong>Dead Letter Queue (DLQ)</strong> mein jaata hai!
+                        </div>
+
+                        <div class="visual-box" style="background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.4);">
+                            <h4 style="color: var(--accent-green);">🔄 Service Bus Flow — Real Example (Instagram-style)</h4>
+                            <pre class="visual-diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│     USER CREATES NEW POST — EVENTUAL CONSISTENCY IN ACTION!     │
+└─────────────────────────────────────────────────────────────────┘
+
+👤 User clicks "Post" button
+       │
+       ▼
+┌─────────────────┐
+│   API Gateway   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Post Service   │ ──► 1. Save to PostDB ✅
+└────────┬────────┘     (Immediate - Strong Consistency)
+         │
+         │ 2. Publish to Azure Service Bus
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  AZURE SERVICE BUS                          │
+│                  Topic: "post-events"                        │
+│                                                             │
+│  Message: {"event":"post.created", "postId":789}           │
+└────────────┬────────────────┬────────────────┬──────────────┘
+             │                │                │
+    ┌────────▼────────┐ ┌────▼────────┐ ┌─────▼─────────┐
+    │ Subscription:   │ │Subscription:│ │ Subscription: │
+    │ "feed-updates"  │ │"notify-svc" │ │ "analytics"   │
+    └────────┬────────┘ └─────┬───────┘ └──────┬────────┘
+             │                │                │
+    ┌────────▼────────┐ ┌─────▼───────┐ ┌──────▼────────┐
+    │  Feed Service   │ │ Notif Svc   │ │Analytics Svc  │
+    │                 │ │             │ │               │
+    │ 3a. Update      │ │3b. Send push│ │3c. Log event  │
+    │    user feeds   │ │  to followers│ │   for metrics│
+    └─────────────────┘ └─────────────┘ └───────────────┘
+
+⏱️ TIMELINE:
+─────────────────────────────────────────
+   t=0ms   │ Post saved in PostDB
+   t=50ms  │ Message published to Service Bus
+   t=100ms │ Feed Service receives & processes
+   t=150ms │ Notification Service sends push
+   t=200ms │ Analytics logs the event
+
+⚠️ User sees "Posted!" at t=0ms
+⚠️ Followers see post in feed at t=100-200ms
+⚠️ This 100-200ms delay = EVENTUAL CONSISTENCY! 
+                            </pre>
+                        </div>
+
+                        <div class="hinglish-note" style="background: rgba(255, 159, 67, 0.15); border-left-color: var(--accent-orange);">
+                            ⚡ <strong>Azure Service Bus vs Kafka vs SQS — Quick Comparison:</strong><br><br>
+                            
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                                <tr style="background: rgba(0,0,0,0.3);">
+                                    <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Feature</th>
+                                    <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Azure Service Bus</th>
+                                    <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Kafka</th>
+                                    <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">AWS SQS</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Type</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Message Broker</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Event Streaming</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Queue Service</td>
+                                </tr>
+                                <tr style="background: rgba(0,0,0,0.15);">
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Best For</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Enterprise apps, FIFO</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">High throughput streaming</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Simple async tasks</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Message Retention</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">14 days (configurable)</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Unlimited (log-based)</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">14 days max</td>
+                                </tr>
+                                <tr style="background: rgba(0,0,0,0.15);">
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">Dead Letter Queue</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">✅ Built-in</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">❌ Manual setup</td>
+                                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.2);">✅ Built-in</td>
+                                </tr>
+                            </table>
                         </div>
 
                         <div class="hinglish-note">

@@ -2396,7 +2396,7 @@
             background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
             border-color: rgba(59, 130, 246, 0.3);
             color: #1e293b;
-            box-shadow: 
+            box-shadow:
                 0 4px 20px rgba(0, 0, 0, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
@@ -2405,6 +2405,31 @@
             background: linear-gradient(135deg, #f8fafc, #f1f5f9);
             color: #3b82f6;
             border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        /* ==================== MERMAID DIAGRAM STYLING ==================== */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .mermaid:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.15);
+        }
+
+        /* Light theme for Mermaid */
+        [data-theme="light"] .mermaid {
+            background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%) !important;
         }
 
         /* ==================== DIAGRAM CARD STYLING ==================== */
@@ -3419,7 +3444,7 @@
                     <span class="category-icon">🔗</span>
                     Linked List
                 </span>
-                <span class="category-count">2</span>
+                <span class="category-count">4</span>
                 <span class="category-toggle">▼</span>
             </div>
             <div class="category-items">
@@ -3433,6 +3458,18 @@
                     <span class="nav-number green">19</span>
                     <span class="nav-text">Merge Two Sorted Lists</span>
                     <span class="nav-difficulty easy"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+                <a href="#linked-list-cycle" class="nav-item" data-difficulty="easy">
+                    <span class="nav-number green">20</span>
+                    <span class="nav-text">Linked List Cycle</span>
+                    <span class="nav-difficulty easy"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+                <a href="#reorder-linked-list" class="nav-item" data-difficulty="medium">
+                    <span class="nav-number orange">21</span>
+                    <span class="nav-text">Reorder Linked List</span>
+                    <span class="nav-difficulty medium"></span>
                     <span class="nav-check">✓</span>
                 </a>
             </div>
@@ -13071,6 +13108,1208 @@ class Solution:
             </div>
         </section>
 
+        <!-- ==================== PROBLEM #20: LINKED LIST CYCLE ==================== -->
+        <section class="problem-section" id="linked-list-cycle">
+            <header class="problem-header prob-1">
+                <div class="problem-badge">🔗 Problem #20</div>
+                <h2>Linked List Cycle</h2>
+                <p class="problem-subtitle">Cycle detect karo Linked List mein — Floyd's Tortoise & Hare! 🐢🐇</p>
+            </header>
+
+            <!-- Problem Card -->
+            <div class="problem-card theme-green">
+                <span class="difficulty-tag easy">🟢 Easy Level</span>
+                <h3 class="problem-title">Problem Kya Hai?</h3>
+                <p class="problem-desc">
+                    Ek <strong>singly linked list</strong> ka head diya gaya hai. Tumhe batana hai ki list mein koi <span class="highlight">cycle</span> hai ya nahi.
+                    Cycle matlab last node wapas kisi pehle wale node ko point kar raha hai — <span class="highlight-red">infinite loop!</span> 🔄
+                </p>
+                <div class="hinglish-note">
+                    🎯 <strong>Cycle:</strong> Agar list traverse karte raho aur kabhi NULL nahi milta, cycle hai!<br>
+                    📌 <code>pos</code> = jis node pe tail connect ho raha hai (0-indexed). Ye input mein nahi milta!<br>
+                    🔄 Return <code>true</code> agar cycle hai, warna <code>false</code>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 1:</strong></p>
+                    <code>head = [3,2,0,-4], pos = 1</code>
+                    <p>Output: <strong>true</strong> — Tail (-4) connects back to node at index 1 (value 2)</p>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 2:</strong></p>
+                    <code>head = [1,2], pos = 0</code>
+                    <p>Output: <strong>true</strong> — Tail (2) connects back to head (1)</p>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 3:</strong></p>
+                    <code>head = [1], pos = -1</code>
+                    <p>Output: <strong>false</strong> — Single node, no cycle, points to NULL</p>
+                </div>
+            </div>
+
+            <!-- Real-life Analogy Box -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 159, 67, 0.15) 0%, rgba(245, 87, 108, 0.15) 100%); border-color: rgba(255, 159, 67, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-orange);">🎭 Real-life Analogy — Samjho Asaan Bhasha Mein!</h4>
+                <p class="content-text">
+                    <strong>Scenario 1 — Circular Road:</strong> Socho tum ek road pe chal rahe ho. Agar road <span class="highlight-orange">straight hai</span> → eventually end milega (NULL). 
+                    But agar road <strong>circular hai</strong> → ghoomte raho, kabhi end nahi milega! Ye hai cycle! 🔄
+                </p>
+                <p class="content-text" style="margin-top: 10px;">
+                    <strong>Scenario 2 — Race Track:</strong> Do runners ek track pe daur rahe hain — ek <strong>slow (🐢)</strong>, ek <strong>fast (🐇)</strong>. 
+                    Agar track circular hai → fast wala slow ko zaroor pakad lega (lap kar dega)! 
+                    Agar track straight hai → fast wala end tak pahunch jaayega, kabhi nahi milenge! 🏃‍♂️
+                </p>
+                <div class="hinglish-note" style="margin-top: 15px; background: rgba(168, 85, 247, 0.15);">
+                    💡 <strong>Interview Insight:</strong> Ye problem <strong>Floyd's Cycle Detection</strong> algorithm ka classic example hai. 
+                    Interviewer specifically dekhte hain ki tumhe <strong>space-efficient O(1)</strong> solution aata hai ya nahi!
+                </div>
+            </div>
+
+            <!-- Visual Representation with Mermaid -->
+            <div class="visual-box">
+                <h4>🔄 Cycle vs No Cycle — Dekho Difference!</h4>
+
+                <!-- No Cycle Diagram -->
+                <p class="content-text" style="margin-bottom: 10px; color: var(--accent-green);"><strong>✅ NO CYCLE (Normal Linked List):</strong></p>
+                <div class="mermaid" style="background: rgba(0, 255, 136, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+flowchart LR
+    HEAD[HEAD] --> A[3]
+    A --> B[2]
+    B --> C[0]
+    C --> D[-4]
+    D --> NULL[NULL]
+    style HEAD fill:#a855f7,stroke:#a855f7,color:#fff
+    style A fill:#16213e,stroke:#00ff88,color:#fff
+    style B fill:#16213e,stroke:#00ff88,color:#fff
+    style C fill:#16213e,stroke:#00ff88,color:#fff
+    style D fill:#16213e,stroke:#00ff88,color:#fff
+    style NULL fill:#ff6b6b,stroke:#ff6b6b,color:#fff
+                </div>
+                <p class="content-text" style="text-align: center; color: var(--text-secondary);">Last node → NULL = Road khatam! End mil gaya! ✅</p>
+
+                <!-- Has Cycle Diagram -->
+                <p class="content-text" style="margin: 25px 0 10px 0; color: var(--accent-red);"><strong>❌ HAS CYCLE (Infinite Loop!):</strong></p>
+                <div class="mermaid" style="background: rgba(255, 107, 107, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+flowchart LR
+    HEAD2[HEAD] --> A2[3]
+    A2 --> B2[2]
+    B2 --> C2[0]
+    C2 --> D2[-4]
+    D2 -->|CYCLE| B2
+    style HEAD2 fill:#a855f7,stroke:#a855f7,color:#fff
+    style A2 fill:#16213e,stroke:#00d4ff,color:#fff
+    style B2 fill:#ff6b6b,stroke:#ff6b6b,color:#fff
+    style C2 fill:#16213e,stroke:#00d4ff,color:#fff
+    style D2 fill:#16213e,stroke:#ff9f43,color:#fff
+                </div>
+                <p class="content-text" style="text-align: center; color: var(--text-secondary);">Tail (-4) → Node at index 1 (value 2) = Infinite loop! 🔄</p>
+
+                <!-- Key Observations -->
+                <div class="hinglish-note" style="margin-top: 20px; background: rgba(168, 85, 247, 0.15);">
+                    <strong>🎯 KEY OBSERVATION:</strong><br>
+                    • Cycle = koi node multiple baar visit ho sakta hai<br>
+                    • No Cycle = har node exactly ek baar visit, phir NULL<br>
+                    • Problem: Cycle detect karo WITHOUT knowing pos!
+                </div>
+            </div>
+
+            <!-- Approach 1: Hash Set -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-1">1</div>
+                    <h3 class="section-title">Hash Set Approach — Visited Nodes Yaad Rakho!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Simple Idea:</span> Har node ko "remember" karo jab visit karte ho! 📝
+                        </p>
+                        <p class="content-text">
+                            Jaise tum ek <strong>maze mein ghoom rahe ho</strong> aur har room mein <strong>chalk se X</strong> laga rahe ho.
+                            Agar kabhi aise room mein pahunche jahan pehle se X hai → <span class="highlight-red">You're going in circles!</span> 🔄
+                        </p>
+                        <div class="hinglish-note">
+                            💭 Hash Set mein node <strong>REFERENCE</strong> store karo (not value!) — kyunki same value multiple nodes mein ho sakti hai!
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title algorithm">Algorithm (Steps)</h4>
+                        <ol class="steps">
+                            <li>Ek <span class="highlight">empty Hash Set</span> banao (visited nodes store karne ke liye)</li>
+                            <li>Head se start karo, list traverse karo</li>
+                            <li>Har node pe check karo: <span class="highlight-blue">kya ye pehle set mein hai?</span></li>
+                            <li>Agar <strong>haan</strong> → <span class="highlight-green">Cycle hai! return True</span> ✅</li>
+                            <li>Agar <strong>nahi</strong> → Set mein <span class="highlight-orange">add</span> karo, aage badho</li>
+                            <li>Agar NULL mil gaya → <span class="highlight-purple">No cycle! return False</span></li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 1: HASH SET (Easy to Understand)</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Har visited node ko yaad rakho!</span>
+<span class="comment"># Agar dubara mila → Cycle hai! 🔄</span>
+
+<span class="keyword">class</span> <span class="class-name">ListNode</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="param">self</span>, <span class="param">val</span>=<span class="number">0</span>, <span class="param">next</span>=<span class="builtin">None</span>):
+        <span class="param">self</span>.val = val
+        <span class="param">self</span>.next = next
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">hasCycle</span>(<span class="param">self</span>, <span class="param">head</span>) -> <span class="builtin">bool</span>:
+        <span class="comment"># 📍 Visited nodes yaad rakhne ke liye Set</span>
+        seen = <span class="builtin">set</span>()
+        
+        <span class="comment"># 📍 List traverse karo</span>
+        cur = head
+        
+        <span class="keyword">while</span> cur:
+            <span class="comment"># 🔴 Kya ye node pehle dekha hai?</span>
+            <span class="keyword">if</span> cur <span class="keyword">in</span> seen:
+                <span class="keyword">return</span> <span class="builtin">True</span>  <span class="comment"># CYCLE DETECTED! 🎉</span>
+            
+            <span class="comment"># 🔵 Set mein add karo</span>
+            seen.add(cur)
+            
+            <span class="comment"># 🟢 Aage badho</span>
+            cur = cur.next
+        
+        <span class="comment"># 📍 NULL tak pahunch gaye — No Cycle!</span>
+        <span class="keyword">return</span> <span class="builtin">False</span></pre>
+                        </div>
+                    </div>
+
+                    <!-- Dry Run -->
+                    <div class="concept-box" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.3);">
+                        <h4 class="concept-title" style="color: var(--accent-purple);">📋 Step-by-Step Dry Run</h4>
+                        <p class="content-text"><strong>Input:</strong> <code>head = [3, 2, 0, -4]</code>, pos = 1</p>
+                        <table class="summary-table" style="margin-top: 15px;">
+                            <thead>
+                                <tr><th>Step</th><th>cur</th><th>seen (Set)</th><th>cur in seen?</th><th>Action</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>3</td><td>{}</td><td>❌ No</td><td>Add 3, move next</td></tr>
+                                <tr><td>2</td><td>2</td><td>{3}</td><td>❌ No</td><td>Add 2, move next</td></tr>
+                                <tr><td>3</td><td>0</td><td>{3, 2}</td><td>❌ No</td><td>Add 0, move next</td></tr>
+                                <tr><td>4</td><td>-4</td><td>{3, 2, 0}</td><td>❌ No</td><td>Add -4, move next</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.1);"><td>5</td><td>2</td><td>{3, 2, 0, -4}</td><td>✅ Yes!</td><td><strong>Return True — CYCLE! 🎉</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value medium">O(n)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            🤔 Time O(n) achha hai, but Space O(n) lagti hai — kya better ho sakta hai? 🤔
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 2: Floyd's Algorithm (Optimal) -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-2">2</div>
+                    <h3 class="section-title">Floyd's Cycle Detection — Fast & Slow Pointers! 🐢🐇 <span style="color: var(--accent-green); font-size: 0.8em;">✨ OPTIMAL</span></h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Tortoise & Hare Algorithm!</span> 🐢🐇 Do pointers use karo jo <strong>different speeds</strong> se move karte hain!
+                        </p>
+                        <p class="content-text">
+                            <strong>🐢 Slow Pointer:</strong> 1 step at a time<br>
+                            <strong>🐇 Fast Pointer:</strong> 2 steps at a time
+                        </p>
+                        <div class="hinglish-note">
+                            💭 <strong>Race Track Logic:</strong> Agar track circular hai → fast wala slow ko "lap" kar dega — dono <strong>zaroor milenge!</strong> 🤝<br>
+                            Agar track straight hai → fast end tak pahunch jaayega (NULL) — <strong>kabhi nahi milenge!</strong>
+                        </div>
+                    </div>
+
+                    <!-- Visual for Floyd's -->
+                    <div class="visual-box" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 212, 255, 0.1));">
+                        <h4>🐢🐇 Floyd's Algorithm — Step by Step</h4>
+                        <pre class="visual-diagram">
+┌──────────────────────────────────────────────────────────────────┐
+│           FLOYD'S CYCLE DETECTION (TORTOISE & HARE)              │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   STEP 0 (Initial): Dono head pe!                                │
+│   ═══════════════════════════════                                │
+│                                                                  │
+│     🐢🐇                                                          │
+│      ↓                                                           │
+│     [3] ──→ [2] ──→ [0] ──→ [-4]                                │
+│              ↑               │                                   │
+│              └───────────────┘                                   │
+│                                                                  │
+│   slow = 3, fast = 3                                             │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   STEP 1: slow +1, fast +2                                       │
+│   ════════════════════════════                                   │
+│                                                                  │
+│            🐢         🐇                                          │
+│             ↓          ↓                                         │
+│     [3] ──→ [2] ──→ [0] ──→ [-4]                                │
+│              ↑               │                                   │
+│              └───────────────┘                                   │
+│                                                                  │
+│   slow = 2, fast = 0                                             │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   STEP 2: slow +1, fast +2 (fast cycle mein ghusa!)              │
+│   ══════════════════════════════════════════════════             │
+│                                                                  │
+│                   🐢         🐇                                   │
+│                    ↓          ↓                                  │
+│     [3] ──→ [2] ──→ [0] ──→ [-4]                                │
+│              ↑               │                                   │
+│              └───────────────┘                                   │
+│                                                                  │
+│   slow = 0, fast = 2 (fast ne lap start ki!)                     │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   STEP 3: slow +1, fast +2                                       │
+│   ════════════════════════════                                   │
+│                                                                  │
+│                          🐢🐇  ← MIL GAYE! 🎉                    │
+│                           ↓                                      │
+│     [3] ──→ [2] ──→ [0] ──→ [-4]                                │
+│              ↑               │                                   │
+│              └───────────────┘                                   │
+│                                                                  │
+│   slow = -4, fast = -4 → SAME NODE = CYCLE DETECTED! ✅          │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title algorithm">Algorithm (Steps)</h4>
+                        <ol class="steps">
+                            <li>Initialize: <span class="highlight">slow = head</span>, <span class="highlight">fast = head</span></li>
+                            <li>While loop chalaao jab tak <code>fast</code> aur <code>fast.next</code> exist karte hain</li>
+                            <li><span class="highlight-blue">slow = slow.next</span> (1 step)</li>
+                            <li><span class="highlight-orange">fast = fast.next.next</span> (2 steps)</li>
+                            <li>Check: Agar <code>slow == fast</code> → <span class="highlight-green">CYCLE HAI! return True</span></li>
+                            <li>Loop end: fast NULL tak pahuncha → <span class="highlight-purple">NO CYCLE! return False</span></li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-green); font-size: 0.8em; margin-left: 10px;">✨ OPTIMAL SOLUTION</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 2: FLOYD'S CYCLE DETECTION (OPTIMAL)</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Fast & Slow Pointers — Tortoise & Hare! 🐢🐇</span>
+<span class="comment"># ⚡ Advantage: O(1) Space! No extra memory!</span>
+
+<span class="keyword">class</span> <span class="class-name">ListNode</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="param">self</span>, <span class="param">val</span>=<span class="number">0</span>, <span class="param">next</span>=<span class="builtin">None</span>):
+        <span class="param">self</span>.val = val
+        <span class="param">self</span>.next = next
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">hasCycle</span>(<span class="param">self</span>, <span class="param">head</span>) -> <span class="builtin">bool</span>:
+        <span class="comment"># 📍 Two pointers — different speeds!</span>
+        slow = head  <span class="comment"># 🐢 Tortoise — 1 step</span>
+        fast = head  <span class="comment"># 🐇 Hare — 2 steps</span>
+        
+        <span class="comment"># 📍 Race begins! 🏁</span>
+        <span class="keyword">while</span> fast <span class="keyword">and</span> fast.next:
+            <span class="comment"># 🐢 Slow: 1 step forward</span>
+            slow = slow.next
+            
+            <span class="comment"># 🐇 Fast: 2 steps forward</span>
+            fast = fast.next.next
+            
+            <span class="comment"># 🎯 Check: Kya dono mil gaye?</span>
+            <span class="keyword">if</span> slow == fast:
+                <span class="keyword">return</span> <span class="builtin">True</span>  <span class="comment"># CYCLE DETECTED! 🎉</span>
+        
+        <span class="comment"># 📍 Fast reached NULL — No Cycle!</span>
+        <span class="keyword">return</span> <span class="builtin">False</span></pre>
+                        </div>
+                    </div>
+
+                    <!-- Dry Run Table -->
+                    <div class="concept-box" style="background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.3);">
+                        <h4 class="concept-title" style="color: var(--accent-green);">📋 Step-by-Step Dry Run — Floyd's Algorithm</h4>
+                        <p class="content-text"><strong>Input:</strong> <code>head = [3, 2, 0, -4]</code>, pos = 1</p>
+                        <table class="summary-table" style="margin-top: 15px;">
+                            <thead>
+                                <tr><th>Step</th><th>🐢 slow</th><th>🐇 fast</th><th>slow == fast?</th><th>Action</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Init</td><td>3</td><td>3</td><td>—</td><td>Dono head pe!</td></tr>
+                                <tr><td>1</td><td>2</td><td>0</td><td>❌ No</td><td>slow +1, fast +2</td></tr>
+                                <tr><td>2</td><td>0</td><td>2</td><td>❌ No</td><td>fast cycle mein ghusa!</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.15);"><td>3</td><td>-4</td><td>-4</td><td>✅ Yes!</td><td><strong>Return True — CYCLE! 🎉</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- DETAILED: Why Floyd's Algorithm Works — Mathematical Proof -->
+                    <div class="concept-box" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%); border-color: rgba(168, 85, 247, 0.5);">
+                        <h4 class="concept-title" style="color: var(--accent-purple);">🧠 Floyd's Algorithm KYUN Kaam Karta Hai? — Mathematical Proof!</h4>
+                        
+                        <p class="content-text" style="margin-top: 15px;">
+                            <strong>🤔 Problem Samjho Pehle:</strong><br>
+                            Agar cycle <strong>nahi hai</strong> → Easy! Eventually NULL milega aur hum return <code>false</code> kar denge.<br>
+                            Agar cycle <strong>hai</strong> → Tricky! Hum kabhi NULL tak nahi pahunchenge. Infinite loop ho jaayega! 😵
+                        </p>
+
+                        <p class="content-text" style="margin-top: 15px;">
+                            <strong>💡 First Idea — Hash Set:</strong><br>
+                            Har node visit karo aur Hash Set mein daalo. Agar same node <strong>dubara mila</strong> → Cycle detected!<br>
+                            <span style="color: var(--accent-orange);">⚠️ But:</span> Ye O(n) extra space use karta hai. Kya hum <strong>O(1) space</strong> mein kar sakte hain? 🤔
+                        </p>
+
+                        <p class="content-text" style="margin-top: 15px;">
+                            <strong>🐢🐇 Floyd's Idea — Two Pointers Different Speeds!</strong><br>
+                            Do pointers lo — <strong>Slow (🐢)</strong> jo 1 step chalta hai, <strong>Fast (🐇)</strong> jo 2 steps chalta hai.<br>
+                            Fast pointer obviously slow se <strong>tez hai</strong>, toh agar cycle hai toh fast <strong>lap karke</strong> slow ko pakad lega!
+                        </p>
+                    </div>
+
+                    <!-- Visual Proof with Mermaid Diagram -->
+                    <div class="visual-box" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(168, 85, 247, 0.08));">
+                        <h4>📐 Mathematical Proof — Kyun Fast Slow Ko Zaroor Milega?</h4>
+
+                        <!-- Floyd's Algorithm Animation Diagram -->
+                        <p class="content-text" style="margin-bottom: 15px; color: var(--accent-purple);"><strong>🐢🐇 Floyd's Cycle Detection — Circular Track Visualization:</strong></p>
+                        <div class="mermaid" style="background: rgba(168, 85, 247, 0.08); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+flowchart LR
+    N1((1)) --> N2((2))
+    N2 --> N3((3))
+    N3 --> N4((4))
+    N4 --> N5((5))
+    N5 --> N6((6))
+    N6 --> N1
+    style N1 fill:#16213e,stroke:#00d4ff,color:#fff
+    style N2 fill:#00ff88,stroke:#00ff88,color:#000
+    style N3 fill:#16213e,stroke:#00d4ff,color:#fff
+    style N4 fill:#16213e,stroke:#00d4ff,color:#fff
+    style N5 fill:#ff9f43,stroke:#ff9f43,color:#000
+    style N6 fill:#16213e,stroke:#00d4ff,color:#fff
+                        </div>
+                        <p class="content-text" style="text-align: center; color: var(--text-secondary);">🐢 SLOW = Green Node (2) | 🐇 FAST = Orange Node (5) | Gap = 3 nodes</p>
+
+                        <!-- Gap Reduction Formula Visualization -->
+                        <p class="content-text" style="margin: 20px 0 15px 0; color: var(--accent-blue);"><strong>📊 Gap Reduction Formula — Har Iteration Mein:</strong></p>
+                        <div class="mermaid" style="background: rgba(0, 212, 255, 0.08); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+flowchart LR
+    A[Slow +1] --> B[Gap +1]
+    C[Fast +2] --> D[Gap -2]
+    B --> E[NET = -1]
+    D --> E
+    style A fill:#00ff88,stroke:#00ff88,color:#000
+    style B fill:#16213e,stroke:#00ff88,color:#fff
+    style C fill:#ff9f43,stroke:#ff9f43,color:#000
+    style D fill:#16213e,stroke:#ff6b6b,color:#fff
+    style E fill:#a855f7,stroke:#a855f7,color:#fff
+                        </div>
+
+                        <!-- Gap Iteration Table -->
+                        <p class="content-text" style="margin: 20px 0 15px 0; color: var(--accent-green);"><strong>📈 Gap Closing Over Iterations (Example: Initial Gap = 10):</strong></p>
+                        <div class="mermaid" style="background: rgba(0, 255, 136, 0.08); padding: 20px; border-radius: 12px;">
+flowchart LR
+    G10[Gap=10] --> G9[Gap=9]
+    G9 --> G8[Gap=8]
+    G8 --> DOTS[...]
+    DOTS --> G1[Gap=1]
+    G1 --> G0[Gap=0 MEET!]
+    style G10 fill:#16213e,stroke:#00d4ff,color:#fff
+    style G9 fill:#16213e,stroke:#00d4ff,color:#fff
+    style G8 fill:#16213e,stroke:#00d4ff,color:#fff
+    style DOTS fill:#1a1a2e,stroke:#a855f7,color:#fff
+    style G1 fill:#16213e,stroke:#ff9f43,color:#fff
+    style G0 fill:#00ff88,stroke:#00ff88,color:#000
+                        </div>
+
+                        <!-- Time Complexity Box -->
+                        <div class="hinglish-note" style="margin-top: 20px; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(168, 85, 247, 0.2));">
+                            <strong>⏱️ TIME COMPLEXITY PROOF:</strong><br><br>
+                            • Maximum Gap = Cycle Length = L<br>
+                            • Cycle Length ≤ Total nodes = n<br>
+                            • Gap har iteration mein 1 se decrease hota hai<br><br>
+                            <span style="color: var(--accent-green); font-weight: bold; font-size: 1.1em;">
+                                ∴ Maximum L iterations mein dono zaroor milenge! → O(n) ✅
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Mathematical Explanation -->
+                    <div class="concept-box" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, rgba(0, 255, 136, 0.12) 100%); border-color: rgba(0, 212, 255, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-blue);">🔢 Maths Samjho — Step by Step!</h4>
+                        
+                        <p class="content-text">
+                            <strong>Setup:</strong><br>
+                            • Cycle ke andar dono pointers hain (different positions pe)<br>
+                            • Slow aur Fast ke beech ka distance = <strong>Gap (G)</strong><br>
+                            • Gap ek <strong>integer</strong> hai (kyunki linked list mein nodes discrete hain, decimal nahi!)
+                        </p>
+
+                        <p class="content-text" style="margin-top: 15px;">
+                            <strong>Har Iteration Mein:</strong>
+                        </p>
+                        <ul style="color: var(--text-secondary); line-height: 2; margin-left: 20px;">
+                            <li>🐢 Slow <strong>+1</strong> step move karta hai → Gap <strong>+1</strong> badhta hai</li>
+                            <li>🐇 Fast <strong>+2</strong> steps move karta hai → Gap <strong>-2</strong> ghatta hai</li>
+                            <li>Net change in Gap = <strong>+1 - 2 = -1</strong></li>
+                        </ul>
+
+                        <div class="hinglish-note" style="margin-top: 15px; background: rgba(0, 255, 136, 0.15);">
+                            <strong>🎯 Conclusion:</strong><br>
+                            Har iteration mein Gap <strong>exactly 1 se decrease</strong> hota hai!<br><br>
+                            
+                            Agar initial Gap = 10 hai:<br>
+                            • 10 iterations ke baad Gap = 0 → <strong>Dono mil gaye!</strong> 🎉<br><br>
+                            
+                            Maximum Gap kitna ho sakta hai? <strong>Cycle ki length (L)</strong><br>
+                            Cycle ki length kitni ho sakti hai? <strong>At most n (total nodes)</strong><br><br>
+                            
+                            <span style="color: var(--accent-green); font-weight: bold;">Therefore: Maximum O(n) iterations mein dono zaroor milenge! ✅</span>
+                        </div>
+                    </div>
+
+                    <!-- Why we check AFTER moving, not before -->
+                    <div class="concept-box" style="background: rgba(255, 159, 67, 0.1); border-color: rgba(255, 159, 67, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-orange);">❓ Important: Pehle Move, Phir Check — Kyun?</h4>
+                        <p class="content-text">
+                            Initially dono pointers <strong>head pe hain</strong> (same position).<br>
+                            Agar pehle check karein ki <code>slow == fast</code>, toh <strong>galat True</strong> return ho jaayega!<br><br>
+                            Isliye hum <strong>PEHLE move</strong> karte hain, <strong>PHIR check</strong> karte hain.<br>
+                            Agar woh next time same position pe milte hain → Tabhi cycle confirm hoti hai! 🔄
+                        </p>
+                    </div>
+
+                    <!-- What if no cycle? -->
+                    <div class="concept-box" style="background: rgba(107, 107, 255, 0.1); border-color: rgba(107, 107, 255, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-blue);">❓ Agar Cycle Nahi Hai Toh?</h4>
+                        <p class="content-text">
+                            Agar cycle nahi hai, toh linked list <strong>NULL pe end</strong> hoti hai.<br><br>
+                            Fast pointer slow se <strong>tez hai</strong>, toh woh <strong>pehle NULL</strong> tak pahunch jaayega!<br>
+                            Jab <code>fast == NULL</code> ya <code>fast.next == NULL</code> → Loop break!<br><br>
+                            <span style="color: var(--accent-green);">Return <code>false</code></span> — No cycle exists! ✅
+                        </p>
+                        <div class="hinglish-note" style="margin-top: 10px;">
+                            💡 Isliye loop condition hai: <code>while fast and fast.next:</code><br>
+                            Fast ko 2 steps move karna hai, toh <code>fast.next</code> exist karna chahiye!
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value good">O(1)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            🚀 <strong>OPTIMAL!</strong> Linear time O(n) + Constant space O(1) — sirf 2 pointers! No Hash Set needed! 🎉
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Pitfalls -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 159, 67, 0.1) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-red);">⚠️ Common Galtiyan (Pitfalls) — In Se Bacho!</h4>
+                <div style="color: var(--text-secondary); line-height: 1.9;">
+                    <p><strong>❌ Galti 1: Fast Pointer Check Bhoolna!</strong><br>
+                    <span style="color: var(--accent-red);"><code>while fast.next:</code></span> — NullPointerException! 💀<br>
+                    <span style="color: var(--accent-green);">✅ Fix: <code>while fast and fast.next:</code></span> — Safe check!</p>
+                    
+                    <p style="margin-top: 15px;"><strong>❌ Galti 2: Node Values Compare Karna!</strong><br>
+                    <span style="color: var(--accent-red);"><code>if slow.val == fast.val:</code></span> — Wrong! Same value different nodes mein ho sakti hai!<br>
+                    <span style="color: var(--accent-green);">✅ Fix: <code>if slow == fast:</code></span> — Node REFERENCES compare karo!</p>
+                    
+                    <p style="margin-top: 15px;"><strong>❌ Galti 3: Pehle Check, Phir Move!</strong><br>
+                    <span style="color: var(--accent-red);">Initial case mein dono head pe hain — toh pehle check karoge toh galat True mil jaayega!</span><br>
+                    <span style="color: var(--accent-green);">✅ Fix: Floyd's mein PEHLE move karo, PHIR check karo!</span></p>
+                </div>
+            </div>
+
+            <!-- Interview Tips -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%); border-color: rgba(0, 255, 136, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-green);">🎤 Interview Tips — Interviewer Ko Impress Karo!</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.9;">
+                    <li>📝 <strong>Hash Set pehle batao:</strong> "Simple approach Hash Set hai — O(n) time, O(n) space"</li>
+                    <li>🚀 <strong>Phir optimize karo:</strong> "But hum Floyd's algorithm se O(1) space mein kar sakte hain!"</li>
+                    <li>🏃‍♂️ <strong>Race track analogy use karo:</strong> "It's like two runners on a circular track..."</li>
+                    <li>⚡ <strong>Edge cases mention karo:</strong> Empty list, single node, two nodes with/without cycle</li>
+                    <li>🎓 <strong>Follow-up ready rakho:</strong> "Same technique se cycle start point bhi find kar sakte hain!"</li>
+                </ul>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-card theme-blue">
+                <h3 class="summary-title">📊 Quick Comparison Table</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr><th>Approach</th><th>Time</th><th>Space</th><th>Hinglish Summary</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hash Set</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-orange);">O(n)</td>
+                            <td>"Har node yaad rakho, dubara mila toh cycle!" 📝</td>
+                        </tr>
+                        <tr style="background: rgba(0, 255, 136, 0.1);">
+                            <td>Floyd's 🐢🐇 <span style="color: var(--accent-green);">(BEST)</span></td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-green);">O(1)</td>
+                            <td>Tortoise & Hare race karo! Faster wala lap karega! ⚡</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    📌 <strong>Key Pattern:</strong> Cycle Detection = <strong>Fast & Slow Pointers!</strong> 
+                    Agar cycle hai toh zaroor milenge, nahi hai toh fast NULL pe pahunchega! 🔑<br><br>
+                    🎓 <strong>Bonus:</strong> Ye same technique <strong>Find Duplicate Number</strong> aur <strong>Find Cycle Start Point</strong> problems mein bhi kaam aata hai!
+                </div>
+            </div>
+        </section>
+
+        <!-- =============================================== -->
+        <!-- Problem 21: Reorder Linked List -->
+        <!-- =============================================== -->
+        <section class="problem-section" id="reorder-linked-list">
+            <div class="problem-header">
+                <div class="problem-number" style="background: linear-gradient(135deg, #ff9f43 0%, #f5576c 100%);">21</div>
+                <div>
+                    <h2 class="problem-title">Reorder Linked List</h2>
+                    <div class="problem-meta">
+                        <span class="difficulty-badge medium">Medium</span>
+                        <span class="topic-tag">Linked List</span>
+                        <span class="topic-tag">Two Pointers</span>
+                        <span class="topic-tag">Recursion</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <h3 class="card-title">Problem Statement</h3>
+                <p class="problem-description">
+                    Tumhe ek <strong>Singly Linked List</strong> diya gaya hai. Tumhe list ko <strong>reorder</strong> karna hai iss pattern mein:<br>
+                    <code>L₀ → L₁ → L₂ → ... → Lₙ₋₁ → Lₙ</code><br>
+                    Ko transform karo:<br>
+                    <code>L₀ → Lₙ → L₁ → Lₙ₋₁ → L₂ → Lₙ₋₂ → ...</code>
+                </p>
+                <div class="constraints-box">
+                    📌 Tumhe ye <strong>in-place</strong> karna hai! No extra list banaao!<br>
+                    🔄 Pattern: <strong>First → Last → Second → Second-Last → Third → Third-Last...</strong>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 1:</strong></p>
+                    <code>Input: head = [1,2,3,4]</code>
+                    <p>Output: <strong>[1,4,2,3]</strong></p>
+                </div>
+                <div class="example-box">
+                    <p><strong>Example 2:</strong></p>
+                    <code>Input: head = [1,2,3,4,5]</code>
+                    <p>Output: <strong>[1,5,2,4,3]</strong></p>
+                </div>
+            </div>
+
+            <!-- Real-life Analogy -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 159, 67, 0.15) 0%, rgba(245, 87, 108, 0.15) 100%); border-color: rgba(255, 159, 67, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-orange);">🎭 Real-life Analogy — Samjho Asaan Bhasha Mein!</h4>
+                <p class="content-text">
+                    <strong>Scenario — Playing Cards Shuffle:</strong> 🃏<br>
+                    Socho tum cards ke ek deck ko shuffle kar rahe ho, lekin special tarike se.<br>
+                    Pehle card ko utha lo → Last card ko utha lo → Dusra card → Second-last card... aur aise hi continue karo!<br>
+                    Result? Perfectly interleaved cards — pehle aur aakhri cards mix ho gaye!
+                </p>
+                <p class="content-text" style="margin-top: 10px;">
+                    <strong>Practical Use Case:</strong> Music playlist shuffle jahan purane aur naye songs equally distribute ho!
+                </p>
+                <div class="hinglish-note" style="margin-top: 15px; background: rgba(168, 85, 247, 0.15);">
+                    💡 <strong>Interview Insight:</strong> Ye problem test karta hai tumhari understanding of:<br>
+                    1️⃣ <strong>Fast/Slow Pointers</strong> — Middle dhoondhne ke liye<br>
+                    2️⃣ <strong>Linked List Reversal</strong> — Second half reverse karne ke liye<br>
+                    3️⃣ <strong>Merge Technique</strong> — Dono halves ko interleave karne ke liye
+                </div>
+            </div>
+
+            <!-- Visual Representation -->
+            <div class="visual-box">
+                <h4>🔄 Reorder Pattern — Before & After!</h4>
+
+                <!-- Original List -->
+                <p class="content-text" style="margin-bottom: 10px; color: var(--accent-blue);"><strong>🔵 BEFORE (Original List):</strong></p>
+                <pre class="visual-diagram" style="background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.3);">
+┌─────────────────────────────────────────────────────────────────┐
+│                    ORIGINAL LINKED LIST                          │
+└─────────────────────────────────────────────────────────────────┘
+
+  ┌───┐      ┌───┐      ┌───┐      ┌───┐      ┌───┐
+  │ 1 │ ───► │ 2 │ ───► │ 3 │ ───► │ 4 │ ───► │ 5 │ ───► NULL
+  └───┘      └───┘      └───┘      └───┘      └───┘
+   L₀         L₁         L₂         L₃         L₄
+
+  Index:  0         1         2         3         4
+                </pre>
+
+                <!-- Reordered List -->
+                <p class="content-text" style="margin: 25px 0 10px 0; color: var(--accent-green);"><strong>🟢 AFTER (Reordered List):</strong></p>
+                <pre class="visual-diagram" style="background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.3);">
+┌─────────────────────────────────────────────────────────────────┐
+│                    REORDERED LINKED LIST                         │
+└─────────────────────────────────────────────────────────────────┘
+
+  ┌───┐      ┌───┐      ┌───┐      ┌───┐      ┌───┐
+  │ 1 │ ───► │ 5 │ ───► │ 2 │ ───► │ 4 │ ───► │ 3 │ ───► NULL
+  └───┘      └───┘      └───┘      └───┘      └───┘
+   🟢         🟠         🟢         🟠         🟢
+  First      Last      Second    2nd-Last   Middle
+
+  Pattern:  L₀ → Lₙ → L₁ → Lₙ₋₁ → L₂ → ...
+                </pre>
+
+                <!-- Visual Transformation -->
+                <p class="content-text" style="margin: 25px 0 10px 0; color: var(--accent-purple);"><strong>🔄 Transformation Visualization:</strong></p>
+                <pre class="visual-diagram" style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.3);">
+BEFORE:   1 ─► 2 ─► 3 ─► 4 ─► 5
+          │         │         │
+          │         │         │
+          ▼         ▼         ▼
+AFTER:    1 ─► 5 ─► 2 ─► 4 ─► 3
+          ↑    ↑    ↑    ↑    ↑
+          │    │    │    │    └── Middle (stays)
+          │    │    │    └────── 2nd from last
+          │    │    └─────────── 2nd from start
+          │    └──────────────── Last element
+          └───────────────────── First element
+
+🎯 Pattern: Alternate between FRONT and BACK!
+                </pre>
+
+                <div class="hinglish-note" style="margin-top: 20px; background: rgba(168, 85, 247, 0.15);">
+                    <strong>🎯 Pattern Observe Karo:</strong><br>
+                    • Green nodes (🟢) = First half se<br>
+                    • Orange nodes (🟠) = Second half se (reversed order mein)<br>
+                    • Alternating pattern: First → Last → Second → Second-Last...
+                </div>
+            </div>
+
+            <!-- Approach 1: Brute Force (Array) -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-1">1</div>
+                    <h3 class="section-title">Brute Force — Array Mein Store Karo!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Simple Idea:</span> Linked list ko traverse kar ke saare nodes ek <strong>array mein</strong> daal do! 📦
+                        </p>
+                        <p class="content-text">
+                            Phir array mein <strong>two pointers</strong> use karo:<br>
+                            • <code>i = 0</code> (start se) aur <code>j = n-1</code> (end se)<br>
+                            • Alternately link karte jao: <code>nodes[i] → nodes[j] → nodes[i+1] → nodes[j-1]...</code>
+                        </p>
+                        <div class="hinglish-note">
+                            💭 Array mein random access easy hai! Index se directly node access kar sakte ho! 🎯
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li><strong>Step 1:</strong> Linked list traverse karo aur saare nodes ko <code>nodes</code> array mein push karo</li>
+                            <li><strong>Step 2:</strong> Two pointers initialize karo: <code>i = 0</code> (start), <code>j = len(nodes)-1</code> (end)</li>
+                            <li><strong>Step 3:</strong> Loop chalao jab tak <code>i < j</code>:
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li>Link: <code>nodes[i].next = nodes[j]</code></li>
+                                    <li>Increment: <code>i++</code></li>
+                                    <li>Check: Agar <code>i >= j</code>, loop break!</li>
+                                    <li>Link: <code>nodes[j].next = nodes[i]</code></li>
+                                    <li>Decrement: <code>j--</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Step 4:</strong> Last node ka next NULL set karo: <code>nodes[i].next = None</code></li>
+                        </ol>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-orange);">Approach 1: Array</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 1: ARRAY (Brute Force)</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Saare nodes array mein store karo, phir</span>
+<span class="comment"># two pointers se alternately link karo!</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">reorderList</span>(<span class="param">self</span>, <span class="param">head</span>) -> <span class="builtin">None</span>:
+        <span class="keyword">if</span> <span class="keyword">not</span> head:
+            <span class="keyword">return</span>
+        
+        <span class="comment"># 📦 Step 1: Saare nodes array mein daal do</span>
+        nodes = []
+        cur = head
+        <span class="keyword">while</span> cur:
+            nodes.append(cur)
+            cur = cur.next
+        
+        <span class="comment"># 🎯 Step 2: Two pointers se reorder karo</span>
+        i, j = <span class="number">0</span>, <span class="builtin">len</span>(nodes) - <span class="number">1</span>
+        <span class="keyword">while</span> i < j:
+            nodes[i].next = nodes[j]  <span class="comment"># Link i → j</span>
+            i += <span class="number">1</span>
+            <span class="keyword">if</span> i >= j:  <span class="comment"># Break condition</span>
+                <span class="keyword">break</span>
+            nodes[j].next = nodes[i]  <span class="comment"># Link j → i</span>
+            j -= <span class="number">1</span>
+        
+        <span class="comment"># ✅ Step 3: Last node ka next NULL karo</span>
+        nodes[i].next = <span class="builtin">None</span></pre>
+                        </div>
+                    </div>
+
+                    <!-- Dry Run -->
+                    <div class="concept-box" style="background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.3);">
+                        <h4 class="concept-title" style="color: var(--accent-green);">📋 Dry Run — Array Approach</h4>
+                        <p class="content-text"><strong>Input:</strong> <code>head = [1, 2, 3, 4, 5]</code></p>
+                        <table class="summary-table" style="margin-top: 15px;">
+                            <thead>
+                                <tr><th>Step</th><th>i</th><th>j</th><th>Action</th><th>Result</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Init</td><td>0</td><td>4</td><td>—</td><td>nodes = [1,2,3,4,5]</td></tr>
+                                <tr><td>1</td><td>0</td><td>4</td><td>nodes[0].next = nodes[4]</td><td>1→5</td></tr>
+                                <tr><td>2</td><td>1</td><td>4</td><td>nodes[4].next = nodes[1]</td><td>5→2</td></tr>
+                                <tr><td>3</td><td>1</td><td>3</td><td>nodes[1].next = nodes[3]</td><td>2→4</td></tr>
+                                <tr><td>4</td><td>2</td><td>3</td><td>nodes[3].next = nodes[2]</td><td>4→3</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.15);"><td>5</td><td>2</td><td>2</td><td>i == j, BREAK!</td><td>3→NULL</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="content-text" style="margin-top: 10px;"><strong>Final List:</strong> 1 → 5 → 2 → 4 → 3 → NULL ✅</p>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value bad">O(n)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            ⚠️ <strong>Drawback:</strong> Extra O(n) space use ho raha hai array ke liye! Can we do better? 🤔
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 2: Recursion -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-2">2</div>
+                    <h3 class="section-title">Recursion Approach — Back-to-Front Pairing!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Recursive Idea:</span> List ke <strong>end tak jao</strong> recursion se, phir <strong>wapis aate waqt</strong> front aur back nodes ko pair karo! 🔄
+                        </p>
+                        <p class="content-text">
+                            <strong>How?</strong><br>
+                            • Recursion se <code>cur</code> pointer END tak le jao 📍<br>
+                            • <code>root</code> pointer FRONT se track karo 📍<br>
+                            • Unwinding phase mein: <code>root → cur → root.next</code> karte jao!<br>
+                            • Jab <code>root</code> aur <code>cur</code> mil jayein → Stop!
+                        </p>
+                        <div class="hinglish-note">
+                            💡 Recursion ka <strong>call stack</strong> hi tumhare liye "back" nodes ko yaad rakh leta hai!
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li><strong>Base Case:</strong> Agar <code>cur == None</code> → Return <code>root</code></li>
+                            <li><strong>Recursive Call:</strong> <code>rec(root, cur.next)</code> — End tak jao!</li>
+                            <li><strong>Unwinding Phase:</strong>
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li>Agar <code>root == cur</code> ya <code>root.next == cur</code> → Done! Set <code>cur.next = None</code></li>
+                                    <li>Nahi toh: <code>tmp = root.next</code> save karo</li>
+                                    <li>Link: <code>root.next = cur</code></li>
+                                    <li>Link: <code>cur.next = tmp</code></li>
+                                    <li>Return <code>tmp</code> (next front pointer)</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-purple);">Approach 2: Recursion</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 2: RECURSION</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Recursion se end tak jao, unwinding mein pair karo!</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">reorderList</span>(<span class="param">self</span>, <span class="param">head</span>) -> <span class="builtin">None</span>:
+        <span class="keyword">def</span> <span class="function">rec</span>(root, cur):
+            <span class="comment"># 🔴 Base case: End tak pahunch gaye</span>
+            <span class="keyword">if</span> <span class="keyword">not</span> cur:
+                <span class="keyword">return</span> root
+            
+            <span class="comment"># 🔄 Recursively end tak jao</span>
+            root = rec(root, cur.next)
+            <span class="keyword">if</span> <span class="keyword">not</span> root:  <span class="comment"># Already done</span>
+                <span class="keyword">return</span> <span class="builtin">None</span>
+            
+            tmp = <span class="builtin">None</span>
+            <span class="comment"># 🎯 Check: Meet ho gaye?</span>
+            <span class="keyword">if</span> root == cur <span class="keyword">or</span> root.next == cur:
+                cur.next = <span class="builtin">None</span>  <span class="comment"># Terminate!</span>
+            <span class="keyword">else</span>:
+                <span class="comment"># 🔗 Pair karo: root → cur → tmp</span>
+                tmp = root.next
+                root.next = cur
+                cur.next = tmp
+            
+            <span class="keyword">return</span> tmp  <span class="comment"># Next front pointer</span>
+        
+        head = rec(head, head.next)</pre>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value bad">O(n)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            ⚠️ <strong>Recursion Stack:</strong> O(n) space use hota hai call stack mein! Still not optimal! 😕
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 3: OPTIMAL - Reverse & Merge -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-3">3</div>
+                    <h3 class="section-title">🏆 OPTIMAL — Reverse & Merge (O(1) Space!)</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Brilliant Idea:</span> 3-Step Process! 🎯
+                        </p>
+                        <ol class="steps-list" style="margin-top: 10px;">
+                            <li><strong>Find Middle:</strong> Slow/Fast pointers se list ko 2 halves mein divide karo!</li>
+                            <li><strong>Reverse Second Half:</strong> Second half ko reverse kar do!</li>
+                            <li><strong>Merge:</strong> Dono halves ko alternately merge karo!</li>
+                        </ol>
+                        <div class="hinglish-note">
+                            🔥 <strong>Why It Works:</strong> Reverse karne se last elements pehle aa jayenge, phir simply merge kar do!
+                        </div>
+                    </div>
+
+                    <!-- Visual Steps -->
+                    <div class="visual-box" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(0, 255, 136, 0.08));">
+                        <h4>🎨 Step-by-Step Visualization</h4>
+
+                        <!-- Step 1: Find Middle -->
+                        <p class="content-text" style="margin: 15px 0 10px 0; color: var(--accent-blue);"><strong>Step 1️⃣: Find Middle (Slow/Fast Pointers)</strong></p>
+                        <pre class="visual-diagram" style="background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.3);">
+INPUT:    1 ───► 2 ───► 3 ───► 4 ───► 5 ───► NULL
+          ↑             ↑                    ↑
+        slow          slow                 fast
+       (start)       (ends)               (ends)
+
+🐢 Slow: Moves 1 step at a time
+🐇 Fast: Moves 2 steps at a time
+
+After loop: slow = node(3) → This is the MIDDLE!
+                        </pre>
+                        <p class="content-text" style="text-align: center; color: var(--text-secondary);">🐢 slow stops at 3 (middle) | 🐇 fast reaches end</p>
+
+                        <!-- Step 2: Reverse Second Half -->
+                        <p class="content-text" style="margin: 25px 0 10px 0; color: var(--accent-orange);"><strong>Step 2️⃣: Reverse Second Half</strong></p>
+                        <pre class="visual-diagram" style="background: rgba(255, 159, 67, 0.08); border: 1px solid rgba(255, 159, 67, 0.3);">
+Split at middle:
+────────────────────────────────────────────────────────
+
+FIRST HALF:      1 ───► 2 ───► 3 ───► NULL
+                 🟢      🟢      🟢
+
+SECOND HALF:     4 ───► 5 ───► NULL
+                 🟠      🟠
+
+After REVERSING second half:
+────────────────────────────────────────────────────────
+
+FIRST HALF:      1 ───► 2 ───► 3
+                 🟢      🟢      🟢
+
+SECOND HALF:     5 ───► 4 ───► NULL  (REVERSED!)
+                 🟠      🟠
+                        </pre>
+                        <p class="content-text" style="text-align: center; color: var(--text-secondary);">First Half: 1→2→3 | Second Half (Reversed): 5→4</p>
+
+                        <!-- Step 3: Merge -->
+                        <p class="content-text" style="margin: 25px 0 10px 0; color: var(--accent-green);"><strong>Step 3️⃣: Merge Alternately</strong></p>
+                        <pre class="visual-diagram" style="background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.3);">
+MERGE: Take one from each list alternately!
+────────────────────────────────────────────────────────
+
+First:   1 ───► 2 ───► 3          Second:  5 ───► 4
+         ↓                                  ↓
+         └──────────────┐    ┌──────────────┘
+                        ▼    ▼
+RESULT:  1 ───► 5 ───► 2 ───► 4 ───► 3 ───► NULL
+         🟢      🟠      🟢      🟠      🟢
+
+Pattern: GREEN → ORANGE → GREEN → ORANGE → GREEN
+         (front)  (back)  (front)  (back)  (middle)
+                        </pre>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li><strong>Find Middle:</strong> Slow/Fast pointer technique use karo
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li><code>slow = head</code>, <code>fast = head.next</code></li>
+                                    <li>Loop: <code>while fast and fast.next:</code> slow +1, fast +2</li>
+                                    <li>Result: <code>slow</code> middle ke pehle wale node pe hoga!</li>
+                                </ul>
+                            </li>
+                            <li><strong>Reverse Second Half:</strong>
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li><code>second = slow.next</code> — Second half start</li>
+                                    <li><code>slow.next = None</code> — Disconnect halves!</li>
+                                    <li>Standard reversal: <code>prev, cur = None, second</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Merge Two Lists:</strong>
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li><code>first = head</code>, <code>second = reversed_head</code></li>
+                                    <li>Loop: <code>while second:</code></li>
+                                    <li>Save temps: <code>tmp1 = first.next</code>, <code>tmp2 = second.next</code></li>
+                                    <li>Link: <code>first.next = second</code>, <code>second.next = tmp1</code></li>
+                                    <li>Move: <code>first = tmp1</code>, <code>second = tmp2</code></li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-green);">🏆 OPTIMAL — O(1) Space!</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># 🏆 APPROACH 3: OPTIMAL (Reverse & Merge)</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># 3 Steps: Find Middle → Reverse 2nd Half → Merge!</span>
+<span class="comment"># Time: O(n) | Space: O(1) 🔥</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">reorderList</span>(<span class="param">self</span>, <span class="param">head</span>) -> <span class="builtin">None</span>:
+        <span class="comment"># 🐢🐇 Step 1: Find middle using slow/fast pointers</span>
+        slow, fast = head, head.next
+        <span class="keyword">while</span> fast <span class="keyword">and</span> fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        
+        <span class="comment"># 🔄 Step 2: Reverse second half</span>
+        second = slow.next
+        prev = slow.next = <span class="builtin">None</span>  <span class="comment"># Disconnect!</span>
+        
+        <span class="keyword">while</span> second:
+            tmp = second.next
+            second.next = prev
+            prev = second
+            second = tmp
+        
+        <span class="comment"># 🔗 Step 3: Merge two halves alternately</span>
+        first, second = head, prev
+        <span class="keyword">while</span> second:
+            tmp1, tmp2 = first.next, second.next
+            first.next = second
+            second.next = tmp1
+            first, second = tmp1, tmp2</pre>
+                        </div>
+                    </div>
+
+                    <!-- Dry Run -->
+                    <div class="concept-box" style="background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.3);">
+                        <h4 class="concept-title" style="color: var(--accent-green);">📋 Detailed Dry Run — Optimal Approach</h4>
+                        <p class="content-text"><strong>Input:</strong> <code>head = [1, 2, 3, 4, 5]</code></p>
+                        
+                        <p style="color: var(--accent-blue); margin-top: 15px;"><strong>Phase 1: Find Middle</strong></p>
+                        <table class="summary-table">
+                            <thead>
+                                <tr><th>Iteration</th><th>slow</th><th>fast</th><th>Comment</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Init</td><td>1</td><td>2</td><td>—</td></tr>
+                                <tr><td>1</td><td>2</td><td>4</td><td>slow +1, fast +2</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.15);"><td>2</td><td>3</td><td>NULL</td><td>fast.next NULL! STOP!</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="content-text">✅ Middle found! <code>slow = 3</code></p>
+
+                        <p style="color: var(--accent-orange); margin-top: 20px;"><strong>Phase 2: Reverse Second Half</strong></p>
+                        <p class="content-text">Second half: <code>4 → 5 → NULL</code></p>
+                        <p class="content-text">After reversal: <code>5 → 4 → NULL</code> ✅</p>
+
+                        <p style="color: var(--accent-purple); margin-top: 20px;"><strong>Phase 3: Merge</strong></p>
+                        <table class="summary-table">
+                            <thead>
+                                <tr><th>Step</th><th>first</th><th>second</th><th>Action</th><th>Result</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>5</td><td>1.next = 5, 5.next = 2</td><td>1→5→2</td></tr>
+                                <tr><td>2</td><td>2</td><td>4</td><td>2.next = 4, 4.next = 3</td><td>2→4→3</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.15);"><td>3</td><td>3</td><td>NULL</td><td>second NULL, DONE!</td><td>3→NULL</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="content-text" style="margin-top: 10px;"><strong>Final List:</strong> 1 → 5 → 2 → 4 → 3 → NULL 🎉</p>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value good">O(1)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            🏆 <strong>OPTIMAL!</strong> Linear time + Constant space! No extra memory! Perfect solution! 🚀
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Pitfalls -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 159, 67, 0.15) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-red);">⚠️ Common Pitfalls — Galtiyan Mat Karo!</h4>
+                <ol class="steps-list">
+                    <li><strong>Incorrect Middle Finding:</strong><br>
+                        ❌ <code>slow = fast = head</code> — Galat initialization!<br>
+                        ✅ <code>slow = head, fast = head.next</code> — Sahi way! Slow exactly pehle half ke last node pe rukta hai!
+                    </li>
+                    <li><strong>Forgetting to Disconnect Halves:</strong><br>
+                        ❌ <code>slow.next</code> ko NULL nahi kiya → Cycle ban jayega!<br>
+                        ✅ <code>slow.next = None</code> zaroor karo before reversal!
+                    </li>
+                    <li><strong>Losing References During Merge:</strong><br>
+                        ❌ <code>first.next = second</code> karne se original <code>first.next</code> lost!<br>
+                        ✅ Pehle save karo: <code>tmp1 = first.next</code>, phir link karo!
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="subsection">
+                <h4 class="subsection-title">📊 Approach Comparison</h4>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Time</th>
+                            <th>Space</th>
+                            <th>Key Idea</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. Brute Force (Array)</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-red);">O(n)</td>
+                            <td>Store all nodes in array, use two pointers</td>
+                        </tr>
+                        <tr>
+                            <td>2. Recursion</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-red);">O(n)</td>
+                            <td>Call stack stores back nodes, pair during unwind</td>
+                        </tr>
+                        <tr style="background: rgba(0, 255, 136, 0.15);">
+                            <td><strong>3. Reverse & Merge ⭐</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(n)</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                            <td><strong>Find middle → Reverse second half → Merge!</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    🎯 <strong>Interview Mein:</strong> Approach 3 (Reverse & Merge) hi bolna! Most optimal aur clean! 💯
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="footer">
             <p>Made with 💜 for DSA learners | Hinglish mein samjho, English mein code karo! 🚀</p>
@@ -13902,6 +15141,38 @@ class Solution:
         if (typeof Prism !== 'undefined') {
             Prism.highlightAll();
         }
+    </script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid immediately after script loads
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            securityLevel: 'loose',
+            themeVariables: {
+                darkMode: true,
+                background: '#0f0f23',
+                primaryColor: '#00ff88',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#1a1a2e',
+                tertiaryColor: '#16213e',
+                textColor: '#e4e4e7'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+        
+        // Run mermaid rendering on all .mermaid elements
+        mermaid.run({
+            querySelector: '.mermaid'
+        });
     </script>
 </body>
 </html>

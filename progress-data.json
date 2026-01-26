@@ -1,20 +1,20 @@
 {
   "metadata": {
     "version": "2.1",
-    "lastUpdated": "2026-01-24T18:08:27.892Z",
+    "lastUpdated": "2026-01-26T18:03:19.213Z",
     "description": "Progress tracker for System Design, DSA & Reel Scripts learning materials - Individual concept tracking"
   },
   "summary": {
     "systemDesign": {
       "totalTopics": 8,
       "totalConcepts": 72,
-      "completedConcepts": 33,
-      "percentage": 46
+      "completedConcepts": 40,
+      "percentage": 56
     },
     "dsa": {
-      "totalProblems": 17,
+      "totalProblems": 21,
       "completedProblems": 6,
-      "percentage": 35
+      "percentage": 29
     },
     "scripts": {
       "totalScripts": 12,
@@ -109,49 +109,49 @@
             "id": "concept-0",
             "name": "System Design Tricky Lagta Hai? Let's Break It Down!",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:13.105Z"
+            "completedAt": "2026-01-26T17:44:33.477Z"
           },
           "concept-1": {
             "id": "concept-1",
             "name": "System Design Hota Kya Hai?",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:13.924Z"
+            "completedAt": "2026-01-26T17:44:34.566Z"
           },
           "concept-2": {
             "id": "concept-2",
             "name": "System Ka Matlab Kya? — Different Types",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:14.663Z"
+            "completedAt": "2026-01-26T17:44:35.633Z"
           },
           "concept-3": {
             "id": "concept-3",
             "name": "Design Output: 3 Important Layers",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:15.347Z"
+            "completedAt": "2026-01-26T17:44:36.732Z"
           },
           "concept-4": {
             "id": "concept-4",
             "name": "Approach #1: Spiral Approach",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:16.010Z"
+            "completedAt": "2026-01-26T17:44:37.801Z"
           },
           "concept-5": {
             "id": "concept-5",
             "name": "Approach #2: Incremental MVP",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:16.708Z"
+            "completedAt": "2026-01-26T17:44:42.015Z"
           },
           "concept-6": {
             "id": "concept-6",
             "name": "3 Golden Rules",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:17.504Z"
+            "completedAt": "2026-01-26T17:44:44.517Z"
           },
           "concept-7": {
             "id": "concept-7",
             "name": "Universal Principle: Divide & Conquer",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:18.140Z"
+            "completedAt": "2026-01-26T17:44:45.955Z"
           }
         }
       },
@@ -164,49 +164,49 @@
             "id": "concept-8",
             "name": "REST Ka Full Form Aur Uska Real Matlab",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:43.746Z"
+            "completedAt": "2026-01-26T17:44:52.805Z"
           },
           "concept-9": {
             "id": "concept-9",
             "name": "REST Ka Core Idea: Everything is a Resource",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:50.804Z"
+            "completedAt": "2026-01-26T17:44:53.952Z"
           },
           "concept-10": {
             "id": "concept-10",
             "name": "REST Tumhe Storage Ke Baare Mein Kuch Nahi Bolta",
             "completed": true,
-            "completedAt": "2026-01-21T18:38:51.352Z"
+            "completedAt": "2026-01-26T17:44:55.268Z"
           },
           "concept-11": {
             "id": "concept-11",
             "name": "Representation Ka Real Meaning",
             "completed": true,
-            "completedAt": "2026-01-21T18:40:41.981Z"
+            "completedAt": "2026-01-26T17:44:56.685Z"
           },
           "concept-12": {
             "id": "concept-12",
             "name": "REST vs HTTP",
             "completed": true,
-            "completedAt": "2026-01-22T06:29:09.546Z"
+            "completedAt": "2026-01-26T17:45:05.151Z"
           },
           "concept-13": {
             "id": "concept-13",
             "name": "REST Ka Golden Rule",
             "completed": true,
-            "completedAt": "2026-01-22T06:36:42.818Z"
+            "completedAt": "2026-01-26T17:45:06.325Z"
           },
           "concept-14": {
             "id": "concept-14",
             "name": "HTTP Tooling Aur Ecosystem",
             "completed": true,
-            "completedAt": "2026-01-22T06:38:55.697Z"
+            "completedAt": "2026-01-26T17:45:19.576Z"
           },
           "concept-15": {
             "id": "concept-15",
             "name": "REST Ke Downsides",
             "completed": true,
-            "completedAt": "2026-01-22T06:44:42.801Z"
+            "completedAt": "2026-01-26T17:45:42.516Z"
           }
         }
       },
@@ -352,38 +352,38 @@
           "concept-36": {
             "id": "concept-36",
             "name": "Benefit: Granular Scaling Control",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T17:54:14.498Z"
           },
           "concept-37": {
             "id": "concept-37",
             "name": "Benefit: Blast Radius Reduction",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T17:54:16.992Z"
           },
           "concept-38": {
             "id": "concept-38",
             "name": "Benefit: Compliance & Governance",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T17:54:18.188Z"
           },
           "concept-39": {
             "id": "concept-39",
             "name": "Challenge 1: Cross-Service Transactions",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T17:56:43.019Z"
           },
           "concept-40": {
             "id": "concept-40",
             "name": "Challenge 2: Data Propagation & Eventual Consistency",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T17:58:51.544Z"
           },
           "concept-41": {
             "id": "concept-41",
             "name": "Challenge 3: Operational Complexity",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T17:59:22.892Z"
           }
         }
       },
@@ -395,8 +395,8 @@
           "concept-42": {
             "id": "concept-42",
             "name": "The Biggest Architectural Benefit: CONTROL",
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-26T18:03:19.213Z"
           },
           "concept-43": {
             "id": "concept-43",
@@ -753,6 +753,44 @@
             "name": "Search in Rotated Sorted Array",
             "difficulty": "Medium",
             "leetcode": 33,
+            "completed": false,
+            "completedAt": null
+          }
+        }
+      },
+      "linked-list": {
+        "name": "Linked List",
+        "icon": "🔗",
+        "problems": {
+          "reverse-linked-list": {
+            "id": "reverse-linked-list",
+            "name": "Reverse Linked List",
+            "difficulty": "Easy",
+            "leetcode": 206,
+            "completed": false,
+            "completedAt": null
+          },
+          "merge-two-sorted-lists": {
+            "id": "merge-two-sorted-lists",
+            "name": "Merge Two Sorted Lists",
+            "difficulty": "Easy",
+            "leetcode": 21,
+            "completed": false,
+            "completedAt": null
+          },
+          "linked-list-cycle": {
+            "id": "linked-list-cycle",
+            "name": "Linked List Cycle",
+            "difficulty": "Easy",
+            "leetcode": 141,
+            "completed": false,
+            "completedAt": null
+          },
+          "reorder-linked-list": {
+            "id": "reorder-linked-list",
+            "name": "Reorder Linked List",
+            "difficulty": "Medium",
+            "leetcode": 143,
             "completed": false,
             "completedAt": null
           }
