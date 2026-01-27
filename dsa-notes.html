@@ -3450,7 +3450,7 @@
                     <span class="category-icon">🔗</span>
                     Linked List
                 </span>
-                <span class="category-count">4</span>
+                <span class="category-count">5</span>
                 <span class="category-toggle">▼</span>
             </div>
             <div class="category-items">
@@ -3475,6 +3475,12 @@
                 <a href="#reorder-linked-list" class="nav-item" data-difficulty="medium">
                     <span class="nav-number orange">21</span>
                     <span class="nav-text">Reorder Linked List</span>
+                    <span class="nav-difficulty medium"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+                <a href="#remove-nth-from-end" class="nav-item" data-difficulty="medium">
+                    <span class="nav-number orange">22</span>
+                    <span class="nav-text">Remove Nth From End</span>
                     <span class="nav-difficulty medium"></span>
                     <span class="nav-check">✓</span>
                 </a>
@@ -14312,6 +14318,758 @@ Pattern: GREEN → ORANGE → GREEN → ORANGE → GREEN
                 </table>
                 <div class="hinglish-note" style="margin-top: 15px;">
                     🎯 <strong>Interview Mein:</strong> Approach 3 (Reverse & Merge) hi bolna! Most optimal aur clean! 💯
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PROBLEM 22: Remove Nth Node From End ==================== -->
+        <section class="problem-section" id="remove-nth-from-end">
+            <header class="problem-header">
+                <span class="problem-number">22</span>
+                <h2>Remove Nth Node From End of List</h2>
+                <p class="problem-subtitle">End se Nth node hatao — Two Pointers ka Classic Problem! 🎯</p>
+                <div class="problem-meta">
+                    <span class="difficulty medium">Medium</span>
+                    <span class="category">Linked List</span>
+                    <span class="category">Two Pointers</span>
+                </div>
+            </header>
+
+            <!-- Problem Statement -->
+            <div class="problem-statement">
+                <h3>📋 Problem Statement</h3>
+                <p class="content-text">
+                    Ek <strong>singly linked list</strong> ka head diya gaya hai. Tumhe list ke <span class="highlight">end se nth node</span> ko remove karna hai 
+                    aur modified list ka head return karna hai.
+                </p>
+                <div class="example-box">
+                    <strong>Example 1:</strong><br>
+                    <code>Input: head = [1,2,3,4,5], n = 2</code><br>
+                    <code>Output: [1,2,3,5]</code><br>
+                    <em>Explanation: End se 2nd node (4) ko remove kiya!</em>
+                </div>
+                <div class="example-box">
+                    <strong>Example 2:</strong><br>
+                    <code>Input: head = [1], n = 1</code><br>
+                    <code>Output: []</code><br>
+                    <em>Explanation: Single node hai aur wahi remove karna hai!</em>
+                </div>
+                <div class="example-box">
+                    <strong>Example 3:</strong><br>
+                    <code>Input: head = [1,2], n = 1</code><br>
+                    <code>Output: [1]</code><br>
+                    <em>Explanation: End se 1st node (2) ko remove kiya!</em>
+                </div>
+            </div>
+
+            <!-- Prerequisites -->
+            <div class="concept-box" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+                <h4 class="concept-title" style="color: var(--accent-purple);">🎓 Prerequisites — Pehle Ye Samjho!</h4>
+                <ul class="bullet-list">
+                    <li><strong>Linked List Fundamentals:</strong> Singly linked list kaise kaam karta hai — node structure, traversal, pointers</li>
+                    <li><strong>Two Pointers Technique:</strong> Do pointers use karke different positions track karna simultaneously</li>
+                    <li><strong>Dummy Node Pattern:</strong> Sentinel node jo edge cases (like head removal) ko simple banata hai!</li>
+                </ul>
+            </div>
+
+            <!-- Visual: Problem Understanding -->
+            <div class="mermaid-container">
+                <div class="diagram-label">🎯 PROBLEM VISUALIZATION — End Se Nth Node</div>
+                <div class="mermaid">
+flowchart LR
+    subgraph Input["INPUT: n = 2"]
+        H1["1"]
+        H2["2"]
+        H3["3"]
+        H4["4<br/>🎯 Remove!"]
+        H5["5"]
+        N1["NULL"]
+        
+        H1 --> H2 --> H3 --> H4 --> H5 --> N1
+    end
+    
+    subgraph Count["Counting from END"]
+        C1["5th"]
+        C2["4th"]
+        C3["3rd"]
+        C4["2nd ✂️"]
+        C5["1st"]
+    end
+    
+    subgraph Output["OUTPUT"]
+        O1["1"]
+        O2["2"]
+        O3["3"]
+        O5["5"]
+        ON["NULL"]
+        
+        O1 --> O2 --> O3 --> O5 --> ON
+    end
+    
+    style H4 fill:#ff6b6b,color:#fff,stroke:#ff0000,stroke-width:3px
+    style C4 fill:#ff6b6b,color:#fff
+                </div>
+            </div>
+
+            <!-- Approach 1: Brute Force (Array) -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-1">1</div>
+                    <h3 class="section-title">Brute Force — Array Mein Store Karo!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Simple Idea:</span> Saare nodes ko array mein daal do! 📦
+                        </p>
+                        <p class="content-text">
+                            Array mein direct index access hota hai, toh end se nth position easily calculate kar sakte ho!
+                        </p>
+                        <div class="hinglish-note">
+                            💡 <strong>Kahani Samjho:</strong> Linked List mein end tak jaane ke liye traverse karna padta hai (O(n)). 
+                            Lekin array mein? Direct <code>arr[index]</code> se access! Toh nodes array mein daal do, phir easily delete karo!
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li>Linked list traverse karo aur <strong>har node ko array</strong> mein push karo</li>
+                            <li>Delete karne wale node ka index calculate karo: <code>removeIndex = len(nodes) - n</code></li>
+                            <li>Agar <code>removeIndex == 0</code> → Head ko hi remove karna hai → Return <code>head.next</code></li>
+                            <li>Otherwise: <code>nodes[removeIndex - 1].next = nodes[removeIndex].next</code></li>
+                            <li>Modified head return karo!</li>
+                        </ol>
+                    </div>
+
+                    <!-- Mermaid: Brute Force Flow -->
+                    <div class="mermaid-container">
+                        <div class="diagram-label">🔄 BRUTE FORCE APPROACH FLOW</div>
+                        <div class="mermaid">
+flowchart TB
+    subgraph Step1["Step 1: Array Mein Store"]
+        LL["1 → 2 → 3 → 4 → 5"]
+        ARR["nodes = [1, 2, 3, 4, 5]"]
+        LL --> ARR
+    end
+    
+    subgraph Step2["Step 2: Index Calculate"]
+        CALC["removeIndex = len(5) - n(2) = 3"]
+        NODE["nodes[3] = Node(4) 🎯"]
+        CALC --> NODE
+    end
+    
+    subgraph Step3["Step 3: Link Update"]
+        PREV["nodes[2] (Node 3)"]
+        SKIP["nodes[3] (Node 4) ✂️ SKIP!"]
+        NEXT["nodes[3].next (Node 5)"]
+        PREV -->|".next ="| NEXT
+    end
+    
+    subgraph Result["Result"]
+        RES["1 → 2 → 3 → 5 → NULL ✅"]
+    end
+    
+    Step1 --> Step2 --> Step3 --> Result
+    
+    style NODE fill:#ff6b6b,color:#fff
+    style SKIP fill:#ff6b6b,color:#fff,stroke-dasharray: 5 5
+                        </div>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-orange);">Approach 1: Brute Force (Array)</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 1: BRUTE FORCE — Array Mein Store!</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Time: O(n) | Space: O(n)</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">removeNthFromEnd</span>(<span class="param">self</span>, <span class="param">head</span>, <span class="param">n</span>):
+        <span class="comment"># 📦 Step 1: Saare nodes array mein daal do</span>
+        nodes = []
+        cur = head
+        <span class="keyword">while</span> cur:
+            nodes.append(cur)
+            cur = cur.next
+        
+        <span class="comment"># 🧮 Step 2: Remove karne wala index calculate karo</span>
+        removeIndex = <span class="builtin">len</span>(nodes) - n
+        
+        <span class="comment"># 🎯 Step 3: Edge case — Head remove karna hai?</span>
+        <span class="keyword">if</span> removeIndex == <span class="number">0</span>:
+            <span class="keyword">return</span> head.next  <span class="comment"># Naya head!</span>
+        
+        <span class="comment"># ✂️ Step 4: Previous node ko next se connect karo</span>
+        nodes[removeIndex - <span class="number">1</span>].next = nodes[removeIndex].next
+        
+        <span class="keyword">return</span> head</pre>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value bad">O(n)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            ⚠️ <strong>Drawback:</strong> Extra O(n) space use ho raha hai! Can we do better? 🤔
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 2: Two Pass (Iteration) -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-2">2</div>
+                    <h3 class="section-title">Two Pass Iteration — Pehle Count, Phir Delete!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Idea:</span> Pehle count karo kitne nodes hain, phir delete karo! 🔢
+                        </p>
+                        <p class="content-text">
+                            • <strong>Pass 1:</strong> Total nodes count karo (N)<br>
+                            • End se n-th node matlab start se <code>(N - n)</code>th node!<br>
+                            • <strong>Pass 2:</strong> Us position tak jao aur delete karo!
+                        </p>
+                        <div class="hinglish-note">
+                            💡 <strong>Simple Math:</strong> Agar total 5 nodes hain aur end se 2nd chahiye, toh start se <code>5 - 2 = 3rd</code> node! (0-indexed: index 3)
+                        </div>
+                    </div>
+
+                    <!-- Mermaid: Two Pass Flow -->
+                    <div class="mermaid-container">
+                        <div class="diagram-label">🔄 TWO PASS APPROACH VISUALIZATION</div>
+                        <div class="mermaid">
+flowchart TB
+    subgraph Pass1["PASS 1: Count Nodes"]
+        direction LR
+        P1A["1"]
+        P1B["2"]
+        P1C["3"]
+        P1D["4"]
+        P1E["5"]
+        P1N["NULL"]
+        P1A -->|"N=1"| P1B -->|"N=2"| P1C -->|"N=3"| P1D -->|"N=4"| P1E -->|"N=5"| P1N
+    end
+    
+    subgraph Calculate["CALCULATION"]
+        CALC2["Total N = 5, n = 2<br/>removeIndex = 5 - 2 = 3"]
+    end
+    
+    subgraph Pass2["PASS 2: Navigate to Index 2"]
+        direction LR
+        P2A["1<br/>i=0"]
+        P2B["2<br/>i=1"]
+        P2C["3<br/>i=2 ✋"]
+        P2D["4 ✂️"]
+        P2E["5"]
+        P2A --> P2B --> P2C
+        P2C -.->|"SKIP!"| P2D
+        P2C -->|".next"| P2E
+    end
+    
+    Pass1 --> Calculate --> Pass2
+    
+    style P2D fill:#ff6b6b,color:#fff,stroke-dasharray: 5 5
+    style P2C fill:#00ff88,color:#000
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li><strong>Pass 1:</strong> List traverse karke total nodes (N) count karo</li>
+                            <li>Calculate: <code>removeIndex = N - n</code></li>
+                            <li>Agar <code>removeIndex == 0</code> → Head remove! Return <code>head.next</code></li>
+                            <li><strong>Pass 2:</strong> <code>removeIndex - 1</code> position tak jao</li>
+                            <li>Us node ka <code>.next</code> update karo: <code>cur.next = cur.next.next</code></li>
+                        </ol>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-purple);">Approach 2: Two Pass Iteration</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 2: TWO PASS ITERATION</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Time: O(n) | Space: O(1) ✅</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">removeNthFromEnd</span>(<span class="param">self</span>, <span class="param">head</span>, <span class="param">n</span>):
+        <span class="comment"># 🔢 Pass 1: Total nodes count karo</span>
+        N = <span class="number">0</span>
+        cur = head
+        <span class="keyword">while</span> cur:
+            N += <span class="number">1</span>
+            cur = cur.next
+        
+        <span class="comment"># 🧮 Calculate: Start se kaunsa index delete karna hai?</span>
+        removeIndex = N - n
+        
+        <span class="comment"># 🎯 Edge case: Head remove karna hai?</span>
+        <span class="keyword">if</span> removeIndex == <span class="number">0</span>:
+            <span class="keyword">return</span> head.next
+        
+        <span class="comment"># 🚶 Pass 2: removeIndex - 1 tak jao</span>
+        cur = head
+        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(N - <span class="number">1</span>):
+            <span class="keyword">if</span> (i + <span class="number">1</span>) == removeIndex:
+                <span class="comment"># ✂️ Skip the target node!</span>
+                cur.next = cur.next.next
+                <span class="keyword">break</span>
+            cur = cur.next
+        
+        <span class="keyword">return</span> head</pre>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value good">O(1)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            ✅ <strong>Better!</strong> Space O(1) ho gaya! But 2 passes lagti hain... Can we do in ONE pass? 🤔
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 3: Recursion -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-3">3</div>
+                    <h3 class="section-title">Recursion — End Se Count Karo Wapis Aate Waqt!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Brilliant Observation:</span> Recursion naturally end se start ki taraf process karta hai! 🔄
+                        </p>
+                        <p class="content-text">
+                            • Recursion se list ke <strong>end tak jao</strong><br>
+                            • <strong>Unwinding phase</strong> mein (wapis aate waqt) counter decrement karo<br>
+                            • Jab counter = 0 → Ye wahi node hai jo delete karni hai → Skip it!
+                        </p>
+                        <div class="hinglish-note">
+                            💡 <strong>Kahani:</strong> Imagine karo tum queue mein ho. Pehle last person tak jao, phir wapis aate waqt count karo: "Ye 1st from end, ye 2nd from end..." Jab n-th mile → Remove!
+                        </div>
+                    </div>
+
+                    <!-- Mermaid: Recursion Flow -->
+                    <div class="mermaid-container">
+                        <div class="diagram-label">🔄 RECURSION CALL STACK — n = 2</div>
+                        <div class="mermaid">
+flowchart TB
+    subgraph Going["➡️ GOING DOWN (Recursive Calls)"]
+        R1["rec(1) → rec(2)"]
+        R2["rec(2) → rec(3)"]
+        R3["rec(3) → rec(4)"]
+        R4["rec(4) → rec(5)"]
+        R5["rec(5) → rec(NULL)"]
+        RN["BASE: return None"]
+        
+        R1 --> R2 --> R3 --> R4 --> R5 --> RN
+    end
+    
+    subgraph Unwinding["⬅️ UNWINDING (Return Phase)"]
+        U5["n[0]=2 → n[0]=1<br/>return 5"]
+        U4["n[0]=1 → n[0]=0<br/>🎯 n=0! Return 4.next (5)"]
+        U3["return 3<br/>3.next = 5 ✅"]
+        U2["return 2"]
+        U1["return 1"]
+    end
+    
+    RN --> U5 --> U4 --> U3 --> U2 --> U1
+    
+    style U4 fill:#ff6b6b,color:#fff
+    style U3 fill:#00ff88,color:#000
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li><strong>Base Case:</strong> Agar <code>head == None</code> → Return <code>None</code></li>
+                            <li><strong>Recursive Call:</strong> <code>head.next = rec(head.next, n)</code></li>
+                            <li><strong>Unwinding mein:</strong> <code>n[0] -= 1</code> (counter decrement)</li>
+                            <li>Agar <code>n[0] == 0</code> → Ye node delete karni hai → Return <code>head.next</code></li>
+                            <li>Otherwise return <code>head</code> (list rebuild karte jao)</li>
+                        </ol>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-blue);">Approach 3: Recursion</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># ✨ APPROACH 3: RECURSION</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Time: O(n) | Space: O(n) — Call Stack!</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">rec</span>(<span class="param">self</span>, <span class="param">head</span>, <span class="param">n</span>):
+        <span class="comment"># 🔴 Base case: End tak pahunch gaye</span>
+        <span class="keyword">if</span> <span class="keyword">not</span> head:
+            <span class="keyword">return</span> <span class="builtin">None</span>
+        
+        <span class="comment"># 🔄 Recursively aage jao</span>
+        head.next = <span class="keyword">self</span>.rec(head.next, n)
+        
+        <span class="comment"># ⬅️ Unwinding: Counter decrement karo</span>
+        n[<span class="number">0</span>] -= <span class="number">1</span>
+        
+        <span class="comment"># 🎯 Check: Kya ye wahi node hai jo delete karni hai?</span>
+        <span class="keyword">if</span> n[<span class="number">0</span>] == <span class="number">0</span>:
+            <span class="keyword">return</span> head.next  <span class="comment"># Skip this node!</span>
+        
+        <span class="keyword">return</span> head  <span class="comment"># Keep this node</span>
+    
+    <span class="keyword">def</span> <span class="function">removeNthFromEnd</span>(<span class="param">self</span>, <span class="param">head</span>, <span class="param">n</span>):
+        <span class="comment"># Note: n ko list mein wrap kiya taaki reference pass ho</span>
+        <span class="keyword">return</span> <span class="keyword">self</span>.rec(head, [n])</pre>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 159, 67, 0.1); border-color: rgba(255, 159, 67, 0.3);">
+                        ⚠️ <strong>Python Gotcha:</strong> <code>n</code> ko <code>[n]</code> list mein wrap kiya kyunki Python mein integers immutable hain. 
+                        List pass karne se recursive calls mein same reference share hoti hai!
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value bad">O(n)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            ⚠️ <strong>Recursion Stack!</strong> O(n) space use hota hai call stack mein. Not optimal for large lists!
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 4: OPTIMAL - Two Pointers -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-4">4</div>
+                    <h3 class="section-title">🏆 OPTIMAL — Two Pointers with Dummy Node!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Intuition (Sochne Ka Tarika)</h4>
+                        <p class="content-text">
+                            <span class="highlight">Genius Idea:</span> Do pointers use karo jinka gap exactly <strong>n</strong> ho! 🎯
+                        </p>
+                        <p class="content-text">
+                            • <strong>Right pointer</strong> ko <code>n</code> steps aage bhejo<br>
+                            • Ab dono pointers ko <strong>saath-saath</strong> move karo<br>
+                            • Jab <strong>right = NULL</strong> → Left exactly us node ke peeche hai jo delete karni hai!
+                        </p>
+                        <div class="hinglish-note">
+                            💡 <strong>Kahani:</strong> Do friends race track pe hain. Pehle wala (right) n steps aage chala gaya. Ab dono saath-saath chalte hain. 
+                            Jab pehla wala finish line (NULL) pe pahunche → doosra wala exactly n steps peeche hai! 🏃‍♂️🏃
+                        </div>
+                    </div>
+
+                    <!-- Main Concept Visual -->
+                    <div class="mermaid-container">
+                        <div class="diagram-label">🎯 TWO POINTERS MAGIC — Gap = n = 2</div>
+                        <div class="mermaid">
+flowchart TB
+    subgraph Init["INITIAL SETUP"]
+        direction LR
+        D0["DUMMY"]
+        I1["1"]
+        I2["2"]
+        I3["3"]
+        I4["4"]
+        I5["5"]
+        IN["NULL"]
+        D0 --> I1 --> I2 --> I3 --> I4 --> I5 --> IN
+        
+        LP["⬅️ LEFT"]
+        RP["➡️ RIGHT"]
+    end
+    
+    subgraph Step1["Step 1: Move RIGHT by n=2"]
+        direction LR
+        S1D["DUMMY<br/>⬅️L"]
+        S11["1"]
+        S12["2<br/>➡️R"]
+        S13["3"]
+        S14["4"]
+        S15["5"]
+        S1N["NULL"]
+        S1D --> S11 --> S12 --> S13 --> S14 --> S15 --> S1N
+    end
+    
+    subgraph Step2["Step 2: Move BOTH until RIGHT = NULL"]
+        direction LR
+        S2D["DUMMY"]
+        S21["1"]
+        S22["2"]
+        S23["3<br/>⬅️L"]
+        S24["4 ✂️"]
+        S25["5<br/>➡️R"]
+        S2N["NULL"]
+        S2D --> S21 --> S22 --> S23 --> S24 --> S25 --> S2N
+    end
+    
+    subgraph Final["FINAL: L.next = L.next.next"]
+        direction LR
+        F1["1"]
+        F2["2"]
+        F3["3"]
+        F5["5"]
+        FN["NULL"]
+        F1 --> F2 --> F3 --> F5 --> FN
+    end
+    
+    Init --> Step1 --> Step2 --> Final
+    
+    style S24 fill:#ff6b6b,color:#fff,stroke-dasharray: 5 5
+    style S23 fill:#00ff88,color:#000
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Why Dummy Node?</h4>
+                        <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+                            🤔 <strong>Problem:</strong> Agar head hi delete karna hai toh? Left pointer head ke peeche hona chahiye!<br><br>
+                            ✅ <strong>Solution:</strong> <strong>Dummy node</strong> head ke pehle lagao! Left dummy pe start hoga, toh head bhi delete ho sakta hai!
+                        </div>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">DUMMY NODE SAVES HEAD REMOVAL!</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph WithoutDummy["❌ Without Dummy — HEAD DELETE PROBLEM!"]
+        W1["1 ⬅️L?<br/>🤷 Kahan se delete?"]
+                        W2["2"]
+                        W1 --> W2
+                    end
+                    
+                    subgraph WithDummy["✅ With Dummy — CLEAN!"]
+                        D["DUMMY<br/>⬅️L"]
+                        WD1["1 ✂️"]
+                        WD2["2"]
+                        D --> WD1 --> WD2
+                        D -.->|"L.next = L.next.next"| WD2
+                    end
+                    
+                    style WD1 fill:#ff6b6b,color:#fff,stroke-dasharray: 5 5
+                    style D fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title">Algorithm</h4>
+                        <ol class="steps-list">
+                            <li>Create <strong>dummy node</strong> pointing to head: <code>dummy.next = head</code></li>
+                            <li>Initialize: <code>left = dummy</code>, <code>right = head</code></li>
+                            <li><strong>Move right n steps:</strong> <code>while n > 0: right = right.next; n -= 1</code></li>
+                            <li><strong>Move both until right = NULL:</strong> <code>while right: left = left.next; right = right.next</code></li>
+                            <li>Delete: <code>left.next = left.next.next</code></li>
+                            <li>Return <code>dummy.next</code> (naya head!)</li>
+                        </ol>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-green);">🏆 Approach 4: Two Pointers (OPTIMAL!)</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># 🏆 APPROACH 4: TWO POINTERS — OPTIMAL!</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Time: O(n) | Space: O(1) — ONE PASS! 🚀</span>
+
+<span class="keyword">class</span> <span class="class-name">Solution</span>:
+    <span class="keyword">def</span> <span class="function">removeNthFromEnd</span>(<span class="param">self</span>, <span class="param">head</span>, <span class="param">n</span>):
+        <span class="comment"># 🎭 Step 1: Dummy node create karo</span>
+        dummy = ListNode(<span class="number">0</span>, head)  <span class="comment"># dummy.next = head</span>
+        left = dummy
+        right = head
+        
+        <span class="comment"># ➡️ Step 2: Right ko n steps aage bhejo</span>
+        <span class="keyword">while</span> n > <span class="number">0</span>:
+            right = right.next
+            n -= <span class="number">1</span>
+        
+        <span class="comment"># 🚶🚶 Step 3: Dono ko saath-saath move karo</span>
+        <span class="keyword">while</span> right:
+            left = left.next
+            right = right.next
+        
+        <span class="comment"># ✂️ Step 4: Delete the target node!</span>
+        left.next = left.next.next
+        
+        <span class="comment"># 🎉 Return new head (dummy.next)</span>
+        <span class="keyword">return</span> dummy.next</pre>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Dry Run -->
+                    <div class="concept-box" style="background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.3);">
+                        <h4 class="concept-title" style="color: var(--accent-green);">📋 Detailed Dry Run — Two Pointers</h4>
+                        <p class="content-text"><strong>Input:</strong> <code>head = [1,2,3,4,5], n = 2</code></p>
+                        
+                        <p style="color: var(--accent-blue); margin-top: 15px;"><strong>Phase 1: Initial Setup</strong></p>
+                        <p class="content-text"><code>dummy → 1 → 2 → 3 → 4 → 5 → NULL</code></p>
+                        <p class="content-text"><code>left = dummy, right = 1</code></p>
+                        
+                        <p style="color: var(--accent-orange); margin-top: 15px;"><strong>Phase 2: Move Right by n=2</strong></p>
+                        <table class="summary-table">
+                            <thead>
+                                <tr><th>Iteration</th><th>n</th><th>right</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Init</td><td>2</td><td>1</td></tr>
+                                <tr><td>1</td><td>1</td><td>2</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.15);"><td>2</td><td>0</td><td>3</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="content-text">✅ Right ab 3 pe hai. Gap = 2 (dummy → 1 → 2 → 3)</p>
+                        
+                        <p style="color: var(--accent-purple); margin-top: 20px;"><strong>Phase 3: Move Both Until Right = NULL</strong></p>
+                        <table class="summary-table">
+                            <thead>
+                                <tr><th>Iteration</th><th>left</th><th>right</th><th>Gap</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Init</td><td>dummy</td><td>3</td><td>2</td></tr>
+                                <tr><td>1</td><td>1</td><td>4</td><td>2</td></tr>
+                                <tr><td>2</td><td>2</td><td>5</td><td>2</td></tr>
+                                <tr style="background: rgba(0, 255, 136, 0.15);"><td>3</td><td>3</td><td>NULL</td><td>STOP!</td></tr>
+                            </tbody>
+                        </table>
+                        
+                        <p style="color: var(--accent-green); margin-top: 20px;"><strong>Phase 4: Delete!</strong></p>
+                        <p class="content-text"><code>left.next = left.next.next</code> → <code>3.next = 5</code> (4 skipped!)</p>
+                        <p class="content-text" style="margin-top: 10px;"><strong>Final:</strong> 1 → 2 → 3 → 5 → NULL 🎉</p>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ Time Complexity</div>
+                                <div class="complexity-value good">O(n)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space Complexity</div>
+                                <div class="complexity-value good">O(1)</div>
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            🏆 <strong>OPTIMAL!</strong> Single pass + Constant space! Interview mein yehi approach bolna! 💯
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Pitfalls -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 159, 67, 0.15) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-red);">⚠️ Common Pitfalls — Galtiyan Mat Karo!</h4>
+                <ol class="steps-list">
+                    <li><strong>Forgetting to Handle Head Removal:</strong><br>
+                        ❌ Jab <code>n = list length</code> → Head delete karna hai! Bina dummy node ke crash!<br>
+                        ✅ <strong>Dummy node</strong> use karo ya explicit check karo!
+                    </li>
+                    <li><strong>Off-by-One Error in Pointer Positioning:</strong><br>
+                        ❌ Right ko <code>n-1</code> steps move kiya → Wrong node delete!<br>
+                        ✅ Right ko <strong>exactly n</strong> steps aage move karo!
+                    </li>
+                    <li><strong>Not Returning Updated Head:</strong><br>
+                        ❌ <code>return head</code> — Agar head delete hua toh galat reference return!<br>
+                        ✅ <code>return dummy.next</code> — Always correct head milega!
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="subsection">
+                <h4 class="subsection-title">📊 Approach Comparison</h4>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Time</th>
+                            <th>Space</th>
+                            <th>Key Idea</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. Brute Force (Array)</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-red);">O(n)</td>
+                            <td>Store all nodes, direct index access</td>
+                        </tr>
+                        <tr>
+                            <td>2. Two Pass</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-green);">O(1)</td>
+                            <td>Count first, delete second pass</td>
+                        </tr>
+                        <tr>
+                            <td>3. Recursion</td>
+                            <td style="color: var(--accent-green);">O(n)</td>
+                            <td style="color: var(--accent-red);">O(n)</td>
+                            <td>Unwind from end, decrement counter</td>
+                        </tr>
+                        <tr style="background: rgba(0, 255, 136, 0.15);">
+                            <td><strong>4. Two Pointers ⭐</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(n)</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                            <td><strong>Gap of n, single pass, dummy node!</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    🎯 <strong>Interview Mein:</strong> Approach 4 (Two Pointers with Dummy) hi bolna! ONE PASS + O(1) space! 💯
                 </div>
             </div>
         </section>
