@@ -1,0 +1,3088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Bot Service Notes | Hinglish Explained</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for Beautiful Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <!-- Mermaid.js for Beautiful Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --bg-code: #0d1117;
+            --accent-green: #00ff88;
+            --accent-blue: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-orange: #ff9f43;
+            --accent-red: #ff6b6b;
+            --accent-yellow: #ffd93d;
+            --accent-pink: #f5576c;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            --sidebar-width: 320px;
+            --font-size-base: 16px;
+        }
+
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-code: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 136, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(0, 120, 212, 0.05) 0%, transparent 50%);
+            animation: float 30s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, -20px) rotate(5deg); }
+        }
+
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(135deg, #0078d4 0%, #00d4ff 100%);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header .logo {
+            font-size: 2rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0078d4 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-header span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        /* Navigation Links */
+        .nav-external-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-external-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.8rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-external-link:hover {
+            background: rgba(0, 120, 212, 0.1);
+            border-color: rgba(0, 120, 212, 0.3);
+            color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        /* Search Box */
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+        }
+
+        /* Category Groups */
+        .category-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .category-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .category-count {
+            font-size: 0.65rem;
+            background: var(--bg-card);
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            color: var(--text-muted);
+        }
+
+        .category-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 120, 212, 0.1);
+            color: var(--accent-blue);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 120, 212, 0.15);
+            color: var(--accent-blue);
+            border-left-color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem 3rem;
+            max-width: 1000px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 120, 212, 0.1);
+            border: 1px solid rgba(0, 120, 212, 0.2);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0078d4 0%, #00d4ff 50%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        /* Warning Banner */
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(255, 157, 67, 0.15), rgba(255, 107, 107, 0.15));
+            border: 1px solid rgba(255, 157, 67, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .warning-banner h3 {
+            color: var(--accent-orange);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-banner p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .warning-banner a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .warning-banner a:hover {
+            text-decoration: underline;
+        }
+
+        /* Topic Sections */
+        .topic-section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .topic-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topic-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background: linear-gradient(135deg, #0078d4, #00d4ff);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .topic-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-3);
+            border-radius: 10px;
+            font-weight: 700;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-content {
+            padding-left: 0;
+        }
+
+        .content-text {
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* Visual Boxes */
+        .visual-box {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .visual-box h4 {
+            color: var(--accent-blue);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Mermaid Diagrams */
+        .mermaid-container {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .diagram-label {
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Hinglish Notes */
+        .hinglish-note {
+            background: rgba(0, 120, 212, 0.1);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 12px 12px 0;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .hinglish-note strong {
+            color: var(--text-primary);
+        }
+
+        /* Bullet Lists */
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 1rem 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .bullet-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        /* Code Blocks */
+        pre[class*="language-"] {
+            background: var(--bg-code) !important;
+            border-radius: 12px;
+            padding: 1.5rem !important;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Fira Code', 'JetBrains Mono', monospace;
+        }
+
+        :not(pre) > code {
+            background: var(--bg-code);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: var(--accent-pink);
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: linear-gradient(135deg, rgba(0, 120, 212, 0.1), rgba(0, 212, 255, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(0, 120, 212, 0.2);
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .feature-card h5 {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* Channel Grid */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .channel-item {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .channel-item:hover {
+            border-color: var(--accent-blue);
+            background: rgba(0, 120, 212, 0.1);
+        }
+
+        .channel-item .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .channel-item .name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .topic-header h2 {
+                font-size: 1.35rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo">🤖</span>
+            <div>
+                <h2>ABS Notes</h2>
+                <span>Azure Bot Service</span>
+            </div>
+        </div>
+
+        <div class="nav-external-links">
+            <a href="index.html" class="nav-external-link">
+                <span>🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="dsa-notes.html" class="nav-external-link">
+                <span>📊</span>
+                <span>DSA Notes</span>
+            </a>
+            <a href="system-design.html" class="nav-external-link">
+                <span>🏗️</span>
+                <span>System Design</span>
+            </a>
+            <a href="reel-scripts.html" class="nav-external-link">
+                <span>🎬</span>
+                <span>Reel Scripts</span>
+            </a>
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search topics..." id="searchInput">
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🚀 Getting Started</span>
+                <span class="category-count">3</span>
+            </div>
+            <div class="category-items">
+                <a href="#intro" class="nav-item active">Introduction to ABS</a>
+                <a href="#what-is-bot" class="nav-item">What is a Bot?</a>
+                <a href="#bot-framework" class="nav-item">Bot Framework SDK</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🧠 Core Concepts</span>
+                <span class="category-count">5</span>
+            </div>
+            <div class="category-items">
+                <a href="#activities" class="nav-item">Activities & Turns</a>
+                <a href="#bot-structure" class="nav-item">Bot Structure</a>
+                <a href="#adapter" class="nav-item">Bot Adapter</a>
+                <a href="#turn-context" class="nav-item">Turn Context</a>
+                <a href="#middleware" class="nav-item">Middleware</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">💾 State Management</span>
+                <span class="category-count">4</span>
+            </div>
+            <div class="category-items">
+                <a href="#state-intro" class="nav-item">Why State Matters</a>
+                <a href="#storage-layer" class="nav-item">Storage Layer</a>
+                <a href="#state-types" class="nav-item">State Types</a>
+                <a href="#state-accessors" class="nav-item">State Accessors</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🌐 Channels</span>
+                <span class="category-count">2</span>
+            </div>
+            <div class="category-items">
+                <a href="#channels-intro" class="nav-item">What are Channels?</a>
+                <a href="#channels-list" class="nav-item">Available Channels</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">💬 Dialogs & Prompts</span>
+                <span class="category-count">4</span>
+            </div>
+            <div class="category-items">
+                <a href="#dialogs" class="nav-item">Dialogs Library</a>
+                <a href="#waterfall" class="nav-item">Waterfall Dialogs</a>
+                <a href="#prompts" class="nav-item">Prompts</a>
+                <a href="#activity-handlers" class="nav-item">Activity Handlers</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🎴 Rich Messages</span>
+                <span class="category-count">3</span>
+            </div>
+            <div class="category-items">
+                <a href="#cards" class="nav-item">Cards & Attachments</a>
+                <a href="#adaptive-cards" class="nav-item">Adaptive Cards</a>
+                <a href="#proactive" class="nav-item">Proactive Messaging</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🧠 AI & NLU</span>
+                <span class="category-count">2</span>
+            </div>
+            <div class="category-items">
+                <a href="#nlu" class="nav-item">Natural Language (CLU)</a>
+                <a href="#skills" class="nav-item">Skills</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🔐 Authentication</span>
+                <span class="category-count">1</span>
+            </div>
+            <div class="category-items">
+                <a href="#authentication" class="nav-item">User Authentication (OAuth)</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">💬 Teams & More</span>
+                <span class="category-count">3</span>
+            </div>
+            <div class="category-items">
+                <a href="#teams" class="nav-item">Microsoft Teams Bots</a>
+                <a href="#suggested-actions" class="nav-item">Suggested Actions</a>
+                <a href="#composer" class="nav-item">Bot Framework Composer</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🎨 Design Principles</span>
+                <span class="category-count">2</span>
+            </div>
+            <div class="category-items">
+                <a href="#cux" class="nav-item">Conversational UX</a>
+                <a href="#bot-lifecycle" class="nav-item">Bot Lifecycle</a>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🚀 Testing & Deploy</span>
+                <span class="category-count">2</span>
+            </div>
+            <div class="category-items">
+                <a href="#testing" class="nav-item">Testing (Emulator)</a>
+                <a href="#deployment" class="nav-item">Deployment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">
+                <span>🤖</span>
+                <span>Azure Bot Service & Bot Framework SDK</span>
+            </div>
+            <h1>Azure Bot Service Notes</h1>
+            <p class="hero-subtitle">
+                Complete Hinglish guide to understand Azure Bot Service — Intelligent bots banao jo users se naturally baat kar sakein! 🚀
+            </p>
+        </section>
+
+        <!-- Important Warning -->
+        <div class="warning-banner">
+            <h3>⚠️ Important Notice — SDK Archival</h3>
+            <p>
+                <strong>Bot Framework SDK aur Bot Framework Emulator ko GitHub pe archive kar diya gaya hai.</strong> December 31, 2025 ke baad support tickets service nahi honge.<br><br>
+                <strong>Naye projects ke liye recommendations:</strong><br>
+                → <a href="https://github.com/Microsoft/Agents" target="_blank">Microsoft 365 Agents SDK</a> — C#, JavaScript, Python support<br>
+                → <a href="https://www.microsoft.com/microsoft-copilot/microsoft-copilot-studio" target="_blank">Microsoft Copilot Studio</a> — SaaS-based agent platform
+            </p>
+        </div>
+
+        <!-- ==================== TOPIC 1: Introduction ==================== -->
+        <section class="topic-section" id="intro">
+            <header class="topic-header">
+                <div class="topic-badge">🚀 Chapter 1 — Introduction</div>
+                <h2>Azure Bot Service Kya Hai?</h2>
+                <p class="topic-subtitle">Microsoft Bot Framework aur Azure AI Bot Service ka complete introduction!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🧠</div>
+                    <h3 class="section-title">Azure Bot Service — Ek Nazar Mein</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Microsoft Bot Framework</span> aur <span class="highlight">Azure AI Bot Service</span> milke ek powerful combination banate hain jo tumhe <strong>intelligent bots</strong> build, test, deploy aur manage karne ki capability deta hai.
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Simple Words Mein Samjho:</strong><br><br>
+                        <strong>Bot</strong> = Ek automated program jo users se baat kar sakta hai (jaise WhatsApp pe customer support)<br>
+                        <strong>Bot Framework</strong> = Microsoft ka toolkit jo bots banana easy banata hai<br>
+                        <strong>Azure Bot Service</strong> = Cloud platform jahan ye bots host hote hain<br>
+                        <strong>SDK</strong> = Software Development Kit — ready-made code library jo development fast kare
+                    </div>
+
+                    <p class="content-text">
+                        Bot Framework mein ek <strong>modular aur extensible SDK</strong> hota hai jo bots banane aur AI services se connect karne ke liye use hota hai. Is framework se developers aise bots create kar sakte hain jo:
+                    </p>
+
+                    <ul class="bullet-list">
+                        <li><strong>Speech</strong> use kar sakein — Voice commands samjhe</li>
+                        <li><strong>Natural Language</strong> samjhe — Normal Hindi/English mein baat karo</li>
+                        <li><strong>Questions ka Answer</strong> de sakein — FAQ bots</li>
+                        <li><strong>Multiple Platforms</strong> pe kaam kare — Teams, WhatsApp, Facebook, etc.</li>
+                    </ul>
+
+                    <div class="visual-box">
+                        <h4>🏗️ Azure Bot Service — Architecture Overview</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">AZURE BOT SERVICE — Complete Ecosystem</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Users["👥 USERS"]
+        U1["📱 Mobile App"]
+        U2["💻 Website"]
+        U3["💬 Teams"]
+        U4["📘 Facebook"]
+    end
+    
+    subgraph Channels["🌐 CHANNELS"]
+        C["Bot Connector Service<br/>Messages Relay"]
+    end
+    
+    subgraph Bot["🤖 YOUR BOT"]
+        B["Bot Application<br/>(C#/JS/Python)"]
+        SDK["Bot Framework SDK"]
+        B --> SDK
+    end
+    
+    subgraph Azure["☁️ AZURE SERVICES"]
+        AI["🧠 Azure AI Services"]
+        Storage["💾 Azure Storage"]
+        Config["⚙️ Bot Configuration"]
+    end
+    
+    Users --> Channels
+    Channels <--> Bot
+    Bot --> Azure
+    
+    style C fill:#0078d4,color:#fff
+    style B fill:#00d4ff,color:#000
+    style SDK fill:#00ff88,color:#000
+    style AI fill:#8338ec,color:#fff
+    style Storage fill:#ff9f43,color:#fff
+    style Config fill:#ff6b6b,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        💡 <strong>Yaad Rakho:</strong><br>
+                        Azure Bot Service basically do cheezein provide karta hai:<br>
+                        1. <strong>Bot Framework SDK</strong> — Code likhne ke liye tools<br>
+                        2. <strong>Bot Connector Service</strong> — Different platforms se connect karne ke liye
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 2: What is a Bot ==================== -->
+        <section class="topic-section" id="what-is-bot">
+            <header class="topic-header">
+                <div class="topic-badge">🤖 Chapter 2 — Fundamentals</div>
+                <h2>Bot Kya Hota Hai? — Complete Explanation</h2>
+                <p class="topic-subtitle">Bot ka matlab, kaise kaam karta hai, aur kahan-kahan use hota hai!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Bot Ki Definition — Simple Words Mein</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Bot</span> ek aisa experience provide karta hai jo computer use karne jaisa nahi lagta, balki <strong>kisi insaan se baat karne jaisa</strong> lagta hai — ya intelligent robot se! 🤖
+                    </p>
+
+                    <p class="content-text">
+                        Bots ka main purpose hota hai <strong>simple, repetitive tasks</strong> ko automate karna — jaise dinner reservation lena, profile information gather karna, FAQs answer karna — ye sab automated systems handle kar lete hain bina human intervention ke!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>💬 Bot Interaction — Kaise Hoti Hai?</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">USER ↔ BOT INTERACTION FLOW</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Input["📥 USER INPUT"]
+        T["📝 Text"]
+        S["🎤 Speech"]
+        C["🃏 Cards"]
+        I["🖼️ Images"]
+    end
+    
+    subgraph Bot["🤖 BOT PROCESSING"]
+        P1["1️⃣ Input Receive"]
+        P2["2️⃣ Interpret/Understand"]
+        P3["3️⃣ Perform Task"]
+        P4["4️⃣ Generate Response"]
+        P1 --> P2 --> P3 --> P4
+    end
+    
+    subgraph Output["📤 BOT RESPONSE"]
+        R["💬 Reply to User"]
+    end
+    
+    Input --> Bot
+    Bot --> Output
+    
+    style P1 fill:#3a86ff,color:#fff
+    style P2 fill:#8338ec,color:#fff
+    style P3 fill:#06d6a0,color:#fff
+    style P4 fill:#ff9f43,color:#fff
+    style R fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📖 <strong>Bot Interaction Modes:</strong><br><br>
+                        Users bots se kaise interact kar sakte hain:<br>
+                        • <strong>Text</strong> — Typing karke (most common)<br>
+                        • <strong>Speech</strong> — Voice commands se (Alexa, Cortana jaisa)<br>
+                        • <strong>Interactive Cards</strong> — Buttons, forms, carousels<br>
+                        • <strong>Images/Videos</strong> — Visual content share karna
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Bot Ko Web App Ki Tarah Socho</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Bot ko samajhne ka ek simple way hai: <span class="highlight">Bot = Web Application + Conversational Interface</span>
+                    </p>
+
+                    <p class="content-text">
+                        Jaise ek normal website HTTP requests handle karti hai, waise hi bot bhi messages handle karta hai. Difference bas itna hai ki:
+                    </p>
+
+                    <ul class="bullet-list">
+                        <li><strong>Website</strong> — User clicks buttons, fills forms → Server responds with HTML pages</li>
+                        <li><strong>Bot</strong> — User sends messages → Bot responds with conversational replies</li>
+                    </ul>
+
+                    <div class="visual-box">
+                        <h4>🌐 Bot = Web App with Conversational Interface</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">BOT AS A WEB APPLICATION</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Traditional["🖥️ TRADITIONAL WEB APP"]
+        W1["User clicks button"]
+        W2["HTTP Request"]
+        W3["Server processes"]
+        W4["HTML Response"]
+        W1 --> W2 --> W3 --> W4
+    end
+    
+    subgraph BotApp["🤖 BOT APPLICATION"]
+        B1["User sends message"]
+        B2["Activity received"]
+        B3["Bot processes"]
+        B4["Message Response"]
+        B1 --> B2 --> B3 --> B4
+    end
+    
+    Note["💡 Same concept,<br/>different interface!"]
+    
+    Traditional --> Note
+    BotApp --> Note
+    
+    style W1 fill:#3a86ff,color:#fff
+    style W4 fill:#3a86ff,color:#fff
+    style B1 fill:#00ff88,color:#000
+    style B4 fill:#00ff88,color:#000
+    style Note fill:#ffd93d,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="content-text">
+                        Bots Azure mein host hote hain aur <strong>APIs use karte hain</strong> messages send aur receive karne ke liye. Bot simple bhi ho sakta hai (sirf echo kare) ya complex bhi (multiple AI services use kare)!
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🎯 <strong>Bot Capabilities:</strong><br><br>
+                        Bots woh sab kar sakte hain jo normal software karta hai:<br>
+                        • <strong>Files read/write</strong> karna<br>
+                        • <strong>Databases</strong> access karna<br>
+                        • <strong>APIs</strong> call karna<br>
+                        • <strong>Computational tasks</strong> perform karna<br><br>
+                        <strong>Unique kya hai?</strong> Bots <em>human-like communication mechanisms</em> use karte hain — natural language, voice, etc.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h3 class="section-title">Azure Bot Service Includes Kya-Kya?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Azure AI Bot Service aur Bot Framework mein ye sab included hota hai:
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>📦 Bot Framework SDKs</h5>
+                            <p>C#, JavaScript, Python mein bots develop karo. (Java SDK retired ho gaya hai)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🛠️ CLI Tools</h5>
+                            <p>Command line tools for end-to-end bot development</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔗 Bot Connector Service</h5>
+                            <p>Messages aur events relay karta hai bots aur channels ke beech</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>☁️ Azure Resources</h5>
+                            <p>Bot management aur configuration ke liye cloud resources</p>
+                        </div>
+                    </div>
+
+                    <p class="content-text" style="margin-top: 1.5rem;">
+                        <strong>Additional Azure Services jo bots use kar sakte hain:</strong>
+                    </p>
+
+                    <ul class="bullet-list">
+                        <li><strong>Azure AI Services</strong> — Intelligent applications build karne ke liye (NLP, Vision, etc.)</li>
+                        <li><strong>Azure Storage</strong> — Cloud storage solution for data</li>
+                        <li><strong>Azure Cosmos DB</strong> — State management ke liye database</li>
+                        <li><strong>Azure Key Vault</strong> — Secrets aur credentials manage karne ke liye</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 3: Activities & Turns ==================== -->
+        <section class="topic-section" id="activities">
+            <header class="topic-header">
+                <div class="topic-badge">🔄 Chapter 3 — Core Concepts</div>
+                <h2>Activities Aur Turns — Bot Communication Ka Core</h2>
+                <p class="topic-subtitle">Samjho ki bot messages kaise process karta hai — Activity aur Turn ka concept!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Activity Kya Hai? — Har Interaction Ek Activity!</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Activity</span> Bot Framework mein communication ki basic unit hai. User (ya channel) aur bot ke beech <strong>har interaction ek activity</strong> ke form mein represent hota hai.
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Activity Samjho Simple Example Se:</strong><br><br>
+                        Jaise WhatsApp pe jab tum message bhejte ho — woh ek <strong>Activity</strong> hai!<br>
+                        Jab doosra reply karta hai — woh bhi ek <strong>Activity</strong> hai!<br><br>
+                        Activities represent kar sakti hain:<br>
+                        • <strong>Message</strong> — Text ya media content<br>
+                        • <strong>Conversation Update</strong> — Koi join/leave kiya<br>
+                        • <strong>Reaction</strong> — Like, emoji response<br>
+                        • <strong>Event</strong> — App-to-app notifications
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>📨 Activity Types — Different Interaction Types</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">ACTIVITY TYPES IN BOT FRAMEWORK</div>
+                            <div class="mermaid">
+flowchart TB
+    A["📨 ACTIVITY<br/>Base Unit of Communication"]
+    
+    A --> M["💬 Message Activity<br/>Text, images, cards"]
+    A --> CU["👋 Conversation Update<br/>User joined/left"]
+    A --> R["👍 Reaction<br/>Emoji, likes"]
+    A --> E["🔔 Event<br/>App notifications"]
+    A --> T["⌨️ Typing<br/>User is typing..."]
+    
+    style A fill:#0078d4,color:#fff
+    style M fill:#00ff88,color:#000
+    style CU fill:#ff9f43,color:#fff
+    style R fill:#8338ec,color:#fff
+    style E fill:#ff6b6b,color:#fff
+    style T fill:#ffd93d,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="content-text">
+                        <strong>Message Activity</strong> sabse common hai — isme text, images, cards, speech sab aa sakta hai. Jab user kuch type karta hai ya bot reply karta hai — dono <code>message</code> activity hain!
+                    </p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Turn Kya Hai? — Baari-Baari Baat Karna</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Jaise real conversation mein log <strong>baari-baari</strong> bolte hain, waise hi bot mein bhi <span class="highlight">Turn</span> concept hai!
+                    </p>
+
+                    <div class="hinglish-note">
+                        💡 <strong>Turn Ka Matlab:</strong><br><br>
+                        Ek <strong>Turn</strong> = User ka incoming activity + Bot ka immediate response<br><br>
+                        <em>Think of it like: User ne message bheja → Bot ne process kiya → Bot ne reply diya = 1 Turn complete!</em>
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>🔄 Turn — Complete Request-Response Cycle</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">TURN = USER MESSAGE + BOT RESPONSE</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Turn1["TURN 1"]
+        U1["👤 User: 'Book a table'"]
+        B1["🤖 Bot: 'For how many people?'"]
+        U1 --> B1
+    end
+    
+    subgraph Turn2["TURN 2"]
+        U2["👤 User: '4 people'"]
+        B2["🤖 Bot: 'What date?'"]
+        U2 --> B2
+    end
+    
+    subgraph Turn3["TURN 3"]
+        U3["👤 User: 'Tomorrow'"]
+        B3["🤖 Bot: 'Booked for 4 tomorrow!'"]
+        U3 --> B3
+    end
+    
+    Turn1 --> Turn2 --> Turn3
+    
+    style U1 fill:#3a86ff,color:#fff
+    style U2 fill:#3a86ff,color:#fff
+    style U3 fill:#3a86ff,color:#fff
+    style B1 fill:#00ff88,color:#000
+    style B2 fill:#00ff88,color:#000
+    style B3 fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="content-text">
+                        Har turn mein bot incoming activity receive karta hai, usko process karta hai, aur response generate karta hai. Ye cycle repeat hoti rehti hai jab tak conversation complete nahi ho jaata!
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        ⚠️ <strong>Important Note:</strong><br><br>
+                        Bot ke paas <strong>15 seconds</strong> hote hain response dene ke liye (most channels pe).<br>
+                        Agar 15 seconds mein response nahi aaya → <strong>HTTP 504 Gateway Timeout</strong> error!<br><br>
+                        <em>Isliye long-running tasks ke liye different patterns use karo (like proactive messaging)</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 4: Bot Structure ==================== -->
+        <section class="topic-section" id="bot-structure">
+            <header class="topic-header">
+                <div class="topic-badge">🏗️ Chapter 4 — Architecture</div>
+                <h2>Bot Application Structure — Andar Se Samjho</h2>
+                <p class="topic-subtitle">Bot kaise bana hota hai? Adapter, Turn Context, Middleware — sab samjho!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Bot Application Ke Main Components</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        SDK do main classes define karta hai jo milke bot application banate hain:
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🧩 Bot Application Components</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">BOT APPLICATION STRUCTURE</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph BotClass["🤖 BOT CLASS"]
+        BC1["Recognizes user input"]
+        BC2["Reasons about input"]
+        BC3["Performs relevant tasks"]
+        BC4["Generates responses"]
+    end
+    
+    subgraph AdapterClass["🔌 ADAPTER CLASS"]
+        AC1["Handles channel connectivity"]
+        AC2["Middleware pipeline"]
+        AC3["Calls turn handler"]
+        AC4["Catches errors"]
+    end
+    
+    subgraph StateClass["💾 STATE CLASSES"]
+        SC1["Storage layer"]
+        SC2["Bot State objects"]
+        SC3["Property accessors"]
+    end
+    
+    Channel["🌐 Channel<br/>(Teams, Slack, etc.)"]
+    
+    Channel <--> AdapterClass
+    AdapterClass <--> BotClass
+    BotClass <--> StateClass
+    
+    style Channel fill:#0078d4,color:#fff
+    style BC1 fill:#00ff88,color:#000
+    style AC1 fill:#ff9f43,color:#fff
+    style SC1 fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📚 <strong>Components Samjho:</strong><br><br>
+                        <strong>1. Bot Class</strong> — Tumhara main logic yahaan rehta hai<br>
+                        → User ka input recognize karo<br>
+                        → Decide karo kya karna hai<br>
+                        → Response generate karo<br><br>
+                        
+                        <strong>2. Adapter Class</strong> — Channel se connectivity handle karta hai<br>
+                        → Messages receive karo<br>
+                        → Middleware se guzaro<br>
+                        → Bot ko call karo<br><br>
+                        
+                        <strong>3. State Classes</strong> — Data persistence<br>
+                        → Conversation yaad rakho<br>
+                        → User info store karo
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="adapter">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Bot Adapter — Gateway to Channels</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Adapter</span> wo component hai jo channel se incoming requests handle karta hai aur bot tak pahunchata hai. Ye SDK runtime ka core hota hai!
+                    </p>
+
+                    <p class="content-text">
+                        <strong>Adapter ka process activity method</strong> turn start karta hai:
+                    </p>
+
+                    <ul class="bullet-list">
+                        <li>Request body (activity as JSON) aur headers receive karo</li>
+                        <li>Authentication header validate karo</li>
+                        <li>Turn ke liye <strong>context object</strong> create karo</li>
+                        <li>Context ko <strong>middleware pipeline</strong> se guzaro</li>
+                        <li>Finally bot ke <strong>turn handler</strong> ko call karo</li>
+                    </ul>
+
+                    <div class="visual-box">
+                        <h4>🔄 Adapter Flow — Step by Step</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">ADAPTER PROCESSING FLOW</div>
+                            <div class="mermaid">
+flowchart TB
+    A["📥 HTTP POST Request<br/>(Activity as JSON)"]
+    B["🔐 Validate Auth Header"]
+    C["🎫 Create Turn Context"]
+    D["⚙️ Middleware Pipeline"]
+    E["🤖 Bot Turn Handler"]
+    F["📤 Send Response"]
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    
+    style A fill:#3a86ff,color:#fff
+    style B fill:#ff6b6b,color:#fff
+    style C fill:#ffd93d,color:#000
+    style D fill:#8338ec,color:#fff
+    style E fill:#00ff88,color:#000
+    style F fill:#0078d4,color:#fff
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="turn-context">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h3 class="section-title">Turn Context — Information Ka Carrier</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Turn Context</span> SDK ka sabse important abstraction hai! Ye activity ke baare mein saari information carry karta hai — sender, receiver, channel, aur processing ke liye needed data.
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        💡 <strong>Turn Context Ka Kaam:</strong><br><br>
+                        1. <strong>Inbound activity</strong> ko middleware aur bot logic tak le jaata hai<br>
+                        2. <strong>Outbound activities</strong> send karne ka mechanism provide karta hai<br>
+                        3. Har layer mein <strong>information add</strong> karne ki capability deta hai<br><br>
+                        
+                        <em>Simple words mein: Turn Context = Activity ka wrapper jo extra powers deta hai!</em>
+                    </div>
+
+                    <p class="content-text">
+                        Turn context <code>send</code>, <code>update</code>, aur <code>delete</code> activity methods provide karta hai jo bot ko responses bhejne mein help karte hain.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section" id="middleware">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h3 class="section-title">Middleware — Processing Pipeline</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Middleware</span> ek linear set of components hai jo activity process hone se <strong>pehle aur baad</strong> mein execute hote hain. Ye nested execution follow karta hai — jaise <strong>onion ke layers!</strong> 🧅
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🧅 Middleware Pipeline — Onion Architecture</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">MIDDLEWARE = NESTED EXECUTION (LIKE ONION)</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Pipeline["MIDDLEWARE PIPELINE"]
+        direction TB
+        M1["🔵 Middleware 1 (Before)"]
+        M2["🟣 Middleware 2 (Before)"]
+        M3["🟢 Middleware 3 (Before)"]
+        Bot["🤖 BOT TURN HANDLER"]
+        M3B["🟢 Middleware 3 (After)"]
+        M2B["🟣 Middleware 2 (After)"]
+        M1B["🔵 Middleware 1 (After)"]
+        
+        M1 --> M2
+        M2 --> M3
+        M3 --> Bot
+        Bot --> M3B
+        M3B --> M2B
+        M2B --> M1B
+    end
+    
+    In["📥 Incoming Activity"]
+    Out["📤 Outgoing Response"]
+    
+    In --> M1
+    M1B --> Out
+    
+    style In fill:#3a86ff,color:#fff
+    style Out fill:#00ff88,color:#000
+    style Bot fill:#ffd93d,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        📚 <strong>Middleware Use Cases:</strong><br><br>
+                        • <strong>Logging</strong> — Har request/response log karo<br>
+                        • <strong>Authentication</strong> — User verify karo<br>
+                        • <strong>Translation</strong> — Languages translate karo<br>
+                        • <strong>Error Handling</strong> — Errors gracefully handle karo<br>
+                        • <strong>State Loading</strong> — Conversation state load karo
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 5: State Management ==================== -->
+        <section class="topic-section" id="state-intro">
+            <header class="topic-header">
+                <div class="topic-badge">💾 Chapter 5 — State Management</div>
+                <h2>State Management — Conversation Ko Yaad Rakho!</h2>
+                <p class="topic-subtitle">Bot stateless hai lekin conversation yaad rakhna hai — ye kaise hota hai?</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">State Kyun Zaroori Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Web apps ki tarah, bot bhi <strong>inherently stateless</strong> hota hai — matlab har request independent hai, bot khud se kuch yaad nahi rakhta!
+                    </p>
+
+                    <p class="content-text">
+                        Lekin meaningful conversation ke liye <span class="highlight">state maintain karna zaroori hai</span>:
+                    </p>
+
+                    <ul class="bullet-list">
+                        <li>User se pehle kya baat hui yaad rakho</li>
+                        <li>User ki preferences store karo</li>
+                        <li>Multi-turn conversation mein context maintain karo</li>
+                        <li>Personalized experience provide karo</li>
+                    </ul>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        🎯 <strong>Real Example:</strong><br><br>
+                        User: "Book a flight to Delhi"<br>
+                        Bot: "What date?"<br>
+                        User: "Tomorrow"<br>
+                        Bot: "What time?"<br>
+                        User: "Morning"<br><br>
+                        
+                        Yahaan bot ko <strong>yaad rakhna padega</strong>:<br>
+                        → Destination = Delhi<br>
+                        → Date = Tomorrow<br>
+                        → Time = Morning<br><br>
+                        
+                        <em>Bina state ke, har turn pe bot bhool jayega ki user kya chahta hai!</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="storage-layer">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Storage Layer — Data Kahaan Store Hota Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Storage Layer</span> actual physical storage hai jahan state information save hoti hai. Bot Framework SDK kuch ready-made implementations deta hai:
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>🧪 Memory Storage</h5>
+                            <p>In-memory storage — <strong>sirf testing ke liye!</strong> Bot restart hone pe data gayab!</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>📦 Azure Blob Storage</h5>
+                            <p>Azure Blob Storage object database se connect karo</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🗄️ Azure Cosmos DB</h5>
+                            <p>Partitioned Cosmos DB NoSQL database — production ke liye best!</p>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        ⚠️ <strong>Important:</strong><br>
+                        <code>Memory Storage</code> sirf <strong>local testing</strong> ke liye hai — production mein kabhi use mat karo! Data volatile hai aur bot restart pe sab gayab ho jayega.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="state-types">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h3 class="section-title">State Types — 3 Buckets of State</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        SDK teen pre-defined <span class="highlight">"buckets"</span> provide karta hai state organize karne ke liye:
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>📦 Three State Buckets</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">STATE TYPES — DIFFERENT SCOPES</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph UserState["👤 USER STATE"]
+        US1["Scope: User + Channel"]
+        US2["Same user, any conversation"]
+        US3["Example: User preferences,<br/>name, settings"]
+    end
+    
+    subgraph ConvState["💬 CONVERSATION STATE"]
+        CS1["Scope: Conversation"]
+        CS2["Any user in this conversation"]
+        CS3["Example: Current topic,<br/>which question asked"]
+    end
+    
+    subgraph PrivateState["🔒 PRIVATE CONVERSATION STATE"]
+        PS1["Scope: User + Conversation"]
+        PS2["Specific user in specific conv"]
+        PS3["Example: Individual scores<br/>in group quiz"]
+    end
+    
+    style US1 fill:#3a86ff,color:#fff
+    style CS1 fill:#00ff88,color:#000
+    style PS1 fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📚 <strong>Kab Kaunsa State Use Karo:</strong><br><br>
+                        <strong>User State</strong> — User-specific info jo conversation ke baad bhi rahe:<br>
+                        → Name, preferences, alarm settings, language preference<br><br>
+                        
+                        <strong>Conversation State</strong> — Current conversation ka context:<br>
+                        → Konsa question pucha, current topic kya hai<br><br>
+                        
+                        <strong>Private Conversation State</strong> — Group mein individual tracking:<br>
+                        → Classroom quiz mein har student ka score alag
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="state-accessors">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h3 class="section-title">State Property Accessors — Read/Write Kaise Karo?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">State Property Accessors</span> actual interface hain jo state properties read/write karte hain. Ye <code>get</code>, <code>set</code>, aur <code>delete</code> methods provide karte hain.
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🔄 State Accessor Methods</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">STATE ACCESSOR WORKFLOW</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Get["GET Method"]
+                        G1["1. Request from cache"]
+                        G2["2. If not in cache, get from storage"]
+                        G3["3. Return property"]
+                        G1 --> G2 --> G3
+                    end
+                    
+                    subgraph Set["SET Method"]
+                        S1["1. Update cache with new value"]
+                        S2["2. Cache ready for save"]
+                        S1 --> S2
+                    end
+                    
+                    subgraph Save["SAVE CHANGES"]
+                        SV1["1. Check changes in cache"]
+                        SV2["2. Write to storage"]
+                        SV1 --> SV2
+                    end
+                    
+                    Get --> Set
+                    Set --> Save
+                    
+                    style G1 fill:#3a86ff,color:#fff
+                    style S1 fill:#ff9f43,color:#fff
+                    style SV2 fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 107, 107, 0.1); border-left-color: var(--accent-red);">
+                        ⚠️ <strong>Critical Point — "Last Write Wins":</strong><br><br>
+                        Bot state <strong>"last write wins"</strong> behavior follow karta hai — matlab jo last mein save hoga wahi final hoga!<br><br>
+                        
+                        Scaled-out scenarios mein (multiple instances) ye problem create kar sakta hai. Agar concurrency ya latency hai toh careful rahna padega!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 6: Channels ==================== -->
+        <section class="topic-section" id="channels-intro">
+            <header class="topic-header">
+                <div class="topic-badge">🌐 Chapter 6 — Channels</div>
+                <h2>Channels — Bot Ko Duniya Se Connect Karo!</h2>
+                <p class="topic-subtitle">Ek bot banao, multiple platforms pe deploy karo — Teams, Slack, Facebook, WhatsApp!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Channel Kya Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Channel</span> ek connection hai communication application aur bot ke beech. Bot ko Azure mein register karte ho, aur phir channels configure karte ho taaki bot users se communicate kar sake.
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        💡 <strong>Channel-Agnostic Development:</strong><br><br>
+                        Bot Framework ka magic ye hai ki tum <strong>ek baar code likho</strong>, aur woh <strong>multiple channels pe kaam kare!</strong><br><br>
+                        
+                        Framework automatically messages ko <strong>normalize</strong> karta hai — matlab:<br>
+                        • Facebook se aaye message ka format → Bot Framework Activity schema<br>
+                        • Teams se aaye message ka format → Bot Framework Activity schema<br><br>
+                        
+                        <em>Tumhe har platform ka alag code nahi likhna padta!</em>
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>🔄 Channel Normalization — One Bot, Many Platforms</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">BOT CONNECTOR SERVICE — MESSAGE NORMALIZATION</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Channels["DIFFERENT CHANNELS"]
+                        T["💬 Teams"]
+                        F["📘 Facebook"]
+                        S["💼 Slack"]
+                        W["📱 WhatsApp"]
+                    end
+                    
+                    Connector["🔗 Bot Connector Service<br/>Normalizes all messages<br/>to Activity Schema"]
+                    
+                    Bot["🤖 YOUR BOT<br/>Receives unified format"]
+                    
+                    Channels --> Connector
+                    Connector --> Bot
+                    Bot --> Connector
+                    Connector --> Channels
+                    
+                    style Connector fill:#0078d4,color:#fff
+                    style Bot fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="channels-list">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Available Channels — Kahaan-Kahaan Deploy Kar Sakte Ho?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Bot Framework bahut saare channels support karta hai. Kuch popular ones:
+                    </p>
+
+                    <div class="channel-grid">
+                        <div class="channel-item">
+                            <div class="icon">💬</div>
+                            <div class="name">Microsoft Teams</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">📘</div>
+                            <div class="name">Facebook</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">💼</div>
+                            <div class="name">Slack</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">✈️</div>
+                            <div class="name">Telegram</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">💬</div>
+                            <div class="name">Web Chat</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">📧</div>
+                            <div class="name">Email</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">📱</div>
+                            <div class="name">SMS (Twilio)</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">🎤</div>
+                            <div class="name">Alexa</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">💚</div>
+                            <div class="name">LINE</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">💬</div>
+                            <div class="name">WeChat</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">🔗</div>
+                            <div class="name">Direct Line</div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="icon">📧</div>
+                            <div class="name">Outlook</div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        📝 <strong>Channel Configure Kaise Karo:</strong><br><br>
+                        1. Azure Portal pe sign in karo<br>
+                        2. Apna bot select karo<br>
+                        3. Settings → Channels pe jao<br>
+                        4. Jo channel chahiye uska icon click karo<br>
+                        5. Channel-specific configuration complete karo<br><br>
+                        
+                        <em>Note: Har channel ke apne requirements hote hain — Facebook ke liye app registration, Teams ke liye tenant approval, etc.</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 7: Dialogs Library ==================== -->
+        <section class="topic-section" id="dialogs">
+            <header class="topic-header">
+                <div class="topic-badge">💬 Chapter 7 — Dialogs</div>
+                <h2>Dialogs Library — Multi-Turn Conversations!</h2>
+                <p class="topic-subtitle">Complex conversations manage karo — step-by-step user input gather karo!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Dialog Kya Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Dialog</span> SDK mein ek central concept hai jo <strong>long-running conversations</strong> manage karta hai. Ek dialog ek task represent karta hai jo complete hone tak multiple turns le sakta hai.
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Dialog = Function/Method Jaisa!</strong><br><br>
+                        Programming mein jaise function hota hai, waise hi Dialog hai:<br>
+                        • <strong>Arguments pass</strong> kar sakte ho (options)<br>
+                        • <strong>Return value</strong> mil sakti hai (result)<br>
+                        • <strong>Begin, Continue, End</strong> — lifecycle manage hoti hai<br><br>
+                        
+                        <em>Example: Flight booking dialog — destination, date, passengers sab step-by-step puchega!</em>
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>📚 Dialog Types</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h5>🔵 Component Dialog</h5>
+                                <p>Container dialog jo multiple dialogs ko group karta hai. Reusable!</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5>🔵 Waterfall Dialog</h5>
+                                <p>Linear steps — ek ke baad ek questions puchta hai</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5>🔵 Prompt Dialog</h5>
+                                <p>User se specific input maangta hai (text, number, choice, etc.)</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5>🔵 Adaptive Dialog</h5>
+                                <p>Flexible conversation flow — Composer ke liye designed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Dialog Stack — Call Stack Jaisa!</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Dialogs ek <span class="highlight">stack</span> structure mein organized hote hain — jaise function call stack!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>📚 Dialog Stack Operations</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">DIALOG STACK — PUSH/POP OPERATIONS</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph Stack["DIALOG STACK"]
+        D1["🔵 Root Dialog<br/>(Main)"]
+        D2["🟢 Booking Dialog<br/>(Child)"]
+        D3["🟡 Date Prompt<br/>(Top - Active)"]
+    end
+    
+    Push["BEGIN DIALOG<br/>→ Push to stack"]
+    Pop["END DIALOG<br/>→ Pop from stack"]
+    
+    Push --> Stack
+    Stack --> Pop
+    
+    Note["💡 Top dialog = Active Dialog<br/>Only active dialog receives input"]
+    
+    style D3 fill:#ffd93d,color:#000
+    style D2 fill:#00ff88,color:#000
+    style D1 fill:#3a86ff,color:#fff
+    style Note fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        💡 <strong>Stack Operations:</strong><br><br>
+                        • <strong>Begin Dialog</strong> — Naya dialog push karo stack pe<br>
+                        • <strong>End Dialog</strong> — Current dialog pop karo, parent ko control<br>
+                        • <strong>Replace Dialog</strong> — Current ko replace karo (loop ke liye useful)<br>
+                        • <strong>Cancel All</strong> — Saare dialogs clear karo
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 8: Waterfall Dialogs ==================== -->
+        <section class="topic-section" id="waterfall">
+            <header class="topic-header">
+                <div class="topic-badge">🌊 Chapter 8 — Waterfall Dialogs</div>
+                <h2>Waterfall Dialogs — Step-by-Step Conversation!</h2>
+                <p class="topic-subtitle">Linear conversation flow — paani ki tarah ek step se doosre pe!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🌊</div>
+                    <h3 class="section-title">Waterfall Dialog Kaise Kaam Karta Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Waterfall Dialog</span> ek sequence of steps define karta hai. Har step ek async function hai jo user se input leta hai aur next step ko result pass karta hai.
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🌊 Waterfall Flow Example — Flight Booking</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">WATERFALL DIALOG — SEQUENTIAL STEPS</div>
+                            <div class="mermaid">
+flowchart TB
+    S1["Step 1: Ask Destination<br/>'Where do you want to go?'"]
+    S2["Step 2: Ask Date<br/>'What date?'"]
+    S3["Step 3: Ask Passengers<br/>'How many passengers?'"]
+    S4["Step 4: Confirm<br/>'Book flight to Delhi on 25th for 2?'"]
+    S5["Step 5: Complete<br/>'Flight booked! ✅'"]
+    
+    S1 -->|"User: Delhi"| S2
+    S2 -->|"User: 25th Jan"| S3
+    S3 -->|"User: 2"| S4
+    S4 -->|"User: Yes"| S5
+    
+    style S1 fill:#3a86ff,color:#fff
+    style S2 fill:#8338ec,color:#fff
+    style S3 fill:#ff9f43,color:#fff
+    style S4 fill:#ff6b6b,color:#fff
+    style S5 fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📚 <strong>Waterfall Step Context Properties:</strong><br><br>
+                        Har step mein <code>stepContext</code> milta hai jisme:<br>
+                        • <strong>Options</strong> — Dialog start karte waqt pass ki gayi info<br>
+                        • <strong>Values</strong> — Previous steps ka collected data<br>
+                        • <strong>Result</strong> — Previous step ka result (user input)<br><br>
+                        
+                        <em>Ye properties use karke tum previous steps ka data access kar sakte ho!</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 9: Prompts ==================== -->
+        <section class="topic-section" id="prompts">
+            <header class="topic-header">
+                <div class="topic-badge">❓ Chapter 9 — Prompts</div>
+                <h2>Prompts — User Se Input Lo!</h2>
+                <p class="topic-subtitle">Different types ke input collect karo — text, number, choice, date!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">❓</div>
+                    <h3 class="section-title">Prompt Types</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Prompts</span> special dialogs hain jo user se specific type ka input maangte hain. Automatically validation bhi karte hain!
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>📝 Text Prompt</h5>
+                            <p>General text input — naam, address, etc. Returns: string</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔢 Number Prompt</h5>
+                            <p>Numbers ke liye — "ten", "12", "a dozen" sab samjhe! Returns: number</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>✅ Confirm Prompt</h5>
+                            <p>Yes/No confirmation — "haan", "yes", "nope" sab samjhe! Returns: boolean</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🎯 Choice Prompt</h5>
+                            <p>Options mein se choose karo — buttons ya list. Returns: FoundChoice</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>📅 DateTime Prompt</h5>
+                            <p>"tomorrow", "next Friday", "10am" — natural language dates! Returns: DateTime[]</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>📎 Attachment Prompt</h5>
+                            <p>Files, images upload karwao. Returns: Attachment[]</p>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        🔄 <strong>Prompt 2-Step Process:</strong><br><br>
+                        1. <strong>Ask</strong> — User se input maango<br>
+                        2. <strong>Validate</strong> — Check karo valid hai ya nahi<br>
+                        → Valid? ✅ Return value<br>
+                        → Invalid? ❌ Retry prompt send karo<br><br>
+                        
+                        <em>Tum custom validator bhi add kar sakte ho — jaise party size 2-12 ke beech hona chahiye!</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 10: Activity Handlers ==================== -->
+        <section class="topic-section" id="activity-handlers">
+            <header class="topic-header">
+                <div class="topic-badge">⚡ Chapter 10 — Activity Handlers</div>
+                <h2>Activity Handlers — Event-Driven Bot!</h2>
+                <p class="topic-subtitle">Different activity types ke liye different handlers — clean code structure!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">⚡</div>
+                    <h3 class="section-title">Activity Handler Pattern</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Activity Handler</span> ek event-driven way hai bot logic organize karne ka. Har activity type ke liye ek handler method hota hai!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>📋 Common Activity Handlers</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">ACTIVITY HANDLERS — EVENT-DRIVEN PATTERN</div>
+                            <div class="mermaid">
+flowchart TB
+    Turn["OnTurnAsync<br/>(Master Handler)"]
+    
+    Turn --> Msg["OnMessageActivityAsync<br/>💬 User messages"]
+    Turn --> Conv["OnConversationUpdateActivityAsync<br/>👋 Join/Leave events"]
+    Turn --> React["OnMessageReactionActivityAsync<br/>👍 Reactions"]
+    Turn --> Event["OnEventActivityAsync<br/>🔔 Events"]
+    
+    Conv --> Added["OnMembersAddedAsync<br/>Welcome new members"]
+    Conv --> Removed["OnMembersRemovedAsync<br/>Goodbye messages"]
+    
+    style Turn fill:#0078d4,color:#fff
+    style Msg fill:#00ff88,color:#000
+    style Conv fill:#ff9f43,color:#fff
+    style React fill:#8338ec,color:#fff
+    style Event fill:#ff6b6b,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Most Used Handlers:</strong><br><br>
+                        • <strong>OnMessageActivityAsync</strong> — User ka message handle karo (echo bot)<br>
+                        • <strong>OnMembersAddedAsync</strong> — Naye users ko welcome karo<br>
+                        • <strong>OnMembersRemovedAsync</strong> — User leave kare toh handle karo<br>
+                        • <strong>OnTokenResponseEventAsync</strong> — OAuth token response<br><br>
+                        
+                        <em>Simply inherit <code>ActivityHandler</code> class aur jo handlers chahiye woh override karo!</em>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>public class EchoBot : ActivityHandler
+{
+    // Handle user messages
+    protected override async Task OnMessageActivityAsync(
+        ITurnContext&lt;IMessageActivity&gt; turnContext, 
+        CancellationToken cancellationToken)
+    {
+        var replyText = $"Echo: {turnContext.Activity.Text}";
+        await turnContext.SendActivityAsync(
+            MessageFactory.Text(replyText), cancellationToken);
+    }
+
+    // Welcome new members
+    protected override async Task OnMembersAddedAsync(
+        IList&lt;ChannelAccount&gt; membersAdded,
+        ITurnContext&lt;IConversationUpdateActivity&gt; turnContext,
+        CancellationToken cancellationToken)
+    {
+        foreach (var member in membersAdded)
+        {
+            if (member.Id != turnContext.Activity.Recipient.Id)
+            {
+                await turnContext.SendActivityAsync(
+                    MessageFactory.Text("Welcome!"), cancellationToken);
+            }
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 11: Cards & Attachments ==================== -->
+        <section class="topic-section" id="cards">
+            <header class="topic-header">
+                <div class="topic-badge">🎴 Chapter 11 — Cards & Attachments</div>
+                <h2>Rich Cards — Beautiful Messages!</h2>
+                <p class="topic-subtitle">Text se zyada — images, buttons, carousels send karo!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🎴</div>
+                    <h3 class="section-title">Card Types</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Plain text boring hai! <span class="highlight">Rich Cards</span> use karke visually appealing messages bhejo — images, buttons, forms sab include kar sakte ho!
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>🦸 Hero Card</h5>
+                            <p>Large image + title + buttons — product showcase ke liye perfect!</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🖼️ Thumbnail Card</h5>
+                            <p>Small image + text — compact info display</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🧾 Receipt Card</h5>
+                            <p>Order receipt — items, prices, total dikhao</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔐 Sign-in Card</h5>
+                            <p>OAuth login button — authentication ke liye</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🎵 Audio/Video Card</h5>
+                            <p>Media playback — inline audio/video</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🎠 Carousel</h5>
+                            <p>Multiple cards side-by-side — swipe karke dekho!</p>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        💡 <strong>Card Actions:</strong><br><br>
+                        Cards pe buttons add kar sakte ho jo different actions trigger kare:<br>
+                        • <strong>imBack</strong> — Message send karo (visible in chat)<br>
+                        • <strong>postBack</strong> — Message send karo (hidden from chat)<br>
+                        • <strong>openUrl</strong> — External URL kholo<br>
+                        • <strong>call</strong> — Phone call initiate karo<br>
+                        • <strong>signin</strong> — OAuth flow start karo
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 12: Adaptive Cards ==================== -->
+        <section class="topic-section" id="adaptive-cards">
+            <header class="topic-header">
+                <div class="topic-badge">📋 Chapter 12 — Adaptive Cards</div>
+                <h2>Adaptive Cards — Universal UI!</h2>
+                <p class="topic-subtitle">JSON-based cards jo har platform pe adapt ho jaaye!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">📋</div>
+                    <h3 class="section-title">Adaptive Cards Kya Hain?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Adaptive Cards</span> ek open card exchange format hai — JSON mein likho, har platform (Teams, Slack, Web) pe native UI ban jaaye!
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🎯 <strong>Adaptive Cards Benefits:</strong><br><br>
+                        • <strong>Platform-agnostic</strong> — Ek baar design, everywhere use<br>
+                        • <strong>Native rendering</strong> — Har platform apna style apply kare<br>
+                        • <strong>Rich content</strong> — Text, images, inputs, actions sab support<br>
+                        • <strong>JSON format</strong> — Easy to create aur modify<br><br>
+                        
+                        <em>Design karke dekho: <a href="https://adaptivecards.io/designer/" target="_blank">adaptivecards.io/designer</a></em>
+                    </div>
+
+                    <pre class="language-json line-numbers"><code>{
+  "type": "AdaptiveCard",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Hello! 👋",
+      "size": "Large",
+      "weight": "Bolder"
+    },
+    {
+      "type": "Input.Text",
+      "id": "userName",
+      "placeholder": "Enter your name"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "title": "Submit"
+    }
+  ],
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5"
+}</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        ⚠️ <strong>Channel Support Vary Hota Hai!</strong><br><br>
+                        Har channel Adaptive Cards ko differently support karta hai:<br>
+                        • <strong>Teams</strong> — Full support ✅<br>
+                        • <strong>Web Chat</strong> — Full support ✅<br>
+                        • <strong>Facebook</strong> — Limited (buttons may not work)<br><br>
+                        
+                        <em>Always test on target channels!</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 13: Proactive Messaging ==================== -->
+        <section class="topic-section" id="proactive">
+            <header class="topic-header">
+                <div class="topic-badge">📢 Chapter 13 — Proactive Messaging</div>
+                <h2>Proactive Messages — Bot Pehle Bole!</h2>
+                <p class="topic-subtitle">User ke bina maange notifications bhejo — alerts, reminders, updates!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">📢</div>
+                    <h3 class="section-title">Proactive vs Reactive Messages</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Normally bot <strong>reactive</strong> hota hai — user message bheje tab reply kare. <span class="highlight">Proactive messaging</span> mein bot khud initiate karta hai conversation!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>📊 Reactive vs Proactive</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">REACTIVE VS PROACTIVE MESSAGING</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Reactive["🔄 REACTIVE"]
+        U1["👤 User: 'What's the weather?'"]
+        B1["🤖 Bot: 'Sunny, 25°C'"]
+                        U1 --> B1
+                    end
+                    
+                    subgraph Proactive["📢 PROACTIVE"]
+                        T["⏰ Trigger<br/>(Timer, Event, API)"]
+                        B2["🤖 Bot: 'Reminder: Meeting in 10 mins!'"]
+                        U2["👤 User receives notification"]
+                        T --> B2 --> U2
+                    end
+                    
+                    style U1 fill:#3a86ff,color:#fff
+                    style B1 fill:#00ff88,color:#000
+                    style T fill:#ff9f43,color:#fff
+                    style B2 fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Proactive Messaging Use Cases:</strong><br><br>
+                        • <strong>Price Alerts</strong> — "Product price dropped by 20%!"<br>
+                        • <strong>Meeting Reminders</strong> — "Meeting starts in 10 minutes"<br>
+                        • <strong>Task Completion</strong> — "Your report is ready to download"<br>
+                        • <strong>Welcome Messages</strong> — App install ke baad welcome<br><br>
+                        
+                        <em>Note: Kuch channels restrict karte hain — user ne pehle bot se baat ki ho tabhi proactive message bhej sakte ho!</em>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 107, 107, 0.1); border-left-color: var(--accent-red);">
+                        ⚠️ <strong>Conversation Reference Required!</strong><br><br>
+                        Proactive message bhejne ke liye <strong>ConversationReference</strong> save karna padta hai — ye tab milta hai jab user pehli baar bot se interact kare.<br><br>
+                        
+                        <strong>Process:</strong><br>
+                        1. User bot se baat kare → ConversationReference capture karo<br>
+                        2. Database mein store karo<br>
+                        3. Later: ContinueConversationAsync use karke message bhejo
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 14: Natural Language ==================== -->
+        <section class="topic-section" id="nlu">
+            <header class="topic-header">
+                <div class="topic-badge">🧠 Chapter 14 — Natural Language Understanding</div>
+                <h2>NLU — Bot Ko Smart Banao!</h2>
+                <p class="topic-subtitle">LUIS replaced by Azure AI Language — Conversational Language Understanding (CLU)!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🧠</div>
+                    <h3 class="section-title">Intent & Entity Recognition</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Natural Language Understanding (NLU)</span> se bot user ki natural language samajh paata hai — keywords match nahi karna padta!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🎯 Intent & Entity Example</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">NLU — INTENT & ENTITY EXTRACTION</div>
+                            <div class="mermaid">
+flowchart TB
+    Input["👤 User: 'Book a flight to Delhi tomorrow'"]
+    
+    NLU["🧠 CLU Processing"]
+    
+    Intent["🎯 INTENT<br/>BookFlight"]
+    Entity1["📍 ENTITY: Destination<br/>Delhi"]
+    Entity2["📅 ENTITY: Date<br/>Tomorrow"]
+    
+    Input --> NLU
+    NLU --> Intent
+    NLU --> Entity1
+    NLU --> Entity2
+    
+    style Input fill:#3a86ff,color:#fff
+    style NLU fill:#8338ec,color:#fff
+    style Intent fill:#00ff88,color:#000
+    style Entity1 fill:#ff9f43,color:#fff
+    style Entity2 fill:#ffd93d,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        ⚠️ <strong>LUIS Retired — Use CLU!</strong><br><br>
+                        <strong>Language Understanding (LUIS)</strong> October 1, 2025 ko retire ho gaya hai!<br><br>
+                        
+                        <strong>Replacement:</strong> <strong>Conversational Language Understanding (CLU)</strong><br>
+                        → Part of Azure AI Language service<br>
+                        → Same capabilities, better integration<br><br>
+                        
+                        <strong>QnA Maker</strong> bhi retired — use <strong>Custom Question Answering</strong> (Azure AI Language feature)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 15: Skills ==================== -->
+        <section class="topic-section" id="skills">
+            <header class="topic-header">
+                <div class="topic-badge">🔧 Chapter 15 — Skills</div>
+                <h2>Bot Skills — Reusable Bot Capabilities!</h2>
+                <p class="topic-subtitle">Ek bot doosre bot ko call kar sakta hai — modular design!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🔧</div>
+                    <h3 class="section-title">Skills Kya Hain?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Skill</span> ek reusable bot hai jo doosre bots (skill consumers) access kar sakte hain. Jaise microservices architecture mein services ek dusre ko call karti hain!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🔗 Skill Architecture</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">SKILL CONSUMER & SKILL BOT</div>
+                            <div class="mermaid">
+flowchart TB
+    User["👤 User"]
+    Consumer["🤖 ROOT BOT<br/>(Skill Consumer)"]
+    
+    subgraph Skills["SKILL BOTS"]
+                        S1["📅 Calendar Skill"]
+                        S2["📧 Email Skill"]
+                        S3["📝 To-Do Skill"]
+                    end
+                    
+                    User <--> Consumer
+                    Consumer <--> S1
+                    Consumer <--> S2
+                    Consumer <--> S3
+                    
+                    style Consumer fill:#0078d4,color:#fff
+                    style S1 fill:#00ff88,color:#000
+                    style S2 fill:#ff9f43,color:#fff
+                    style S3 fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        💡 <strong>Skill Benefits:</strong><br><br>
+                        • <strong>Reusability</strong> — Ek skill multiple bots use kar sakte hain<br>
+                        • <strong>Modularity</strong> — Large bot ko smaller skills mein break karo<br>
+                        • <strong>Team Collaboration</strong> — Different teams different skills develop karein<br>
+                        • <strong>Independent Deployment</strong> — Skills separately deploy ho sakte hain
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 16: Testing ==================== -->
+        <section class="topic-section" id="testing">
+            <header class="topic-header">
+                <div class="topic-badge">🧪 Chapter 16 — Testing</div>
+                <h2>Bot Testing — Emulator & More!</h2>
+                <p class="topic-subtitle">Local testing se production testing tak — sab cover karo!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🧪</div>
+                    <h3 class="section-title">Bot Framework Emulator</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Bot Framework Emulator</span> ek desktop application hai jo locally bots test karne ke liye use hoti hai. Real channel ki zaroorat nahi!
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>💻 Local Testing</h5>
+                            <p>Bot ko localhost pe run karo, Emulator se connect karo, test karo!</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔍 Inspect Messages</h5>
+                            <p>JSON payload dekho — activities ka detailed view</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🐛 Debug</h5>
+                            <p>VS Code/Visual Studio mein breakpoints lagao</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>📡 ngrok Integration</h5>
+                            <p>Tunnel use karke remote services se connect karo</p>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 107, 107, 0.1); border-left-color: var(--accent-red);">
+                        ⚠️ <strong>Emulator Archived!</strong><br><br>
+                        Bot Framework Emulator bhi archive ho gaya hai (Dec 2025).<br>
+                        Existing version use kar sakte ho, lekin new features nahi aayenge.<br><br>
+                        
+                        <strong>Alternative:</strong> Web Chat test page, Teams Developer Portal, Direct testing on channels
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 17: Deployment ==================== -->
+        <section class="topic-section" id="deployment">
+            <header class="topic-header">
+                <div class="topic-badge">🚀 Chapter 17 — Deployment</div>
+                <h2>Azure Deployment — Bot Ko Live Karo!</h2>
+                <p class="topic-subtitle">Local se Azure tak — bot ko duniya ke saamne lao!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🚀</div>
+                    <h3 class="section-title">Deployment Steps</h3>
+                </div>
+                <div class="section-content">
+                    <div class="visual-box">
+                        <h4>🚀 Deployment Flow</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">BOT DEPLOYMENT TO AZURE</div>
+                            <div class="mermaid">
+flowchart TB
+    Dev["💻 LOCAL DEVELOPMENT<br/>VS Code / Visual Studio"]
+    
+    subgraph Azure["☁️ AZURE RESOURCES"]
+                        AppService["🌐 App Service<br/>(Hosts bot code)"]
+                        BotService["🤖 Azure Bot Service<br/>(Bot registration)"]
+                        AI["🧠 Azure AI Services<br/>(Optional: CLU, etc.)"]
+                    end
+                    
+                    Dev -->|"Deploy"| AppService
+                    AppService <--> BotService
+                    BotService <--> AI
+                    
+                    Channels["🌐 CHANNELS<br/>Teams, Slack, Web Chat"]
+                    
+                    BotService <--> Channels
+                    
+                    style Dev fill:#3a86ff,color:#fff
+                    style AppService fill:#00ff88,color:#000
+                    style BotService fill:#0078d4,color:#fff
+                    style Channels fill:#ff9f43,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        📋 <strong>Deployment Checklist:</strong><br><br>
+                        1. ✅ Azure subscription create karo<br>
+                        2. ✅ App Service plan create karo<br>
+                        3. ✅ Azure Bot Service resource create karo<br>
+                        4. ✅ App ID aur Password configure karo<br>
+                        5. ✅ Bot code deploy karo (VS Code Azure extension ya CLI)<br>
+                        6. ✅ Channels configure karo (Teams, etc.)<br>
+                        7. ✅ Test karo live environment mein!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 18: User Authentication ==================== -->
+        <section class="topic-section" id="authentication">
+            <header class="topic-header">
+                <div class="topic-badge">🔐 Chapter 18 — Authentication</div>
+                <h2>User Authentication — OAuth Integration!</h2>
+                <p class="topic-subtitle">User ko login karwao, secure resources access karo!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🔐</div>
+                    <h3 class="section-title">Bots Mein Authentication Kyun?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Kabhi-kabhi bot ko user ki taraf se <span class="highlight">secured resources access</span> karne padte hain — jaise email check karna, calendar dekhna, orders place karna. Iske liye user authentication zaroori hai!
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>OAuth Flow — Simple Explanation:</strong><br><br>
+                        1. User bot se kuch request kare jo login chahiye (e.g., "Check my emails")<br>
+                        2. Bot <strong>OAuthCard</strong> send kare with "Sign In" button<br>
+                        3. User button click kare → External service ki login page khule<br>
+                        4. User login kare → Token generate ho<br>
+                        5. Token <strong>Bot Framework Token Service</strong> mein securely store ho<br>
+                        6. Bot ab user ki taraf se API calls kar sake!
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>🔄 OAuth Authentication Flow</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">USER AUTHENTICATION IN BOT</div>
+                            <div class="mermaid">
+flowchart TB
+    U["👤 User: 'Check my emails'"]
+    B["🤖 Bot asks for token"]
+    TS["🔑 Token Service<br/>'No token found'"]
+    Card["🃏 Bot sends OAuthCard<br/>'Please sign in'"]
+    Login["🔐 User signs in<br/>(Microsoft, Google, etc.)"]
+    Token["✅ Token stored securely"]
+    API["📧 Bot calls API<br/>with user's token"]
+    
+    U --> B
+    B --> TS
+    TS --> Card
+    Card --> Login
+    Login --> Token
+    Token --> API
+    
+    style U fill:#3a86ff,color:#fff
+    style Login fill:#ff9f43,color:#fff
+    style Token fill:#00ff88,color:#000
+    style API fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>🔑 OAuth Connection</h5>
+                            <p>Azure Portal mein configure karo — Identity Provider, Client ID, Secret, Scopes</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🃏 OAuthCard</h5>
+                            <p>User ko sign-in button dikhata hai — click pe login page khulti hai</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔐 Token Service</h5>
+                            <p>Bot Framework Token Service tokens securely store aur manage karta hai</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔢 Magic Code</h5>
+                            <p>6-digit code for verification — ensures same user signed in</p>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        ⚠️ <strong>Security Tip:</strong><br><br>
+                        Sign-in URL <strong>kabhi share mat karo!</strong> Ye specific conversation ke liye hoti hai.<br>
+                        Kuch channels (Teams, Web Chat) automatically verify karte hain, baaki channels mein <strong>6-digit magic code</strong> enter karna padta hai confirmation ke liye.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 19: Microsoft Teams Bots ==================== -->
+        <section class="topic-section" id="teams">
+            <header class="topic-header">
+                <div class="topic-badge">💬 Chapter 19 — Microsoft Teams</div>
+                <h2>Teams Bots — Enterprise Favorite!</h2>
+                <p class="topic-subtitle">Teams ke liye special activity handlers aur features!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">💬</div>
+                    <h3 class="section-title">Teams Activity Handler</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Teams Activity Handler</span> normal ActivityHandler se derive hota hai, but Teams-specific activities handle karta hai — channel creation, team events, meetings, etc.
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>📋 Teams-Specific Events</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">TEAMS ACTIVITY HANDLER — SPECIAL EVENTS</div>
+                            <div class="mermaid">
+flowchart TB
+    TAH["TeamsActivityHandler"]
+    
+    subgraph Channel["📢 CHANNEL EVENTS"]
+                        C1["OnTeamsChannelCreatedAsync"]
+                        C2["OnTeamsChannelDeletedAsync"]
+                        C3["OnTeamsChannelRenamedAsync"]
+                    end
+                    
+                    subgraph Team["👥 TEAM EVENTS"]
+                        T1["OnTeamsMembersAddedAsync"]
+                        T2["OnTeamsMembersRemovedAsync"]
+                        T3["OnTeamsTeamRenamedAsync"]
+                    end
+                    
+                    subgraph Meeting["📅 MEETING EVENTS"]
+                        M1["OnTeamsMeetingStartAsync"]
+                        M2["OnTeamsMeetingEndAsync"]
+                    end
+                    
+                    TAH --> Channel
+                    TAH --> Team
+                    TAH --> Meeting
+                    
+                    style TAH fill:#0078d4,color:#fff
+                    style C1 fill:#00ff88,color:#000
+                    style T1 fill:#ff9f43,color:#fff
+                    style M1 fill:#8338ec,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note">
+                        💡 <strong>Teams-Specific Features:</strong><br><br>
+                        • <strong>Messaging Extensions</strong> — Search aur actions directly Teams mein<br>
+                        • <strong>Task Modules</strong> — Modal dialogs for input<br>
+                        • <strong>Adaptive Cards</strong> — Rich interactive cards<br>
+                        • <strong>Meeting Bots</strong> — Meeting start/end events handle karo<br>
+                        • <strong>File Consent</strong> — File upload/download permissions<br><br>
+                        
+                        <em>Teams bots ke liye <code>TeamsActivityHandler</code> inherit karo instead of <code>ActivityHandler</code>!</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 20: Suggested Actions ==================== -->
+        <section class="topic-section" id="suggested-actions">
+            <header class="topic-header">
+                <div class="topic-badge">🔘 Chapter 20 — Suggested Actions</div>
+                <h2>Suggested Actions — Quick Reply Buttons!</h2>
+                <p class="topic-subtitle">User ko options do — click karo aur reply ho jaye!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🔘</div>
+                    <h3 class="section-title">Suggested Actions Kya Hain?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Suggested Actions</span> buttons hain jo user ko quick reply options dete hain. User click kare aur woh text message ban ke chala jaye!
+                    </p>
+
+                    <div class="visual-box">
+                        <h4>🔘 Suggested Actions vs Cards</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h5>🔘 Suggested Actions</h5>
+                                <p>• Click ke baad disappear ho jaate hain<br>• Inline buttons jaisa dikhta hai<br>• Simple choices ke liye best</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5>🃏 Card Buttons</h5>
+                                <p>• Click ke baad visible rehte hain<br>• Card ke andar embedded<br>• Complex interactions ke liye</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📚 <strong>Use Cases:</strong><br><br>
+                        • "Yes" / "No" confirmation<br>
+                        • Language selection: "Hindi" / "English"<br>
+                        • Quick menu: "Order Status" / "Track Package" / "Contact Support"<br><br>
+                        
+                        <em>Suggested Actions se typing kam hoti hai aur user experience smooth hota hai!</em>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// C# Example - Suggested Actions
+var reply = MessageFactory.Text("Do you want to continue?");
+reply.SuggestedActions = new SuggestedActions()
+{
+    Actions = new List&lt;CardAction&gt;()
+    {
+        new CardAction() { Title = "Yes", Type = ActionTypes.ImBack, Value = "Yes" },
+        new CardAction() { Title = "No", Type = ActionTypes.ImBack, Value = "No" },
+        new CardAction() { Title = "Maybe", Type = ActionTypes.ImBack, Value = "Maybe" }
+    }
+};
+await turnContext.SendActivityAsync(reply, cancellationToken);</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 21: Bot Framework Composer ==================== -->
+        <section class="topic-section" id="composer">
+            <header class="topic-header">
+                <div class="topic-badge">🎨 Chapter 21 — Bot Framework Composer</div>
+                <h2>Composer — Visual Bot Authoring!</h2>
+                <p class="topic-subtitle">No-code/low-code bot development — drag and drop!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🎨</div>
+                    <h3 class="section-title">Bot Framework Composer Kya Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Bot Framework Composer</span> ek open-source IDE hai jo visual authoring canvas provide karta hai. SDK pe built hai but <strong>visual interface</strong> se bots banao!
+                    </p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>🎨 Visual Canvas</h5>
+                            <p>Drag-and-drop interface — code likhne ki zaroorat kam!</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>📝 Adaptive Dialogs</h5>
+                            <p>Natural conversation flows design karo visually</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🧠 LU Integration</h5>
+                            <p>Language Understanding directly Composer mein configure karo</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔧 Extensible</h5>
+                            <p>Code se extend kar sakte ho jab visual tools enough na ho</p>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        💡 <strong>Composer vs SDK Direct:</strong><br><br>
+                        <strong>Use Composer when:</strong><br>
+                        • Quickly prototype karna ho<br>
+                        • Non-developers bhi contribute karein<br>
+                        • Visual flow design chahiye<br><br>
+                        
+                        <strong>Use SDK Direct when:</strong><br>
+                        • Complex custom logic chahiye<br>
+                        • Full code control chahiye<br>
+                        • Existing codebase mein integrate karna ho<br><br>
+                        
+                        <em>Pro Tip: Dono combine bhi kar sakte ho — Composer se start karo, code se extend karo!</em>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        ⚠️ <strong>Alternative: Microsoft Copilot Studio</strong><br><br>
+                        Agar pure no-code solution chahiye toh <strong>Microsoft Copilot Studio</strong> consider karo — SaaS platform hai, aur bhi easy!<br>
+                        Composer is great for developers who want visual tools but also want code access.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 7: Conversational UX ==================== -->
+        <section class="topic-section" id="cux">
+            <header class="topic-header">
+                <div class="topic-badge">🎨 Chapter 7 — Design Principles</div>
+                <h2>Conversational UX (CUX) — Great Bot Kaise Banao?</h2>
+                <p class="topic-subtitle">Technical knowledge ke saath-saath design principles bhi zaroori hain!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">CUX Kya Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        <span class="highlight">Conversational User Experience (CUX)</span> ek modality of interaction hai jo <strong>natural language pe based</strong> hai. Jaise humans ek dusre se baat karte hain — conversation ke through ideas, concepts, data share karte hain — CUX wahi experience devices aur apps ke saath provide karta hai!
+                    </p>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        💡 <strong>CUX vs Traditional UI:</strong><br><br>
+                        <strong>Traditional UI</strong> — User ko system seekhna padta hai:<br>
+                        → Command line syntax<br>
+                        → GUI navigation<br>
+                        → Touch gestures<br><br>
+                        
+                        <strong>CUX</strong> — System user ko seekhta hai:<br>
+                        → Natural language patterns<br>
+                        → Colloquialisms (local phrases)<br>
+                        → Chit-chat handling<br><br>
+                        
+                        <em>"Instead of users learning the system, the system learns from users!"</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Great Conversational Bot Ke Characteristics</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text">
+                        Successful bots mein ek common cheez hoti hai — <span class="highlight">great conversational user experience!</span>
+                    </p>
+
+                    <p class="content-text">
+                        Bot design karte waqt ye questions pucho:
+                    </p>
+
+                    <ul class="bullet-list">
+                        <li>Kya bot <strong>easily user ka problem solve</strong> karta hai with minimal back and forth?</li>
+                        <li>Kya bot <strong>better/easier/faster</strong> hai alternatives se (apps, websites, phone calls)?</li>
+                        <li>Kya bot un <strong>devices aur platforms</strong> pe run karta hai jo user use karta hai?</li>
+                        <li>Kya bot <strong>discoverable aur easy to invoke</strong> hai?</li>
+                        <li>Kya bot user ko <strong>guide karta hai</strong> jab woh stuck ho — live agent handover ya help provide karta hai?</li>
+                    </ul>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🎯 <strong>Users Care About Results!</strong><br><br>
+                        Users ko farak nahi padta ki bot kitna intelligent hai ya kaunsi technology use hui hai.<br><br>
+                        <strong>Users care when:</strong><br>
+                        → Bot unka problem <strong>jaldi solve</strong> kare<br>
+                        → <strong>Zyada type</strong> na karna pade<br>
+                        → <strong>Repeat</strong> na karna pade<br>
+                        → Bot <strong>automatically</strong> relevant info yaad rakhe<br><br>
+                        
+                        <em>Great CUX = User ka kaam easy hona chahiye!</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TOPIC 8: Bot Lifecycle ==================== -->
+        <section class="topic-section" id="bot-lifecycle">
+            <header class="topic-header">
+                <div class="topic-badge">🔄 Chapter 8 — Development Lifecycle</div>
+                <h2>Bot Lifecycle — Plan se Production Tak!</h2>
+                <p class="topic-subtitle">Bot development ke stages — kaise plan karo, build karo, test karo, aur deploy karo!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🔄</div>
+                    <h3 class="section-title">Bot Development Stages</h3>
+                </div>
+                <div class="section-content">
+                    <div class="visual-box">
+                        <h4>📋 Bot Development Lifecycle</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">BOT LIFECYCLE — FROM IDEA TO PRODUCTION</div>
+                            <div class="mermaid">
+flowchart LR
+    P["📝 PLAN"]
+    B["🔨 BUILD"]
+    T["🧪 TEST"]
+    PUB["🚀 PUBLISH"]
+    C["🔗 CONNECT"]
+    E["📊 EVALUATE"]
+    
+    P --> B --> T --> PUB --> C --> E
+    E -.->|"Iterate"| P
+    
+    style P fill:#3a86ff,color:#fff
+    style B fill:#8338ec,color:#fff
+    style T fill:#ff9f43,color:#fff
+    style PUB fill:#00ff88,color:#000
+    style C fill:#0078d4,color:#fff
+    style E fill:#ff6b6b,color:#fff
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>📝 Plan</h5>
+                            <p>Goals samjho, user needs identify karo, design guidelines review karo. Speech, NLU, Q&A capabilities decide karo.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔨 Build</h5>
+                            <p>SDK use karke bot develop karo — C#, JavaScript, ya Python mein. Azure services integrate karo.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🧪 Test</h5>
+                            <p>Bot Framework Emulator se local testing. Web Chat se remote testing. Unit tests likho.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🚀 Publish</h5>
+                            <p>Bot ko Azure pe deploy karo ya apne own infrastructure pe. Public internet address do.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>🔗 Connect</h5>
+                            <p>Channels configure karo — Teams, Slack, Facebook, etc. Bot multiple platforms pe available ho.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h5>📊 Evaluate</h5>
+                            <p>Azure Portal mein analytics dekho — traffic, latency, user data. Performance improve karo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SUMMARY ==================== -->
+        <div class="summary-card">
+            <h3 class="summary-title">🎓 ABS Notes — Complete Summary (21 Chapters)</h3>
+
+            <div class="visual-box">
+                <h4>📋 All Topics Covered — MS Learn Complete!</h4>
+                <div class="mermaid-container">
+                    <div class="diagram-label">AZURE BOT SERVICE — COMPLETE LEARNING PATH</div>
+                    <div class="mermaid">
+flowchart TB
+    subgraph Basics["🚀 BASICS (Ch 1-6)"]
+        B1["Introduction"]
+        B2["Bot Concept"]
+        B3["Activities/Turns"]
+        B4["Architecture"]
+        B5["State Mgmt"]
+        B6["Channels"]
+    end
+    
+    subgraph Dialogs["💬 DIALOGS (Ch 7-10)"]
+        D1["Dialog Library"]
+        D2["Waterfall"]
+        D3["Prompts"]
+        D4["Activity Handlers"]
+    end
+    
+    subgraph Rich["🎴 RICH MSG (Ch 11-13)"]
+        R1["Cards"]
+        R2["Adaptive Cards"]
+        R3["Proactive Msg"]
+    end
+    
+    subgraph Advanced["🔧 ADVANCED (Ch 14-21)"]
+        A1["NLU/CLU"]
+        A2["Skills"]
+        A3["Testing"]
+        A4["Deploy"]
+        A5["Auth/OAuth"]
+        A6["Teams"]
+        A7["Suggested Actions"]
+        A8["Composer"]
+    end
+    
+    Basics --> Dialogs --> Rich --> Advanced
+    
+    style B1 fill:#3a86ff,color:#fff
+    style D1 fill:#8338ec,color:#fff
+    style R1 fill:#ff9f43,color:#fff
+    style A1 fill:#00ff88,color:#000
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-grid" style="margin-top: 1.5rem;">
+                <div class="feature-card">
+                    <h5>📚 Chapters 1-6</h5>
+                    <p>Introduction, Bot basics, Activities, Turns, Architecture, State, Channels</p>
+                </div>
+                <div class="feature-card">
+                    <h5>💬 Chapters 7-10</h5>
+                    <p>Dialogs Library, Waterfall, Prompts (6 types), Activity Handlers</p>
+                </div>
+                <div class="feature-card">
+                    <h5>🎴 Chapters 11-13</h5>
+                    <p>Rich Cards, Adaptive Cards, Proactive Messaging</p>
+                </div>
+                <div class="feature-card">
+                    <h5>🔧 Chapters 14-17</h5>
+                    <p>CLU/NLU, Skills, Testing (Emulator), Azure Deployment</p>
+                </div>
+                <div class="feature-card">
+                    <h5>🔐 Chapter 18</h5>
+                    <p>User Authentication, OAuth, Token Service, Sign-in Cards</p>
+                </div>
+                <div class="feature-card">
+                    <h5>💬 Chapters 19-21</h5>
+                    <p>Teams Bots, Suggested Actions, Bot Framework Composer</p>
+                </div>
+            </div>
+
+            <div class="hinglish-note" style="margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
+                🚀 <strong>Final Takeaway — All MS Learn Topics Covered!</strong><br><br>
+                
+                <strong>21 Chapters covering:</strong><br>
+                ✅ Bot Basics — Activities, Turns, Structure<br>
+                ✅ Dialogs & Prompts — Multi-turn conversations<br>
+                ✅ State Management — 3 state buckets<br>
+                ✅ Rich Messages — Cards, Adaptive Cards, Attachments<br>
+                ✅ Channels — 12+ platforms supported<br>
+                ✅ Authentication — OAuth, Token Service<br>
+                ✅ Teams Integration — Special handlers<br>
+                ✅ Skills — Reusable bot capabilities<br>
+                ✅ NLU — CLU (LUIS replacement)<br>
+                ✅ Testing & Deployment — Emulator, Azure<br>
+                ✅ Composer — Visual authoring<br><br>
+                
+                <strong style="color: var(--accent-orange);">⚠️ Important:</strong> Bot Framework SDK archived Dec 2025 — consider <strong>Microsoft 365 Agents SDK</strong> for new projects!<br><br>
+                
+                <em>"Ab tum Azure Bot Service ke complete concepts jaante ho! 🎉"</em>
+            </div>
+        </div>
+    </main>
+
+    <!-- Prism.js for Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0d1117',
+                primaryColor: '#0078d4',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#30363d',
+                lineColor: '#8b949e',
+                secondaryColor: '#161b22',
+                tertiaryColor: '#21262d'
+            },
+            flowchart: {
+                curve: 'basis',
+                padding: 20
+            }
+        });
+
+        // Reading Progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('readingProgress').style.width = scrolled + '%';
+        });
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = searchTerm ? 'none' : 'flex';
+                }
+            });
+        });
+
+        // Active Nav Item
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
