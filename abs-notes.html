@@ -816,6 +816,21 @@
                 <a href="#deployment" class="nav-item">Deployment</a>
             </div>
         </div>
+
+        <div class="category-group">
+            <div class="category-header">
+                <span class="category-title">🏢 Enterprise Deep Dive</span>
+                <span class="category-count">6</span>
+            </div>
+            <div class="category-items">
+                <a href="#enterprise-deep-dive" class="nav-item">🎯 Message Journey Story</a>
+                <a href="#enterprise-deep-dive" class="nav-item">Activity Schema</a>
+                <a href="#enterprise-deep-dive" class="nav-item">Channel Connector</a>
+                <a href="#enterprise-deep-dive" class="nav-item">WhatsApp Mapper</a>
+                <a href="#enterprise-deep-dive" class="nav-item">DirectLine WebSocket</a>
+                <a href="#enterprise-deep-dive" class="nav-item">OAuth & Auth Flow</a>
+            </div>
+        </div>
     </nav>
 
     <!-- Main Content -->
@@ -1452,6 +1467,68 @@ flowchart TB
                         • <strong>Error Handling</strong> — Errors gracefully handle karo<br>
                         • <strong>State Loading</strong> — Conversation state load karo
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 17.multilingual-bot middleware sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Custom Middleware — from 17.multilingual-bot sample
+from typing import Callable, Awaitable, List
+from botbuilder.core import Middleware, TurnContext
+from botbuilder.schema import Activity, ActivityTypes
+
+class TranslationMiddleware(Middleware):
+    """
+    Middleware — Har request ke pehle aur baad process karo!
+    Ye example translation middleware hai jo incoming/outgoing messages translate karta hai.
+    """
+    
+    def __init__(self, translator, user_state):
+        self.translator = translator
+        self.language_preference_accessor = user_state.create_property("LanguagePreference")
+    
+    async def on_turn(
+        self, 
+        context: TurnContext, 
+        logic: Callable[[TurnContext], Awaitable]  # next() function
+    ):
+        """
+        on_turn — Ye har turn pe call hota hai!
+        Pehle incoming process karo, phir next() call karo, phir outgoing process karo.
+        """
+        
+        # ===== BEFORE (Incoming Message) =====
+        should_translate = await self._should_translate(context)
+        
+        if should_translate and context.activity.type == ActivityTypes.message:
+            # User ka message English mein translate karo (bot ko samajh aaye)
+            context.activity.text = await self.translator.translate(
+                context.activity.text, 
+                target_language="en"  # Default language
+            )
+        
+        # ===== REGISTER SEND HANDLER (For Outgoing) =====
+        async def on_send_activities(ctx, activities, next_send):
+            """Jab bot reply bheje, user ki language mein translate karo"""
+            user_language = await self.language_preference_accessor.get(ctx, "en")
+            
+            if user_language != "en":
+                for activity in activities:
+                    if activity.type == ActivityTypes.message:
+                        activity.text = await self.translator.translate(
+                            activity.text, 
+                            target_language=user_language
+                        )
+            
+            return await next_send()
+        
+        context.on_send_activities(on_send_activities)
+        
+        # ===== CALL NEXT (Bot Logic) =====
+        await logic()  # Ye bot ka actual code run karega
+        
+        # ===== AFTER (Bot logic ke baad) =====
+        # Yahan additional cleanup ya logging kar sakte ho</code></pre>
                 </div>
             </div>
         </section>
@@ -1641,6 +1718,200 @@ flowchart TB
                         
                         Scaled-out scenarios mein (multiple instances) ye problem create kar sakta hai. Agar concurrency ya latency hai toh careful rahna padega!
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 45.state-management sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># State Management Bot — from 45.state-management sample
+from botbuilder.core import ActivityHandler, ConversationState, TurnContext, UserState
+
+# Data Models — state mein kya store karna hai
+class UserProfile:
+    def __init__(self):
+        self.name = None  # User ka naam
+
+class ConversationData:
+    def __init__(self):
+        self.timestamp = None      # Message time
+        self.channel_id = None     # Channel info
+        self.prompted_for_user_name = False  # Flag
+
+
+class StateManagementBot(ActivityHandler):
+    """
+    State Management — User aur Conversation data persist karo!
+    Restart ke baad bhi data yaad rahe.
+    """
+    
+    def __init__(self, conversation_state: ConversationState, user_state: UserState):
+        # State objects store karo
+        self.conversation_state = conversation_state
+        self.user_state = user_state
+        
+        # Accessors create karo — ye read/write ke liye use honge
+        self.conversation_data_accessor = conversation_state.create_property("ConversationData")
+        self.user_profile_accessor = user_state.create_property("UserProfile")
+    
+    async def on_turn(self, turn_context: TurnContext):
+        await super().on_turn(turn_context)
+        
+        # ⚠️ IMPORTANT: Har turn ke end pe save karo!
+        await self.conversation_state.save_changes(turn_context)
+        await self.user_state.save_changes(turn_context)
+    
+    async def on_message_activity(self, turn_context: TurnContext):
+        # State se data get karo (default object milega agar nahi hai)
+        user_profile = await self.user_profile_accessor.get(turn_context, UserProfile)
+        conversation_data = await self.conversation_data_accessor.get(turn_context, ConversationData)
+        
+        if user_profile.name is None:
+            if conversation_data.prompted_for_user_name:
+                # User ne naam diya — save karo!
+                user_profile.name = turn_context.activity.text
+                await turn_context.send_activity(f"Thanks {user_profile.name}!")
+                conversation_data.prompted_for_user_name = False
+            else:
+                # Naam puchho
+                await turn_context.send_activity("What is your name?")
+                conversation_data.prompted_for_user_name = True
+        else:
+            # User ka naam yaad hai! 🎉
+            await turn_context.send_activity(f"Hello {user_profile.name}! How can I help?")</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Enterprise C# Code — Bot State Controller API!</strong><br>
+                        Ye code Azure Bot Service Intercom backend se hai — real state management endpoints!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Bot State Controller — Enterprise REST API (From Intercom Codebase)
+// Ye deprecated state APIs hain but important to understand architecture!
+
+[RoutePrefix("v3/botstate")]
+[ValidateModel]
+[HandleAPIException]
+public class BotStateController : ApiController
+{
+    /// &lt;summary&gt;
+    /// Get user data across ALL conversations
+    /// User ki global preferences ya settings get karo
+    /// &lt;/summary&gt;
+    [HttpGet]
+    [Route("{channelId}/users/{userId}")]
+    [ResponseType(typeof(BotData))]
+    [Obsolete("Use BotBuilder state management instead")]
+    public async Task&lt;HttpResponseMessage&gt; GetUserData(string channelId, string userId)
+    {
+        return Request.CreateResponse(HttpStatusCode.OK);
+    }
+
+    /// &lt;summary&gt;
+    /// Get conversation-specific data for ALL users in that conversation
+    /// Group conversation ka shared state
+    /// &lt;/summary&gt;
+    [HttpGet]
+    [Route("{channelId}/conversations/{conversationId}")]
+    [ResponseType(typeof(BotData))]
+    public async Task&lt;HttpResponseMessage&gt; GetConversationData(string channelId, string conversationId)
+    {
+        return Request.CreateResponse(HttpStatusCode.OK);
+    }
+
+    /// &lt;summary&gt;
+    /// Get PRIVATE data — specific user + specific conversation
+    /// Most common use case — user ke conversation-specific state
+    /// &lt;/summary&gt;
+    [HttpGet]
+    [Route("{channelId}/conversations/{conversationId}/users/{userId}")]
+    public async Task&lt;HttpResponseMessage&gt; GetPrivateConversationData(
+        string channelId, string conversationId, string userId)
+    {
+        return Request.CreateResponse(HttpStatusCode.OK);
+    }
+}</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Conversation Manager — Enterprise Session Management!</strong><br>
+                        DirectLine ke through conversation session kaise manage hote hain!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Conversation Manager — From DirectLine Extension (Intercom Enterprise Code)
+// Real-time conversation session management with WebSocket support
+
+public class ConversationManager : IConversationManager
+{
+    private readonly IBotInfo _botInfo;
+    private readonly IConversationEvictionPolicy _evictionPolicy;
+    
+    // Thread-safe dictionary for active conversations
+    private readonly ConcurrentDictionary&lt;string, ConversationContext&gt; _conversations;
+
+    public ConversationManager(IBotInfo botInfo, IConversationEvictionPolicy evictionPolicy)
+    {
+        _botInfo = botInfo;
+        _evictionPolicy = evictionPolicy;
+        _conversations = new ConcurrentDictionary&lt;string, ConversationContext&gt;();
+
+        // Background eviction policy monitor
+        _evictionPolicy.Monitor(_conversations);
+    }
+
+    /// &lt;summary&gt;
+    /// Naya conversation create karo — DirectLine client ke liye
+    /// &lt;/summary&gt;
+    public ConversationContext CreateConversation(string siteId, string conversationId, bool isReconnect = false)
+    {
+        if (conversationId == null)
+            conversationId = CreateConversationId();  // Generate unique ID
+
+        var conversationContext = new ConversationContext(conversationId, siteId, isReconnect);
+
+        // Bot ko conversation mein add karo
+        conversationContext.TryAddUser(_botInfo.Bot.Configuration.BotId);
+
+        // Thread-safe add/update
+        conversationContext = _conversations.AddOrUpdate(
+            conversationContext.ConversationId, 
+            conversationContext, 
+            (id, existing) => existing);
+
+        return conversationContext;
+    }
+
+    /// &lt;summary&gt;
+    /// WebSocket connection manage karo for real-time messages
+    /// &lt;/summary&gt;
+    public void TryAddSocket(string conversationId, WebSocketServer socketServer)
+    {
+        if (_conversations.TryGetValue(conversationId, out ConversationContext conversationContext))
+        {
+            // Disconnect handler register karo
+            socketServer.Disconnected += (sender, args) =&gt;
+            {
+                conversationContext.TryRemoveSocket(socketServer);
+            };
+            
+            conversationContext.TryAddSocket(socketServer);
+        }
+        else
+        {
+            throw new ArgumentException("conversationId not found");
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// Conversation end karo — cleanup
+    /// &lt;/summary&gt;
+    public bool RemoveConversation(string conversationId)
+    {
+        return _conversations.Remove(conversationId, out ConversationContext _);
+    }
+
+    public static string CreateConversationId()
+    {
+        return IdFactory.CreateId() + IdFactory.CreateId();  // Long unique ID
+    }
+}</code></pre>
                 </div>
             </div>
         </section>
@@ -1775,6 +2046,153 @@ flowchart TB
                         
                         <em>Note: Har channel ke apne requirements hote hain — Facebook ke liye app registration, Teams ke liye tenant approval, etc.</em>
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Enterprise C# Code — Real WhatsApp Channel Implementation!</strong><br>
+                        Ye code Azure Bot Service Intercom codebase se hai — production-grade channel connector!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// WhatsApp Channel - Incoming Message Mapper (Enterprise Code)
+// From: Intercom/Channels/WhatsAppChannel - Production ABS Infrastructure
+
+public class WhatsAppIncomingMessageMapper
+{
+    private IIdFactory _idFactory;
+    private IAdvancedLogger _advancedLogger;
+
+    public WhatsAppIncomingMessageMapper(IIdFactory idFactory, IAdvancedLogger advancedLogger)
+    {
+        _idFactory = idFactory ?? throw new ArgumentNullException(nameof(idFactory));
+        _advancedLogger = advancedLogger ?? throw new ArgumentNullException(nameof(advancedLogger));
+    }
+
+    /// &lt;summary&gt;
+    /// WhatsApp message ko Bot Framework Activity mein convert karo!
+    /// Ye normalization hai - har channel ka message same format mein aata hai bot ke paas.
+    /// &lt;/summary&gt;
+    public IMessageActivity WhatsAppMessageEnvelopeToConversationUpdateAsync(
+        APIContext apiContext, 
+        WhatsAppMessageRequest whatsAppEvent, 
+        ChannelAccount from, 
+        ChannelAccount recipient, 
+        ConversationAccount conversation = null)
+    {
+        // Activity create karo — standard Bot Framework format
+        var updateActivity = Activity.CreateMessageActivity();
+        updateActivity.Id = _idFactory.CreateId();
+        updateActivity.From = from;
+        updateActivity.Conversation = conversation;
+        updateActivity.Recipient = recipient;
+        updateActivity.Timestamp = whatsAppEvent.EventTime;
+        updateActivity.ChannelId = ChannelId.WhatsApp;  // Channel identifier
+
+        // Message type ke hisaab se handle karo
+        if (whatsAppEvent.Data.MessageType == WhatsAppContentType.Text)
+        {
+            updateActivity.Type = ActivityTypes.Message;
+            updateActivity.Text = whatsAppEvent.Data.Content;  // User ka text
+        }
+        else if (whatsAppEvent.Data.Interactive != null)
+        {
+            // Interactive buttons/list response
+            var interactiveMessageRenderer = new InteractiveMessageRenderer(whatsAppEvent.Data.Interactive);
+            updateActivity.Value = interactiveMessageRenderer.TransformToABSActionResponse();
+        }
+        else if (whatsAppEvent.Data.Media != null)
+        {
+            // Media attachments (images, documents, etc.)
+            List&lt;Attachment&gt; attachments = new List&lt;Attachment&gt;();
+            attachments.Add(new Attachment()
+            {
+                Name = whatsAppEvent.Data.Media.FileName,
+                Content = new WhatsAppAttachmentData(whatsAppEvent.Data.Media.Id),
+                ContentType = whatsAppEvent.Data.Media.MimeType,
+            });
+            updateActivity.Attachments = attachments;
+        }
+
+        return updateActivity;
+    }
+}</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>WhatsApp to Bot Connector — Message Delivery</strong><br>
+                        Bot tak message kaise pahunchta hai — ye enterprise connector code!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// WhatsApp to Bot Connector — From Intercom Enterprise Codebase
+// Ye class WhatsApp se message receive karke Bot ko forward karta hai
+
+public class WhatsAppToBotConnector
+{
+    private readonly BotStore _storage;
+    private readonly WhatsAppIncomingMessageMapper _whatsappIncomingMessageMapper;
+    private readonly IARCertificateCache _jwtARCertCache;  // JWT Certificate for auth
+
+    /// &lt;summary&gt;
+    /// WhatsApp se message aaya — Bot ko bhejo!
+    /// Certificate-based authentication ke saath secure delivery.
+    /// &lt;/summary&gt;
+    public async Task&lt;HttpResponseMessage&gt; SendChannelDataToBotAsync(
+        IBotApiFactory botApiFactory, 
+        APIContext context, 
+        WhatsAppMessageRequest whatsappEvent, 
+        CancellationToken cancellationToken)
+    {
+        HttpResponseMessage response = null;
+
+        // Duplicate message check — same message dobara process na ho
+        var key = $"{whatsappEvent.Id}-{whatsappEvent.Data.From}-{context.BotId}";
+        
+        await _doOnce.DoOnce(key, async () =&gt;
+        {
+            // Bot API create karo with proper authentication
+            var botApi = new BotAPI(
+                IntercomEnvironment.Current,
+                new WhatsAppApiStorage(),
+                new ChannelConfiguration(),
+                certificate: null,  // Set below
+                ReportingSenderPerCloud.Instance.GetSettings(),
+                BillingPolicyPerCloud.Instance.GetSettings());
+
+            // JWT Certificate load karo for secure communication
+            var certificate = await _jwtARCertCache.PickARCert(
+                _autoRotationFlightingHelper, 
+                OpenIdFlavor.JWTAR, 
+                context.BotId).ConfigureAwait(false);
+            
+            botApi.JwtSigningCertificate = certificate;
+
+            // Bot ko message bhejo!
+            response = await ProcessMessage(botApi, context, whatsappEvent, cancellationToken);
+            
+            return true;
+        }).ConfigureAwait(false);
+
+        return response;
+    }
+
+    private async Task&lt;HttpResponseMessage&gt; ProcessMessage(...)
+    {
+        // Bot lookup from storage
+        BotService bot = await _storage.GetBotInGeoAsync(apiContext.BotId, useCache: true);
+        
+        if (bot == null)
+            throw new APIException(HttpStatusCode.NotFound, "Bot not found");
+
+        // Conversation ID generate karo (encrypted for security)
+        var conversationAccount = new ConversationAccount(
+            ConversationHelper.GetConversationId(eventFromEncrypted, eventTo, apiContext.BotId));
+
+        // Activity create karo via mapper
+        IActivity activity = _whatsappIncomingMessageMapper
+            .WhatsAppMessageEnvelopeToConversationUpdateAsync(
+                apiContext, whatsappEvent, from, recipient, conversationAccount);
+
+        // Bot ko forward karo!
+        return await botApi.PostActivityToBotAsync(activity);
+    }
+}</code></pre>
                 </div>
             </div>
         </section>
@@ -1933,6 +2351,84 @@ flowchart TB
                         
                         <em>Ye properties use karke tum previous steps ka data access kar sakte ho!</em>
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 05.multi-turn-prompt sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Waterfall Dialog — from 05.multi-turn-prompt sample
+from botbuilder.dialogs import ComponentDialog, WaterfallDialog, WaterfallStepContext
+from botbuilder.dialogs.prompts import TextPrompt, ChoicePrompt, ConfirmPrompt, PromptOptions
+from botbuilder.dialogs.choices import Choice
+from botbuilder.core import MessageFactory
+
+class UserProfileDialog(ComponentDialog):
+    """
+    Waterfall Dialog — Step by step user se info lo!
+    Paani ki tarah ek step se next pe flow karo.
+    """
+    
+    def __init__(self, user_state):
+        super().__init__(UserProfileDialog.__name__)
+        
+        # Prompts add karo — ye input lenge
+        self.add_dialog(TextPrompt(TextPrompt.__name__))
+        self.add_dialog(ChoicePrompt(ChoicePrompt.__name__))
+        self.add_dialog(ConfirmPrompt(ConfirmPrompt.__name__))
+        
+        # Waterfall Dialog — steps ka sequence define karo
+        self.add_dialog(
+            WaterfallDialog(
+                "WaterfallDialog",
+                [
+                    self.transport_step,    # Step 1: Transport mode
+                    self.name_step,         # Step 2: Name
+                    self.confirm_step,      # Step 3: Confirm
+                    self.summary_step       # Step 4: Summary
+                ]
+            )
+        )
+        
+        self.initial_dialog_id = "WaterfallDialog"
+    
+    async def transport_step(self, step_context: WaterfallStepContext):
+        """Step 1: Transport mode puchho — Choice Prompt use karo"""
+        return await step_context.prompt(
+            ChoicePrompt.__name__,
+            PromptOptions(
+                prompt=MessageFactory.text("Please enter your mode of transport:"),
+                choices=[Choice("Car"), Choice("Bus"), Choice("Bicycle")]
+            )
+        )
+    
+    async def name_step(self, step_context: WaterfallStepContext):
+        """Step 2: Previous step ka result save karo, naam puchho"""
+        # step_context.result = previous step ka output!
+        step_context.values["transport"] = step_context.result.value
+        
+        return await step_context.prompt(
+            TextPrompt.__name__,
+            PromptOptions(prompt=MessageFactory.text("Please enter your name:"))
+        )
+    
+    async def confirm_step(self, step_context: WaterfallStepContext):
+        """Step 3: Naam save karo, confirm karo"""
+        step_context.values["name"] = step_context.result
+        
+        return await step_context.prompt(
+            ConfirmPrompt.__name__,
+            PromptOptions(prompt=MessageFactory.text("Is this correct?"))
+        )
+    
+    async def summary_step(self, step_context: WaterfallStepContext):
+        """Step 4: Summary show karo aur dialog end karo"""
+        if step_context.result:  # User ne "Yes" bola
+            await step_context.context.send_activity(
+                f"Transport: {step_context.values['transport']}\n"
+                f"Name: {step_context.values['name']}"
+            )
+        
+        return await step_context.end_dialog()</code></pre>
                 </div>
             </div>
         </section>
@@ -2048,7 +2544,44 @@ flowchart TB
                         <em>Simply inherit <code>ActivityHandler</code> class aur jo handlers chahiye woh override karo!</em>
                     </div>
 
-                    <pre class="language-csharp line-numbers"><code>public class EchoBot : ActivityHandler
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — Bot Framework Samples se!</strong><br>
+                        Ye actual code hai <code>botbuilder-samples</code> repo se — production-ready!
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Python Echo Bot — from 02.echo-bot sample
+from botbuilder.core import ActivityHandler, MessageFactory, TurnContext
+from botbuilder.schema import ChannelAccount
+
+class EchoBot(ActivityHandler):
+    """
+    Sabse simple bot — user jo bole wahi echo karo!
+    ActivityHandler inherit karo aur methods override karo.
+    """
+    
+    # Jab user message bheje
+    async def on_message_activity(self, turn_context: TurnContext):
+        # Echo back the user's message
+        return await turn_context.send_activity(
+            MessageFactory.text(f"Echo: {turn_context.activity.text}")
+        )
+    
+    # Jab naya user join kare
+    async def on_members_added_activity(
+        self, members_added: [ChannelAccount], turn_context: TurnContext
+    ):
+        for member in members_added:
+            # Bot khud ko welcome mat karo!
+            if member.id != turn_context.activity.recipient.id:
+                await turn_context.send_activity("Hello and welcome!")
+</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        💻 <strong>C# Version — Same Logic:</strong>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// C# Echo Bot — from JavaScript sample converted
+public class EchoBot : ActivityHandler
 {
     // Handle user messages
     protected override async Task OnMessageActivityAsync(
@@ -2134,6 +2667,60 @@ flowchart TB
                         • <strong>call</strong> — Phone call initiate karo<br>
                         • <strong>signin</strong> — OAuth flow start karo
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 06.using-cards sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Hero Card banao — from 06.using-cards sample
+from botbuilder.schema import HeroCard, CardImage, CardAction, ActionTypes
+from botbuilder.core import CardFactory
+
+def create_hero_card():
+    """
+    Hero Card — Large image + title + buttons
+    Product showcase, welcome messages ke liye best!
+    """
+    card = HeroCard(
+        title="Bot Framework Hero Card",
+        images=[
+            CardImage(url="https://example.com/image.jpg")
+        ],
+        buttons=[
+            CardAction(
+                type=ActionTypes.open_url,
+                title="Get Started",
+                value="https://docs.microsoft.com/azure/bot-service/"
+            ),
+            CardAction(
+                type=ActionTypes.im_back,  # Message visible in chat
+                title="Say Hello",
+                value="Hello!"
+            )
+        ]
+    )
+    return CardFactory.hero_card(card)
+
+# Receipt Card — Order details dikhao
+def create_receipt_card():
+    """
+    Receipt Card — E-commerce orders ke liye perfect!
+    Items, prices, tax, total sab dikhao.
+    """
+    card = ReceiptCard(
+        title="John Doe",
+        facts=[
+            Fact(key="Order Number", value="1234"),
+            Fact(key="Payment Method", value="VISA 5555-****"),
+        ],
+        items=[
+            ReceiptItem(title="Data Transfer", price="$38.45", quantity="368"),
+            ReceiptItem(title="App Service", price="$45.00", quantity="720"),
+        ],
+        tax="$7.50",
+        total="$90.95"
+    )
+    return CardFactory.receipt_card(card)</code></pre>
                 </div>
             </div>
         </section>
@@ -2200,6 +2787,75 @@ flowchart TB
                         
                         <em>Always test on target channels!</em>
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Enterprise C# Code — Adaptive Card Renderer!</strong><br>
+                        Channels jo Adaptive Cards support nahi karte, unke liye image render karo!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Adaptive Card Renderer — Enterprise Channel SDK Code
+// From: Intercom/Channels/Intercom.ChannelSDK - Card Image Rendering
+
+/// &lt;summary&gt;
+/// Adaptive Card ko IMAGE mein convert karo!
+/// Jo channels Adaptive Cards support nahi karte (e.g., SMS, Email),
+/// unke liye card ka screenshot render karke image bhej do.
+/// &lt;/summary&gt;
+public class AdaptiveCardRenderer : IAdaptiveCardRenderer
+{
+    private readonly string _channelId;
+
+    public AdaptiveCardRenderer(string channelId)
+    {
+        _channelId = channelId;
+    }
+
+    /// &lt;summary&gt;
+    /// Adaptive Card render karke Azure Blob Storage mein store karo.
+    /// Image URL return hoga jo channel pe bhej sakte ho.
+    /// &lt;/summary&gt;
+    public Task&lt;string&gt; RenderAdaptiveCardToAttachmentStoreAsync(
+        AdaptiveCard adaptiveCard, 
+        string botID, 
+        string botRegion, 
+        IAttachmentStore attachmentStore, 
+        int width, 
+        bool disableBlobAnonymousAccess = true)
+    {
+        return AdaptiveCardImageRendererSingleton.RenderAdaptiveCardToAttachmentStoreAsync(
+            adaptiveCard, 
+            _channelId,     // Channel ke hisaab se styling
+            botID, 
+            botRegion, 
+            attachmentStore, 
+            width,          // Image width in pixels
+            disableBlobAnonymousAccess);
+    }
+
+    /// &lt;summary&gt;
+    /// Adaptive Card render karke raw attachment data return karo.
+    /// Inline sending ke liye — storage mein save nahi karna.
+    /// &lt;/summary&gt;
+    public Task&lt;AttachmentData&gt; RenderAdaptiveCardToAttachmentDataAsync(
+        AdaptiveCard adaptiveCard, 
+        string botID, 
+        string botRegion, 
+        int width)
+    {
+        return AdaptiveCardImageRendererSingleton.RenderAdaptiveCardToAttachmentDataAsync(
+            adaptiveCard, 
+            _channelId, 
+            botID, 
+            botRegion, 
+            width);
+    }
+}
+
+// Usage in channel: 
+// var renderer = new AdaptiveCardRenderer("whatsapp");
+// var imageUrl = await renderer.RenderAdaptiveCardToAttachmentStoreAsync(
+//     adaptiveCard, botId, "westus", attachmentStore, 400);
+// // Now send imageUrl to WhatsApp instead of JSON card!</code></pre>
                 </div>
             </div>
         </section>
@@ -2268,6 +2924,233 @@ flowchart LR
                         2. Database mein store karo<br>
                         3. Later: ContinueConversationAsync use karke message bhejo
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 16.proactive-messages sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Proactive Bot — from 16.proactive-messages sample
+from typing import Dict
+from botbuilder.core import ActivityHandler, TurnContext
+from botbuilder.schema import ConversationReference, Activity
+
+class ProactiveBot(ActivityHandler):
+    """
+    Proactive Messaging — Bot pehle message kare bina user ke!
+    Reminders, notifications, alerts ke liye use karo.
+    """
+    
+    def __init__(self, conversation_references: Dict[str, ConversationReference]):
+        # Dictionary to store conversation references
+        self.conversation_references = conversation_references
+    
+    async def on_conversation_update_activity(self, turn_context: TurnContext):
+        # Jab bhi conversation update ho, reference save karo
+        self._add_conversation_reference(turn_context.activity)
+        return await super().on_conversation_update_activity(turn_context)
+    
+    async def on_message_activity(self, turn_context: TurnContext):
+        # Har message pe reference save karo (update latest info)
+        self._add_conversation_reference(turn_context.activity)
+        
+        return await turn_context.send_activity(
+            f"You sent: {turn_context.activity.text}\n\n"
+            f"Navigate to http://localhost:3978/api/notify to proactively message!"
+        )
+    
+    def _add_conversation_reference(self, activity: Activity):
+        """
+        ConversationReference capture aur store karo.
+        Ye reference baad mein proactive message bhejne ke liye use hoga!
+        """
+        conversation_reference = TurnContext.get_conversation_reference(activity)
+        # User ID ke saath store karo
+        self.conversation_references[conversation_reference.user.id] = conversation_reference
+
+
+# app.py mein — Proactive message bhejne ka endpoint
+# @app.route("/api/notify", methods=["POST"])
+async def notify_all_users(adapter, conversation_references):
+    """
+    Sabhi stored users ko message bhejo!
+    Ye API endpoint se trigger hota hai.
+    """
+    for conversation_reference in conversation_references.values():
+        await adapter.continue_conversation(
+            conversation_reference,
+            lambda turn_context: turn_context.send_activity("Proactive hello! 🎉"),
+            app_id
+        )</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Enterprise C# Code — PostBox Messaging System!</strong><br>
+                        Real Azure Bot Service mein distributed proactive messaging kaise handle hoti hai!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// PostBox — Enterprise Proactive Message Delivery (From Intercom Codebase)
+// Distributed message delivery for scaled-out bot scenarios
+
+public class PostBox : IPostBox, IPostBoxInternal
+{
+    private readonly CancellationTokenSource _ctSource = new CancellationTokenSource();
+    private readonly IPostBoxListener _listener;
+    private readonly IPostBoxClient _redisClient;     // Redis for fast delivery
+    private readonly IPostBoxClient _httpPostBoxClient; // HTTP fallback
+    private readonly IInstanceTable _instanceTable;    // Bot instance tracking
+
+    public string InstanceId { get; }
+    public string SiteUrl { get; }
+
+    public static readonly string MachineName = Environment.GetEnvironmentVariable("COMPUTERNAME");
+    public static readonly string SiteName = Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME");
+    public static readonly string AffinityId = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
+
+    /// &lt;summary&gt;
+    /// Proactive message post karo kisi bhi instance pe!
+    /// First Redis try karo (fast), phir HTTP fallback.
+    /// &lt;/summary&gt;
+    public async Task PostAsync(string instanceId, string contentType, string content, 
+                                 string activityId, CancellationToken token = default)
+    {
+        // Local delivery — same instance pe hai?
+        if (instanceId == InstanceId && await Dials.DirectLine.LoopbackForLocalCrates.GetValueAsync())
+        {
+            var delivered = await DispatchAsync(contentType, content, null);
+            AppInsights.TrackTraceEx("PostBox.Dispatch", "Source", "Direct", "Delivered", delivered);
+        }
+        else
+        {
+            // Remote instance pe deliver karna hai
+            var instance = await _instanceTable.GetInstanceAsync(instanceId, cancellationToken: token);
+            if (instance == null)
+            {
+                AppInsights.TrackTraceEx("Instance not found", "InstanceId", instanceId);
+                return;  // Instance no longer active
+            }
+            await PostAsync(instance, contentType, content, activityId, token);
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// Smart delivery — Redis first, HTTP fallback
+    /// Redis fast hai lekin unreliable, HTTP slow but guaranteed.
+    /// &lt;/summary&gt;
+    private async Task&lt;bool&gt; PostAsync(InstanceDocument instanceDocument, string contentType, 
+                                        string content, string activityId, CancellationToken token)
+    {
+        var messageId = IdFactory.CreateId();
+        var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+        // Redis try karo with 1 second timeout
+        var redisTask = _redisClient.SendAsync(instanceDocument, contentType, content, messageId, activityId, token);
+        var completedTask = await Task.WhenAny(redisTask, Task.Delay(TimeSpan.FromSeconds(1), token));
+
+        if (completedTask == redisTask)
+        {
+            var delivered = await redisTask;
+            if (delivered) return true;  // Redis delivered! Done!
+        }
+
+        // Redis didn't work — HTTP fallback
+        AppInsights.TrackTrace($"Redis didn't deliver. Starting Http task");
+        return await _httpPostBoxClient.SendAsync(instanceDocument, contentType, content, messageId, activityId, token);
+    }
+
+    /// &lt;summary&gt;
+    /// Conversation evict karo — stale conversation cleanup
+    /// &lt;/summary&gt;
+    public async Task EvictAsync(string instanceId, string conversationId)
+    {
+        var instance = await _instanceTable.GetInstanceAsync(instanceId, CancellationToken.None);
+        if (instance == null) return;
+
+        AppInsights.TrackEventEx("POSTBOX: Posting eviction", 
+            "Instance ID", InstanceId, "ConversationId", conversationId);
+
+        await PostAsync(instance, "evict",
+            JsonConvert.SerializeObject(new EvictionNotice()
+            {
+                InstanceId = instance.InstanceId,
+                ConversationId = conversationId
+            }), null, CancellationToken.None);
+    }
+}</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Cognitive Services Token Generator — Speech Integration!</strong><br>
+                        Web Chat aur Emulator mein Speech kaise enable hota hai!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Cognitive Services Token Generator — Enterprise Speech Integration
+// From: Intercom/Utilities/SpeechServices - Speech-to-Text Token Management
+
+/// &lt;summary&gt;
+/// Speech Recognition tokens generate karo for Emulator/WebChat.
+/// Ye tokens Azure Cognitive Services Speech API ke liye hain.
+/// &lt;/summary&gt;
+public class CognitiveServicesTokenGenerator : ICognitiveServicesTokenGenerator
+{
+    private static readonly HttpClient _httpClient = new HttpClient();
+    
+    // Cognitive Services tokens sirf 10 minutes valid hote hain!
+    private static TimeSpan _cognitiveServiceTokenMaxLife = TimeSpan.FromMinutes(10);
+
+    /// &lt;summary&gt;
+    /// Speech token generate karo — Emulator microphone use kar sake!
+    /// &lt;/summary&gt;
+    public async Task&lt;SpeechTokenInfo&gt; GetTokenAsync()
+    {
+        if (!CognitiveServicePerCloud.Instance.GetSettings().IsSpeechServiceEnabled)
+            throw new Exception("Cognitive Speech Services not enabled in this region.");
+
+        var attempt = 0;
+        var maxRetries = await Dials.Channels.GetCognitiveServiceTokenMaxRetries.GetValueAsync();
+
+        while (attempt++ &lt;= maxRetries)
+        {
+            try
+            {
+                using (var request = new HttpRequestMessage(HttpMethod.Post, 
+                    CognitiveServicePerCloud.Instance.GetSettings().EndPoint))
+                {
+                    // Subscription key header — Azure portal se
+                    request.Headers.Add("Ocp-Apim-Subscription-Key", GetSubscriptionKey());
+
+                    using (HttpResponseMessage response = await _httpClient.SendAsync(request))
+                    {
+                        response.EnsureSuccessStatusCode();
+
+                        return new SpeechTokenInfo
+                        {
+                            AccessToken = await response.Content.ReadAsStringAsync(),
+                            Region = CognitiveServicePerCloud.Instance.GetSettings().RegionName,
+                            Expiry = DateTimeOffset.UtcNow.Add(_cognitiveServiceTokenMaxLife).ToUnixTimeMilliseconds(),
+                            TokenLife = _cognitiveServiceTokenMaxLife.TotalMilliseconds
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppInsights.TrackException(ex, "Getting Speech Service Token Failed");
+                if (attempt &gt;= maxRetries) throw;
+            }
+
+            // Exponential backoff
+            await Task.Delay(TimeSpan.FromSeconds(attempt));
+        }
+
+        throw new Exception("Speech Services did not return a token");
+    }
+
+    private static string GetSubscriptionKey()
+    {
+        string key = IntercomEnvironment.Current.SecretGlobal(BindGlobal.accounts_emulatorSpeech);
+        if (string.IsNullOrEmpty(key))
+            throw new Exception("Subscription Key Not Found!");
+        return key;
+    }
+}</code></pre>
                 </div>
             </div>
         </section>
@@ -2328,6 +3211,109 @@ flowchart TB
                         
                         <strong>QnA Maker</strong> bhi retired — use <strong>Custom Question Answering</strong> (Azure AI Language feature)
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Enterprise C# Code — LUIS API Client (Legacy but Educational)!</strong><br>
+                        Real Azure Bot Service LUIS integration code — shows how NLU APIs work internally!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// LUIS Cognitive Service API Client — Enterprise Production Code
+// From: Intercom/Utilities/Intercom.Luis - Real ABS LUIS Infrastructure
+
+public class LuisCognitiveServiceApiClient : LuisApiBase, ILuisCognitiveServiceApiClient
+{
+    // Training status types jo polling mein check hote hain
+    private static readonly ISet&lt;LuisTrainResponse.TrainStatus&gt; TerminalTrainingStatuses = 
+        new HashSet&lt;LuisTrainResponse.TrainStatus&gt;
+    {
+        LuisTrainResponse.TrainStatus.Fail,
+        LuisTrainResponse.TrainStatus.Success,
+        LuisTrainResponse.TrainStatus.UpToDate  // Already trained
+    };
+
+    private readonly TimeSpan _modelTrainPollInterval = TimeSpan.FromSeconds(1);
+    private const int ModelTrainPollRetryCount = 50;
+
+    private const string AppsPath = "/apps";
+    private const string ImportPath = AppsPath + "/import";
+
+    /// &lt;summary&gt;
+    /// Bot ko LUIS App access authorize karo.
+    /// Runtime permissions set karo — bot ye app use kar sake.
+    /// &lt;/summary&gt;
+    public async Task AuthorizeBotToApp(string progKey, string botAppId, string luisAppId)
+    {
+        var request = new AuthorizeBotRequest { AuthId = botAppId };
+        await Post(
+            new LuisApiCigEndpoint(_luisCigApiHostName, progKey, privateEndpoint: true), 
+            $"{AppsPath}/{luisAppId}/runtimepermissions/bot", 
+            request).ConfigureAwait(false);
+    }
+
+    /// &lt;summary&gt;
+    /// LUIS App import karo from JSON definition.
+    /// New app create hoga with intents, entities, utterances.
+    /// &lt;/summary&gt;
+    public async Task&lt;string&gt; ImportApp(string progKey, string appName, string appJson)
+    {
+        var response = await PostJson(
+            new LuisApiCigEndpoint(_luisCigApiHostName, progKey), 
+            ImportPath, 
+            appJson, 
+            new Dictionary&lt;string, string&gt; { ["appName"] = appName }
+        ).ConfigureAwait(false);
+        
+        return response == null ? null : JsonConvert.DeserializeObject&lt;string&gt;(response);
+    }
+
+    /// &lt;summary&gt;
+    /// LUIS model train karo!
+    /// Training asynchronous hai — poll karo status check karne ke liye.
+    /// &lt;/summary&gt;
+    public async Task&lt;LuisTrainResponse.TrainStatus&gt; Train(string appId, string key, string version)
+    {
+        // Training trigger karo
+        string postTrainResp = await Post(
+            new LuisApiCigEndpoint(_luisCigApiHostName, key), 
+            $"/apps/{appId}/versions/{version}/train", 
+            string.Empty).ConfigureAwait(false);
+        
+        LuisAppTrainingStatus status = JsonConvert.DeserializeObject&lt;LuisAppTrainingStatus&gt;(postTrainResp);
+        
+        if (status.Status == LuisTrainResponse.TrainStatus.UpToDate)
+            return LuisTrainResponse.TrainStatus.UpToDate;  // Already trained!
+
+        // Poll for completion — training takes time
+        ICollection&lt;LuisTrainResponse&gt; trainingStatus = null;
+        for (int retryAttempts = 0; retryAttempts &lt; ModelTrainPollRetryCount; retryAttempts++)
+        {
+            trainingStatus = (await GetTrainingStatus(appId, key, version)).ToArray();
+            
+            if (AllModelsTrained(trainingStatus))
+            {
+                return trainingStatus.All(p =&gt; p.Details.Status != LuisTrainResponse.TrainStatus.Fail) 
+                    ? LuisTrainResponse.TrainStatus.Success 
+                    : LuisTrainResponse.TrainStatus.Fail;
+            }
+
+            await Task.Delay(_modelTrainPollInterval).ConfigureAwait(false);
+        }
+
+        return LuisTrainResponse.TrainStatus.Fail;
+    }
+
+    /// &lt;summary&gt;
+    /// Trained model publish karo — production endpoint pe deploy
+    /// &lt;/summary&gt;
+    public async Task Publish(string appId, string key, string version)
+    {
+        await Post(
+            new LuisApiCigEndpoint(_luisCigApiHostName, key), 
+            $"/apps/{appId}/publish", 
+            new { versionId = version, isStaging = false }  // Production slot
+        ).ConfigureAwait(false);
+    }
+}</code></pre>
                 </div>
             </div>
         </section>
@@ -2385,6 +3371,69 @@ flowchart TB
                         • <strong>Team Collaboration</strong> — Different teams different skills develop karein<br>
                         • <strong>Independent Deployment</strong> — Skills separately deploy ho sakte hain
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 80.skills-simple-bot-to-bot sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># SKILL BOT — Echo Skill (from echo-skill-bot sample)
+from botbuilder.core import ActivityHandler, MessageFactory, TurnContext
+from botbuilder.schema import Activity, ActivityTypes, EndOfConversationCodes
+
+class EchoSkillBot(ActivityHandler):
+    """
+    Ye ek SKILL bot hai — doosra bot (Root Bot) isko call karega!
+    Skill apna kaam karke EndOfConversation bhejega.
+    """
+    
+    async def on_message_activity(self, turn_context: TurnContext):
+        if "end" in turn_context.activity.text.lower():
+            # Skill khatam — EndOfConversation bhejo!
+            await turn_context.send_activity(MessageFactory.text("Ending skill..."))
+            
+            end_of_conversation = Activity(type=ActivityTypes.end_of_conversation)
+            end_of_conversation.code = EndOfConversationCodes.completed_successfully
+            await turn_context.send_activity(end_of_conversation)
+        else:
+            # Normal echo response
+            await turn_context.send_activity(
+                MessageFactory.text(f"Skill Echo: {turn_context.activity.text}")
+            )
+            await turn_context.send_activity(
+                MessageFactory.text('Say "end" to return to root bot')
+            )
+
+
+# ROOT BOT — Skill Consumer (from simple-root-bot sample)
+from botbuilder.core.skills import BotFrameworkSkill
+from botbuilder.integration.aiohttp.skills import SkillHttpClient
+
+class RootBot(ActivityHandler):
+    """
+    ROOT BOT — Ye Skill Consumer hai.
+    User ka message skill ko forward karta hai!
+    """
+    
+    def __init__(self, conversation_state, skills_config, skill_client):
+        self._skill_client = skill_client
+        self._skills_config = skills_config
+        self._conversation_state = conversation_state
+        self._active_skill_property = conversation_state.create_property("activeSkill")
+    
+    async def on_message_activity(self, turn_context: TurnContext):
+        if "skill" in turn_context.activity.text.lower():
+            # Skill activate karo!
+            await turn_context.send_activity("Connecting to skill...")
+            
+            skill = self._skills_config.SKILLS["EchoSkillBot"]
+            await self._active_skill_property.set(turn_context, skill)
+            
+            # Skill ko message forward karo
+            await self._skill_client.post_activity_to_skill(
+                self._bot_id, skill, skill_host_endpoint, turn_context.activity
+            )
+        else:
+            await turn_context.send_activity('Say "skill" to connect to Echo Skill')</code></pre>
                 </div>
             </div>
         </section>
@@ -2576,6 +3625,179 @@ flowchart TB
                         Sign-in URL <strong>kabhi share mat karo!</strong> Ye specific conversation ke liye hoti hai.<br>
                         Kuch channels (Teams, Web Chat) automatically verify karte hain, baaki channels mein <strong>6-digit magic code</strong> enter karna padta hai confirmation ke liye.
                     </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 18.bot-authentication sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Authentication Bot — from 18.bot-authentication sample
+from botbuilder.core import ConversationState, UserState, TurnContext
+from botbuilder.dialogs import Dialog
+from helpers.dialog_helper import DialogHelper
+
+class AuthBot(DialogBot):
+    """
+    Authentication Bot — User ko login karwao, secure resources access karo!
+    OAuth flow handle karta hai ye bot.
+    """
+    
+    def __init__(self, conversation_state: ConversationState, user_state: UserState, dialog: Dialog):
+        super().__init__(conversation_state, user_state, dialog)
+    
+    async def on_members_added_activity(self, members_added, turn_context: TurnContext):
+        for member in members_added:
+            if member.id != turn_context.activity.recipient.id:
+                await turn_context.send_activity(
+                    "Welcome to AuthenticationBot! Type anything to login. "
+                    "Type 'logout' to sign-out."
+                )
+    
+    async def on_token_response_event(self, turn_context: TurnContext):
+        """
+        ⚡ TOKEN RESPONSE EVENT — Ye tab fire hota hai jab:
+        1. User ne login kiya
+        2. Token service ne token return kiya
+        
+        Is event mein dialog continue karo jo token use karega!
+        """
+        await DialogHelper.run_dialog(
+            self.dialog,
+            turn_context,
+            self.conversation_state.create_property("DialogState")
+        )
+
+
+# Main Dialog mein OAuth Prompt use karo
+from botbuilder.dialogs.prompts import OAuthPrompt, OAuthPromptSettings
+
+class MainDialog(ComponentDialog):
+    def __init__(self, connection_name: str):
+        super().__init__(MainDialog.__name__)
+        
+        # OAuth Prompt add karo
+        self.add_dialog(OAuthPrompt(
+            OAuthPrompt.__name__,
+            OAuthPromptSettings(
+                connection_name=connection_name,  # Azure Portal mein configure kiya hua
+                text="Please sign in",
+                title="Sign In",
+                timeout=300000  # 5 minutes
+            )
+        ))
+    
+    async def prompt_step(self, step_context):
+        """User ko login karwao"""
+        return await step_context.begin_dialog(OAuthPrompt.__name__)
+    
+    async def login_step(self, step_context):
+        """Token mil gaya! Ab use karo"""
+        token_response = step_context.result
+        
+        if token_response:
+            await step_context.context.send_activity(f"You are now logged in! ✅")
+            # Token use karke API call karo (e.g., Microsoft Graph)
+            # token_response.token mein actual token hai
+        else:
+            await step_context.context.send_activity("Login failed. Please try again.")
+        
+        return await step_context.end_dialog()</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Enterprise C# Code — Auth Helper & Token Validation!</strong><br>
+                        Ye code Azure Bot Service Intercom production infrastructure se hai!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Auth Helper — First Party App Validation (Enterprise Production Code)
+// From: Intercom/Utilities - Real ABS Authentication Infrastructure
+
+public static class AuthHelper
+{
+    /// &lt;summary&gt;
+    /// Check karo ki incoming token First Party App se hai ya nahi.
+    /// Bot Connector se aane wale requests verify karo!
+    /// &lt;/summary&gt;
+    public static bool IsFirstPartyApp(string token)
+    {
+        if (string.IsNullOrEmpty(token))
+            throw new ArgumentNullException(nameof(token));
+
+        // JWT token se claims extract karo
+        var principal = TokenExchanger.GetPrincipalForToken(token);
+        return principal != null && IsFirstPartyApp(principal);
+    }
+
+    /// &lt;summary&gt;
+    /// ClaimsPrincipal se App ID check karo
+    /// First Party = Microsoft's own Bot Framework infrastructure
+    /// &lt;/summary&gt;
+    public static bool IsFirstPartyApp(ClaimsPrincipal principal)
+    {
+        if (principal == null)
+            throw new ArgumentNullException(nameof(principal));
+
+        // JWT claims se App ID nikalo
+        var appId = principal.GetAppId();
+        
+        // Environment-specific settings se compare karo
+        var firstPartyAppId = SecurityPerEnvironment.Instance.GetSettings().FirstPartyAppClientId;
+        
+        return string.Equals(appId, firstPartyAppId, StringComparison.OrdinalIgnoreCase);
+    }
+}</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        🏢 <strong>Token Maker — Secure Key Generation!</strong><br>
+                        Azure Bot Service mein secure tokens kaise generate hote hain!
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Token Maker — Cryptographic Key Generation (Enterprise Code)
+// From: Intercom/Utilities/TokenMaker - Production Security Infrastructure
+
+public class TokenMaker
+{
+    private static RNGCryptoServiceProvider _crypto = new RNGCryptoServiceProvider();
+    private readonly IEncoder _encoder;
+    private AzureCloud _cloudName;
+    const string AzureFunctionsSignature = "AZBS";  // Azure Bot Service signature
+
+    /// &lt;summary&gt;
+    /// Azure Common Annotated Key generate karo
+    /// New compliant format with metadata embedded
+    /// &lt;/summary&gt;
+    private string GenerateAzureCommonAnnotatedKey()
+    {
+        string tenantId = GetTenantId();
+        
+        // Microsoft Security Utilities library use karke secure key
+        return AzureIdentifiableSecrets.GenerateAzureCommonAnnotatedKey(
+            signature: AzureFunctionsSignature,
+            customerManagedKey: true,
+            cloud: _cloudName,
+            region: _regionName.ToString(),
+            tenantGuid: Guid.Parse(tenantId),
+            (byte)KeyKind.FunctionScope
+        );
+    }
+
+    /// &lt;summary&gt;
+    /// App Secret generate karo — internally verifiable
+    /// &lt;/summary&gt;
+    public string GenerateSecret(string siteId, bool useNewFormat)
+    {
+        byte[] appBytes = _encoder.Decode(siteId);
+        
+        if (useNewFormat)
+        {
+            var entropy = GenerateAzureCommonAnnotatedKey();
+            return _encoder.Join(appBytes, _encoder.Decode(entropy));
+        }
+        else
+        {
+            byte[] entropyBytes = GenerateRandomBytes(32);  // Legacy format
+            return _encoder.Join(appBytes, entropyBytes);
+        }
+    }
+}</code></pre>
                 </div>
             </div>
         </section>
@@ -2688,6 +3910,72 @@ flowchart TB
                         • Quick menu: "Order Status" / "Track Package" / "Contact Support"<br><br>
                         
                         <em>Suggested Actions se typing kam hoti hai aur user experience smooth hota hai!</em>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        🐍 <strong>Python Code — 08.suggested-actions sample se!</strong>
+                    </div>
+
+                    <pre class="language-python line-numbers"><code># Python Suggested Actions — from 08.suggested-actions sample
+from botbuilder.core import ActivityHandler, MessageFactory, TurnContext
+from botbuilder.schema import CardAction, ActionTypes, SuggestedActions
+
+class SuggestActionsBot(ActivityHandler):
+    """
+    Suggested Actions — Quick reply buttons jo click ke baad disappear!
+    User ko options do, typing ki zaroorat nahi.
+    """
+    
+    async def on_message_activity(self, turn_context: TurnContext):
+        # User ke response ko process karo
+        text = turn_context.activity.text.lower()
+        
+        if text == "red":
+            response = "Red is the best color, I agree! 🔴"
+        elif text == "blue":
+            response = "Blue is the best color, I agree! 🔵"
+        else:
+            response = "Please select a color"
+        
+        await turn_context.send_activity(MessageFactory.text(response))
+        
+        # Suggested Actions wapas bhejo
+        return await self._send_suggested_actions(turn_context)
+    
+    async def _send_suggested_actions(self, turn_context: TurnContext):
+        """
+        Suggested Actions ke saath message bhejo.
+        Buttons click hone pe disappear ho jaate hain!
+        """
+        reply = MessageFactory.text("What is your favorite color?")
+        
+        # SuggestedActions attach karo
+        reply.suggested_actions = SuggestedActions(
+            actions=[
+                CardAction(
+                    title="Red",
+                    type=ActionTypes.im_back,  # im_back = message visible in chat
+                    value="Red",
+                    image="https://via.placeholder.com/20/FF0000?text=R"
+                ),
+                CardAction(
+                    title="Blue", 
+                    type=ActionTypes.im_back,
+                    value="Blue",
+                    image="https://via.placeholder.com/20/0000FF?text=B"
+                ),
+                CardAction(
+                    title="Yellow",
+                    type=ActionTypes.im_back,
+                    value="Yellow"
+                )
+            ]
+        )
+        
+        return await turn_context.send_activity(reply)</code></pre>
+
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        💻 <strong>C# Version:</strong>
                     </div>
 
                     <pre class="language-csharp line-numbers"><code>// C# Example - Suggested Actions
@@ -2909,9 +4197,895 @@ flowchart LR
             </div>
         </section>
 
+        <!-- ==================== BONUS: ENTERPRISE DEEP DIVE ==================== -->
+        <section class="topic-section" id="enterprise-deep-dive">
+            <header class="topic-header">
+                <div class="topic-badge">🏢 BONUS Chapter — Enterprise Deep Dive</div>
+                <h2>Production ABS Infrastructure — Real Code Se Samjho!</h2>
+                <p class="topic-subtitle">Microsoft ka actual Intercom codebase — WhatsApp, DirectLine, Token Service, Channel Connectors!</p>
+            </header>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">🎯</div>
+                    <h3 class="section-title">Kahani Shuru — Message Ka Safar Samjho!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📖 <strong>Imagine Karo — Ek WhatsApp Message Ka Journey!</strong><br><br>
+                        
+                        <strong>Scene 1:</strong> Tumhara friend "Ravi" apne phone pe WhatsApp kholta hai aur type karta hai: <em>"Pizza order karna hai"</em><br><br>
+                        
+                        <strong>Question:</strong> Ye message tumhare bot tak kaise pahunchta hai? 🤔<br><br>
+                        
+                        <strong>Answer:</strong> Bahut lambi journey hai bhai! WhatsApp → Azure Communication Services → Channel Connector → Bot Connector → Tumhara Bot!<br><br>
+                        
+                        <em>Chalo step-by-step samjhte hain enterprise code ke saath...</em>
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>🗺️ Message Journey — WhatsApp to Bot</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">ENTERPRISE MESSAGE FLOW — PRODUCTION INFRASTRUCTURE</div>
+                            <div class="mermaid">
+flowchart TB
+    subgraph User["📱 USER DEVICE"]
+        WA["WhatsApp App<br/>Message: Pizza order karna hai"]
+    end
+    
+    subgraph Meta["🌐 META SERVERS"]
+        WAS["WhatsApp Business API<br/>Webhook trigger"]
+    end
+    
+    subgraph Azure["☁️ AZURE INFRASTRUCTURE"]
+        ACS["Azure Communication Services<br/>Message receive"]
+        WC["WhatsApp Channel Connector<br/>✨ Message normalization"]
+        BC["Bot Connector Service<br/>🔐 JWT Authentication"]
+    end
+    
+    subgraph Bot["🤖 YOUR BOT"]
+        BL["Bot Logic<br/>Process & Respond"]
+    end
+    
+    User -->|"1. User types"| Meta
+    Meta -->|"2. Webhook"| ACS
+    ACS -->|"3. Event"| WC
+    WC -->|"4. Activity"| BC
+    BC -->|"5. POST /api/messages"| Bot
+    Bot -->|"6. Response"| BC
+    BC -->|"7. Reply"| WC
+    WC -->|"8. Send"| Meta
+    Meta -->|"9. Deliver"| User
+    
+    style WA fill:#25D366,color:#fff
+    style WC fill:#0078d4,color:#fff
+    style BC fill:#ff9f43,color:#fff
+    style BL fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hinglish-note" style="background: rgba(255, 157, 67, 0.1); border-left-color: var(--accent-orange);">
+                        🔥 <strong>Ye Sab Enterprise Infra Hai!</strong><br><br>
+                        Jo tum Azure Portal mein "Add Channel" click karke WhatsApp add karte ho — uske peeche ye sab code chal raha hai!<br><br>
+                        Intercom codebase mein <strong>5575+ C# files</strong> hain jo ye sab handle karte hain!
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h3 class="section-title">Activity Schema — Bot Framework Ka Universal Language</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📚 <strong>Kahani Continue — Activity Kya Hai?</strong><br><br>
+                        
+                        Socho WhatsApp ka message format alag hai, Facebook ka alag hai, Teams ka alag hai.<br>
+                        Agar tumhe har platform ke liye alag code likhna pade toh pagal ho jaoge! 😵<br><br>
+                        
+                        <strong>Solution?</strong> Bot Framework ne ek <strong>"Universal Language"</strong> banayi — <strong>Activity Schema!</strong><br><br>
+                        
+                        Har channel ka message pehle <strong>Activity format</strong> mein convert hota hai, phir tumhare bot ko milta hai.<br>
+                        Tum ek code likho, wo sab platforms pe kaam kare! 🎉
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Activity Class — The Universal Message Format (From Intercom/ChannelSDK)
+// Ye class Bot Framework 3.0 protocol ka core hai!
+
+namespace Microsoft.Bot.Schema
+{
+    /// &lt;summary&gt;
+    /// Activity is the UNIVERSAL communication format!
+    /// Chahe WhatsApp se message aaye ya Teams se — sab Activity ban jaata hai.
+    /// 
+    /// Kahani: Imagine Activity ko ek "translator" samjho.
+    /// WhatsApp Hindi bolti hai, Teams English bolti hai, Facebook French bolti hai.
+    /// Activity sabko ek hi language mein convert kar deta hai!
+    /// &lt;/summary&gt;
+    public class Activity :
+        IActivity,
+        IMessageActivity,           // 💬 Normal messages
+        IConversationUpdateActivity, // 👋 Join/Leave events  
+        ITypingActivity,            // ⌨️ User is typing...
+        IEventActivity,             // 🔔 Custom events
+        IInvokeActivity,            // ⚡ Sync operations
+        ICommandActivity            // 🎮 Commands
+    {
+        // 🎯 Activity Types — Har type of interaction
+        public static IMessageActivity CreateMessageActivity() 
+            => new Activity(ActivityTypes.Message);
+            
+        public static ITypingActivity CreateTypingActivity() 
+            => new Activity(ActivityTypes.Typing);
+            
+        public static IConversationUpdateActivity CreateConversationUpdateActivity() 
+            => new Activity(ActivityTypes.ConversationUpdate);
+        
+        // 🔍 Check Activity Type — Bot logic mein use karo
+        public IMessageActivity AsMessageActivity() 
+            => IsActivity(ActivityTypes.Message) ? this : null;
+            
+        public ITypingActivity AsTypingActivity() 
+            => IsActivity(ActivityTypes.Typing) ? this : null;
+    }
+}</code></pre>
+
+                    <pre class="language-csharp line-numbers"><code>// Activity Types — Saari Activity Types Define Hain Yahaan!
+namespace Microsoft.Bot.Schema
+{
+    /// &lt;summary&gt;
+    /// Ye constants hain jo bataate hain activity kis type ki hai.
+    /// 
+    /// Kahani: Jaise letters ke types hote hain (normal, registered, speed post),
+    /// waise hi messages ke types hote hain!
+    /// &lt;/summary&gt;
+    public class ActivityTypes
+    {
+        // 💬 Normal message — "Hello", "Pizza order karo"
+        public const string Message = "message";
+        
+        // 👋 User join/leave — Group mein koi aaya ya gaya
+        public const string ConversationUpdate = "conversationUpdate";
+        
+        // ⌨️ Typing indicator — "User is typing..."
+        public const string Typing = "typing";
+        
+        // 🔚 Conversation end — "Bye bye!"
+        public const string EndOfConversation = "endOfConversation";
+        
+        // 🔔 Event — External trigger jaise "payment successful"
+        public const string Event = "event";
+        
+        // ⚡ Invoke — Synchronous call with response expected
+        public const string Invoke = "invoke";
+        
+        // ✏️ Message updated — User ne apna message edit kiya
+        public const string MessageUpdate = "messageUpdate";
+        
+        // 🗑️ Message deleted — User ne message delete kiya
+        public const string MessageDelete = "messageDelete";
+        
+        // 👍 Reaction — Like, love, laugh
+        public const string MessageReaction = "messageReaction";
+        
+        // 🤝 Handoff — Live agent ko transfer
+        public const string Handoff = "handoff";
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h3 class="section-title">Channel Connector Interface — Gateway to Channels</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        📚 <strong>Kahani Continue — Connector Ka Kaam!</strong><br><br>
+                        
+                        Ab samjho Channel Connector kya karta hai...<br><br>
+                        
+                        Socho tumhare bot ne response diya: <em>"Pizza order confirmed! 🍕"</em><br><br>
+                        
+                        Lekin ye response user tak kaise pahunchega? WhatsApp ko directly nahi bhej sakte!<br><br>
+                        
+                        <strong>IChannelConnector</strong> wo interface hai jo bot aur channel ke beech <strong>"translator + delivery boy"</strong> ka kaam karta hai!<br>
+                        → Bot se message lo<br>
+                        → Channel ke format mein convert karo<br>
+                        → User tak deliver karo<br>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// IChannelConnector — The Gateway Interface (From Intercom/ChannelSDK)
+// Har channel (WhatsApp, Teams, Slack) ka apna connector hota hai jo ye interface implement karta hai.
+
+namespace Microsoft.Bot.ChannelConnector
+{
+    /// &lt;summary&gt;
+    /// Bot ke liye channel se baat karne ka doorway!
+    /// 
+    /// Kahani: Ye ek "Embassy" jaisa hai.
+    /// Agar bot India hai aur WhatsApp USA hai, toh Connector unke beech ka Embassy hai
+    /// jo messages translate karke deliver karta hai!
+    /// &lt;/summary&gt;
+    public interface IChannelConnector
+    {
+        /// &lt;summary&gt;
+        /// Channel ka unique identifier — "whatsapp", "teams", "slack", etc.
+        /// &lt;/summary&gt;
+        string ChannelId { get; }
+
+        /// &lt;summary&gt;
+        /// Nayi conversation start karo!
+        /// Jaise WhatsApp pe "Start Chat" karna.
+        /// &lt;/summary&gt;
+        Task&lt;ConversationResourceResponse&gt; CreateConversationAsync(
+            ActivityContext context, 
+            ConversationParameters parameters);
+
+        /// &lt;summary&gt;
+        /// 💬 Bot ka message user ko bhejo!
+        /// Ye sabse zyada use hone wala method hai.
+        /// 
+        /// Example: Bot bola "Pizza order confirmed!" 
+        /// → Ye method isko WhatsApp message mein convert karke bhejega
+        /// &lt;/summary&gt;
+        Task&lt;ResourceResponse&gt; SendMessageActivityToUserAsync(
+            ActivityContext context, 
+            IMessageActivity messageActivity);
+
+        /// &lt;summary&gt;
+        /// ⌨️ Typing indicator bhejo — "Bot is typing..."
+        /// User ko pata chale ki bot reply kar raha hai!
+        /// &lt;/summary&gt;
+        Task&lt;ResourceResponse&gt; SendTypingActivityToUserAsync(
+            ActivityContext context, 
+            ITypingActivity typingActivity);
+
+        /// &lt;summary&gt;
+        /// 🔚 Conversation end karo
+        /// "Thank you for chatting! Goodbye!"
+        /// &lt;/summary&gt;
+        Task&lt;ResourceResponse&gt; SendEndOfConversationActivityToUserAsync(
+            ActivityContext context, 
+            IEndOfConversationActivity endOfConversationActivity);
+
+        /// &lt;summary&gt;
+        /// ✏️ Message update karo — already sent message ko edit karo
+        /// Note: Sab channels support nahi karte (WhatsApp nahi karta)
+        /// &lt;/summary&gt;
+        Task&lt;ResourceResponse&gt; UpdateActivity(
+            ActivityContext context, 
+            IActivity activity);
+
+        /// &lt;summary&gt;
+        /// 🗑️ Message delete karo
+        /// Note: Sab channels support nahi karte
+        /// &lt;/summary&gt;
+        Task&lt;ErrorResponse&gt; DeleteActivity(
+            ActivityContext context, 
+            string conversationId, 
+            string activityId);
+
+        /// &lt;summary&gt;
+        /// 👥 Conversation ke members list karo
+        /// Group chat mein kaun-kaun hai?
+        /// &lt;/summary&gt;
+        Task&lt;ChannelAccount[]&gt; GetMembersAsync(
+            APIContext context, 
+            string conversationId, 
+            string messageId);
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h3 class="section-title">WhatsApp Message Mapping — Real Transformation!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Kahani Continue — WhatsApp to Activity Transformation!</strong><br><br>
+                        
+                        Ab real code dekhte hain — WhatsApp message kaise Activity ban jaata hai!<br><br>
+                        
+                        <strong>Step 1:</strong> User ne WhatsApp pe type kiya: "2 large pizzas"<br>
+                        <strong>Step 2:</strong> WhatsApp API ne ye message JSON format mein bheja<br>
+                        <strong>Step 3:</strong> WhatsAppOutgoingMessageMapper ne isko Bot Framework Activity mein convert kiya<br>
+                        <strong>Step 4:</strong> Ab tumhara bot isko samajh sakta hai!<br><br>
+                        
+                        <em>Ye "normalization" ka jaadu hai — ek format se doosre mein conversion!</em>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// WhatsApp Outgoing Message Mapper — Bot Response to WhatsApp Format
+// From: Intercom/Channels/WhatsAppChannel — Production Code!
+
+namespace WhatsApp.Core.Mapper
+{
+    /// &lt;summary&gt;
+    /// Bot ke Activity ko WhatsApp message mein convert karo!
+    /// 
+    /// Kahani: Bot ne bola "Your order is confirmed! 🍕"
+    /// Ab isko WhatsApp samjhe aise format mein convert karna hai.
+    /// &lt;/summary&gt;
+    public class WhatsAppOutgoingMessageMapper
+    {
+        // WhatsApp message limit — 4096 characters max
+        private int _messageTextLimit = Constants.MessageTextLimit;
+
+        /// &lt;summary&gt;
+        /// IMessageActivity → WhatsApp Envelope(s) mein convert karo!
+        /// 
+        /// Note: Ek Activity se multiple envelopes ban sakte hain!
+        /// Kyunki agar text + attachments hain toh alag-alag messages jayenge.
+        /// &lt;/summary&gt;
+        public List&lt;WhatsAppOutgoingMessageEnvelope&gt; ActivityToEnvelope(
+            IMessageActivity messageActivity, 
+            string botID, 
+            string botRegion, 
+            CancellationToken cancellationToken)
+        {
+            List&lt;WhatsAppOutgoingMessageEnvelope&gt; envelopes = new List&lt;WhatsAppOutgoingMessageEnvelope&gt;();
+
+            // 1️⃣ Text Message Handle Karo
+            string text = GetMessageActivityText(messageActivity);
+            
+            if (!string.IsNullOrEmpty(text))
+            {
+                // ⚠️ WhatsApp limit check — zyada lamba text toh split karo!
+                while (Encoding.UTF8.GetBytes(text).Length > 0)
+                {
+                    var envelope = CreateResponseEnvelope(messageActivity);
+                    int length = text.Length > _messageTextLimit ? _messageTextLimit : text.Length;
+                    
+                    // Proper UTF-8 boundary pe split karo
+                    var textToSet = text.Substring(0, length);
+                    while (Encoding.UTF8.GetBytes(textToSet).Length > _messageTextLimit)
+                    {
+                        length--;
+                        textToSet = text.Substring(0, length);
+                    }
+
+                    envelope.Data.Content = textToSet;
+                    envelope.Data.ContentType = WhatsAppContentType.Text;
+                    envelopes.Add(envelope);
+                    
+                    text = text.Substring(length);  // Remaining text
+                }
+            }
+
+            // 2️⃣ Attachments Handle Karo (Cards, Images, etc.)
+            if (messageActivity.Attachments != null)
+            {
+                foreach (Attachment attachment in messageActivity.Attachments)
+                {
+                    InteractiveMessage interactiveMessage = null;
+                    
+                    // 🎴 Adaptive Card → WhatsApp Interactive Message
+                    if (attachment.ContentType == "application/vnd.microsoft.card.adaptive")
+                    {
+                        AdaptiveCard card = JsonConvert.DeserializeObject&lt;AdaptiveCard&gt;(
+                            ((JObject)attachment.Content).ToString());
+                        var renderer = new AdaptiveCardRenderer(card);
+                        interactiveMessage = renderer.RenderToACSInteractiveMessage();
+                    }
+                    // 🔐 OAuth Card → WhatsApp Sign-in Button
+                    else if (attachment.ContentType == "application/vnd.microsoft.card.oauth")
+                    {
+                        OAuthCard oAuthCard = JsonConvert.DeserializeObject&lt;OAuthCard&gt;(
+                            ((JObject)attachment.Content).ToString());
+                        var renderer = new OAuthCardRenderer(oAuthCard);
+                        interactiveMessage = renderer.RenderToACSInteractiveMessage();
+                    }
+
+                    if (interactiveMessage != null)
+                    {
+                        // WhatsApp Interactive Message create karo
+                        var attachmentEnvelope = new WhatsAppOutgoingMessageEnvelope
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            EventType = "Notification",
+                            EventTime = DateTime.UtcNow,
+                            Data = new WhatsAppOutgoingMessage()
+                            {
+                                ContentType = WhatsAppContentType.Interactive,
+                                InteractiveContent = interactiveMessage,
+                                From = messageActivity.From.Id,
+                                To = messageActivity.Recipient.Id
+                            }
+                        };
+                        envelopes.Add(attachmentEnvelope);
+                    }
+                }
+            }
+
+            return envelopes;
+        }
+
+        /// &lt;summary&gt;
+        /// Markdown → WhatsApp format convert karo!
+        /// WhatsApp ka apna formatting hai (*bold*, _italic_, etc.)
+        /// &lt;/summary&gt;
+        private static string GetMessageActivityText(IMessageActivity messageActivity)
+        {
+            string text = messageActivity.Text;
+            if (string.IsNullOrEmpty(text)) return text;
+
+            // Markdown format toh WhatsApp Markdown mein convert karo
+            if (messageActivity.TextFormat == TextFormatTypes.Markdown)
+            {
+                var marked = new Marked();
+                marked.Options.Mangle = false;
+                marked.Options.Sanitize = false;
+                marked.Options.Renderer = new WhatsAppMarkdownRenderer();
+                text = marked.Parse(text);
+            }
+
+            return text;
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h3 class="section-title">DirectLine WebSocket — Real-Time Communication!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple);">
+                        📚 <strong>Kahani Continue — DirectLine Kya Hai?</strong><br><br>
+                        
+                        DirectLine ek special channel hai jo <strong>custom apps</strong> ke liye hai!<br><br>
+                        
+                        <strong>Use Case:</strong><br>
+                        • Apni website pe chat widget lagana hai? → DirectLine use karo!<br>
+                        • Mobile app mein bot integrate karna hai? → DirectLine use karo!<br>
+                        • Custom electron app bana rahe ho? → DirectLine use karo!<br><br>
+                        
+                        <strong>WebSocket</strong> use hota hai real-time, bi-directional communication ke liye.<br>
+                        User type kare → turant bot ko mile → turant response aaye!<br><br>
+                        
+                        <em>HTTP polling se 100x faster hai WebSocket! ⚡</em>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// DirectLine WebSocket — Real-Time Chat Infrastructure
+// From: Intercom/Channels/DirectLineChannel — Enterprise Production Code!
+
+namespace DirectLine.Controllers
+{
+    /// &lt;summary&gt;
+    /// WebSocket connection manager for DirectLine channel!
+    /// 
+    /// Kahani: HTTP request-response slow hai. Har baar connection kholo, message bhejo, band karo.
+    /// WebSocket ek baar connection kholo, phir freely messages aate-jaate rahen! 🚀
+    /// &lt;/summary&gt;
+    public class DirectLineWebSocket : IWebSocket, IDisposable
+    {
+        // 📊 Metrics tracking — kitne sockets connected hain
+        private static readonly CounterMetric _socketsConnected = 
+            new CounterMetric("SOCKET: Number sockets connected", AppInsights.AzureHostingDetails);
+        private static readonly CounterMetric _bytesSent = 
+            new CounterMetric("SOCKET: Bytes sent", AppInsights.AzureHostingDetails);
+
+        // 🔑 Socket state
+        private WebSocket _socket;
+        private readonly string _conversationId;
+        private DateTime _lastMessageTime = DateTime.UtcNow;
+
+        /// &lt;summary&gt;
+        /// Unique identifier for this socket connection
+        /// &lt;/summary&gt;
+        public string Id { get; } = Guid.NewGuid().ToString();
+
+        /// &lt;summary&gt;
+        /// WebSocket start karo aur messages listen karo!
+        /// 
+        /// Ye method long-running hai — jab tak user connected hai, ye chalta rahega.
+        /// &lt;/summary&gt;
+        public async Task RunAsync(WebSocket ws, string startingWatermark)
+        {
+            _socket = ws;
+            _socketsConnected.Increment();
+
+            try
+            {
+                // 1️⃣ Register this socket for the conversation
+                _sockets.TryAdd(_context.Conversation.ConversationId, this);
+
+                // 2️⃣ Start listening for messages (runs forever until disconnected)
+                await ReceiveLoop();
+
+                // 3️⃣ Send periodic ping to keep connection alive
+                _runner.RunForever(async token =>
+                {
+                    await SendPingAsync();
+                    return await GetLivenessIntervalAsync();
+                }, TimeSpan.FromSeconds(60), "WebSocketPing");
+            }
+            finally
+            {
+                // 4️⃣ Cleanup on disconnect
+                _socketsConnected.Decrement();
+                _sockets.TryRemove(_context.Conversation.ConversationId, out _);
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Bot se user ko message bhejo via WebSocket!
+        /// 
+        /// Ye method queue-based hai — fast delivery ensure karta hai.
+        /// &lt;/summary&gt;
+        public async Task SendAsync(Activity activity)
+        {
+            // Duplicate check — same message dobara na bheje
+            if (_sentActivities.Contains(activity.Id))
+                return;
+            _sentActivities.Add(activity.Id);
+
+            // Serialize and send
+            string json = JsonConvert.SerializeObject(activity);
+            byte[] bytes = Encoding.UTF8.GetBytes(json);
+            
+            await _socket.SendAsync(
+                new ArraySegment&lt;byte&gt;(bytes), 
+                WebSocketMessageType.Text, 
+                endOfMessage: true, 
+                CancellationToken.None);
+
+            _bytesSent.Increment(bytes.Length);
+            _lastMessageTime = DateTime.UtcNow;
+        }
+
+        /// &lt;summary&gt;
+        /// Connection alive check karo!
+        /// Stale connections ko aggressive ping karo.
+        /// &lt;/summary&gt;
+        private async Task&lt;TimeSpan&gt; GetLivenessIntervalAsync()
+        {
+            // Agar 1 hour se zyada idle hai → more frequent pings
+            bool isStaleSocket = (DateTime.UtcNow - _lastMessageTime) > TimeSpan.FromHours(1);
+            
+            return isStaleSocket 
+                ? TimeSpan.FromSeconds(30)   // Stale socket — ping every 30 sec
+                : TimeSpan.FromSeconds(60);  // Active socket — ping every 60 sec
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">5</div>
+                    <h3 class="section-title">OAuth Controller — User Authentication Magic!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(0, 212, 255, 0.1); border-left-color: var(--accent-blue);">
+                        📚 <strong>Kahani Continue — Login Flow Samjho!</strong><br><br>
+                        
+                        User ne bot se bola: <em>"Show my calendar"</em><br><br>
+                        
+                        Bot ko Microsoft Graph API call karni hai calendar dekhne ke liye.<br>
+                        But wait! User ka permission chahiye pehle! 🔐<br><br>
+                        
+                        <strong>OAuth Flow:</strong><br>
+                        1. Bot user ko "Sign in" button bhejta hai<br>
+                        2. User click kare → Azure AD login page khule<br>
+                        3. User login kare → Token generate ho<br>
+                        4. Token bot ko mile → Ab Graph API call ho sakti hai!<br><br>
+                        
+                        <em>Ye secure way hai user ke data access karne ka!</em>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// OAuth Controller — User Authentication Endpoint
+// From: Intercom/Intercom.Switch — Production Auth Infrastructure!
+
+namespace Intercom.Switch.Controllers
+{
+    /// &lt;summary&gt;
+    /// OAuth flow ka main controller!
+    /// 
+    /// Kahani: Ye controller "Security Guard" jaisa hai.
+    /// User ko pehle ID verify karwani padti hai (Azure AD se),
+    /// phir hi sensitive operations allow hote hain!
+    /// &lt;/summary&gt;
+    [RoutePrefix("api/oauth")]
+    [HandleAPIException]
+    public class OAuthController : ApiController
+    {
+        // Teams SDK versions — different versions ke liye different scripts
+        private const string teams218Imports = 
+            "&lt;script src='https://res.cdn.office.net/teams-js/2.18.0/js/MicrosoftTeams.min.js'&gt;&lt;/script&gt;";
+
+        private readonly IJwtTokenSender _jwtTokenSender;
+        private readonly ISignInCache _signInCache;
+        private readonly IMagicCodeCache _magicCodeCache;
+
+        /// &lt;summary&gt;
+        /// User Sign-In initiate karo!
+        /// 
+        /// Process:
+        /// 1. SignIn request aaye
+        /// 2. Azure AD ke login URL generate karo
+        /// 3. User ko redirect karo
+        /// 4. User login kare → callback aaye
+        /// 5. Token store karo → bot ko de do
+        /// &lt;/summary&gt;
+        [HttpGet]
+        [Route("SignIn")]
+        public async Task&lt;HttpResponseMessage&gt; SignIn(
+            string settingId = null,
+            string redirectUri = null,
+            string signin = null,
+            string fwdUrl = null)
+        {
+            AppInsights.TrackEventEx("OAuthController.SignIn",
+                "Setting ID", settingId,
+                "RedirectUri", redirectUri);
+
+            string signInLocation;
+            
+            if (!string.IsNullOrEmpty(signin))
+            {
+                // Code challenge for PKCE security
+                string codeChallenge = String.Empty;
+                int codeChallengeIndex = signin.IndexOf("&code_challenge=");
+                
+                if (codeChallengeIndex != -1)
+                {
+                    codeChallenge = signin.Substring(codeChallengeIndex);
+                    signin = signin.Substring(0, codeChallengeIndex);
+                }
+
+                // SignIn state cache se get karo
+                var signInState = await _signInCache.GetSignInStateAsync(signin);
+
+                if (signInState == null)
+                {
+                    // State expired ya invalid — error return karo
+                    return CreateNoSignInResponse();
+                }
+                
+                // Forward URL update karo agar needed
+                if (!string.IsNullOrWhiteSpace(fwdUrl) && 
+                    string.IsNullOrWhiteSpace(signInState.ForwardUrl))
+                {
+                    signInState.ForwardUrl = fwdUrl;
+                }
+
+                // Azure AD login URL generate karo
+                signInLocation = await BuildSignInUrlAsync(signInState, codeChallenge);
+            }
+
+            // Redirect to login page
+            return Request.CreateResponse(HttpStatusCode.Redirect, signInLocation);
+        }
+
+        /// &lt;summary&gt;
+        /// Magic Code verify karo!
+        /// 
+        /// Magic Code = 6-digit code jo user ko dikhta hai login ke baad.
+        /// User ye code bot mein type karta hai → bot verify karta hai.
+        /// Ye extra security layer hai "man-in-the-middle" attacks se bachne ke liye!
+        /// &lt;/summary&gt;
+        [HttpPost]
+        [Route("VerifyMagicCode")]
+        public async Task&lt;HttpResponseMessage&gt; VerifyMagicCode(
+            string code, 
+            string conversationId)
+        {
+            // Cache se check karo code valid hai ya nahi
+            var storedCode = await _magicCodeCache.GetAsync(conversationId);
+            
+            if (storedCode == null || storedCode != code)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized, "Invalid code");
+            }
+
+            // Code valid hai — token return karo
+            var token = await GetUserTokenAsync(conversationId);
+            return Request.CreateResponse(HttpStatusCode.OK, token);
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-number">6</div>
+                    <h3 class="section-title">Enterprise Bot Template — Production-Ready Code!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(0, 255, 136, 0.1); border-left-color: var(--accent-green);">
+                        📚 <strong>Final Piece — Full Bot Application!</strong><br><br>
+                        
+                        Ab tak individual components dekhe. Ab complete bot application dekho!<br><br>
+                        
+                        <strong>3 Main Files:</strong><br>
+                        1. <strong>BotController.cs</strong> — HTTP endpoint jo messages receive kare<br>
+                        2. <strong>AdapterWithErrorHandler.cs</strong> — Error handling + middleware<br>
+                        3. <strong>EchoBot.cs</strong> — Actual bot logic<br><br>
+                        
+                        <em>Ye pattern follow karo production bots ke liye!</em>
+                    </div>
+
+                    <pre class="language-csharp line-numbers"><code>// Bot Controller — HTTP Endpoint (From: BotAppTemplates/EchoBot)
+// Ye ASP.NET Core controller hai jo /api/messages pe listen karta hai.
+
+namespace Microsoft.BotBuilderSamples.Controllers
+{
+    /// &lt;summary&gt;
+    /// Main entry point for all bot messages!
+    /// 
+    /// Kahani: Ye "Reception Desk" hai tumhare office ki.
+    /// Sabhi messages pehle yahaan aate hain, phir proper department ko forward hote hain.
+    /// &lt;/summary&gt;
+    [Route("api/messages")]
+    [ApiController]
+    public class BotController : ControllerBase
+    {
+        private readonly IBotFrameworkHttpAdapter Adapter;
+        private readonly IBot Bot;
+
+        // Dependency Injection — ASP.NET Core automatically inject karega
+        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot)
+        {
+            Adapter = adapter;
+            Bot = bot;
+        }
+
+        /// &lt;summary&gt;
+        /// POST /api/messages — Ye endpoint Bot Connector Service call karta hai!
+        /// 
+        /// Flow:
+        /// 1. User message bheje → Channel receive kare
+        /// 2. Channel → Bot Connector Service ko forward kare
+        /// 3. Bot Connector → Ye endpoint call kare
+        /// 4. Adapter message process kare → Bot logic run ho
+        /// 5. Response wapas jaaye reverse path se
+        /// &lt;/summary&gt;
+        [HttpPost, HttpGet]
+        public async Task PostAsync()
+        {
+            // Adapter does all the heavy lifting!
+            // - Authentication verify karta hai
+            // - Activity deserialize karta hai
+            // - Middleware pipeline run karta hai
+            // - Bot ko call karta hai
+            await Adapter.ProcessAsync(Request, Response, Bot);
+        }
+    }
+}</code></pre>
+
+                    <pre class="language-csharp line-numbers"><code>// Adapter With Error Handler — Graceful Error Handling
+// Production mein errors handle karna MUST hai!
+
+namespace Microsoft.BotBuilderSamples
+{
+    /// &lt;summary&gt;
+    /// Custom adapter jo errors gracefully handle kare!
+    /// 
+    /// Kahani: Kabhi kabhi code crash hota hai (null reference, API timeout, etc.)
+    /// Bina error handling ke bot "silent death" mar jaata hai.
+    /// User ko kuch nahi dikhta — bad UX! 😞
+    /// 
+    /// Is adapter se errors catch hote hain aur user ko friendly message milta hai.
+    /// &lt;/summary&gt;
+    public class AdapterWithErrorHandler : BotFrameworkHttpAdapter
+    {
+        public AdapterWithErrorHandler(
+            IConfiguration configuration, 
+            ILogger&lt;BotFrameworkHttpAdapter&gt; logger)
+            : base(configuration, logger)
+        {
+            // 🔥 OnTurnError — Jab bhi koi error aaye, ye handler run hoga
+            OnTurnError = async (turnContext, exception) =>
+            {
+                // 1️⃣ Log the error — Azure App Insights mein jaayega
+                logger.LogError(exception, 
+                    $"[OnTurnError] unhandled error : {exception.Message}");
+
+                // 2️⃣ User ko friendly message bhejo
+                await turnContext.SendActivityAsync(
+                    "Oops! Something went wrong. Please try again.");
+
+                // 3️⃣ Development mein detailed error bhejo (optional)
+                // Production mein ye disable karo!
+                await turnContext.TraceActivityAsync(
+                    "OnTurnError Trace", 
+                    exception.Message, 
+                    "https://www.botframework.com/schemas/error", 
+                    "TurnError");
+            };
+        }
+    }
+}</code></pre>
+
+                    <pre class="language-csharp line-numbers"><code>// Startup.cs — Dependency Injection Configuration
+// ASP.NET Core application ka heart!
+
+namespace Microsoft.BotBuilderSamples
+{
+    /// &lt;summary&gt;
+    /// Application startup configuration!
+    /// 
+    /// Kahani: Ye "Recipe Book" hai tumhare restaurant ki.
+    /// Kaunse ingredients (services) chahiye, kaise mix karne hain (configure),
+    /// sab yahaan define hota hai!
+    /// &lt;/summary&gt;
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers().AddNewtonsoftJson();
+
+            // 🔌 Adapter register karo — error handling wala
+            services.AddSingleton&lt;IBotFrameworkHttpAdapter, AdapterWithErrorHandler&gt;();
+
+            // 🤖 Bot register karo — har request pe naya instance (transient)
+            services.AddTransient&lt;IBot, EchoBot&gt;();
+            
+            // 💾 Optional: State management add karo
+            // services.AddSingleton&lt;IStorage, MemoryStorage&gt;();
+            // services.AddSingleton&lt;ConversationState&gt;();
+            // services.AddSingleton&lt;UserState&gt;();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseDefaultFiles()
+               .UseStaticFiles()
+               .UseWebSockets()  // DirectLine WebSocket ke liye
+               .UseRouting()
+               .UseAuthorization()
+               .UseEndpoints(endpoints =>
+               {
+                   endpoints.MapControllers();
+               });
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="summary-card" style="margin-top: 2rem;">
+                <h3 class="summary-title">🎓 Enterprise Deep Dive — Summary!</h3>
+                <p class="content-text">
+                    Is BONUS chapter mein tumne dekha:
+                </p>
+                <ul class="bullet-list">
+                    <li><strong>Message Journey</strong> — WhatsApp se Bot tak ka complete flow</li>
+                    <li><strong>Activity Schema</strong> — Universal message format (5575+ files mein use hota hai!)</li>
+                    <li><strong>IChannelConnector</strong> — Gateway interface jo channels se communicate kare</li>
+                    <li><strong>WhatsApp Mapper</strong> — Activity ↔ WhatsApp format conversion</li>
+                    <li><strong>DirectLine WebSocket</strong> — Real-time communication for custom apps</li>
+                    <li><strong>OAuth Controller</strong> — User authentication flow</li>
+                    <li><strong>Production Template</strong> — Complete bot application structure</li>
+                </ul>
+                <div class="hinglish-note" style="background: rgba(168, 85, 247, 0.1); border-left-color: var(--accent-purple); margin-top: 1rem;">
+                    🚀 <strong>Ab Tum Ready Ho!</strong><br><br>
+                    MS Learn concepts + Enterprise production code dono tumhare paas hain!<br>
+                    Intercom codebase Azure Bot Service ki actual infrastructure hai jo <strong>millions of bots</strong> ko power karti hai.<br><br>
+                    <em>"Theory + Real Code = Complete Understanding! 🎉"</em>
+                </div>
+            </div>
+        </section>
+
         <!-- ==================== SUMMARY ==================== -->
         <div class="summary-card">
-            <h3 class="summary-title">🎓 ABS Notes — Complete Summary (21 Chapters)</h3>
+            <h3 class="summary-title">🎓 ABS Notes — Complete Summary (21 Chapters + Enterprise Deep Dive)</h3>
 
             <div class="visual-box">
                 <h4>📋 All Topics Covered — MS Learn Complete!</h4>
@@ -2990,24 +5164,31 @@ flowchart TB
             </div>
 
             <div class="hinglish-note" style="margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
-                🚀 <strong>Final Takeaway — All MS Learn Topics Covered!</strong><br><br>
+                🚀 <strong>Final Takeaway — MS Learn + Real Code Samples!</strong><br><br>
                 
-                <strong>21 Chapters covering:</strong><br>
-                ✅ Bot Basics — Activities, Turns, Structure<br>
-                ✅ Dialogs & Prompts — Multi-turn conversations<br>
-                ✅ State Management — 3 state buckets<br>
-                ✅ Rich Messages — Cards, Adaptive Cards, Attachments<br>
+                <strong>21 Chapters + Python/C# Code from botbuilder-samples repo!</strong><br>
+                ✅ Bot Basics — Activities, Turns, Structure + <strong>Echo Bot code</strong><br>
+                ✅ Dialogs & Prompts — Multi-turn conversations + <strong>Waterfall Dialog code</strong><br>
+                ✅ State Management — 3 state buckets + <strong>State Bot code</strong><br>
+                ✅ Rich Messages — Cards, Adaptive Cards + <strong>Hero/Receipt Card code</strong><br>
                 ✅ Channels — 12+ platforms supported<br>
-                ✅ Authentication — OAuth, Token Service<br>
+                ✅ Authentication — OAuth, Token Service + <strong>Auth Bot code</strong><br>
                 ✅ Teams Integration — Special handlers<br>
-                ✅ Skills — Reusable bot capabilities<br>
-                ✅ NLU — CLU (LUIS replacement)<br>
+                ✅ Skills — Reusable bot capabilities + <strong>Root/Skill Bot code</strong><br>
+                ✅ Middleware — Request/Response pipeline + <strong>Translation Middleware code</strong><br>
+                ✅ Proactive Messaging + <strong>ConversationReference code</strong><br>
+                ✅ Suggested Actions + <strong>Python code</strong><br>
                 ✅ Testing & Deployment — Emulator, Azure<br>
                 ✅ Composer — Visual authoring<br><br>
                 
+                <strong style="color: var(--accent-purple);">🐍 Python code from: github.com/microsoft/botbuilder-samples</strong><br><br>
+                
+                <strong style="color: var(--accent-blue);">🏢 C# Enterprise code from: Azure Bot Service Intercom Codebase</strong><br>
+                (CCIVR/Intercom — Production ABS Infrastructure including Channels, LUIS, Auth, PostBox, TokenMaker, Speech Services)<br><br>
+                
                 <strong style="color: var(--accent-orange);">⚠️ Important:</strong> Bot Framework SDK archived Dec 2025 — consider <strong>Microsoft 365 Agents SDK</strong> for new projects!<br><br>
                 
-                <em>"Ab tum Azure Bot Service ke complete concepts jaante ho! 🎉"</em>
+                <em>"Ab tum Azure Bot Service ke concepts + real enterprise production code dono jaante ho! 🎉"</em>
             </div>
         </div>
     </main>
