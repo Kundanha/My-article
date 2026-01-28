@@ -1594,8 +1594,8 @@
 
         /* Visual Steps */
         .visual-steps {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
 
@@ -1612,6 +1612,32 @@
         .visual-step.active {
             border-left-color: #2ecc71;
             background: rgba(46, 204, 113, 0.1);
+        }
+
+        /* Step Cards for visual diagrams */
+        .step-card {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-card .step-number {
+            background: var(--accent-blue);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 10px;
+            width: auto;
+            height: auto;
+        }
+
+        .step-card p {
+            margin: 5px 0;
+            font-size: 0.9rem;
         }
 
         .step-number {
