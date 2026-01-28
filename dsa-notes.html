@@ -911,6 +911,12 @@
             color: #0f0f23;
         }
 
+        .filter-btn.hard.active {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: #fff;
+        }
+
         /* Progress Bar */
         .progress-section {
             margin-bottom: 1.5rem;
@@ -1056,6 +1062,8 @@
 
         .nav-number.blue { background: var(--gradient-3); color: white; }
         .nav-number.orange { background: var(--gradient-2); color: white; }
+        .nav-number.green { background: var(--gradient-4); color: white; }
+        .nav-number.red { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); color: white; }
 
         .nav-text {
             flex: 1;
@@ -1074,6 +1082,7 @@
 
         .nav-difficulty.easy { background: var(--accent-green); }
         .nav-difficulty.medium { background: var(--accent-orange); }
+        .nav-difficulty.hard { background: var(--accent-red); }
 
         .nav-check {
             color: var(--accent-green);
@@ -1387,6 +1396,10 @@
             background: linear-gradient(135deg, #ff9f43, #ee5a24);
         }
 
+        .category-divider-icon.linked-list {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
         .category-divider-content h3 {
             font-size: 1.3rem;
             margin-bottom: 0.3rem;
@@ -1404,72 +1417,6 @@
             border-radius: 8px;
             font-size: 0.85rem;
             color: var(--text-secondary);
-        }
-
-        /* Problem Section */
-        .problem-section {
-            margin-bottom: 5rem;
-            padding-top: 2rem;
-        }
-            transition: all 0.3s ease;
-        }
-
-        .toc-item:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-purple);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
-        }
-
-        .toc-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.2rem;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .toc-number {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .toc-number.prob-1 { background: var(--gradient-3); }
-        .toc-number.prob-2 { background: var(--gradient-2); }
-
-        .toc-text {
-            flex: 1;
-        }
-
-        .toc-text h4 {
-            font-size: 1rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .toc-text span {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .toc-tag {
-            padding: 0.3rem 0.7rem;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
-        }
-
-        .toc-tag.medium {
-            background: rgba(243, 156, 18, 0.15);
-            color: #f39c12;
         }
 
         /* Problem Section - COLLAPSIBLE */
@@ -3257,6 +3204,7 @@
                 <button class="filter-btn active" data-filter="all">All</button>
                 <button class="filter-btn easy" data-filter="easy">Easy</button>
                 <button class="filter-btn medium" data-filter="medium">Medium</button>
+                <button class="filter-btn hard" data-filter="hard">Hard</button>
             </div>
         </div>
 
@@ -3264,7 +3212,7 @@
         <div class="progress-section">
             <div class="progress-header">
                 <span class="progress-label">📊 Progress</span>
-                <span class="progress-count" id="progressCount">0/19 completed</span>
+                <span class="progress-count" id="progressCount">0/24 completed</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill" style="width: 0%"></div>
@@ -3450,7 +3398,7 @@
                     <span class="category-icon">🔗</span>
                     Linked List
                 </span>
-                <span class="category-count">5</span>
+                <span class="category-count">7</span>
                 <span class="category-toggle">▼</span>
             </div>
             <div class="category-items">
@@ -3482,6 +3430,18 @@
                     <span class="nav-number orange">22</span>
                     <span class="nav-text">Remove Nth From End</span>
                     <span class="nav-difficulty medium"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+                <a href="#lru-cache" class="nav-item" data-difficulty="medium">
+                    <span class="nav-number orange">23</span>
+                    <span class="nav-text">LRU Cache</span>
+                    <span class="nav-difficulty medium"></span>
+                    <span class="nav-check">✓</span>
+                </a>
+                <a href="#lfu-cache" class="nav-item" data-difficulty="hard">
+                    <span class="nav-number red">24</span>
+                    <span class="nav-text">LFU Cache</span>
+                    <span class="nav-difficulty hard"></span>
                     <span class="nav-check">✓</span>
                 </a>
             </div>
@@ -3675,16 +3635,20 @@
             <!-- Stats Banner -->
             <div class="stats-banner">
                 <div class="stat-card">
-                    <div class="stat-value">17</div>
+                    <div class="stat-value">24</div>
                     <div class="stat-label">Total Problems</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">6</div>
+                    <div class="stat-value">8</div>
                     <div class="stat-label">Easy</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">11</div>
+                    <div class="stat-value">15</div>
                     <div class="stat-label">Medium</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Hard</div>
                 </div>
             </div>
 
@@ -3704,6 +3668,9 @@
                 </a>
                 <a href="#binarysearch-section" class="jump-link">
                     <span>🔍</span> Binary Search (2)
+                </a>
+                <a href="#linkedlist-section" class="jump-link">
+                    <span>🔗</span> Linked List (7)
                 </a>
             </div>
 
@@ -11648,6 +11615,16 @@ print(search([1, 2, 3, 4, 5], 3))         # Output: 2 ✅ (not rotated)</code></
             </div>
         </section>
 
+        <!-- ==================== LINKED LIST CATEGORY ==================== -->
+        <div class="category-divider" id="linkedlist-section">
+            <div class="category-divider-icon linked-list">🔗</div>
+            <div class="category-divider-content">
+                <h3>Linked List</h3>
+                <p>Pointers aur nodes ka game — interview ka favourite topic!</p>
+            </div>
+            <span class="category-divider-count">7 problems</span>
+        </div>
+
         <!-- ==================== PROBLEM 18: Reverse Linked List ==================== -->
         <section class="problem-section" id="reverse-linked-list">
             <header class="problem-header prob-1">
@@ -15070,6 +15047,1500 @@ flowchart LR
                 </table>
                 <div class="hinglish-note" style="margin-top: 15px;">
                     🎯 <strong>Interview Mein:</strong> Approach 4 (Two Pointers with Dummy) hi bolna! ONE PASS + O(1) space! 💯
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PROBLEM 23: LRU Cache ==================== -->
+        <section class="problem-section" id="lru-cache">
+            <header class="problem-header">
+                <span class="problem-number">23</span>
+                <h2>LRU Cache</h2>
+                <p class="problem-subtitle">Least Recently Used Cache — HashMap + Doubly Linked List ka Magic! 🗃️</p>
+                <div class="problem-meta">
+                    <span class="difficulty medium">Medium</span>
+                    <span class="category">Linked List</span>
+                    <span class="category">Hash Table</span>
+                    <span class="category">Design</span>
+                </div>
+            </header>
+
+            <!-- Problem Statement -->
+            <div class="problem-statement">
+                <h3>📋 Problem Statement</h3>
+                <p class="content-text">
+                    Ek <strong>LRU (Least Recently Used) Cache</strong> design karo jo <span class="highlight">O(1) average time</span> mein 
+                    <code>get</code> aur <code>put</code> operations support kare.
+                </p>
+                <div class="example-box">
+                    <strong>Operations:</strong><br>
+                    <code>LRUCache(capacity)</code> — Cache ko given capacity ke saath initialize karo<br>
+                    <code>get(key)</code> — Key ki value return karo (agar nahi hai toh -1)<br>
+                    <code>put(key, value)</code> — Key-value insert/update karo. Agar capacity exceed ho toh <strong>least recently used</strong> ko evict karo!
+                </div>
+                <div class="example-box">
+                    <strong>Example:</strong><br>
+                    <code>LRUCache cache = new LRUCache(2);</code><br>
+                    <code>cache.put(1, 1);</code>  // cache: {1=1}<br>
+                    <code>cache.put(2, 2);</code>  // cache: {1=1, 2=2}<br>
+                    <code>cache.get(1);</code>     // returns 1, cache: {2=2, 1=1} (1 most recent)<br>
+                    <code>cache.put(3, 3);</code>  // evicts key 2, cache: {1=1, 3=3}<br>
+                    <code>cache.get(2);</code>     // returns -1 (not found)<br>
+                </div>
+            </div>
+
+            <!-- LRU Concept -->
+            <div class="concept-box" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+                <h4 class="concept-title" style="color: var(--accent-purple);">🧠 LRU Concept — Pehle Ye Samjho!</h4>
+                <p class="content-text">
+                    <strong>LRU (Least Recently Used)</strong> ka matlab kya hai?
+                </p>
+                <ul class="bullet-list">
+                    <li>Cache mein <strong>limited slots</strong> hote hain (capacity = C)</li>
+                    <li>Jo item <strong>abhi-abhi use hua</strong> (get/put) → <span class="highlight">Most Recently Used (MRU)</span></li>
+                    <li>Jo item <strong>bahut time se use nahi hua</strong> → <span class="highlight">Least Recently Used (LRU)</span></li>
+                    <li>Jab naya item add karna ho aur cache <strong>FULL</strong> ho → <strong>LRU ko evict (nikaalo)</strong>!</li>
+                </ul>
+                <div class="hinglish-note">
+                    💡 <strong>Real Life Example:</strong> Browser tabs! Agar tumhari memory full ho jaaye, toh jo tab tumne sabse purana 
+                    access kiya wo close ho jaata hai. Recently use kiye gaye tabs safe rehte hain!
+                </div>
+            </div>
+
+            <!-- Why HashMap + DLL? -->
+            <div class="mermaid-container">
+                <div class="diagram-label">WHY HASHMAP + DOUBLY LINKED LIST?</div>
+                <div class="mermaid">
+flowchart TB
+    subgraph Problem["PROBLEM"]
+        OnlyList["Only List - get key is O n"]
+        OnlyMap["Only HashMap - recency track how?"]
+    end
+    
+    subgraph Solution["SOLUTION - Combine Both!"]
+        HashMap["HashMap - O 1 access"]
+        DLL["DLL - Recency maintain"]
+        HashMap <--> DLL
+    end
+    
+    Problem --> Solution
+    
+    style OnlyList fill:#ff6b6b,color:#fff
+    style OnlyMap fill:#ff9f43,color:#fff
+    style HashMap fill:#00ff88,color:#000
+    style DLL fill:#00d4ff,color:#000
+                </div>
+            </div>
+
+            <!-- Data Structure Design -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number">📐</div>
+                    <h3 class="section-title">Data Structure Design — Internally Kya Store Hoga?</h3>
+                </div>
+                <div class="section-content">
+                    
+                    <!-- Node Structure -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">1️⃣ Node Structure</h4>
+                        <p class="content-text">
+                            Har cache entry ek <strong>Doubly Linked List Node</strong> hogi:
+                        </p>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">NODE STRUCTURE</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Node["NODE"]
+        K["key"]
+        V["val"]
+        P["prev"]
+        N["next"]
+    end
+    
+    PREV["Previous Node"] --> P
+    N --> NEXT["Next Node"]
+    
+    style Node fill:#16213e,stroke:#00d4ff,stroke-width:2px
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            ⚠️ <strong>Important:</strong> Node mein <code>key</code> store karna mat bhoolna! 
+                            Eviction ke time HashMap se delete karne ke liye key chahiye!
+                        </div>
+                    </div>
+
+                    <!-- HashMap -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">2️⃣ HashMap</h4>
+                        <p class="content-text">
+                            <code>map[key] = node</code> → O(1) mein node access!
+                        </p>
+                    </div>
+
+                    <!-- DLL with Dummy Nodes -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">3️⃣ Doubly Linked List with Dummy Head/Tail</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">DLL STRUCTURE</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph DLL["DOUBLY LINKED LIST"]
+        HEAD["DUMMY HEAD"]
+        MRU["Most Recent"]
+        MID["..."]
+        LRU["Least Recent"]
+        TAIL["DUMMY TAIL"]
+        
+        HEAD <--> MRU <--> MID <--> LRU <--> TAIL
+    end
+    
+    style HEAD fill:#8338ec,color:#fff
+    style TAIL fill:#8338ec,color:#fff
+    style MRU fill:#00ff88,color:#000
+    style LRU fill:#ff6b6b,color:#fff
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            💡 <strong>Dummy Nodes Ka Faayda:</strong><br>
+                            • Empty list, single node list, head/tail update... in sab edge cases ka jhanjhat kam!<br>
+                            • <strong>Head ke baad</strong> = Most Recently Used<br>
+                            • <strong>Tail ke pehle</strong> = Least Recently Used (evict ye hoga!)
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Operations Logic -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number">⚡</div>
+                    <h3 class="section-title">Operations Ka Logic — LRU Rules!</h3>
+                </div>
+                <div class="section-content">
+
+                    <!-- GET Operation -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">✅ get(key) Operation</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">GET OPERATION FLOW</div>
+                            <div class="mermaid">
+flowchart TB
+    START["get key"]
+    CHECK{"key in map?"}
+    NOT_FOUND["return -1"]
+    FOUND["node = map key"]
+    MOVE["Move node to FRONT"]
+    RETURN["return node.val"]
+    
+    START --> CHECK
+    CHECK -->|No| NOT_FOUND
+    CHECK -->|Yes| FOUND
+    FOUND --> MOVE
+    MOVE --> RETURN
+    
+    style NOT_FOUND fill:#ff6b6b,color:#fff
+    style RETURN fill:#00ff88,color:#000
+    style MOVE fill:#00d4ff,color:#000
+                            </div>
+                        </div>
+                        <div class="hinglish-note">
+                            🔥 <strong>Why Move to Front?</strong> Kyunki abhi use hua hai! 
+                            Access karna matlab ye item "recently used" ban gaya!
+                        </div>
+                    </div>
+
+                    <!-- PUT Operation -->
+                    <div class="subsection">
+                        <h4 class="subsection-title">✅ put(key, value) Operation</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">PUT OPERATION FLOW</div>
+                            <div class="mermaid">
+flowchart TB
+    START["put key, value"]
+    CHECK{"key in map?"}
+    
+    subgraph Existing["KEY EXISTS"]
+        E1["node = map key"]
+        E2["node.val = value"]
+        E3["Move node to FRONT"]
+    end
+    
+    subgraph New["NEW KEY"]
+        N1["Create new node"]
+        N2["Add to FRONT"]
+        N3["map key = node"]
+        N4{"size > capacity?"}
+        N5["EVICT LRU!"]
+    end
+    
+    START --> CHECK
+    CHECK -->|Yes| E1 --> E2 --> E3
+    CHECK -->|No| N1 --> N2 --> N3 --> N4
+    N4 -->|Yes| N5
+    N4 -->|No| DONE["Done!"]
+    N5 --> DONE
+    E3 --> DONE
+    
+    style N5 fill:#ff6b6b,color:#fff
+    style E3 fill:#00d4ff,color:#000
+    style N2 fill:#00ff88,color:#000
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Example -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number">🎬</div>
+                    <h3 class="section-title">Visual Example — Step by Step!</h3>
+                </div>
+                <div class="section-content">
+                    <p class="content-text"><strong>Capacity = 2</strong></p>
+                    
+                    <div class="mermaid-container">
+                        <div class="diagram-label">LRU CACHE OPERATIONS - Capacity = 2</div>
+                        <div class="mermaid">
+flowchart TB
+    subgraph Step1["Step 1: put 1,10"]
+        S1H["HEAD"]
+        S1N1["1,10"]
+        S1T["TAIL"]
+        S1H <--> S1N1 <--> S1T
+    end
+    
+    subgraph Step2["Step 2: put 2,20"]
+        S2H["HEAD"]
+        S2N2["2,20 MRU"]
+        S2N1["1,10 LRU"]
+        S2T["TAIL"]
+        S2H <--> S2N2 <--> S2N1 <--> S2T
+    end
+    
+    subgraph Step3["Step 3: get 1 returns 10"]
+        S3H["HEAD"]
+        S3N1["1,10 MRU"]
+        S3N2["2,20 LRU"]
+        S3T["TAIL"]
+        S3H <--> S3N1 <--> S3N2 <--> S3T
+    end
+    
+    subgraph Step4["Step 4: put 3,30 EVICT 2"]
+        S4H["HEAD"]
+        S4N3["3,30 MRU"]
+        S4N1["1,10"]
+        S4T["TAIL"]
+        S4H <--> S4N3 <--> S4N1 <--> S4T
+    end
+    
+    subgraph Step5["Step 5: get 2 returns -1"]
+        S5Result["Key 2 not found!"]
+    end
+    
+    Step1 --> Step2 --> Step3 --> Step4 --> Step5
+    
+    style S2N2 fill:#00ff88,color:#000
+    style S3N1 fill:#00ff88,color:#000
+    style S4N3 fill:#00ff88,color:#000
+    style S5Result fill:#ff6b6b,color:#fff
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 1: HashMap + DLL (From Scratch) -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-1">1</div>
+                    <h3 class="section-title">🏆 HashMap + Doubly Linked List (From Scratch!)</h3>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4 class="subsection-title">Helper Functions</h4>
+                        <div class="mermaid-container">
+                            <div class="diagram-label">HELPER FUNCTIONS</div>
+                            <div class="mermaid">
+flowchart LR
+    subgraph Remove["_remove"]
+        R1["get prev, next"]
+        R2["link prev to next"]
+        R1 --> R2
+    end
+    
+    subgraph AddFront["_add_to_front"]
+        A1["set node pointers"]
+        A2["insert after head"]
+        A1 --> A2
+    end
+    
+    subgraph MoveFront["_move_to_front"]
+        M1["remove"]
+        M2["add to front"]
+        M1 --> M2
+    end
+    
+    subgraph PopLRU["_pop_lru"]
+        P1["get tail.prev"]
+        P2["remove it"]
+        P3["return lru"]
+        P1 --> P2 --> P3
+    end
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-green);">🏆 Complete LRU Cache Implementation</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># 🏆 LRU CACHE — HashMap + Doubly Linked List</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Time: O(1) average for get/put</span>
+<span class="comment"># Space: O(capacity)</span>
+
+<span class="keyword">class</span> <span class="class-name">LRUCache</span>:
+    
+    <span class="comment"># 🔲 Node class — DLL ka har node</span>
+    <span class="keyword">class</span> <span class="class-name">Node</span>:
+        __slots__ = (<span class="string">"key"</span>, <span class="string">"val"</span>, <span class="string">"prev"</span>, <span class="string">"next"</span>)
+        <span class="keyword">def</span> <span class="function">__init__</span>(<span class="param">self</span>, <span class="param">key</span>=<span class="number">0</span>, <span class="param">val</span>=<span class="number">0</span>):
+            <span class="keyword">self</span>.key = key   <span class="comment"># ⚠️ Important for eviction!</span>
+            <span class="keyword">self</span>.val = val
+            <span class="keyword">self</span>.prev = <span class="builtin">None</span>
+            <span class="keyword">self</span>.next = <span class="builtin">None</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="param">self</span>, <span class="param">capacity</span>: <span class="builtin">int</span>):
+        <span class="keyword">self</span>.cap = capacity
+        <span class="keyword">self</span>.map = {}  <span class="comment"># key → Node</span>
+
+        <span class="comment"># 🎭 Dummy head/tail nodes — edge cases easy!</span>
+        <span class="keyword">self</span>.head = <span class="keyword">self</span>.Node()
+        <span class="keyword">self</span>.tail = <span class="keyword">self</span>.Node()
+        <span class="keyword">self</span>.head.next = <span class="keyword">self</span>.tail
+        <span class="keyword">self</span>.tail.prev = <span class="keyword">self</span>.head
+
+    <span class="comment"># ✂️ Remove node from anywhere in DLL</span>
+    <span class="keyword">def</span> <span class="function">_remove</span>(<span class="param">self</span>, <span class="param">node</span>):
+        p, n = node.prev, node.next
+        p.next = n
+        n.prev = p
+
+    <span class="comment"># ➕ Add node right after head (MRU position)</span>
+    <span class="keyword">def</span> <span class="function">_add_to_front</span>(<span class="param">self</span>, <span class="param">node</span>):
+        node.prev = <span class="keyword">self</span>.head
+        node.next = <span class="keyword">self</span>.head.next
+        <span class="keyword">self</span>.head.next.prev = node
+        <span class="keyword">self</span>.head.next = node
+
+    <span class="comment"># 🔄 Move existing node to front</span>
+    <span class="keyword">def</span> <span class="function">_move_to_front</span>(<span class="param">self</span>, <span class="param">node</span>):
+        <span class="keyword">self</span>._remove(node)
+        <span class="keyword">self</span>._add_to_front(node)
+
+    <span class="comment"># 🗑️ Pop LRU node (just before tail)</span>
+    <span class="keyword">def</span> <span class="function">_pop_lru</span>(<span class="param">self</span>):
+        lru = <span class="keyword">self</span>.tail.prev
+        <span class="keyword">self</span>._remove(lru)
+        <span class="keyword">return</span> lru
+
+    <span class="comment"># 🔍 GET operation</span>
+    <span class="keyword">def</span> <span class="function">get</span>(<span class="param">self</span>, <span class="param">key</span>: <span class="builtin">int</span>) -> <span class="builtin">int</span>:
+        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> <span class="keyword">self</span>.map:
+            <span class="keyword">return</span> <span class="number">-1</span>
+        
+        node = <span class="keyword">self</span>.map[key]
+        <span class="comment"># ⚡ Abhi use hua → Most Recent banao!</span>
+        <span class="keyword">self</span>._move_to_front(node)
+        <span class="keyword">return</span> node.val
+
+    <span class="comment"># 📝 PUT operation</span>
+    <span class="keyword">def</span> <span class="function">put</span>(<span class="param">self</span>, <span class="param">key</span>: <span class="builtin">int</span>, <span class="param">value</span>: <span class="builtin">int</span>) -> <span class="builtin">None</span>:
+        <span class="comment"># 🔄 Case 1: Key already exists → Update!</span>
+        <span class="keyword">if</span> key <span class="keyword">in</span> <span class="keyword">self</span>.map:
+            node = <span class="keyword">self</span>.map[key]
+            node.val = value
+            <span class="keyword">self</span>._move_to_front(node)
+            <span class="keyword">return</span>
+
+        <span class="comment"># 🆕 Case 2: New key → Insert!</span>
+        node = <span class="keyword">self</span>.Node(key, value)
+        <span class="keyword">self</span>.map[key] = node
+        <span class="keyword">self</span>._add_to_front(node)
+
+        <span class="comment"># ❌ Capacity exceed? → Evict LRU!</span>
+        <span class="keyword">if</span> <span class="builtin">len</span>(<span class="keyword">self</span>.map) > <span class="keyword">self</span>.cap:
+            lru = <span class="keyword">self</span>._pop_lru()
+            <span class="keyword">del</span> <span class="keyword">self</span>.map[lru.key]  <span class="comment"># ⚠️ key stored in node!</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4 class="subsection-title complexity">Time & Space Complexity</h4>
+                        <div class="complexity-box">
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ get() Time</div>
+                                <div class="complexity-value good">O(1)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">⏱️ put() Time</div>
+                                <div class="complexity-value good">O(1)</div>
+                            </div>
+                            <div class="complexity-item">
+                                <div class="complexity-label">💾 Space</div>
+                                <div class="complexity-value good">O(capacity)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approach 2: OrderedDict -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-number approach-2">2</div>
+                    <h3 class="section-title">OrderedDict Approach — Short & Interview-Acceptable!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="hinglish-note" style="background: rgba(255, 159, 67, 0.1); border-color: rgba(255, 159, 67, 0.3);">
+                        ⚠️ <strong>Note:</strong> Python ka <code>OrderedDict</code> internally same concept use karta hai!
+                        Interview mein ye bolo but mention karo ki "from scratch" bhi bana sakte ho! 👆
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Python</span>
+                            <span style="color: var(--accent-orange);">Approach 2: OrderedDict</span>
+                        </div>
+                        <div class="code-content">
+<pre><span class="comment"># ============================================</span>
+<span class="comment"># 🔧 LRU CACHE — Using OrderedDict</span>
+<span class="comment"># ============================================</span>
+<span class="comment"># Same O(1) complexity, but cleaner code!</span>
+
+<span class="keyword">from</span> collections <span class="keyword">import</span> OrderedDict
+
+<span class="keyword">class</span> <span class="class-name">LRUCache</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="param">self</span>, <span class="param">capacity</span>: <span class="builtin">int</span>):
+        <span class="keyword">self</span>.cap = capacity
+        <span class="keyword">self</span>.od = OrderedDict()
+
+    <span class="keyword">def</span> <span class="function">get</span>(<span class="param">self</span>, <span class="param">key</span>: <span class="builtin">int</span>) -> <span class="builtin">int</span>:
+        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> <span class="keyword">self</span>.od:
+            <span class="keyword">return</span> <span class="number">-1</span>
+        <span class="comment"># Move to end (most recent)</span>
+        <span class="keyword">self</span>.od.move_to_end(key, last=<span class="builtin">False</span>)
+        <span class="keyword">return</span> <span class="keyword">self</span>.od[key]
+
+    <span class="keyword">def</span> <span class="function">put</span>(<span class="param">self</span>, <span class="param">key</span>: <span class="builtin">int</span>, <span class="param">value</span>: <span class="builtin">int</span>) -> <span class="builtin">None</span>:
+        <span class="keyword">if</span> key <span class="keyword">in</span> <span class="keyword">self</span>.od:
+            <span class="keyword">self</span>.od[key] = value
+            <span class="keyword">self</span>.od.move_to_end(key, last=<span class="builtin">False</span>)
+        <span class="keyword">else</span>:
+            <span class="keyword">self</span>.od[key] = value
+            <span class="keyword">self</span>.od.move_to_end(key, last=<span class="builtin">False</span>)
+            <span class="keyword">if</span> <span class="builtin">len</span>(<span class="keyword">self</span>.od) > <span class="keyword">self</span>.cap:
+                <span class="comment"># Pop least recent (last=True)</span>
+                <span class="keyword">self</span>.od.popitem(last=<span class="builtin">True</span>)</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Pitfalls -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 159, 67, 0.15) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-red);">⚠️ Common Pitfalls — Interview Mein Mat Karo!</h4>
+                <ol class="steps-list">
+                    <li><strong>Node mein key store nahi kiya:</strong><br>
+                        ❌ Eviction ke time <code>del map[???]</code> — key nahi pata!<br>
+                        ✅ Node mein <code>key</code> store karo: <code>del map[lru.key]</code>
+                    </li>
+                    <li><strong>get() mein move-to-front bhool gaye:</strong><br>
+                        ❌ Access kiya but front pe nahi laye → LRU galat calculate hoga!<br>
+                        ✅ Har access pe <code>_move_to_front(node)</code> zaroor karo!
+                    </li>
+                    <li><strong>put(existing) mein update + move bhool gaye:</strong><br>
+                        ❌ Value update ki but position same → Recency galat!<br>
+                        ✅ Update + Move both karo!
+                    </li>
+                    <li><strong>Dummy nodes nahi use kiye:</strong><br>
+                        ❌ Edge cases (empty list, single node) mein crash!<br>
+                        ✅ Dummy head/tail use karo — life easy!
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Summary -->
+            <div class="subsection">
+                <h4 class="subsection-title">📊 Approach Comparison</h4>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>get()</th>
+                            <th>put()</th>
+                            <th>Space</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: rgba(0, 255, 136, 0.15);">
+                            <td><strong>HashMap + DLL ⭐</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                            <td style="color: var(--accent-green);">O(cap)</td>
+                            <td><strong>From scratch! Interview mein preferred!</strong></td>
+                        </tr>
+                        <tr>
+                            <td>OrderedDict</td>
+                            <td style="color: var(--accent-green);">O(1)</td>
+                            <td style="color: var(--accent-green);">O(1)</td>
+                            <td style="color: var(--accent-green);">O(cap)</td>
+                            <td>Clean, but mention "from scratch" bhi aata hai!</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    🎯 <strong>Interview Tip:</strong> Pehle Approach 1 (HashMap + DLL) explain karo! 
+                    Ye dikhata hai ki tum data structures properly samjhte ho! 💯
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PROBLEM 24: LFU Cache ==================== -->
+        <section class="problem-section" id="lfu-cache">
+            <div class="problem-header">
+                <h2>LFU Cache</h2>
+                <p class="problem-subtitle">Least Frequently Used Cache — Frequency-Based Eviction! 📊</p>
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="section problem-statement">
+                <div class="section-header">
+                    <h3 class="section-title">📋 Problem Statement</h3>
+                </div>
+                <div class="section-content">
+                    <p>
+                        <strong>LFU Cache</strong> design karo jo following operations <span class="highlight">O(1) average time</span> mein kare:
+                    </p>
+                    <ul class="concept-list">
+                        <li><code>LFUCache(capacity)</code> - Cache initialize karo given capacity ke saath</li>
+                        <li><code>get(key)</code> - Key ka value return karo, nahi hai to <code>-1</code></li>
+                        <li><code>put(key, value)</code> - Key-value insert/update karo</li>
+                    </ul>
+                    <p style="margin-top: 15px;">
+                        <strong>Eviction Rule (Important!):</strong>
+                    </p>
+                    <ol class="steps-list">
+                        <li><strong>Least Frequently Used</strong> item pehle nikalo</li>
+                        <li>Agar frequency same ho → <strong>LRU within that frequency</strong> (oldest wala nikalo)</li>
+                    </ol>
+                    <div class="complexity-badge" style="margin-top: 15px; background: rgba(255, 159, 67, 0.2); border-color: rgba(255, 159, 67, 0.4);">
+                        <span style="color: var(--accent-orange);">🔥 Hard Problem</span> — Amazon, Google, Facebook ka favorite! Frequency + Recency dono track karna padta hai!
+                    </div>
+                </div>
+            </div>
+
+            <!-- LFU vs LRU Concept -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">🧠 LFU ka Matlab Samjho (Intuition)</h3>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4 class="concept-title">LRU vs LFU — Kya Difference Hai?</h4>
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Aspect</th>
+                                    <th>LRU Cache</th>
+                                    <th>LFU Cache</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Eviction Based On</td>
+                                    <td><strong>Recency</strong> (kitni der se access nahi hua)</td>
+                                    <td><strong>Frequency</strong> (kitni baar access hua)</td>
+                                </tr>
+                                <tr>
+                                    <td>Track Karte Hain</td>
+                                    <td>Last access time</td>
+                                    <td>Access count + recency (tie-breaker)</td>
+                                </tr>
+                                <tr>
+                                    <td>Example</td>
+                                    <td>Recent = Safe</td>
+                                    <td>Zyada used = Safe</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="hinglish-note" style="margin-top: 20px;">
+                        <strong>🎯 Simple Analogy:</strong><br>
+                        Socho tumhare paas limited shelf space hai:<br>
+                        • <strong>LRU:</strong> "Ye book bahut din se nahi padhi, hatao!" (recency)<br>
+                        • <strong>LFU:</strong> "Ye book sirf 1 baar padhi, hatao!" (frequency)
+                    </div>
+
+                    <div class="mermaid" style="margin-top: 25px;">
+flowchart TD
+    subgraph LFU_Example["LFU Eviction Example"]
+        A["Key A - used 10 times"] --> SAFE["SAFE - High Frequency"]
+        B["Key B - used 1 time"] --> EVICT["EVICTED - Low Frequency"]
+    end
+    
+    NOTE["Even if B is more recent, A wins because frequency matters more!"]
+    
+    style SAFE fill:#00ff88,stroke:#00d4ff,color:#000
+    style EVICT fill:#ff6b6b,stroke:#ff9f43,color:#000
+    style NOTE fill:#1a1a2e,stroke:#a855f7,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Brute Force Fails -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">❌ Brute Force Kyu Fail Hota Hai?</h3>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 159, 67, 0.15) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-red);">Naive Approach Problems</h4>
+                        <p>Agar har <code>get()</code> pe:</p>
+                        <ul class="concept-list">
+                            <li>Sab keys ki frequency scan karo</li>
+                            <li>Minimum frequency nikalo</li>
+                            <li>Phir LRU decide karo (tie-breaker)</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong style="color: var(--accent-red);">❌ Ye sab O(n) ho jaata — Interview reject!</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Design -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">🏗️ O(1) Design — Industry Standard</h3>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4 class="concept-title">💡 Core Idea (Samjho Carefully!)</h4>
+                        <p style="font-size: 1.1rem; color: var(--accent-cyan);">
+                            <strong>"Har frequency ka apna LRU list hota hai!"</strong>
+                        </p>
+                        <p style="margin-top: 10px;">
+                            Matlab frequency 1 ke saare keys ek list mein, frequency 2 ke alag, frequency 3 ke alag...
+                        </p>
+                    </div>
+
+                    <!-- Data Structures -->
+                    <div class="subsection" style="margin-top: 25px;">
+                        <h4 class="subsection-title">📦 Data Structures Breakdown</h4>
+                        
+                        <div class="mermaid">
+flowchart TB
+    subgraph DS["Three Key Data Structures"]
+        KTN["1. key_to_node<br/>HashMap: key to Node"]
+        FTD["2. freq_to_dll<br/>HashMap: freq to DLL"]
+        MF["3. min_freq<br/>Integer: smallest frequency"]
+    end
+    
+    style KTN fill:#00ff88,stroke:#00d4ff,color:#000
+    style FTD fill:#00d4ff,stroke:#00ff88,color:#000
+    style MF fill:#a855f7,stroke:#f5576c,color:#fff
+                        </div>
+
+                        <div class="code-block" style="margin-top: 20px;">
+                            <div class="code-header">
+                                <span class="code-lang">Data Structures</span>
+                            </div>
+<pre class="language-python line-numbers"><code># 1. key_to_node: Direct access to node
+key_to_node = {
+    10: Node(key=10, val=100, freq=3),
+    20: Node(key=20, val=200, freq=1)
+}
+
+# 2. freq_to_dll: Frequency buckets
+#    Each bucket is a DLL (LRU list)
+freq_to_dll = {
+    1: DLL containing [20],     # freq=1 wale keys
+    3: DLL containing [10]      # freq=3 wale keys
+}
+
+# 3. min_freq: Eviction ke liye
+min_freq = 1  # Sabse chhoti frequency</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Node Structure -->
+                    <div class="subsection" style="margin-top: 25px;">
+                        <h4 class="subsection-title">🔹 Node Structure</h4>
+                        
+                        <div class="mermaid">
+flowchart LR
+    subgraph Node["LFU Node Structure"]
+        K["key"]
+        V["value"]
+        F["freq"]
+        P["prev"]
+        N["next"]
+    end
+    
+    K --> V --> F --> P --> N
+    
+    style Node fill:#1a1a2e,stroke:#00ff88,color:#fff
+    style K fill:#00ff88,stroke:#000,color:#000
+    style V fill:#00d4ff,stroke:#000,color:#000
+    style F fill:#a855f7,stroke:#000,color:#fff
+    style P fill:#ff9f43,stroke:#000,color:#000
+    style N fill:#f5576c,stroke:#000,color:#fff
+                        </div>
+
+                        <div class="hinglish-note">
+                            🎯 <strong>LRU se difference:</strong> LFU Node mein <code>freq</code> field extra hai! Ye track karta hai kitni baar access hua.
+                        </div>
+                    </div>
+
+                    <!-- Frequency Buckets Visualization -->
+                    <div class="subsection" style="margin-top: 25px;">
+                        <h4 class="subsection-title">📊 Frequency Buckets — Visual</h4>
+                        
+                        <div class="mermaid">
+flowchart TB
+    subgraph Cache["LFU Cache State"]
+        subgraph F1["Frequency = 1"]
+            D1["dummy head"] --> N1["key:30"] --> D1T["dummy tail"]
+        end
+        
+        subgraph F2["Frequency = 2"]
+            D2["dummy head"] --> N2["key:20"] --> N3["key:40"] --> D2T["dummy tail"]
+        end
+        
+        subgraph F3["Frequency = 3"]
+            D3["dummy head"] --> N4["key:10"] --> D3T["dummy tail"]
+        end
+    end
+    
+    MF["min_freq = 1"]
+    MF -.-> F1
+    
+    style F1 fill:#ff6b6b,stroke:#f5576c,color:#000
+    style F2 fill:#ff9f43,stroke:#ffd93d,color:#000
+    style F3 fill:#00ff88,stroke:#00d4ff,color:#000
+    style MF fill:#a855f7,stroke:#00d4ff,color:#fff
+                        </div>
+
+                        <div class="hinglish-note" style="margin-top: 15px;">
+                            <strong>🎯 Important Points:</strong><br>
+                            • Har frequency ka <strong>apna DLL</strong> (LRU list)<br>
+                            • DLL mein <strong>front = most recent</strong>, tail = least recent<br>
+                            • <code>min_freq</code> directly points to eviction bucket!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Golden Rule -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">⚠️ Golden Rule — Yaad Rakho!</h3>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 159, 67, 0.2) 100%); border-color: rgba(255, 215, 0, 0.5);">
+                        <h4 class="concept-title" style="color: #ffd93d;">🏆 Every Access = Frequency Increase</h4>
+                        <p style="font-size: 1.1rem;">
+                            Har <code>get()</code> ya existing key pe <code>put()</code> = <strong>frequency badho!</strong>
+                        </p>
+                        <div class="steps-list" style="margin-top: 15px;">
+                            <ol>
+                                <li>Node ko <strong>old freq DLL</strong> se hatao</li>
+                                <li><code>freq += 1</code></li>
+                                <li><strong>New freq DLL</strong> mein front pe daalo</li>
+                                <li>Agar old freq empty ho gaya AND wahi <code>min_freq</code> tha → <code>min_freq++</code></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- _touch() Function -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">🔧 _touch(node) — Sabse Important Function!</h3>
+                </div>
+                <div class="section-content">
+                    <p>Ye function <strong>har access pe call</strong> hota hai — frequency update + recency maintain!</p>
+                    
+                    <div class="mermaid" style="margin-top: 20px;">
+flowchart TD
+    START["_touch node called"] --> REMOVE["1. Old freq list se node hatao"]
+    REMOVE --> CHECK{"2. Old freq == min_freq<br/>AND list empty?"}
+    CHECK -->|Yes| INCREMENT["min_freq++"]
+    CHECK -->|No| SKIP["Skip"]
+    INCREMENT --> UPDATE["3. node.freq += 1"]
+    SKIP --> UPDATE
+    UPDATE --> ADD["4. New freq DLL mein add_front"]
+    ADD --> DONE["Done - Freq updated + Recency maintained"]
+    
+    style START fill:#a855f7,stroke:#00d4ff,color:#fff
+    style DONE fill:#00ff88,stroke:#00d4ff,color:#000
+    style CHECK fill:#ff9f43,stroke:#ffd93d,color:#000
+    style INCREMENT fill:#ff6b6b,stroke:#f5576c,color:#000
+                    </div>
+
+                    <div class="code-block" style="margin-top: 20px;">
+                        <div class="code-header">
+                            <span class="code-lang">_touch() Logic</span>
+                        </div>
+<pre class="language-python line-numbers"><code>def _touch(self, node):
+    # Step 1: Old frequency list se hatao
+    old_freq = node.freq
+    self.freq_to_dll[old_freq].remove(node)
+    
+    # Step 2: Check if we need to update min_freq
+    if old_freq == self.min_freq and self.freq_to_dll[old_freq].empty():
+        self.min_freq += 1  # Old bucket empty, move to next
+    
+    # Step 3: Frequency increase
+    node.freq += 1
+    new_freq = node.freq
+    
+    # Step 4: Add to new frequency bucket (front = most recent)
+    if new_freq not in self.freq_to_dll:
+        self.freq_to_dll[new_freq] = DLL()
+    self.freq_to_dll[new_freq].add_front(node)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET Operation -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">📖 GET Operation Flow</h3>
+                </div>
+                <div class="section-content">
+                    <div class="mermaid">
+flowchart TD
+    START["get key"] --> CHECK{"key in cache?"}
+    CHECK -->|No| RETURN_NEG["return -1"]
+    CHECK -->|Yes| TOUCH["_touch node - freq++"]
+    TOUCH --> RETURN_VAL["return node.value"]
+    
+    style START fill:#00d4ff,stroke:#00ff88,color:#000
+    style RETURN_NEG fill:#ff6b6b,stroke:#f5576c,color:#000
+    style RETURN_VAL fill:#00ff88,stroke:#00d4ff,color:#000
+                    </div>
+                </div>
+            </div>
+
+            <!-- PUT Operation -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">✏️ PUT Operation Flow</h3>
+                </div>
+                <div class="section-content">
+                    <div class="mermaid">
+flowchart TD
+    START["put key, value"] --> CHECK_CAP{"capacity == 0?"}
+    CHECK_CAP -->|Yes| RETURN_NONE["return - no-op"]
+    CHECK_CAP -->|No| CHECK_KEY{"key exists?"}
+    
+    CHECK_KEY -->|Yes| UPDATE["Update value"]
+    UPDATE --> TOUCH_EXIST["_touch node - freq++"]
+    TOUCH_EXIST --> DONE["Done"]
+    
+    CHECK_KEY -->|No| CHECK_FULL{"cache full?"}
+    CHECK_FULL -->|Yes| EVICT["Evict from min_freq DLL tail"]
+    EVICT --> DEL_MAP["Delete evicted key from map"]
+    DEL_MAP --> INSERT
+    CHECK_FULL -->|No| INSERT["Create new node freq=1"]
+    INSERT --> SET_MIN["min_freq = 1"]
+    SET_MIN --> ADD_DLL["Add to freq=1 DLL"]
+    ADD_DLL --> ADD_MAP["Add to key_to_node map"]
+    ADD_MAP --> DONE
+    
+    style START fill:#a855f7,stroke:#00d4ff,color:#fff
+    style EVICT fill:#ff6b6b,stroke:#f5576c,color:#000
+    style INSERT fill:#00ff88,stroke:#00d4ff,color:#000
+    style DONE fill:#00d4ff,stroke:#00ff88,color:#000
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approach A: HashMap + Frequency DLLs -->
+            <div class="section approach-section" id="lfu-approach-a">
+                <div class="section-header">
+                    <h3 class="section-title">✅ Approach A: HashMap + Frequency DLLs (Optimal)</h3>
+                    <span class="difficulty-badge hard" style="background: linear-gradient(135deg, #ff6b6b, #f5576c);">O(1) — Interview Standard</span>
+                </div>
+                <div class="section-content">
+                    <div class="approach-header">
+                        <div class="complexity-badges">
+                            <span class="complexity-badge time">⏱️ Time: O(1) avg</span>
+                            <span class="complexity-badge space">💾 Space: O(capacity)</span>
+                        </div>
+                    </div>
+
+                    <!-- Full Code -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">🐍 Python</span>
+                        </div>
+<pre class="language-python line-numbers"><code>class LFUCache:
+    """
+    LFU Cache - O(1) average time for get() and put()
+    Using HashMap + Frequency Buckets (each bucket is a DLL)
+    """
+    
+    class Node:
+        """Node for DLL - stores key, value, and frequency"""
+        __slots__ = ("key", "val", "freq", "prev", "next")
+        
+        def __init__(self, key, val):
+            self.key = key
+            self.val = val
+            self.freq = 1  # New nodes start with freq=1
+            self.prev = None
+            self.next = None
+    
+    class DLL:
+        """Doubly Linked List for LRU within each frequency"""
+        
+        def __init__(self):
+            # Dummy head and tail for easy operations
+            self.head = LFUCache.Node(None, None)
+            self.tail = LFUCache.Node(None, None)
+            self.head.next = self.tail
+            self.tail.prev = self.head
+            self.size = 0
+        
+        def add_front(self, node):
+            """Add node right after head (most recent position)"""
+            node.prev = self.head
+            node.next = self.head.next
+            self.head.next.prev = node
+            self.head.next = node
+            self.size += 1
+        
+        def remove(self, node):
+            """Remove a specific node from DLL"""
+            node.prev.next = node.next
+            node.next.prev = node.prev
+            self.size -= 1
+        
+        def pop_lru(self):
+            """Remove and return LRU node (just before tail)"""
+            if self.size == 0:
+                return None
+            node = self.tail.prev  # LRU is at tail
+            self.remove(node)
+            return node
+        
+        def empty(self):
+            """Check if DLL is empty"""
+            return self.size == 0
+    
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.key_to_node = {}      # key -> Node
+        self.freq_to_dll = {}      # freq -> DLL
+        self.min_freq = 0          # Smallest frequency in cache
+    
+    def _touch(self, node):
+        """
+        Update frequency of node - THE CORE FUNCTION!
+        Called on every get() and existing key put()
+        """
+        # Step 1: Remove from old frequency bucket
+        old_freq = node.freq
+        self.freq_to_dll[old_freq].remove(node)
+        
+        # Step 2: Update min_freq if needed
+        if old_freq == self.min_freq and self.freq_to_dll[old_freq].empty():
+            self.min_freq += 1
+        
+        # Step 3: Increment frequency
+        node.freq += 1
+        new_freq = node.freq
+        
+        # Step 4: Add to new frequency bucket
+        if new_freq not in self.freq_to_dll:
+            self.freq_to_dll[new_freq] = self.DLL()
+        self.freq_to_dll[new_freq].add_front(node)
+    
+    def get(self, key: int) -> int:
+        """Get value by key, return -1 if not found"""
+        if key not in self.key_to_node:
+            return -1
+        
+        node = self.key_to_node[key]
+        self._touch(node)  # Increase frequency!
+        return node.val
+    
+    def put(self, key: int, value: int) -> None:
+        """Insert or update key-value pair"""
+        if self.cap == 0:
+            return
+        
+        # Case 1: Key exists - update value and frequency
+        if key in self.key_to_node:
+            node = self.key_to_node[key]
+            node.val = value
+            self._touch(node)
+            return
+        
+        # Case 2: New key - check capacity first
+        if len(self.key_to_node) >= self.cap:
+            # Evict LFU (from min_freq bucket's tail)
+            dll = self.freq_to_dll[self.min_freq]
+            evict = dll.pop_lru()
+            del self.key_to_node[evict.key]
+        
+        # Insert new node
+        node = self.Node(key, value)
+        self.key_to_node[key] = node
+        
+        # New nodes always have freq=1
+        self.min_freq = 1
+        if 1 not in self.freq_to_dll:
+            self.freq_to_dll[1] = self.DLL()
+        self.freq_to_dll[1].add_front(node)</code></pre>
+                    </div>
+
+                    <!-- Dry Run -->
+                    <div class="subsection" style="margin-top: 25px;">
+                        <h4 class="subsection-title">🔄 Dry Run Example</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">Step-by-Step</span>
+                            </div>
+<pre class="language-python"><code># Capacity = 2
+
+put(1, 10)  # cache: {1:10}, freq_to_dll: {1: [1]}
+            # min_freq = 1
+
+put(2, 20)  # cache: {1:10, 2:20}, freq_to_dll: {1: [2,1]}
+            # min_freq = 1
+
+get(1)      # freq(1) = 2, move 1 from freq=1 to freq=2
+            # freq_to_dll: {1: [2], 2: [1]}
+            # min_freq = 1 (freq=1 bucket not empty)
+
+put(3, 30)  # capacity full! Evict from min_freq=1
+            # Key 2 evicted (LRU in freq=1)
+            # Insert key 3 with freq=1
+            # freq_to_dll: {1: [3], 2: [1]}
+            # min_freq = 1
+
+# Final cache: {1:10, 3:30}
+# Key 2 was evicted because:
+# - Key 1 had freq=2
+# - Key 2 had freq=1 (least frequently used)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approach B: Heap-based -->
+            <div class="section approach-section" id="lfu-approach-b">
+                <div class="section-header">
+                    <h3 class="section-title">📦 Approach B: Heap / Priority Queue</h3>
+                    <span class="difficulty-badge medium" style="background: linear-gradient(135deg, #ff9f43, #ffd93d);">O(log n) — Sub-optimal</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 159, 67, 0.15) 0%, rgba(255, 215, 0, 0.15) 100%); border-color: rgba(255, 159, 67, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-orange);">⚠️ Important Disclaimer</h4>
+                        <ul class="concept-list">
+                            <li><strong>Simpler</strong> to implement</li>
+                            <li>But <strong>NOT strict O(1)</strong> — O(log n)</li>
+                            <li>Interview mein: <em>"Acceptable but sub-optimal"</em></li>
+                        </ul>
+                    </div>
+
+                    <div class="approach-header" style="margin-top: 20px;">
+                        <div class="complexity-badges">
+                            <span class="complexity-badge time">⏱️ Time: O(log n)</span>
+                            <span class="complexity-badge space">💾 Space: O(n) + stale entries</span>
+                        </div>
+                    </div>
+
+                    <!-- Core Idea -->
+                    <div class="subsection" style="margin-top: 20px;">
+                        <h4 class="subsection-title">💡 Core Idea</h4>
+                        <p>Har key ke saath 3 cheezein track karo:</p>
+                        <ol class="steps-list">
+                            <li><strong>frequency</strong> — kitni baar access hui</li>
+                            <li><strong>time / counter</strong> — recency tie-breaker</li>
+                            <li><strong>key</strong></li>
+                        </ol>
+                        <p style="margin-top: 15px;">
+                            Heap mein store: <code>(freq, time, key)</code><br>
+                            Python ka <code>heapq</code> = min-heap, so pehle lowest freq, phir oldest time!
+                        </p>
+                    </div>
+
+                    <!-- Major Problem -->
+                    <div class="concept-box" style="margin-top: 20px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 159, 67, 0.15) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-red);">⚠️ Major Problem: Heap Update</h4>
+                        <p>Python heap <strong>update support nahi karta!</strong></p>
+                        <p style="margin-top: 10px;">So jab frequency badhti hai:</p>
+                        <ul class="concept-list">
+                            <li>Hum <strong>new entry push</strong> kar dete hain</li>
+                            <li>Old heap entry <strong>stale</strong> ho jaati hai</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>Solution → Lazy Deletion:</strong></p>
+                        <p>Eviction ke time: pop karo, check karo valid hai ya nahi, nahi to ignore & pop next!</p>
+                    </div>
+
+                    <!-- Code -->
+                    <div class="code-block" style="margin-top: 20px;">
+                        <div class="code-header">
+                            <span class="code-lang">🐍 Python</span>
+                        </div>
+<pre class="language-python line-numbers"><code>import heapq
+
+class LFUCache:
+    """
+    LFU Cache - Heap-based approach
+    O(log n) time, simpler but sub-optimal
+    Uses lazy deletion for stale entries
+    """
+    
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.time = 0                  # Global timestamp
+        self.heap = []                 # (freq, time, key)
+        self.key_to_val_freq = {}      # key -> [value, freq]
+    
+    def get(self, key: int) -> int:
+        if key not in self.key_to_val_freq:
+            return -1
+        
+        self.time += 1
+        val, freq = self.key_to_val_freq[key]
+        
+        # Increase frequency
+        freq += 1
+        self.key_to_val_freq[key] = [val, freq]
+        
+        # Push new entry (old one becomes stale)
+        heapq.heappush(self.heap, (freq, self.time, key))
+        
+        return val
+    
+    def put(self, key: int, value: int) -> None:
+        if self.cap == 0:
+            return
+        
+        self.time += 1
+        
+        # Case 1: Key exists - update
+        if key in self.key_to_val_freq:
+            _, freq = self.key_to_val_freq[key]
+            freq += 1
+            self.key_to_val_freq[key] = [value, freq]
+            heapq.heappush(self.heap, (freq, self.time, key))
+            return
+        
+        # Case 2: New key - check capacity
+        if len(self.key_to_val_freq) >= self.cap:
+            # Evict LFU using lazy deletion
+            while self.heap:
+                freq, t, k = heapq.heappop(self.heap)
+                
+                # Check if this entry is still valid
+                if k in self.key_to_val_freq:
+                    cur_val, cur_freq = self.key_to_val_freq[k]
+                    
+                    # Valid only if freq matches current freq
+                    if cur_freq == freq:
+                        del self.key_to_val_freq[k]
+                        break
+                    # Else: stale entry, skip and pop next
+        
+        # Insert new key
+        self.key_to_val_freq[key] = [value, 1]
+        heapq.heappush(self.heap, (1, self.time, key))</code></pre>
+                    </div>
+
+                    <!-- Dry Run -->
+                    <div class="subsection" style="margin-top: 25px;">
+                        <h4 class="subsection-title">🔄 Dry Run (Quick)</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">Execution</span>
+                            </div>
+<pre class="language-python"><code># Capacity = 2
+
+put(1, 10)  # heap: [(1, 1, 1)], map: {1: [10, 1]}
+put(2, 20)  # heap: [(1, 1, 1), (1, 2, 2)], map: {1: [10, 1], 2: [20, 1]}
+
+get(1)      # freq(1) = 2
+            # heap: [(1, 1, 1), (1, 2, 2), (2, 3, 1)]  # old entry stale
+            # map: {1: [10, 2], 2: [20, 1]}
+
+put(3, 30)  # capacity full! Pop from heap:
+            # Pop (1, 1, 1) - stale! (current freq of key 1 is 2)
+            # Pop (1, 2, 2) - valid! freq matches, evict key 2
+            # Insert key 3
+            # Final: map: {1: [10, 2], 3: [30, 1]}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complexity Analysis -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">⏱️ Complexity Reality Check</h3>
+                </div>
+                <div class="section-content">
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Approach A (Freq DLL)</th>
+                                <th>Approach B (Heap)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>get()</td>
+                                <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                                <td style="color: var(--accent-orange);">O(log n)</td>
+                            </tr>
+                            <tr>
+                                <td>put()</td>
+                                <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                                <td style="color: var(--accent-orange);">O(log n)</td>
+                            </tr>
+                            <tr>
+                                <td>Space</td>
+                                <td style="color: var(--accent-green);">O(capacity)</td>
+                                <td style="color: var(--accent-orange);">O(n) + stale</td>
+                            </tr>
+                            <tr>
+                                <td>Stale Entries</td>
+                                <td style="color: var(--accent-green);">No</td>
+                                <td style="color: var(--accent-red);">Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="hinglish-note" style="margin-top: 15px;">
+                        ⚠️ <strong>Heap Warning:</strong> Heap can grow beyond capacity because of stale entries!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approach Comparison -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">⚖️ Approach Comparison — Interview Ready!</h3>
+                </div>
+                <div class="section-content">
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Approach A (Freq DLL) ⭐</th>
+                                <th>Approach B (Heap)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Time Complexity</td>
+                                <td style="color: var(--accent-green);"><strong>O(1) strict</strong></td>
+                                <td style="color: var(--accent-orange);">O(log n)</td>
+                            </tr>
+                            <tr>
+                                <td>Code Complexity</td>
+                                <td style="color: var(--accent-orange);">Complex</td>
+                                <td style="color: var(--accent-green);">Simple</td>
+                            </tr>
+                            <tr>
+                                <td>Stale Entries</td>
+                                <td style="color: var(--accent-green);">No</td>
+                                <td style="color: var(--accent-red);">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Interview Score</td>
+                                <td style="color: var(--accent-green);">⭐⭐⭐⭐⭐</td>
+                                <td style="color: var(--accent-orange);">⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Real Systems</td>
+                                <td>Redis-like</td>
+                                <td>Rare</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="concept-box" style="margin-top: 20px;">
+                        <h4 class="concept-title">🎯 When to Use Heap Approach?</h4>
+                        <ul class="concept-list">
+                            <li>Quick implementation needed</li>
+                            <li>Low constraints / small data</li>
+                            <li>Interviewer says: <em>"O(log n) is fine"</em></li>
+                            <li>Whiteboard round with limited time</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LRU vs LFU Comparison -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">🆚 LRU vs LFU — Complete Comparison</h3>
+                </div>
+                <div class="section-content">
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>LRU Cache</th>
+                                <th>LFU Cache</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Eviction Logic</td>
+                                <td>Least Recently Used</td>
+                                <td>Least Frequently Used</td>
+                            </tr>
+                            <tr>
+                                <td>Track Kya Karte Hain</td>
+                                <td>Recency (last access time)</td>
+                                <td>Frequency + Recency (tie-breaker)</td>
+                            </tr>
+                            <tr>
+                                <td>Data Structures</td>
+                                <td>HashMap + 1 DLL</td>
+                                <td>HashMap + Multiple DLLs (per freq)</td>
+                            </tr>
+                            <tr>
+                                <td>Extra Tracking</td>
+                                <td>-</td>
+                                <td>min_freq variable</td>
+                            </tr>
+                            <tr>
+                                <td>Complexity</td>
+                                <td>Simpler</td>
+                                <td>More complex</td>
+                            </tr>
+                            <tr>
+                                <td>Use Case</td>
+                                <td>Browser cache, OS page cache</td>
+                                <td>CDN, Database query cache</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mermaid" style="margin-top: 25px;">
+flowchart LR
+    subgraph LRU["LRU Cache"]
+        LRU_DS["HashMap + 1 DLL"]
+        LRU_EVICT["Evict: Tail of DLL"]
+    end
+    
+    subgraph LFU["LFU Cache"]
+        LFU_DS["HashMap + N DLLs by freq"]
+        LFU_EVICT["Evict: Tail of min_freq DLL"]
+    end
+    
+    style LRU fill:#00ff88,stroke:#00d4ff,color:#000
+    style LFU fill:#a855f7,stroke:#f5576c,color:#fff
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview Gold Points -->
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">✨ Interview Gold Points</h3>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%); border-color: rgba(168, 85, 247, 0.4);">
+                        <h4 class="concept-title" style="color: var(--accent-purple);">🔥 Key Points to Remember</h4>
+                        <ul class="concept-list">
+                            <li><strong>LFU = Frequency Buckets + LRU inside each bucket</strong></li>
+                            <li><code>min_freq</code> is <strong>mandatory</strong> for O(1) eviction</li>
+                            <li><strong>Every access = frequency increase</strong></li>
+                            <li>Eviction always from <code>min_freq</code> bucket's tail</li>
+                            <li>DLL needed to break frequency ties (LRU within same freq)</li>
+                            <li>New nodes always start with <code>freq=1</code>, so <code>min_freq=1</code> after insert</li>
+                        </ul>
+                    </div>
+
+                    <div class="hinglish-note" style="margin-top: 20px; background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);">
+                        <strong>🎯 One-liner Takeaway (Reel / Interview):</strong><br><br>
+                        <em style="font-size: 1.1rem;">"LFU Cache is HashMap + Frequency Buckets, where each bucket is an LRU list, and <code>min_freq</code> tells you exactly whom to evict in O(1)."</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Pitfalls -->
+            <div class="concept-box" style="background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 159, 67, 0.15) 100%); border-color: rgba(255, 107, 107, 0.4);">
+                <h4 class="concept-title" style="color: var(--accent-red);">⚠️ Common Pitfalls — Interview Mein Mat Karo!</h4>
+                <ol class="steps-list">
+                    <li><strong>min_freq update bhool gaye:</strong><br>
+                        ❌ Old freq bucket empty hua but min_freq same → Wrong eviction!<br>
+                        ✅ Jab old freq bucket empty ho AND wahi min_freq tha → <code>min_freq++</code>
+                    </li>
+                    <li><strong>New insert pe min_freq = 1 nahi kiya:</strong><br>
+                        ❌ New node insert kiya but min_freq purana → Galat eviction!<br>
+                        ✅ Har new insert pe <code>min_freq = 1</code> (kyunki new node ki freq=1)
+                    </li>
+                    <li><strong>Node mein freq store nahi kiya:</strong><br>
+                        ❌ _touch() mein old freq nahi pata!<br>
+                        ✅ Node structure mein <code>freq</code> field rakho
+                    </li>
+                    <li><strong>Same key update pe _touch bhool gaye:</strong><br>
+                        ❌ Value update ki but frequency same → Galat LFU behavior!<br>
+                        ✅ Existing key pe put() bhi <code>_touch()</code> call karo
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Summary -->
+            <div class="subsection">
+                <h4 class="subsection-title">📊 Approach Comparison</h4>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>get()</th>
+                            <th>put()</th>
+                            <th>Space</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: rgba(0, 255, 136, 0.15);">
+                            <td><strong>HashMap + Freq DLLs ⭐</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                            <td style="color: var(--accent-green);"><strong>O(1)</strong></td>
+                            <td style="color: var(--accent-green);">O(cap)</td>
+                            <td><strong>Industry standard! Interview mein ye bolo!</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Heap / Priority Queue</td>
+                            <td style="color: var(--accent-orange);">O(log n)</td>
+                            <td style="color: var(--accent-orange);">O(log n)</td>
+                            <td style="color: var(--accent-orange);">O(n)+stale</td>
+                            <td>Simpler, but sub-optimal with lazy deletion</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hinglish-note" style="margin-top: 15px;">
+                    🎯 <strong>Interview Tip:</strong> Pehle Approach A (HashMap + Frequency DLLs) explain karo! 
+                    Ye dikhata hai ki tum complex data structures properly samjhte ho! 💯
                 </div>
             </div>
         </section>
