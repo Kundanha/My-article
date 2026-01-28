@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.1",
-    "lastUpdated": "2026-01-24T18:39:54.642Z",
+    "lastUpdated": "2026-01-27T11:19:08.391Z",
     "description": "Progress tracker for System Design, DSA & Reel Scripts learning materials - Individual concept tracking"
   },
   "summary": {
@@ -18,8 +18,8 @@
     },
     "scripts": {
       "totalScripts": 12,
-      "completedScripts": 0,
-      "percentage": 0
+      "completedScripts": 2,
+      "percentage": 17
     }
   },
   "scripts": {
@@ -27,14 +27,14 @@
       "strategy": {
         "id": "strategy",
         "name": "Strategy Pattern",
-        "completed": false,
-        "completedAt": null
+        "completed": true,
+        "completedAt": "2026-01-27T11:19:07.432Z"
       },
       "orchestrator": {
         "id": "orchestrator",
         "name": "Orchestrator Pattern",
-        "completed": false,
-        "completedAt": null
+        "completed": true,
+        "completedAt": "2026-01-27T11:19:08.391Z"
       },
       "result": {
         "id": "result",
