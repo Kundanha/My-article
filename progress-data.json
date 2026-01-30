@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "version": "2.1",
-    "lastUpdated": "2026-01-27T11:19:08.391Z",
-    "description": "Progress tracker for System Design, DSA & Reel Scripts learning materials - Individual concept tracking"
+    "version": "2.2",
+    "lastUpdated": "2026-01-30T13:00:23.100Z",
+    "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
     "systemDesign": {
@@ -13,13 +13,37 @@
     },
     "dsa": {
       "totalProblems": 17,
-      "completedProblems": 6,
-      "percentage": 35
+      "completedProblems": 7,
+      "percentage": 41
     },
     "scripts": {
       "totalScripts": 12,
       "completedScripts": 2,
       "percentage": 17
+    },
+    "threeMonthsPlan": {
+      "totalProblems": 100,
+      "completedProblems": 3,
+      "percentage": 3
+    }
+  },
+  "threeMonthsPlan": {
+    "problems": {
+      "two-sum": {
+        "id": "two-sum",
+        "completed": true,
+        "completedAt": "2026-01-30T13:00:19.920Z"
+      },
+      "add-two-numbers": {
+        "id": "add-two-numbers",
+        "completed": true,
+        "completedAt": "2026-01-30T13:00:21.618Z"
+      },
+      "3sum": {
+        "id": "3sum",
+        "completed": true,
+        "completedAt": "2026-01-30T13:00:23.100Z"
+      }
     }
   },
   "scripts": {
@@ -679,8 +703,8 @@
             "name": "3Sum",
             "difficulty": "Medium",
             "leetcode": 15,
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-01-30T12:21:55.761Z"
           },
           "container-water": {
             "id": "container-water",

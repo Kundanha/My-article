@@ -237,6 +237,80 @@ app.post('/api/progress/scripts', (req, res) => {
     }
 });
 
+// POST - Update a Three Months Plan problem's completion status
+app.post('/api/progress/three-months', (req, res) => {
+    const { problemId, completed } = req.body;
+    
+    if (!problemId) {
+        return res.status(400).json({ error: 'problemId is required' });
+    }
+
+    const data = readProgressData();
+    if (!data) {
+        return res.status(500).json({ error: 'Failed to read progress data' });
+    }
+
+    // Initialize threeMonthsPlan section if not exists
+    if (!data.threeMonthsPlan) {
+        data.threeMonthsPlan = {
+            problems: {}
+        };
+    }
+    if (!data.summary.threeMonthsPlan) {
+        data.summary.threeMonthsPlan = {
+            totalProblems: 100,
+            completedProblems: 0,
+            percentage: 0
+        };
+    }
+
+    // Update or create the problem entry
+    if (!data.threeMonthsPlan.problems[problemId]) {
+        data.threeMonthsPlan.problems[problemId] = {
+            id: problemId,
+            completed: false,
+            completedAt: null
+        };
+    }
+    
+    data.threeMonthsPlan.problems[problemId].completed = completed;
+    data.threeMonthsPlan.problems[problemId].completedAt = completed ? new Date().toISOString() : null;
+
+    // Update summary counts
+    let completedCount = 0;
+    for (const key in data.threeMonthsPlan.problems) {
+        if (data.threeMonthsPlan.problems[key].completed) {
+            completedCount++;
+        }
+    }
+    data.summary.threeMonthsPlan.completedProblems = completedCount;
+    data.summary.threeMonthsPlan.percentage = Math.round((completedCount / 100) * 100);
+
+    if (writeProgressData(data)) {
+        res.json({ 
+            success: true, 
+            problemId, 
+            completed,
+            summary: data.summary.threeMonthsPlan
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to save progress' });
+    }
+});
+
+// GET - Fetch Three Months Plan progress
+app.get('/api/progress/three-months', (req, res) => {
+    const data = readProgressData();
+    if (data) {
+        res.json({
+            problems: data.threeMonthsPlan?.problems || {},
+            summary: data.summary?.threeMonthsPlan || { totalProblems: 100, completedProblems: 0, percentage: 0 }
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to read progress data' });
+    }
+});
+
 // POST - Reset all progress
 app.post('/api/progress/reset', (req, res) => {
     const data = readProgressData();
@@ -274,6 +348,14 @@ app.post('/api/progress/reset', (req, res) => {
         }
     }
 
+    // Reset all Three Months Plan problems
+    if (data.threeMonthsPlan && data.threeMonthsPlan.problems) {
+        for (const key in data.threeMonthsPlan.problems) {
+            data.threeMonthsPlan.problems[key].completed = false;
+            data.threeMonthsPlan.problems[key].completedAt = null;
+        }
+    }
+
     // Reset summary
     data.summary.systemDesign.completedConcepts = 0;
     data.summary.systemDesign.percentage = 0;
@@ -282,6 +364,10 @@ app.post('/api/progress/reset', (req, res) => {
     if (data.summary.scripts) {
         data.summary.scripts.completedScripts = 0;
         data.summary.scripts.percentage = 0;
+    }
+    if (data.summary.threeMonthsPlan) {
+        data.summary.threeMonthsPlan.completedProblems = 0;
+        data.summary.threeMonthsPlan.percentage = 0;
     }
 
     if (writeProgressData(data)) {
