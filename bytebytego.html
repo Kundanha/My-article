@@ -811,6 +811,22 @@
             </div>
         </div>
 
+        <div class="category-group active" id="sd-book">
+            <div class="category-header" onclick="toggleCategory('sd-book')">
+                <span class="category-title">
+                    <span>📖</span>
+                    SD-Book (Alex Xu)
+                </span>
+                <span>▼</span>
+            </div>
+            <div class="category-items">
+                <a href="#sd-book-ch1" class="nav-item">Ch 1: Zero to Millions</a>
+                <a href="#sd-book-ch1-cache" class="nav-item">→ Cache & CDN</a>
+                <a href="#sd-book-ch1-stateless" class="nav-item">→ Stateless Architecture</a>
+                <a href="#sd-book-ch1-datacenter" class="nav-item">→ Multi Data Center</a>
+            </div>
+        </div>
+
         <div class="category-group" id="real-world">
             <div class="category-header" onclick="toggleCategory('real-world')">
                 <span class="category-title">
@@ -5577,6 +5593,1165 @@
             </div>
         </section>
 
+        <!-- ==================== SD-BOOK: CHAPTER 1 ==================== -->
+        <section class="section" id="sd-book-ch1" data-topic-id="sd-book-ch1">
+            <div class="section-header">
+                <span class="section-icon">📖</span>
+                <h2 class="section-title">SD-Book Ch 1: Scale from Zero to Millions</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch1', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            
+            <!-- Chapter Overview -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🎯</span>
+                    <span class="topic-card-title">Chapter 1 Ka Overview</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p style="font-size: 1.1rem; color: var(--accent-green);"><strong>🚀 Is chapter me hum ek website ko zero se millions of users tak scale karenge!</strong></p>
+                    <p style="margin-top: 1rem;">Ye chapter Alex Xu ki <strong>"System Design Interview"</strong> book ka foundation hai. Har concept ko step-by-step samjhenge:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #667eea22, #764ba222); padding: 1rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <strong>🖥️ Single Server</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">Shuru se web + DB ek hi machine par</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #00d4ff22, #00bcd422); padding: 1rem; border-radius: 12px; border-left: 4px solid #00d4ff;">
+                            <strong>🗄️ Database Tier</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">SQL vs NoSQL, separate DB server</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ff6f0022, #ff9f4322); padding: 1rem; border-radius: 12px; border-left: 4px solid #ff6f00;">
+                            <strong>⚖️ Load Balancer</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">Traffic distribute karna multiple servers pe</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #00ff8822, #22c55e22); padding: 1rem; border-radius: 12px; border-left: 4px solid #00ff88;">
+                            <strong>🔄 DB Replication</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">Master-Slave setup for reads/writes</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #a855f722, #7c3aed22); padding: 1rem; border-radius: 12px; border-left: 4px solid #a855f7;">
+                            <strong>⚡ Cache Layer</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">In-memory fast storage</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f5576c22, #ff6b6b22); padding: 1rem; border-radius: 12px; border-left: 4px solid #f5576c;">
+                            <strong>🌍 CDN</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">Static content globally serve</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ffd93d22, #f59e0b22); padding: 1rem; border-radius: 12px; border-left: 4px solid #ffd93d;">
+                            <strong>🔐 Stateless Tier</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">Session ko external storage me</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #06b6d422, #0891b222); padding: 1rem; border-radius: 12px; border-left: 4px solid #06b6d4;">
+                            <strong>🏢 Multi Data Center</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">GeoDNS + Failover</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Single Server Setup -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🖥️</span>
+                    <span class="topic-card-title">Single Server Setup - Journey Shuru!</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Har scalable system ki journey ek <strong>single server</strong> se shuru hoti hai. Imagine karo tumne ek startup shuru kiya - pehle din se multi-region deployment ki zaroorat nahi hai! 😄</p>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🏗️ Basic Single Server Architecture</h4>
+                    
+                    <!-- Animated Single Server Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0; position: relative; overflow: hidden;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2rem;">
+                            
+                            <!-- User -->
+                            <div style="display: flex; align-items: center; gap: 1rem; animation: fadeInDown 0.5s ease-out;">
+                                <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 1.5rem; border-radius: 50%; box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);">
+                                    <span style="font-size: 2rem;">👤</span>
+                                </div>
+                                <div style="text-align: left;">
+                                    <strong style="color: #fff;">User (Browser/Mobile)</strong>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary);">www.mysite.com type karta hai</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Arrow Down -->
+                            <div style="display: flex; flex-direction: column; align-items: center; animation: pulse 2s infinite;">
+                                <div style="width: 4px; height: 40px; background: linear-gradient(to bottom, #00d4ff, #00bcd4); border-radius: 2px;"></div>
+                                <div style="width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 15px solid #00bcd4;"></div>
+                                <span style="font-size: 0.8rem; color: #00d4ff; margin-top: 5px;">DNS Query</span>
+                            </div>
+                            
+                            <!-- DNS -->
+                            <div style="display: flex; align-items: center; gap: 1rem; animation: fadeIn 0.7s ease-out;">
+                                <div style="background: linear-gradient(135deg, #ff6f00, #ff9f43); padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 25px rgba(255, 111, 0, 0.4);">
+                                    <span style="font-size: 1.8rem;">🌐</span>
+                                </div>
+                                <div style="text-align: left;">
+                                    <strong style="color: #fff;">DNS Server</strong>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Domain → IP address (15.125.87.21)</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Arrow Down -->
+                            <div style="display: flex; flex-direction: column; align-items: center; animation: pulse 2s infinite 0.5s;">
+                                <div style="width: 4px; height: 40px; background: linear-gradient(to bottom, #00ff88, #22c55e); border-radius: 2px;"></div>
+                                <div style="width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 15px solid #22c55e;"></div>
+                                <span style="font-size: 0.8rem; color: #00ff88; margin-top: 5px;">HTTP Request</span>
+                            </div>
+                            
+                            <!-- Web Server -->
+                            <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 2rem; border-radius: 16px; box-shadow: 0 0 40px rgba(0, 188, 212, 0.4); text-align: center; min-width: 300px;">
+                                <span style="font-size: 2.5rem;">🖥️</span>
+                                <h4 style="color: #fff; margin: 0.5rem 0;">Single Server</h4>
+                                <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+                                    <div style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px;">
+                                        <span>🌐 Web Server</span>
+                                    </div>
+                                    <div style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px;">
+                                        <span>🗄️ Database</span>
+                                    </div>
+                                </div>
+                                <p style="font-size: 0.85rem; margin-top: 1rem; opacity: 0.9;">Sab kuch ek machine par! 💪</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Animation Keyframes -->
+                        <style>
+                            @keyframes pulse {
+                                0%, 100% { opacity: 1; transform: scale(1); }
+                                50% { opacity: 0.7; transform: scale(1.1); }
+                            }
+                            @keyframes fadeInDown {
+                                from { opacity: 0; transform: translateY(-20px); }
+                                to { opacity: 1; transform: translateY(0); }
+                            }
+                            @keyframes fadeIn {
+                                from { opacity: 0; }
+                                to { opacity: 1; }
+                            }
+                        </style>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📡 Request Flow Explained</h4>
+                    <ol style="margin-left: 1.5rem;">
+                        <li><strong>User browser me type karta hai:</strong> <code>www.mysite.com</code></li>
+                        <li><strong>DNS Lookup:</strong> Browser DNS server se IP address mangta hai</li>
+                        <li><strong>DNS Response:</strong> DNS server IP return karta hai (jaise <code>15.125.87.21</code>)</li>
+                        <li><strong>HTTP Request:</strong> Browser us IP par HTTP request bhejta hai</li>
+                        <li><strong>Response:</strong> Server HTML page ya JSON data return karta hai</li>
+                    </ol>
+                    
+                    <div style="background: linear-gradient(135deg, #ff6b6b22, #ff6b6b11); border-left: 4px solid #ff6b6b; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #ff6b6b;">⚠️ Single Server Problems:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Server down = Website down (Single Point of Failure)</li>
+                            <li>High traffic pe slow ho jaata hai</li>
+                            <li>Database aur web server same resources share karte hain</li>
+                            <li>Scaling possible nahi hai</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Traffic Types -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">📱</span>
+                    <span class="topic-card-title">Web vs Mobile Traffic</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Server do tarah ke traffic handle karta hai - <strong>Web Browser</strong> se aur <strong>Mobile Apps</strong> se:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                        <!-- Web Traffic -->
+                        <div style="background: linear-gradient(135deg, #667eea22, #764ba222); padding: 1.5rem; border-radius: 12px; border: 1px solid #667eea44;">
+                            <h5 style="color: #667eea; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🌐</span> Web Browser Traffic
+                            </h5>
+                            <p style="margin-top: 1rem;">Server-side rendering hota hai. Server poora HTML page generate karke bhejta hai.</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 1rem; font-family: 'Fira Code', monospace; font-size: 0.85rem;">
+                                Response: <span style="color: #00ff88;">HTML/CSS/JS</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Traffic -->
+                        <div style="background: linear-gradient(135deg, #00ff8822, #22c55e22); padding: 1.5rem; border-radius: 12px; border: 1px solid #00ff8844;">
+                            <h5 style="color: #00ff88; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">📱</span> Mobile App Traffic
+                            </h5>
+                            <p style="margin-top: 1rem;">API calls hote hain. Server data bhejta hai, rendering app me hoti hai.</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 1rem; font-family: 'Fira Code', monospace; font-size: 0.85rem;">
+                                Response: <span style="color: #ffd93d;">JSON Data</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📦 JSON API Response Example</h4>
+                    <pre style="background: var(--bg-code); padding: 1rem; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace;"><code style="color: #e4e4e7;">{
+  "status": "success",
+  "data": {
+    "user": {
+      "id": 12345,
+      "name": "Rahul Sharma",
+      "email": "rahul@example.com"
+    },
+    "posts": [
+      { "id": 1, "title": "My First Post" },
+      { "id": 2, "title": "System Design Tips" }
+    ]
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- Database Tier -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🗄️</span>
+                    <span class="topic-card-title">Database Tier - Separate Karna Zaroori!</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Jaise traffic badhta hai, <strong>web server aur database ko alag karna</strong> first optimization step hai. Dono ko independently scale kar sakte hain!</p>
+                    
+                    <!-- Animated DB Separation Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                            <!-- Web Server -->
+                            <div style="text-align: center; animation: float 3s ease-in-out infinite;">
+                                <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 2rem; border-radius: 16px; box-shadow: 0 0 30px rgba(0, 188, 212, 0.4);">
+                                    <span style="font-size: 2.5rem;">🌐</span>
+                                    <h5 style="color: #fff; margin-top: 0.5rem;">Web Tier</h5>
+                                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">CPU Optimized</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Connection -->
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 60px; height: 4px; background: linear-gradient(to right, #00bcd4, #a855f7); border-radius: 2px; animation: pulse 2s infinite;"></div>
+                                <div style="font-size: 1.5rem;">↔️</div>
+                                <div style="width: 60px; height: 4px; background: linear-gradient(to right, #a855f7, #00bcd4); border-radius: 2px; animation: pulse 2s infinite;"></div>
+                            </div>
+                            
+                            <!-- Database Server -->
+                            <div style="text-align: center; animation: float 3s ease-in-out infinite 1.5s;">
+                                <div style="background: linear-gradient(135deg, #a855f7, #7c3aed); padding: 2rem; border-radius: 16px; box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);">
+                                    <span style="font-size: 2.5rem;">🗄️</span>
+                                    <h5 style="color: #fff; margin-top: 0.5rem;">Data Tier</h5>
+                                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">Storage Optimized</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <style>
+                            @keyframes float {
+                                0%, 100% { transform: translateY(0); }
+                                50% { transform: translateY(-10px); }
+                            }
+                        </style>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">⚔️ SQL vs NoSQL - Kab Kya Use Karein?</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                        <!-- SQL -->
+                        <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); padding: 1.5rem; border-radius: 12px; border: 2px solid #00bcd4;">
+                            <h5 style="color: #00bcd4; font-size: 1.2rem;">🔵 SQL (Relational)</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><em>MySQL, PostgreSQL, Oracle</em></p>
+                            <ul style="margin: 1rem 0 0 1.5rem;">
+                                <li>Data structured hai (tables, rows, columns)</li>
+                                <li>ACID transactions zaroori hain</li>
+                                <li>Complex JOINs chahiye</li>
+                                <li>Relationships clear hain</li>
+                            </ul>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 1rem;">
+                                <strong style="color: #00bcd4;">Best for:</strong> Banking, E-commerce, ERP
+                            </div>
+                        </div>
+                        
+                        <!-- NoSQL -->
+                        <div style="background: linear-gradient(135deg, #ff6f0022, #ff6f0011); padding: 1.5rem; border-radius: 12px; border: 2px solid #ff6f00;">
+                            <h5 style="color: #ff6f00; font-size: 1.2rem;">🟠 NoSQL (Non-Relational)</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><em>MongoDB, Cassandra, DynamoDB, Redis</em></p>
+                            <ul style="margin: 1rem 0 0 1.5rem;">
+                                <li>Super low latency chahiye</li>
+                                <li>Unstructured/semi-structured data</li>
+                                <li>Massive data (petabytes)</li>
+                                <li>JOINs ki zaroorat nahi</li>
+                            </ul>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 1rem;">
+                                <strong style="color: #ff6f00;">Best for:</strong> Social media, IoT, Real-time analytics
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">💡 Pro Tip:</strong> Most applications start with SQL because structured data aur ACID important hote hain. NoSQL tab use karo jab specific requirements ho jaise high write throughput, flexible schema, ya global distribution.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vertical vs Horizontal Scaling -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">📈</span>
+                    <span class="topic-card-title">Vertical vs Horizontal Scaling</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Traffic badhe to do tarike se handle kar sakte hain - <strong>bigger machine</strong> ya <strong>more machines</strong>!</p>
+                    
+                    <!-- Animated Scaling Comparison -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 1.5rem 0;">
+                        <!-- Vertical Scaling -->
+                        <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; text-align: center;">
+                            <h5 style="color: #ffd93d;">⬆️ Vertical Scaling (Scale Up)</h5>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">"Add more power to existing server"</p>
+                            
+                            <div style="margin: 1.5rem 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                <div style="background: #ffd93d; width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; animation: grow 2s infinite;">🖥️</div>
+                                <div style="font-size: 1.5rem;">⬇️</div>
+                                <div style="background: #ffd93d; width: 100px; height: 100px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 0 30px rgba(255, 217, 61, 0.4);">🖥️</div>
+                            </div>
+                            
+                            <div style="text-align: left; font-size: 0.9rem;">
+                                <p style="color: #22c55e;">✅ Simple implementation</p>
+                                <p style="color: #22c55e;">✅ No code changes</p>
+                                <p style="color: #ff6b6b;">❌ Hardware limit hai</p>
+                                <p style="color: #ff6b6b;">❌ Single point of failure</p>
+                                <p style="color: #ff6b6b;">❌ Expensive (exponential cost)</p>
+                            </div>
+                            
+                            <style>
+                                @keyframes grow {
+                                    0%, 100% { transform: scale(1); }
+                                    50% { transform: scale(1.2); }
+                                }
+                            </style>
+                        </div>
+                        
+                        <!-- Horizontal Scaling -->
+                        <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; text-align: center;">
+                            <h5 style="color: #00ff88;">➡️ Horizontal Scaling (Scale Out)</h5>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">"Add more servers"</p>
+                            
+                            <div style="margin: 1.5rem 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                <div style="background: #00ff88; width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🖥️</div>
+                                <div style="font-size: 1.5rem;">⬇️</div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <div style="background: #00ff88; width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; animation: fadeIn 1s;">🖥️</div>
+                                    <div style="background: #00ff88; width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; animation: fadeIn 1.2s;">🖥️</div>
+                                    <div style="background: #00ff88; width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; animation: fadeIn 1.4s;">🖥️</div>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: left; font-size: 0.9rem;">
+                                <p style="color: #22c55e;">✅ No hardware limit</p>
+                                <p style="color: #22c55e;">✅ Failover possible</p>
+                                <p style="color: #22c55e;">✅ Cost effective (commodity HW)</p>
+                                <p style="color: #ff6b6b;">❌ Complex architecture</p>
+                                <p style="color: #ff6b6b;">❌ Data consistency challenges</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px;">
+                        <strong style="color: #a855f7;">🎯 Interview Answer:</strong> "Large scale applications horizontal scaling prefer karti hain kyunki vertical scaling ki physical limit hoti hai. Vertical scaling ek point ke baad possible nahi hota, jabki horizontal scaling me unlimited servers add kar sakte hain."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load Balancer -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">⚖️</span>
+                    <span class="topic-card-title">Load Balancer - Traffic Distribution</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Jab multiple web servers hain, to traffic ko <strong>evenly distribute</strong> karna padta hai. Ye kaam <strong>Load Balancer</strong> karta hai!</p>
+                    
+                    <!-- Animated Load Balancer Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                            
+                            <!-- Users -->
+                            <div style="display: flex; gap: 1rem;">
+                                <div style="text-align: center;">
+                                    <div style="background: #667eea; padding: 1rem; border-radius: 50%; animation: bounce 1s infinite;"><span style="font-size: 1.5rem;">👤</span></div>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">User 1</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: #667eea; padding: 1rem; border-radius: 50%; animation: bounce 1s infinite 0.2s;"><span style="font-size: 1.5rem;">👤</span></div>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">User 2</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: #667eea; padding: 1rem; border-radius: 50%; animation: bounce 1s infinite 0.4s;"><span style="font-size: 1.5rem;">👤</span></div>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">User 3</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Arrows to LB -->
+                            <div style="width: 4px; height: 30px; background: #00d4ff; border-radius: 2px;"></div>
+                            
+                            <!-- Load Balancer -->
+                            <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 1.5rem 3rem; border-radius: 16px; box-shadow: 0 0 40px rgba(0, 188, 212, 0.5); animation: glow 2s infinite;">
+                                <span style="font-size: 2rem;">⚖️</span>
+                                <h5 style="color: #fff; margin-top: 0.5rem;">Load Balancer</h5>
+                                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">Public IP: 138.10.5.6</p>
+                            </div>
+                            
+                            <!-- Arrows to Servers -->
+                            <div style="display: flex; gap: 4rem;">
+                                <div style="text-align: center;">
+                                    <div style="width: 4px; height: 30px; background: #00ff88; border-radius: 2px; margin: 0 auto;"></div>
+                                    <span style="font-size: 0.75rem; color: #00ff88;">Private IP</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="width: 4px; height: 30px; background: #00ff88; border-radius: 2px; margin: 0 auto;"></div>
+                                    <span style="font-size: 0.75rem; color: #00ff88;">Private IP</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Web Servers -->
+                            <div style="display: flex; gap: 2rem;">
+                                <div style="background: linear-gradient(135deg, #22c55e, #16a34a); padding: 1.5rem; border-radius: 12px; text-align: center; box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);">
+                                    <span style="font-size: 1.8rem;">🖥️</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Server 1</p>
+                                    <p style="font-size: 0.75rem; opacity: 0.8;">10.0.0.1</p>
+                                </div>
+                                <div style="background: linear-gradient(135deg, #22c55e, #16a34a); padding: 1.5rem; border-radius: 12px; text-align: center; box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);">
+                                    <span style="font-size: 1.8rem;">🖥️</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Server 2</p>
+                                    <p style="font-size: 0.75rem; opacity: 0.8;">10.0.0.2</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <style>
+                            @keyframes bounce {
+                                0%, 100% { transform: translateY(0); }
+                                50% { transform: translateY(-5px); }
+                            }
+                            @keyframes glow {
+                                0%, 100% { box-shadow: 0 0 40px rgba(0, 188, 212, 0.5); }
+                                50% { box-shadow: 0 0 60px rgba(0, 188, 212, 0.8); }
+                            }
+                        </style>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔑 Key Concepts</h4>
+                    <ul style="margin-left: 1.5rem;">
+                        <li><strong>Public IP:</strong> Load balancer ka IP jo users ko dikhta hai</li>
+                        <li><strong>Private IP:</strong> Servers ke internal IPs, directly accessible nahi</li>
+                        <li><strong>Health Checks:</strong> LB regularly servers ko ping karta hai</li>
+                        <li><strong>Failover:</strong> Agar ek server down, traffic dusre ko</li>
+                    </ul>
+                    
+                    <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">✅ Benefits of Load Balancer:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>No more single point of failure (for web tier)</li>
+                            <li>Easy to add/remove servers</li>
+                            <li>Better performance through distribution</li>
+                            <li>Security layer (servers are in private network)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Replication -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🔄</span>
+                    <span class="topic-card-title">Database Replication - Master/Slave</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Ab web tier to fault tolerant ho gaya, but <strong>database abhi bhi single point of failure</strong> hai! Isko solve karne ke liye <strong>database replication</strong> use hota hai.</p>
+                    
+                    <!-- Master-Slave Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                            
+                            <!-- Master -->
+                            <div style="background: linear-gradient(135deg, #ff6f00, #e65100); padding: 1.5rem 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 0 30px rgba(255, 111, 0, 0.5);">
+                                <span style="font-size: 2rem;">👑</span>
+                                <h5 style="color: #fff;">Master Database</h5>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.9);">Handles all <strong>WRITES</strong></p>
+                                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.5rem;">
+                                    <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">INSERT</span>
+                                    <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">UPDATE</span>
+                                    <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">DELETE</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Replication Arrows -->
+                            <div style="display: flex; gap: 4rem;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; animation: dataFlow 1s infinite;">⬇️📦</div>
+                                    <span style="font-size: 0.75rem; color: #ffd93d;">Replication</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; animation: dataFlow 1s infinite 0.3s;">⬇️📦</div>
+                                    <span style="font-size: 0.75rem; color: #ffd93d;">Replication</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; animation: dataFlow 1s infinite 0.6s;">⬇️📦</div>
+                                    <span style="font-size: 0.75rem; color: #ffd93d;">Replication</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Slaves -->
+                            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
+                                <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 1.2rem 1.5rem; border-radius: 12px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">📖</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Slave 1</p>
+                                    <span style="font-size: 0.75rem; opacity: 0.9;">READ only</span>
+                                </div>
+                                <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 1.2rem 1.5rem; border-radius: 12px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">📖</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Slave 2</p>
+                                    <span style="font-size: 0.75rem; opacity: 0.9;">READ only</span>
+                                </div>
+                                <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 1.2rem 1.5rem; border-radius: 12px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">📖</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Slave 3</p>
+                                    <span style="font-size: 0.75rem; opacity: 0.9;">READ only</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <style>
+                            @keyframes dataFlow {
+                                0%, 100% { transform: translateY(0); opacity: 1; }
+                                50% { transform: translateY(5px); opacity: 0.7; }
+                            }
+                        </style>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🎯 Master-Slave Working</h4>
+                    <ul style="margin-left: 1.5rem;">
+                        <li><strong>Master:</strong> Sabhi write operations (INSERT, UPDATE, DELETE) sirf master handle karta hai</li>
+                        <li><strong>Slaves:</strong> Sabhi read operations. Read traffic bahut zyada hota hai, isliye multiple slaves</li>
+                        <li><strong>Replication:</strong> Master apna data automatically slaves ko replicate karta hai</li>
+                        <li><strong>Read:Write Ratio:</strong> Most apps me 90% reads, 10% writes hote hain</li>
+                    </ul>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--accent-orange);">⚠️ Failure Scenarios</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; border-left: 4px solid #00bcd4;">
+                            <strong style="color: #00bcd4;">Slave Fails:</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Read traffic remaining slaves pe redirect ho jaata hai. New slave add kar sakte hain.</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; border-left: 4px solid #ff6f00;">
+                            <strong style="color: #ff6f00;">Master Fails:</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Ek slave promote hokar new master ban jaata hai. Data recovery scripts chalte hain.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SD-BOOK: CACHE & CDN Section -->
+        <section class="section" id="sd-book-ch1-cache" data-topic-id="sd-book-ch1-cache">
+            <div class="section-header">
+                <span class="section-icon">⚡</span>
+                <h2 class="section-title">Cache & CDN - Speed Boost!</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch1-cache', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            
+            <!-- Cache Introduction -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🧠</span>
+                    <span class="topic-card-title">Cache Kyun Zaroori Hai?</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p style="font-size: 1.1rem;">Ab tak tumne web tier aur data tier kaafi clearly samajh liya hai. Next obvious problem ye aati hai ki <strong style="color: var(--accent-green);">response time aur load</strong> kaise improve karein.</p>
+                    
+                    <div style="background: linear-gradient(135deg, #ff6b6b22, #ff6b6b11); border-left: 4px solid #ff6b6b; padding: 1rem 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <strong style="color: #ff6b6b;">🚫 Problem without Cache:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Har request ke liye database call = <strong>expensive!</strong></li>
+                            <li>Database disk-based hota hai = <strong>slow</strong></li>
+                            <li>High concurrency pe database <strong>choke</strong> kar jaata hai</li>
+                            <li>Response time badhta jaata hai</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">💡 Cache Kya Hota Hai?</h4>
+                    <p>Cache ek <strong>temporary storage</strong> hota hai jo <strong>memory (RAM)</strong> me hota hai aur expensive operations ke results ko store karta hai.</p>
+                    
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 2rem;">
+                                <div style="text-align: center;">
+                                    <div style="background: #667eea; padding: 1rem; border-radius: 8px;"><span style="font-size: 1.5rem;">🌐</span></div>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Web Server</p>
+                                </div>
+                                
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.5rem;">→</div>
+                                    <span style="font-size: 0.75rem; color: #00ff88;">1️⃣ Check Cache</span>
+                                </div>
+                                
+                                <div style="text-align: center;">
+                                    <div style="background: linear-gradient(135deg, #00ff88, #22c55e); padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 25px rgba(0, 255, 136, 0.4); animation: pulse 2s infinite;">
+                                        <span style="font-size: 2rem;">⚡</span>
+                                        <p style="color: #fff; font-size: 0.9rem; margin-top: 0.3rem;"><strong>CACHE</strong></p>
+                                        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.8);">Redis/Memcached</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 8rem; margin-top: 0.5rem;">
+                                <div style="text-align: center;">
+                                    <span style="font-size: 0.75rem; color: #ff6b6b;">2️⃣ Miss? → Fetch DB</span>
+                                    <div style="font-size: 1.2rem;">↓</div>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: center; margin-top: 0.5rem;">
+                                <div style="background: linear-gradient(135deg, #a855f7, #7c3aed); padding: 1rem 2rem; border-radius: 8px;">
+                                    <span style="font-size: 1.5rem;">🗄️</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Database</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔄 Read-Through Cache Strategy</h4>
+                    <p>Is approach ko <strong>read-through cache</strong> bola jaata hai:</p>
+                    <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+                        <li>Web server request receive karta hai</li>
+                        <li><strong>Pehle cache check karta hai</strong></li>
+                        <li>Agar data mil gaya (<span style="color: #00ff88;">Cache HIT</span>) → Direct return</li>
+                        <li>Agar nahi mila (<span style="color: #ff6b6b;">Cache MISS</span>) → Database se fetch karo</li>
+                        <li>Cache me store karo for future requests</li>
+                        <li>Client ko response do</li>
+                    </ol>
+                    
+                    <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">💡 Cache Benefits:</strong>
+                        <p style="margin-top: 0.5rem;">✅ Response time dramatically improve hota hai (ms instead of seconds)</p>
+                        <p>✅ Database load 80-90% tak kam ho sakta hai</p>
+                        <p>✅ Cache ko independently scale kar sakte ho</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CDN Section -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🌍</span>
+                    <span class="topic-card-title">CDN - Content Delivery Network</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Cache ke baad next optimization hoti hai <strong>CDN (Content Delivery Network)</strong>. CDN ka kaam hota hai static content ko users ke <strong>geographically closest server</strong> se serve karna.</p>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📦 Static Content Examples:</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">📜 JavaScript</span>
+                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🎨 CSS</span>
+                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🖼️ Images</span>
+                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🎥 Videos</span>
+                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">📄 PDFs</span>
+                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🔤 Fonts</span>
+                    </div>
+                    
+                    <!-- CDN World Map Animation -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0; position: relative;">
+                        <h5 style="text-align: center; color: var(--accent-blue); margin-bottom: 1.5rem;">🌐 CDN Global Distribution</h5>
+                        
+                        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <!-- User in India -->
+                            <div style="text-align: center;">
+                                <div style="background: #667eea; padding: 1rem; border-radius: 50%; animation: ping 1.5s infinite;"><span style="font-size: 1.5rem;">👤</span></div>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">User in India 🇮🇳</p>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; animation: pulse 1s infinite;">⚡→</div>
+                            
+                            <!-- CDN Edge (Mumbai) -->
+                            <div style="text-align: center;">
+                                <div style="background: linear-gradient(135deg, #00ff88, #22c55e); padding: 1rem 1.5rem; border-radius: 12px; box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);">
+                                    <span style="font-size: 1.8rem;">🏢</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">CDN Edge</p>
+                                    <p style="font-size: 0.75rem; opacity: 0.9;">Mumbai</p>
+                                </div>
+                                <p style="font-size: 0.8rem; color: #00ff88; margin-top: 0.5rem;">~20ms latency ⚡</p>
+                            </div>
+                            
+                            <div style="border-top: 2px dashed #555; width: 50px;"></div>
+                            
+                            <!-- Origin Server (US) -->
+                            <div style="text-align: center;">
+                                <div style="background: linear-gradient(135deg, #ff6f00, #e65100); padding: 1rem 1.5rem; border-radius: 12px;">
+                                    <span style="font-size: 1.8rem;">🖥️</span>
+                                    <p style="color: #fff; font-size: 0.85rem;">Origin Server</p>
+                                    <p style="font-size: 0.75rem; opacity: 0.9;">US-East</p>
+                                </div>
+                                <p style="font-size: 0.8rem; color: #ff6b6b; margin-top: 0.5rem;">~250ms latency 🐢</p>
+                            </div>
+                        </div>
+                        
+                        <style>
+                            @keyframes ping {
+                                0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+                                70% { box-shadow: 0 0 0 15px rgba(102, 126, 234, 0); }
+                                100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+                            }
+                        </style>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📋 CDN Workflow</h4>
+                    <ol style="margin-left: 1.5rem;">
+                        <li><strong>User A</strong> image request karta hai CDN URL ke through</li>
+                        <li>Agar image CDN cache me <strong>nahi hai</strong> → CDN origin server se fetch karta hai</li>
+                        <li>Server response ke saath <strong>TTL (Time To Live)</strong> deta hai</li>
+                        <li>CDN image ko cache karta hai aur User A ko response de deta hai</li>
+                        <li><strong>User B</strong> same image mangta hai → <span style="color: #00ff88;">CDN direct cache se serve karta hai! ⚡</span></li>
+                    </ol>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--accent-orange);">⚠️ CDN Considerations</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px;">
+                            <strong style="color: #ffd93d;">💰 Cost:</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">CDN third-party services hain, data transfer ke liye charge karti hain. Rarely accessed assets ko CDN pe mat rakho!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px;">
+                            <strong style="color: #00d4ff;">⏰ TTL Setting:</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">TTL bahut zyada = stale content. TTL kam = baar-baar origin fetch. Balance rakhna zaroori!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px;">
+                            <strong style="color: #ff6b6b;">🔄 Fallback:</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">CDN down ho to client ko origin server se directly content mil paana chahiye.</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #a855f7;">🎯 Cache + CDN Impact:</strong>
+                        <p style="margin-top: 0.5rem;">✅ Static assets web servers se completely nikal jaate hain</p>
+                        <p>✅ Database load kaafi kam ho jaata hai</p>
+                        <p>✅ Overall response time noticeably improve hota hai</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SD-BOOK: STATELESS SECTION -->
+        <section class="section" id="sd-book-ch1-stateless" data-topic-id="sd-book-ch1-stateless">
+            <div class="section-header">
+                <span class="section-icon">🔐</span>
+                <h2 class="section-title">Stateless Web Tier - The Key to Scaling!</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch1-stateless', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            
+            <!-- Stateful Problem -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">⚠️</span>
+                    <span class="topic-card-title">Stateful Architecture Ki Problem</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p><strong>Stateful server</strong> ka matlab hota hai server client ka state (jaise session data) yaad rakhta hai. Ye horizontal scaling ke liye <strong>biggest problem</strong> hai!</p>
+                    
+                    <!-- Stateful Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <h5 style="text-align: center; color: #ff6b6b; margin-bottom: 1.5rem;">❌ Stateful Architecture (Problematic)</h5>
+                        
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                            <!-- Users -->
+                            <div style="display: flex; gap: 2rem;">
+                                <div style="text-align: center;">
+                                    <div style="background: #667eea; padding: 0.75rem; border-radius: 50%;"><span>👤</span></div>
+                                    <span style="font-size: 0.75rem;">User A</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: #a855f7; padding: 0.75rem; border-radius: 50%;"><span>👤</span></div>
+                                    <span style="font-size: 0.75rem;">User B</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: #00bcd4; padding: 0.75rem; border-radius: 50%;"><span>👤</span></div>
+                                    <span style="font-size: 0.75rem;">User C</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Sticky Sessions -->
+                            <div style="display: flex; gap: 1rem; font-size: 0.8rem;">
+                                <span style="color: #667eea;">↓ Sticky</span>
+                                <span style="color: #a855f7;">↓ Sticky</span>
+                                <span style="color: #00bcd4;">↓ Sticky</span>
+                            </div>
+                            
+                            <!-- Servers with Session Data -->
+                            <div style="display: flex; gap: 1.5rem;">
+                                <div style="background: #ff6b6b33; border: 2px solid #ff6b6b; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">🖥️</span>
+                                    <p style="font-size: 0.8rem; color: #fff;">Server 1</p>
+                                    <div style="background: #667eea; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; margin-top: 0.5rem;">User A Session</div>
+                                </div>
+                                <div style="background: #ff6b6b33; border: 2px solid #ff6b6b; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">🖥️</span>
+                                    <p style="font-size: 0.8rem; color: #fff;">Server 2</p>
+                                    <div style="background: #a855f7; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; margin-top: 0.5rem;">User B Session</div>
+                                </div>
+                                <div style="background: #ff6b6b33; border: 2px solid #ff6b6b; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">🖥️</span>
+                                    <p style="font-size: 0.8rem; color: #fff;">Server 3</p>
+                                    <div style="background: #00bcd4; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; margin-top: 0.5rem;">User C Session</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #ff6b6b22, #ff6b6b11); border-left: 4px solid #ff6b6b; padding: 1rem 1.5rem; border-radius: 8px;">
+                        <strong style="color: #ff6b6b;">🚫 Stateful Problems:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li><strong>Sticky Sessions Required:</strong> User A hamesha Server 1 pe hi jaana chahiye</li>
+                            <li><strong>Server Fail = Session Lost:</strong> Server 1 down → User A ka session gaya!</li>
+                            <li><strong>Scaling Difficult:</strong> New server add karna complex ho jaata hai</li>
+                            <li><strong>Uneven Load:</strong> Kuch servers overloaded, kuch idle</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stateless Solution -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">✅</span>
+                    <span class="topic-card-title">Stateless Architecture - The Solution!</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p><strong>Stateless architecture</strong> me servers ke andar <strong>koi user-specific state store nahi hoti</strong>. Session data ko persistent storage me move kar diya jaata hai!</p>
+                    
+                    <!-- Stateless Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <h5 style="text-align: center; color: #00ff88; margin-bottom: 1.5rem;">✅ Stateless Architecture (Recommended)</h5>
+                        
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                            <!-- Users -->
+                            <div style="display: flex; gap: 2rem;">
+                                <div style="text-align: center;">
+                                    <div style="background: #667eea; padding: 0.75rem; border-radius: 50%;"><span>👤</span></div>
+                                    <span style="font-size: 0.75rem;">User A</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: #a855f7; padding: 0.75rem; border-radius: 50%;"><span>👤</span></div>
+                                    <span style="font-size: 0.75rem;">User B</span>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: #00bcd4; padding: 0.75rem; border-radius: 50%;"><span>👤</span></div>
+                                    <span style="font-size: 0.75rem;">User C</span>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 1rem;">↓ Any request can go to any server! ↓</div>
+                            
+                            <!-- Load Balancer -->
+                            <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 1rem 2rem; border-radius: 12px;">
+                                <span style="font-size: 1.5rem;">⚖️</span>
+                                <span style="color: #fff; margin-left: 0.5rem;">Load Balancer</span>
+                            </div>
+                            
+                            <!-- Servers (No state) -->
+                            <div style="display: flex; gap: 1.5rem;">
+                                <div style="background: #00ff8833; border: 2px solid #00ff88; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">🖥️</span>
+                                    <p style="font-size: 0.8rem; color: #fff;">Server 1</p>
+                                    <span style="font-size: 0.7rem; color: #00ff88;">No State ✓</span>
+                                </div>
+                                <div style="background: #00ff8833; border: 2px solid #00ff88; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">🖥️</span>
+                                    <p style="font-size: 0.8rem; color: #fff;">Server 2</p>
+                                    <span style="font-size: 0.7rem; color: #00ff88;">No State ✓</span>
+                                </div>
+                                <div style="background: #00ff8833; border: 2px solid #00ff88; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <span style="font-size: 1.5rem;">🖥️</span>
+                                    <p style="font-size: 0.8rem; color: #fff;">Server 3</p>
+                                    <span style="font-size: 0.7rem; color: #00ff88;">No State ✓</span>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 1rem;">↓ Fetch session from shared storage ↓</div>
+                            
+                            <!-- Shared Session Storage -->
+                            <div style="background: linear-gradient(135deg, #ffd93d, #f59e0b); padding: 1.5rem 3rem; border-radius: 12px; box-shadow: 0 0 30px rgba(255, 217, 61, 0.4);">
+                                <span style="font-size: 2rem;">💾</span>
+                                <h5 style="color: #1a1a2e; margin-top: 0.5rem;">Shared Session Store</h5>
+                                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.5rem;">
+                                    <span style="background: rgba(0,0,0,0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">Redis</span>
+                                    <span style="background: rgba(0,0,0,0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">Memcached</span>
+                                    <span style="background: rgba(0,0,0,0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">NoSQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px;">
+                        <strong style="color: #00ff88;">✅ Stateless Benefits:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li><strong>Any server can handle any request</strong> - no sticky sessions needed!</li>
+                            <li><strong>Easy auto-scaling:</strong> Add/remove servers anytime</li>
+                            <li><strong>Fault tolerant:</strong> Server fail? No problem, other servers handle it</li>
+                            <li><strong>Simple load balancing:</strong> Round-robin works perfectly</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🎯 Session Storage Options</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">🔴</span>
+                            <h5 style="color: #ff6b6b; margin-top: 0.5rem;">Redis</h5>
+                            <p style="font-size: 0.85rem;">In-memory, super fast, persistence option</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">📗</span>
+                            <h5 style="color: #22c55e; margin-top: 0.5rem;">Memcached</h5>
+                            <p style="font-size: 0.85rem;">Simple, fast, distributed caching</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">🗄️</span>
+                            <h5 style="color: #00bcd4; margin-top: 0.5rem;">NoSQL DB</h5>
+                            <p style="font-size: 0.85rem;">MongoDB, DynamoDB for durability</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SD-BOOK: MULTI DATA CENTER -->
+        <section class="section" id="sd-book-ch1-datacenter" data-topic-id="sd-book-ch1-datacenter">
+            <div class="section-header">
+                <span class="section-icon">🏢</span>
+                <h2 class="section-title">Multiple Data Centers - Going Global!</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch1-datacenter', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🌍</span>
+                    <span class="topic-card-title">Why Multiple Data Centers?</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>Jaise hi website <strong>global scale</strong> par grow karti hai, ek single data center sufficient nahi hota. Global users ke liye latency kam karne aur <strong>availability improve</strong> karne ke liye multiple data centers chahiye!</p>
+                    
+                    <!-- Multi DC Diagram -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <h5 style="text-align: center; color: var(--accent-blue); margin-bottom: 1.5rem;">🌐 GeoDNS Based Routing</h5>
+                        
+                        <div style="display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; gap: 2rem;">
+                            <!-- US Users -->
+                            <div style="text-align: center;">
+                                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+                                    <div style="background: #667eea; padding: 0.5rem; border-radius: 50%;"><span>👤</span></div>
+                                    <div style="background: #667eea; padding: 0.5rem; border-radius: 50%;"><span>👤</span></div>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">Users in USA 🇺🇸</p>
+                                <div style="margin: 1rem 0; font-size: 1.2rem; color: #00ff88;">⬇️</div>
+                                <div style="background: linear-gradient(135deg, #00bcd4, #0097a7); padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 25px rgba(0, 188, 212, 0.4);">
+                                    <span style="font-size: 2rem;">🏢</span>
+                                    <h5 style="color: #fff;">DC-East (US)</h5>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.5rem; font-size: 0.75rem;">
+                                        <span>🌐 Web Servers</span>
+                                        <span>🗄️ Database</span>
+                                        <span>⚡ Cache</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- GeoDNS in middle -->
+                            <div style="text-align: center; padding-top: 2rem;">
+                                <div style="background: linear-gradient(135deg, #ff6f00, #e65100); padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 0 30px rgba(255, 111, 0, 0.4);">
+                                    <span style="font-size: 2rem;">🌐</span>
+                                    <h5 style="color: #fff;">GeoDNS</h5>
+                                    <p style="font-size: 0.75rem; color: rgba(255,255,255,0.9);">Routes to nearest DC</p>
+                                </div>
+                                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-secondary);">
+                                    <p>User Location → Nearest DC</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Europe Users -->
+                            <div style="text-align: center;">
+                                <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+                                    <div style="background: #a855f7; padding: 0.5rem; border-radius: 50%;"><span>👤</span></div>
+                                    <div style="background: #a855f7; padding: 0.5rem; border-radius: 50%;"><span>👤</span></div>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">Users in Europe 🇪🇺</p>
+                                <div style="margin: 1rem 0; font-size: 1.2rem; color: #00ff88;">⬇️</div>
+                                <div style="background: linear-gradient(135deg, #a855f7, #7c3aed); padding: 1.5rem; border-radius: 12px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
+                                    <span style="font-size: 2rem;">🏢</span>
+                                    <h5 style="color: #fff;">DC-West (EU)</h5>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.5rem; font-size: 0.75rem;">
+                                        <span>🌐 Web Servers</span>
+                                        <span>🗄️ Database</span>
+                                        <span>⚡ Cache</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Data Sync -->
+                        <div style="text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px dashed #333;">
+                            <span style="font-size: 0.9rem; color: #ffd93d;">🔄 Data Replication between DCs</span>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">💥 Data Center Failure Scenario</h4>
+                    <p>Agar ek data center completely <strong>down</strong> ho jaata hai, to saara traffic automatically healthy data center me redirect kar diya jaata hai!</p>
+                    
+                    <div style="background: linear-gradient(135deg, #ff6b6b22, #ff6b6b11); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div style="background: #ff6b6b55; padding: 1rem; border-radius: 8px; border: 2px dashed #ff6b6b; position: relative;">
+                                    <span style="font-size: 1.5rem;">🏢</span>
+                                    <p style="font-size: 0.8rem;">DC-East</p>
+                                    <span style="position: absolute; top: -10px; right: -10px; font-size: 1.5rem;">💥</span>
+                                </div>
+                                <span style="font-size: 0.8rem; color: #ff6b6b;">DOWN!</span>
+                            </div>
+                            
+                            <div style="font-size: 2rem;">➡️</div>
+                            
+                            <div style="text-align: center;">
+                                <div style="background: #00ff8855; padding: 1rem; border-radius: 8px; border: 2px solid #00ff88;">
+                                    <span style="font-size: 1.5rem;">🏢</span>
+                                    <p style="font-size: 0.8rem;">DC-West</p>
+                                </div>
+                                <span style="font-size: 0.8rem; color: #00ff88;">Handles ALL traffic!</span>
+                            </div>
+                            
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                <p>User ko ideally downtime feel nahi hota</p>
+                                <p>Bas thoda latency increase ho sakta hai</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--accent-orange);">⚠️ Multi-DC Challenges</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #ff6f00;">
+                            <strong style="color: #ff6f00;">🚦 Traffic Redirection</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">GeoDNS ko sahi configure karna padta hai. DNS propagation time bhi consider karna padta hai.</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                            <strong style="color: #a855f7;">🔄 Data Synchronization</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Different regions me alag databases hote hain. Failover ke time data consistency ensure karna complex hai.</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #00bcd4;">
+                            <strong style="color: #00bcd4;">🧪 Testing & Deployment</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Multi-region deployment aur testing complex ho jaata hai. CI/CD pipelines ko multi-DC support karna padta hai.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Architecture Summary -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🏆</span>
+                    <span class="topic-card-title">Chapter 1 Complete Architecture!</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p style="font-size: 1.1rem; color: var(--accent-green);"><strong>🎉 Congratulations! Ab tumhara system production-ready, cloud-native architecture ban gaya!</strong></p>
+                    
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
+                        <h5 style="text-align: center; color: var(--accent-green); margin-bottom: 1.5rem;">🌟 Final Scalable Architecture</h5>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; text-align: center;">
+                            <div style="background: rgba(102, 126, 234, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #667eea;">
+                                <span style="font-size: 2rem;">👥</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Global Users</p>
+                            </div>
+                            <div style="background: rgba(255, 111, 0, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #ff6f00;">
+                                <span style="font-size: 2rem;">🌐</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">GeoDNS</p>
+                            </div>
+                            <div style="background: rgba(0, 255, 136, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #00ff88;">
+                                <span style="font-size: 2rem;">🌍</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">CDN</p>
+                            </div>
+                            <div style="background: rgba(0, 188, 212, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #00bcd4;">
+                                <span style="font-size: 2rem;">⚖️</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Load Balancer</p>
+                            </div>
+                            <div style="background: rgba(34, 197, 94, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #22c55e;">
+                                <span style="font-size: 2rem;">🖥️🖥️🖥️</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Stateless Web Tier</p>
+                            </div>
+                            <div style="background: rgba(255, 217, 61, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #ffd93d;">
+                                <span style="font-size: 2rem;">⚡</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Cache (Redis)</p>
+                            </div>
+                            <div style="background: rgba(168, 85, 247, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #a855f7;">
+                                <span style="font-size: 2rem;">👑</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Master DB</p>
+                            </div>
+                            <div style="background: rgba(0, 188, 212, 0.2); padding: 1rem; border-radius: 12px; border: 2px solid #00bcd4;">
+                                <span style="font-size: 2rem;">📖📖📖</span>
+                                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Slave DBs</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🎯 Interview Revision - Chapter 1 Summary</h4>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <tr style="background: var(--bg-code);">
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Component</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Purpose</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Benefit</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Load Balancer</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Traffic distribution</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color); color: #00ff88;">No SPOF, easy scaling</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">DB Replication</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Master-Slave setup</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color); color: #00ff88;">Read scaling, fault tolerance</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Cache (Redis)</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">In-memory storage</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color); color: #00ff88;">Fast response, DB load ↓</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">CDN</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Static content delivery</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color); color: #00ff88;">Low latency globally</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Stateless Web Tier</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">External session store</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color); color: #00ff88;">Easy auto-scaling</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Multi Data Center</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">GeoDNS routing</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color); color: #00ff88;">High availability, low latency</td>
+                        </tr>
+                    </table>
+                    
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #a855f7;">📚 Next Steps:</strong>
+                        <p style="margin-top: 0.5rem;">Agla step hum Chapter 2 me message queues, logging, metrics, aur automation cover karenge. Stay tuned! 🚀</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ==================== REFERENCE LINKS ==================== -->
         <section class="section" id="references" data-topic-id="references">
             <div class="section-header">
@@ -5622,7 +6797,9 @@
             'data-pipelines', 'api-vs-sdk', 'ssh', 'nginx', 'sql-components',
             'frontend-perf', 'proxy-gateway-lb', 'vpn', 'devsecops', 'kubernetes',
             'http-status', 'semver', 'ipv4-ipv6', 'api-auth', 'youtube-design',
-            'arch-patterns', 'uml-class', 'web-app-components', 'bff-pattern', 'references'
+            'arch-patterns', 'uml-class', 'web-app-components', 'bff-pattern',
+            'sd-book-ch1', 'sd-book-ch1-cache', 'sd-book-ch1-stateless', 'sd-book-ch1-datacenter',
+            'references'
         ];
         
         // Load progress from localStorage
