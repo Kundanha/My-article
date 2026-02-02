@@ -464,6 +464,62 @@ app.post('/api/progress/reset', (req, res) => {
     }
 });
 
+// POST - Update ByteByteGo progress
+app.post('/api/bytebytego-progress', (req, res) => {
+    const { bytebytego } = req.body;
+    
+    if (!bytebytego) {
+        return res.status(400).json({ error: 'bytebytego data is required' });
+    }
+
+    const data = readProgressData();
+    if (!data) {
+        return res.status(500).json({ error: 'Failed to read progress data' });
+    }
+
+    // Initialize bytebytego section if not exists
+    if (!data.bytebytego) {
+        data.bytebytego = {
+            topics: {}
+        };
+    }
+    if (!data.summary.bytebytego) {
+        data.summary.bytebytego = {
+            totalTopics: 40,
+            completedTopics: 0,
+            percentage: 0
+        };
+    }
+
+    // Update topics
+    data.bytebytego.topics = bytebytego.topics;
+    
+    // Update summary
+    data.summary.bytebytego = bytebytego.summary;
+
+    if (writeProgressData(data)) {
+        res.json({ 
+            success: true, 
+            summary: data.summary.bytebytego
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to save progress' });
+    }
+});
+
+// GET - Get ByteByteGo progress
+app.get('/api/bytebytego-progress', (req, res) => {
+    const data = readProgressData();
+    if (!data) {
+        return res.status(500).json({ error: 'Failed to read progress data' });
+    }
+    
+    res.json({
+        bytebytego: data.bytebytego || { topics: {} },
+        summary: data.summary.bytebytego || { totalTopics: 40, completedTopics: 0, percentage: 0 }
+    });
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`

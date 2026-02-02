@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-02-02T10:26:33.481Z",
+    "lastUpdated": "2026-02-02T16:00:34.196Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -25,6 +25,17 @@
       "totalProblems": 100,
       "completedProblems": 11,
       "percentage": 11
+    },
+    "ultimateGoogle": {
+      "totalProblems": 541,
+      "completedProblems": 3,
+      "percentage": 1
+    },
+    "bytebytego": {
+      "totalTopics": 40,
+      "completedTopics": 0,
+      "percentage": 0,
+      "lastUpdated": "2026-02-02T16:00:34.191Z"
     }
   },
   "threeMonthsPlan": {
@@ -828,5 +839,27 @@
     "sidebarCollapsed": false,
     "theme": "dark",
     "lastVisitedPage": ""
+  },
+  "ultimateGoogle": {
+    "problems": {
+      "ug-two-sum": {
+        "id": "ug-two-sum",
+        "completed": true,
+        "completedAt": "2026-02-02T15:25:53.979Z"
+      },
+      "ug-add-two-numbers": {
+        "id": "ug-add-two-numbers",
+        "completed": true,
+        "completedAt": "2026-02-02T15:34:15.678Z"
+      },
+      "ug-longest-substring-without-repeating-characters": {
+        "id": "ug-longest-substring-without-repeating-characters",
+        "completed": true,
+        "completedAt": "2026-02-02T15:40:05.087Z"
+      }
+    }
+  },
+  "bytebytego": {
+    "topics": {}
   }
 }
