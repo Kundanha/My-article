@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-01-30T13:00:23.100Z",
+    "lastUpdated": "2026-02-02T10:26:33.481Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -13,8 +13,8 @@
     },
     "dsa": {
       "totalProblems": 17,
-      "completedProblems": 7,
-      "percentage": 41
+      "completedProblems": 8,
+      "percentage": 47
     },
     "scripts": {
       "totalScripts": 12,
@@ -23,8 +23,8 @@
     },
     "threeMonthsPlan": {
       "totalProblems": 100,
-      "completedProblems": 3,
-      "percentage": 3
+      "completedProblems": 11,
+      "percentage": 11
     }
   },
   "threeMonthsPlan": {
@@ -43,6 +43,46 @@
         "id": "3sum",
         "completed": true,
         "completedAt": "2026-01-30T13:00:23.100Z"
+      },
+      "merge-strings-alternately": {
+        "id": "merge-strings-alternately",
+        "completed": true,
+        "completedAt": "2026-01-31T08:28:11.129Z"
+      },
+      "create-hello-world-function": {
+        "id": "create-hello-world-function",
+        "completed": true,
+        "completedAt": "2026-01-31T08:30:38.423Z"
+      },
+      "median-of-two-sorted-arrays": {
+        "id": "median-of-two-sorted-arrays",
+        "completed": true,
+        "completedAt": "2026-01-31T08:54:38.545Z"
+      },
+      "palindrome-number": {
+        "id": "palindrome-number",
+        "completed": true,
+        "completedAt": "2026-01-31T14:26:38.260Z"
+      },
+      "trapping-rain-water": {
+        "id": "trapping-rain-water",
+        "completed": true,
+        "completedAt": "2026-02-02T09:47:48.597Z"
+      },
+      "longest-common-prefix": {
+        "id": "longest-common-prefix",
+        "completed": true,
+        "completedAt": "2026-02-02T10:01:38.874Z"
+      },
+      "best-time-to-buy-and-sell-stock": {
+        "id": "best-time-to-buy-and-sell-stock",
+        "completed": true,
+        "completedAt": "2026-02-02T09:48:01.758Z"
+      },
+      "longest-substring-without-repeating-characters": {
+        "id": "longest-substring-without-repeating-characters",
+        "completed": true,
+        "completedAt": "2026-02-02T10:26:33.480Z"
       }
     }
   },
@@ -733,8 +773,8 @@
             "name": "Longest Substring Without Repeating",
             "difficulty": "Medium",
             "leetcode": 3,
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-02-02T10:26:13.144Z"
           },
           "character-replacement": {
             "id": "character-replacement",

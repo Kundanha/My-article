@@ -311,6 +311,81 @@ app.get('/api/progress/three-months', (req, res) => {
     }
 });
 
+// ==================== ULTIMATE GOOGLE 541 ====================
+// POST - Save Ultimate Google problem progress
+app.post('/api/progress/ultimate-google', (req, res) => {
+    const { problemId, completed } = req.body;
+    
+    if (!problemId) {
+        return res.status(400).json({ error: 'problemId is required' });
+    }
+
+    const data = readProgressData();
+    if (!data) {
+        return res.status(500).json({ error: 'Failed to read progress data' });
+    }
+
+    // Initialize ultimateGoogle section if not exists
+    if (!data.ultimateGoogle) {
+        data.ultimateGoogle = {
+            problems: {}
+        };
+    }
+    if (!data.summary.ultimateGoogle) {
+        data.summary.ultimateGoogle = {
+            totalProblems: 541,
+            completedProblems: 0,
+            percentage: 0
+        };
+    }
+
+    // Update or create the problem entry
+    if (!data.ultimateGoogle.problems[problemId]) {
+        data.ultimateGoogle.problems[problemId] = {
+            id: problemId,
+            completed: false,
+            completedAt: null
+        };
+    }
+    
+    data.ultimateGoogle.problems[problemId].completed = completed;
+    data.ultimateGoogle.problems[problemId].completedAt = completed ? new Date().toISOString() : null;
+
+    // Update summary counts
+    let completedCount = 0;
+    for (const key in data.ultimateGoogle.problems) {
+        if (data.ultimateGoogle.problems[key].completed) {
+            completedCount++;
+        }
+    }
+    data.summary.ultimateGoogle.completedProblems = completedCount;
+    data.summary.ultimateGoogle.percentage = Math.round((completedCount / 541) * 100);
+
+    if (writeProgressData(data)) {
+        res.json({ 
+            success: true, 
+            problemId, 
+            completed,
+            summary: data.summary.ultimateGoogle
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to save progress' });
+    }
+});
+
+// GET - Fetch Ultimate Google progress
+app.get('/api/progress/ultimate-google', (req, res) => {
+    const data = readProgressData();
+    if (data) {
+        res.json({
+            problems: data.ultimateGoogle?.problems || {},
+            summary: data.summary?.ultimateGoogle || { totalProblems: 541, completedProblems: 0, percentage: 0 }
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to read progress data' });
+    }
+});
+
 // POST - Reset all progress
 app.post('/api/progress/reset', (req, res) => {
     const data = readProgressData();
@@ -356,6 +431,14 @@ app.post('/api/progress/reset', (req, res) => {
         }
     }
 
+    // Reset all Ultimate Google problems
+    if (data.ultimateGoogle && data.ultimateGoogle.problems) {
+        for (const key in data.ultimateGoogle.problems) {
+            data.ultimateGoogle.problems[key].completed = false;
+            data.ultimateGoogle.problems[key].completedAt = null;
+        }
+    }
+
     // Reset summary
     data.summary.systemDesign.completedConcepts = 0;
     data.summary.systemDesign.percentage = 0;
@@ -368,6 +451,10 @@ app.post('/api/progress/reset', (req, res) => {
     if (data.summary.threeMonthsPlan) {
         data.summary.threeMonthsPlan.completedProblems = 0;
         data.summary.threeMonthsPlan.percentage = 0;
+    }
+    if (data.summary.ultimateGoogle) {
+        data.summary.ultimateGoogle.completedProblems = 0;
+        data.summary.ultimateGoogle.percentage = 0;
     }
 
     if (writeProgressData(data)) {
