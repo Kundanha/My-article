@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-02-02T16:00:34.196Z",
+    "lastUpdated": "2026-02-04T07:34:07.851Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -23,8 +23,8 @@
     },
     "threeMonthsPlan": {
       "totalProblems": 100,
-      "completedProblems": 11,
-      "percentage": 11
+      "completedProblems": 14,
+      "percentage": 14
     },
     "ultimateGoogle": {
       "totalProblems": 541,
@@ -32,10 +32,10 @@
       "percentage": 1
     },
     "bytebytego": {
-      "totalTopics": 40,
-      "completedTopics": 0,
-      "percentage": 0,
-      "lastUpdated": "2026-02-02T16:00:34.191Z"
+      "totalTopics": 52,
+      "completedTopics": 1,
+      "percentage": 2,
+      "lastUpdated": "2026-02-04T07:34:07.843Z"
     }
   },
   "threeMonthsPlan": {
@@ -94,6 +94,21 @@
         "id": "longest-substring-without-repeating-characters",
         "completed": true,
         "completedAt": "2026-02-02T10:26:33.480Z"
+      },
+      "merge-sorted-array": {
+        "id": "merge-sorted-array",
+        "completed": true,
+        "completedAt": "2026-02-03T06:41:10.412Z"
+      },
+      "subarray-sum-equals-k": {
+        "id": "subarray-sum-equals-k",
+        "completed": true,
+        "completedAt": "2026-02-03T07:19:07.507Z"
+      },
+      "number-of-islands": {
+        "id": "number-of-islands",
+        "completed": true,
+        "completedAt": "2026-02-03T07:44:12.066Z"
       }
     }
   },
@@ -860,6 +875,11 @@
     }
   },
   "bytebytego": {
-    "topics": {}
+    "topics": {
+      "http-protocol": {
+        "completed": true,
+        "completedAt": "2026-02-04T07:34:07.843Z"
+      }
+    }
   }
 }
