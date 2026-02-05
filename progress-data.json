@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-02-04T07:34:07.851Z",
+    "lastUpdated": "2026-02-05T11:01:52.770Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -13,8 +13,8 @@
     },
     "dsa": {
       "totalProblems": 17,
-      "completedProblems": 8,
-      "percentage": 47
+      "completedProblems": 9,
+      "percentage": 53
     },
     "scripts": {
       "totalScripts": 12,
@@ -23,8 +23,8 @@
     },
     "threeMonthsPlan": {
       "totalProblems": 100,
-      "completedProblems": 14,
-      "percentage": 14
+      "completedProblems": 17,
+      "percentage": 17
     },
     "ultimateGoogle": {
       "totalProblems": 541,
@@ -35,7 +35,7 @@
       "totalTopics": 52,
       "completedTopics": 1,
       "percentage": 2,
-      "lastUpdated": "2026-02-04T07:34:07.843Z"
+      "lastUpdated": "2026-02-05T09:13:21.260Z"
     }
   },
   "threeMonthsPlan": {
@@ -109,6 +109,21 @@
         "id": "number-of-islands",
         "completed": true,
         "completedAt": "2026-02-03T07:44:12.066Z"
+      },
+      "container-with-most-water": {
+        "id": "container-with-most-water",
+        "completed": true,
+        "completedAt": "2026-02-04T18:12:47.768Z"
+      },
+      "valid-parentheses": {
+        "id": "valid-parentheses",
+        "completed": true,
+        "completedAt": "2026-02-04T18:23:05.625Z"
+      },
+      "merge-intervals": {
+        "id": "merge-intervals",
+        "completed": true,
+        "completedAt": "2026-02-05T11:01:52.770Z"
       }
     }
   },
@@ -821,8 +836,8 @@
             "name": "Valid Parentheses",
             "difficulty": "Easy",
             "leetcode": 20,
-            "completed": false,
-            "completedAt": null
+            "completed": true,
+            "completedAt": "2026-02-04T18:22:51.719Z"
           }
         }
       },
@@ -878,7 +893,7 @@
     "topics": {
       "http-protocol": {
         "completed": true,
-        "completedAt": "2026-02-04T07:34:07.843Z"
+        "completedAt": "2026-02-03T08:53:34.474Z"
       }
     }
   }

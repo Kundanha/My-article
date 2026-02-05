@@ -156,6 +156,67 @@ app.post('/api/progress/dsa', (req, res) => {
     }
 });
 
+// POST - Update pattern practice problem completion status
+app.post('/api/progress/pattern-practice', (req, res) => {
+    const { problemId, completed } = req.body;
+    
+    if (!problemId) {
+        return res.status(400).json({ error: 'problemId is required' });
+    }
+
+    const progressData = readProgressData();
+    
+    // Initialize patternPractice if it doesn't exist
+    if (!progressData.patternPractice) {
+        progressData.patternPractice = {
+            problems: {},
+            totalProblems: 40,
+            completedProblems: 0
+        };
+    }
+    
+    // Update problem status
+    if (completed) {
+        progressData.patternPractice.problems[problemId] = {
+            id: problemId,
+            completed: true,
+            completedAt: new Date().toISOString()
+        };
+    } else {
+        delete progressData.patternPractice.problems[problemId];
+    }
+    
+    // Update summary
+    const completedCount = Object.keys(progressData.patternPractice.problems).length;
+    progressData.patternPractice.completedProblems = completedCount;
+    
+    // Add to main summary if not exists
+    if (!progressData.summary.patternPractice) {
+        progressData.summary.patternPractice = {
+            totalProblems: 40,
+            completedProblems: 0,
+            percentage: 0
+        };
+    }
+    progressData.summary.patternPractice.completedProblems = completedCount;
+    progressData.summary.patternPractice.percentage = Math.round((completedCount / 40) * 100);
+    
+    // Update metadata
+    progressData.metadata.lastUpdated = new Date().toISOString();
+    
+    if (writeProgressData(progressData)) {
+        res.json({ 
+            success: true, 
+            problemId, 
+            completed, 
+            totalCompleted: completedCount,
+            percentage: progressData.summary.patternPractice.percentage
+        });
+    } else {
+        res.status(500).json({ error: 'Failed to save progress' });
+    }
+});
+
 // POST - Bulk update (for import)
 app.post('/api/progress/bulk', (req, res) => {
     const { progressData } = req.body;

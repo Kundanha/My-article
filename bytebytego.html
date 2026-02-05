@@ -1274,45 +1274,160 @@
                         <p><strong>Buffer Pool:</strong> Frequently accessed data RAM mein cache rehta hai taaki disk I/O kam ho - ye performance ka major factor hai</p>
                     </div>
 
-                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📊 Popular SQL Databases Ki Comparison</h4>
-                    <table style="width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem;">
-                        <tr style="background: var(--bg-code);">
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Database</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Best For</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Key Features</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Used By</th>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>PostgreSQL</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Complex queries, ACID compliance, extensions</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">JSONB support, full-text search, PostGIS for geo data</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Instagram, Spotify, Reddit</td>
-                        </tr>
-                        <tr style="background: var(--bg-code);">
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>MySQL</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Web applications, read-heavy workloads</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Multiple storage engines, replication, easy setup</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Facebook, Twitter, YouTube</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Oracle</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Enterprise, mission-critical systems</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">RAC clustering, advanced security, PL/SQL</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Banks, Airlines, Telecom</td>
-                        </tr>
-                        <tr style="background: var(--bg-code);">
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>SQL Server</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Microsoft ecosystem, BI/Analytics</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">SSRS, SSIS integration, Azure synergy</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Enterprise Windows shops</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>SQLite</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Embedded, mobile apps, local storage</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Zero config, serverless, single file</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Every Android/iOS app, Browsers</td>
-                        </tr>
-                    </table>
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📊 Popular SQL Databases - Detailed Comparison</h4>
+                    
+                    <!-- PostgreSQL -->
+                    <div style="background: linear-gradient(135deg, #336791aa, #33679133); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #336791;">
+                        <h5 style="color: #336791; margin-bottom: 0.75rem; font-size: 1.2rem;">🐘 PostgreSQL - "The World's Most Advanced Open Source Database"</h5>
+                        <p style="margin-bottom: 1rem;"><strong>Ye database un logon ke liye hai jinhe complex queries aur data integrity ki zaroorat hai.</strong> PostgreSQL ek open-source database hai jo SQL standards ko strictly follow karta hai aur bahut powerful features deta hai.</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Best For (Kab Use Karein):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab tumhe <strong>complex queries</strong> run karni ho jaise multiple JOINs, subqueries</li>
+                                    <li>Jab <strong>ACID compliance</strong> must hai, matlab data kabhi corrupt nahi hona chahiye</li>
+                                    <li>Jab tumhe <strong>JSON data</strong> bhi store karna ho SQL ke saath (hybrid approach)</li>
+                                    <li>Jab <strong>geospatial data</strong> handle karna ho, jaise location-based apps</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #3b82f6;">🔧 Key Features (Kya Khaas Hai):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>JSONB Support:</strong> JSON data ko efficiently store aur query kar sakte ho</li>
+                                    <li><strong>Full-Text Search:</strong> Built-in search engine jaise Google search bana sakte ho</li>
+                                    <li><strong>PostGIS Extension:</strong> Maps aur location data ke liye world-class support</li>
+                                    <li><strong>Extensions:</strong> 100+ extensions available hain extra features ke liye</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>🏢 Real World Use:</strong> Instagram photos metadata store karta hai, Spotify playlists manage karta hai, Reddit comments aur posts store karta hai PostgreSQL mein!</p>
+                    </div>
+                    
+                    <!-- MySQL -->
+                    <div style="background: linear-gradient(135deg, #00758faa, #00758f33); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #00758f;">
+                        <h5 style="color: #00758f; margin-bottom: 0.75rem; font-size: 1.2rem;">🐬 MySQL - "The World's Most Popular Open Source Database"</h5>
+                        <p style="margin-bottom: 1rem;"><strong>Agar tumhe simple aur fast database chahiye jo web applications ke liye perfect ho, toh MySQL best choice hai.</strong> Ye bahut easy to learn hai aur duniya ki sabse zyada websites isi pe chalti hain!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Best For (Kab Use Karein):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab tumhe <strong>web application</strong> banana ho, jaise blog, e-commerce site</li>
+                                    <li>Jab <strong>read operations zyada</strong> hain write se (jaise news website)</li>
+                                    <li>Jab <strong>simple setup</strong> chahiye bina zyada configuration ke</li>
+                                    <li>Jab tum <strong>PHP/WordPress</strong> ke saath kaam kar rahe ho</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #3b82f6;">🔧 Key Features (Kya Khaas Hai):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>Multiple Storage Engines:</strong> InnoDB (transactions), MyISAM (fast reads) choose kar sakte ho</li>
+                                    <li><strong>Easy Replication:</strong> Master-slave setup karke read scaling bahut easy hai</li>
+                                    <li><strong>Large Community:</strong> Koi bhi problem ho, solution mil jayega online</li>
+                                    <li><strong>Low Resource Usage:</strong> Chote servers pe bhi achha perform karta hai</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>🏢 Real World Use:</strong> Facebook originally MySQL pe bana tha, Twitter tweets store karta hai, YouTube video metadata MySQL mein hai!</p>
+                    </div>
+                    
+                    <!-- Oracle -->
+                    <div style="background: linear-gradient(135deg, #f80000aa, #f8000033); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #f80000;">
+                        <h5 style="color: #f80000; margin-bottom: 0.75rem; font-size: 1.2rem;">🏛️ Oracle Database - "The Enterprise Standard"</h5>
+                        <p style="margin-bottom: 1rem;"><strong>Jab paisa koi issue nahi hai aur tumhe world-class reliability chahiye, toh Oracle use hota hai.</strong> Ye bahut expensive hai lekin banks aur airlines jaise critical systems isi pe chalte hain kyunki downtime afford nahi kar sakte!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Best For (Kab Use Karein):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab <strong>mission-critical systems</strong> ho jahan 99.999% uptime chahiye</li>
+                                    <li>Jab <strong>enterprise-level security</strong> must ho (banks, government)</li>
+                                    <li>Jab <strong>massive scale</strong> pe data handle karna ho (petabytes)</li>
+                                    <li>Jab tumhari company ke paas <strong>dedicated DBA team</strong> ho</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #3b82f6;">🔧 Key Features (Kya Khaas Hai):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>RAC (Real Application Clusters):</strong> Multiple servers ek database ki tarah kaam karte hain</li>
+                                    <li><strong>Advanced Security:</strong> Data encryption, audit trails, compliance features</li>
+                                    <li><strong>PL/SQL:</strong> Powerful procedural language stored procedures ke liye</li>
+                                    <li><strong>24/7 Support:</strong> Oracle ka premium support kahin bhi help milti hai</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>🏢 Real World Use:</strong> HDFC, ICICI jaise banks apna core banking Oracle pe chalate hain, Airlines flight booking systems, Telecom companies billing systems Oracle use karte hain!</p>
+                    </div>
+                    
+                    <!-- SQL Server -->
+                    <div style="background: linear-gradient(135deg, #0078d4aa, #0078d433); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #0078d4;">
+                        <h5 style="color: #0078d4; margin-bottom: 0.75rem; font-size: 1.2rem;">🪟 Microsoft SQL Server - "Best for Microsoft Ecosystem"</h5>
+                        <p style="margin-bottom: 1rem;"><strong>Agar tumhari company Microsoft technologies use karti hai (Windows Server, .NET, Azure), toh SQL Server perfect fit hai.</strong> Ye Oracle se thoda sasta hai aur Microsoft ke saath seamlessly integrate hota hai!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Best For (Kab Use Karein):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab tum <strong>.NET applications</strong> develop kar rahe ho</li>
+                                    <li>Jab <strong>Business Intelligence</strong> aur reporting chahiye (dashboards, analytics)</li>
+                                    <li>Jab company already <strong>Microsoft licenses</strong> use kar rahi hai</li>
+                                    <li>Jab <strong>Azure cloud</strong> pe migrate karna ho future mein</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #3b82f6;">🔧 Key Features (Kya Khaas Hai):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>SSRS (Reporting Services):</strong> Beautiful reports aur dashboards bana sakte ho</li>
+                                    <li><strong>SSIS (Integration Services):</strong> ETL pipelines banane ke liye powerful tool</li>
+                                    <li><strong>Azure Synergy:</strong> Azure SQL Database mein one-click migrate kar sakte ho</li>
+                                    <li><strong>SQL Server Management Studio:</strong> Best GUI tool database manage karne ke liye</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>🏢 Real World Use:</strong> Bahut saari enterprise Windows-based companies SQL Server use karti hain, especially healthcare, finance, aur manufacturing sectors mein!</p>
+                    </div>
+                    
+                    <!-- SQLite -->
+                    <div style="background: linear-gradient(135deg, #003b57aa, #003b5733); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #003b57;">
+                        <h5 style="color: #44a8d6; margin-bottom: 0.75rem; font-size: 1.2rem;">📱 SQLite - "The Embedded Database Champion"</h5>
+                        <p style="margin-bottom: 1rem;"><strong>Ye duniya ka sabse zyada deployed database hai! Har smartphone mein, har browser mein SQLite hai.</strong> Isko server ki zaroorat nahi, ek single file mein pura database store hota hai. Perfect hai local storage ke liye!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Best For (Kab Use Karein):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab <strong>mobile app</strong> bana rahe ho (Android/iOS)</li>
+                                    <li>Jab <strong>desktop application</strong> mein local data store karna ho</li>
+                                    <li>Jab <strong>prototyping</strong> kar rahe ho aur server setup nahi karna</li>
+                                    <li>Jab <strong>embedded systems</strong> mein database chahiye (IoT devices)</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #3b82f6;">🔧 Key Features (Kya Khaas Hai):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>Zero Configuration:</strong> Koi setup nahi, bas file create karo aur use karo</li>
+                                    <li><strong>Serverless:</strong> Koi server process nahi chalta, directly file read/write hoti hai</li>
+                                    <li><strong>Single File:</strong> Pura database ek .db file mein, backup = file copy!</li>
+                                    <li><strong>Cross-Platform:</strong> Same file Windows, Mac, Linux, Android sab pe kaam karegi</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>🏢 Real World Use:</strong> Har Android phone mein contacts, SMS, call logs SQLite mein store hote hain. Chrome, Firefox browsers history SQLite mein rakhte hain. WhatsApp messages bhi locally SQLite mein store hote hain!</p>
+                    </div>
+                    
+                    <!-- Quick Comparison Summary -->
+                    <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); border: 2px solid #ffd93d; padding: 1.25rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <h5 style="color: #ffd93d; margin-bottom: 0.75rem;">🎯 Quick Decision Guide - Kaunsa Database Choose Karein?</h5>
+                        <ul style="margin-left: 1.5rem; font-size: 0.95rem;">
+                            <li><strong>Startup ya personal project?</strong> → <span style="color: #00758f;">MySQL</span> ya <span style="color: #336791;">PostgreSQL</span> (dono free hain!)</li>
+                            <li><strong>Complex queries aur JSON data?</strong> → <span style="color: #336791;">PostgreSQL</span></li>
+                            <li><strong>Simple web app jaldi banana hai?</strong> → <span style="color: #00758f;">MySQL</span></li>
+                            <li><strong>Bank ya enterprise system?</strong> → <span style="color: #f80000;">Oracle</span> (budget ho toh!)</li>
+                            <li><strong>Microsoft stack use kar rahe ho?</strong> → <span style="color: #0078d4;">SQL Server</span></li>
+                            <li><strong>Mobile app ya local storage?</strong> → <span style="color: #44a8d6;">SQLite</span></li>
+                        </ul>
+                    </div>
 
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔑 SQL Key Concepts - Ye Samajhna Zaruri Hai</h4>
                     
@@ -1383,46 +1498,194 @@
                     </div>
 
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔒 Isolation Levels - Trade-off Between Consistency & Performance</h4>
-                    <p>Isolation ke different levels hain - zyada isolation matlab zyada correct results but slower performance. Application ke according choose karna padta hai:</p>
-                    <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
-                        <tr style="background: var(--bg-code);">
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Level</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Description</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Problems Allowed</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Performance</th>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Read Uncommitted</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Dirty reads allowed - uncommitted data bhi read ho sakta hai</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Dirty Read, Non-repeatable, Phantom</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">⚡ Fastest</td>
-                        </tr>
-                        <tr style="background: var(--bg-code);">
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Read Committed</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Sirf committed data read hota hai - PostgreSQL ka default</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Non-repeatable Read, Phantom</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">⚡ Fast</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Repeatable Read</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Same query same transaction mein same results - MySQL InnoDB default</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Phantom Reads possible</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">🔄 Medium</td>
-                        </tr>
-                        <tr style="background: var(--bg-code);">
-                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Serializable</strong></td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">Complete isolation - transactions serially execute hoti hain effectively</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">None - Full Protection</td>
-                            <td style="padding: 12px; border: 1px solid var(--border-color);">🐢 Slowest</td>
-                        </tr>
-                    </table>
+                    <p style="margin-bottom: 1rem;"><strong>Isolation levels database ka ek important concept hai!</strong> Jab multiple transactions ek saath chal rahi hoti hain, toh unhe ek dusre se kitna isolate karna hai - ye decide karta hai isolation level. Zyada isolation matlab zyada correct results, lekin performance slow ho jayegi. Application ki requirement ke hisaab se sahi level choose karna padta hai!</p>
+                    
+                    <!-- Read Uncommitted -->
+                    <div style="background: linear-gradient(135deg, #ef444422, #ef444411); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #ef4444;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <h5 style="color: #ef4444; margin-bottom: 0; font-size: 1.2rem;">⚡ Level 1: Read Uncommitted - "No Isolation"</h5>
+                            <span style="background: #22c55e33; color: #22c55e; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">⚡⚡⚡ Fastest Performance</span>
+                        </div>
+                        <p style="margin: 1rem 0;"><strong>Ye sabse kam restrictive level hai - basically koi isolation nahi hai!</strong> Is level pe ek transaction doosri transaction ka uncommitted (abhi tak save nahi hua) data bhi read kar sakti hai. Matlab agar Transaction B ne kuch change kiya but abhi commit nahi kiya, Transaction A wo changes dekh sakti hai!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #ffd93d;">⚠️ Problems Allowed:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>Dirty Reads</strong> - uncommitted data read ho sakta hai</li>
+                                    <li><strong>Non-Repeatable Reads</strong> - same query different results de sakti hai</li>
+                                    <li><strong>Phantom Reads</strong> - new rows suddenly appear ho sakti hain</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Kab Use Karein:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab <strong>approximate data</strong> acceptable ho (analytics dashboards)</li>
+                                    <li>Jab <strong>maximum speed</strong> chahiye accuracy se zyada</li>
+                                    <li>Jab data <strong>frequently change</strong> nahi hota</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>💡 Real Example:</strong> Socho tum bank balance check kar rahe ho. Transaction B ne ₹5000 deduct kiya but abhi commit nahi hua. Read Uncommitted pe tumhe reduced balance dikhega. Agar B rollback ho gaya toh tumne galat balance dekh liya - ye hai <strong>Dirty Read</strong>!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Read Committed -->
+                    <div style="background: linear-gradient(135deg, #f59e0b22, #f59e0b11); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #f59e0b;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <h5 style="color: #f59e0b; margin-bottom: 0; font-size: 1.2rem;">⚡ Level 2: Read Committed - "PostgreSQL Default"</h5>
+                            <span style="background: #22c55e33; color: #22c55e; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">⚡⚡ Fast Performance</span>
+                        </div>
+                        <p style="margin: 1rem 0;"><strong>Ye level ensure karta hai ki tum sirf committed (saved) data hi read kar sako!</strong> Dirty reads allowed nahi hain. Agar Transaction B ne kuch change kiya but commit nahi kiya, Transaction A ko purana (committed) data hi dikhega. Ye PostgreSQL, Oracle, aur SQL Server ka default isolation level hai!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #ffd93d;">⚠️ Problems Allowed:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>Non-Repeatable Reads</strong> - same row read karo, beech mein koi update kare, different value milegi</li>
+                                    <li><strong>Phantom Reads</strong> - range query mein new rows add ho sakti hain</li>
+                                    <li>❌ <strong>Dirty Reads BLOCKED</strong></li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Kab Use Karein:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab <strong>most web applications</strong> develop kar rahe ho</li>
+                                    <li>Jab <strong>dirty reads avoid</strong> karni hain but strictness nahi chahiye</li>
+                                    <li>Jab <strong>good balance</strong> chahiye consistency aur performance mein</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>💡 Real Example:</strong> E-commerce site pe product stock check kar rahe ho. Pehle query kiya - 10 items available. Beech mein kisi ne 5 kharid liye (commit hua). Dubara query kiya - ab 5 dikhenge. Same transaction mein different results - ye hai <strong>Non-Repeatable Read</strong>!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Repeatable Read -->
+                    <div style="background: linear-gradient(135deg, #3b82f622, #3b82f611); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #3b82f6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <h5 style="color: #3b82f6; margin-bottom: 0; font-size: 1.2rem;">🔄 Level 3: Repeatable Read - "MySQL InnoDB Default"</h5>
+                            <span style="background: #ffd93d33; color: #ffd93d; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">🔄 Medium Performance</span>
+                        </div>
+                        <p style="margin: 1rem 0;"><strong>Is level pe guarantee milti hai ki same query same transaction mein hamesha same results degi!</strong> Agar tumne ek row read kiya, toh transaction khatam hone tak wo row change nahi hogi (tumhare liye). MySQL InnoDB ka ye default level hai. Ye MVCC (Multi-Version Concurrency Control) use karke achieve hota hai!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #ffd93d;">⚠️ Problems Allowed:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li><strong>Phantom Reads</strong> - range query mein new rows insert ho sakti hain</li>
+                                    <li>❌ <strong>Dirty Reads BLOCKED</strong></li>
+                                    <li>❌ <strong>Non-Repeatable Reads BLOCKED</strong></li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Kab Use Karein:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab <strong>consistent reads</strong> chahiye transaction ke andar</li>
+                                    <li>Jab <strong>financial calculations</strong> kar rahe ho (reports)</li>
+                                    <li>Jab <strong>data integrity</strong> important hai performance se zyada</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>💡 Real Example:</strong> Report generate kar rahe ho - "Show all orders above ₹1000". Pehle query kiya - 50 orders. Beech mein koi ne ₹1500 ka new order add kiya (committed). Dubara same query - ab 51 orders dikhengi! Extra row appear hui - ye hai <strong>Phantom Read</strong>!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Serializable -->
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-left: 5px solid #a855f7;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <h5 style="color: #a855f7; margin-bottom: 0; font-size: 1.2rem;">🐢 Level 4: Serializable - "Maximum Protection"</h5>
+                            <span style="background: #ef444433; color: #ef4444; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">🐢 Slowest Performance</span>
+                        </div>
+                        <p style="margin: 1rem 0;"><strong>Ye sabse strict isolation level hai - complete protection milti hai!</strong> Transactions aise execute hoti hain jaise wo ek ke baad ek serially chal rahi hon (actually parallel chal sakti hain but result wahi hoga). Koi bhi concurrency problem nahi hogi - Dirty Read, Non-Repeatable Read, Phantom Read - sab blocked!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #22c55e;">✅ Protection Level:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>❌ <strong>Dirty Reads BLOCKED</strong></li>
+                                    <li>❌ <strong>Non-Repeatable Reads BLOCKED</strong></li>
+                                    <li>❌ <strong>Phantom Reads BLOCKED</strong></li>
+                                    <li>✅ <strong>FULL ISOLATION</strong> - complete protection!</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                                <strong style="color: #ef4444;">⚠️ Kab Use Karein (Carefully!):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                                    <li>Jab <strong>financial transactions</strong> ho (bank transfers, payments)</li>
+                                    <li>Jab <strong>100% accuracy</strong> must hai, performance secondary</li>
+                                    <li>Jab <strong>critical operations</strong> ho jahan galti afford nahi kar sakte</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);"><strong>💡 Real Example:</strong> Bank transfer - Account A se ₹10,000 Account B mein. Serializable ensure karega ki koi bhi doosra transaction is process ke beech mein interfere nahi kar sakta. Deadlocks ho sakte hain isliye retry logic zaruri hai!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Comparison Table -->
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <h5 style="color: #00bcd4; margin-bottom: 1rem;">📊 Quick Comparison Table</h5>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 500px;">
+                                <tr style="background: #00bcd433;">
+                                    <th style="padding: 0.6rem; text-align: left; border: 1px solid #333;">Isolation Level</th>
+                                    <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">Dirty Read</th>
+                                    <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">Non-Repeatable</th>
+                                    <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">Phantom</th>
+                                    <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">Default In</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Read Uncommitted</strong></td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #ef4444;">✓ Possible</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #ef4444;">✓ Possible</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #ef4444;">✓ Possible</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">-</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Read Committed</strong></td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;">✗ Blocked</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #ef4444;">✓ Possible</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #ef4444;">✓ Possible</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">PostgreSQL, Oracle, SQL Server</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Repeatable Read</strong></td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;">✗ Blocked</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;">✗ Blocked</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #ef4444;">✓ Possible</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">MySQL InnoDB</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Serializable</strong></td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;">✗ Blocked</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;">✗ Blocked</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;">✗ Blocked</td>
+                                    <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Decision Guide -->
+                    <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); border: 2px solid #ffd93d; padding: 1.25rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <h5 style="color: #ffd93d; margin-bottom: 0.75rem;">🎯 Quick Decision Guide - Kaunsa Level Choose Karein?</h5>
+                        <ul style="margin-left: 1.5rem; font-size: 0.95rem;">
+                            <li><strong>Analytics/Reporting dashboards?</strong> → <span style="color: #ef4444;">Read Uncommitted</span> (speed matters, slight inaccuracy OK)</li>
+                            <li><strong>Normal web application?</strong> → <span style="color: #f59e0b;">Read Committed</span> (PostgreSQL default, good balance)</li>
+                            <li><strong>Financial reports/consistent reads?</strong> → <span style="color: #3b82f6;">Repeatable Read</span> (MySQL default)</li>
+                            <li><strong>Bank transfers/critical operations?</strong> → <span style="color: #a855f7;">Serializable</span> (full protection, use retry logic)</li>
+                        </ul>
+                    </div>
                     
                     <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #ef4444;">
-                        <h5 style="color: #ef4444;">🔴 Isolation Problems Explained:</h5>
+                        <h5 style="color: #ef4444;">🔴 Isolation Problems Ka Summary:</h5>
                         <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                            <li><strong>Dirty Read:</strong> Transaction A uncommitted data read kar leta hai Transaction B ka jo baad mein rollback ho jaata hai - A ne invalid data dekh liya!</li>
-                            <li><strong>Non-Repeatable Read:</strong> Transaction A same row do baar read karta hai but beech mein B ne update kar diya - A ko different values milti hain</li>
-                            <li><strong>Phantom Read:</strong> Transaction A range query run karta hai, B new rows insert kar deta hai - A dubara run kare toh extra rows dikhengi</li>
+                            <li><strong>Dirty Read:</strong> Transaction A uncommitted data read kar leta hai Transaction B ka jo baad mein rollback ho jaata hai - A ne invalid data dekh liya! <em>(Solution: Read Committed ya upar)</em></li>
+                            <li><strong>Non-Repeatable Read:</strong> Transaction A same row do baar read karta hai but beech mein B ne update kar diya - A ko different values milti hain <em>(Solution: Repeatable Read ya upar)</em></li>
+                            <li><strong>Phantom Read:</strong> Transaction A range query run karta hai, B new rows insert kar deta hai - A dubara run kare toh extra rows dikhengi <em>(Solution: Serializable)</em></li>
                         </ul>
                     </div>
                 </div>
@@ -7134,10 +7397,15 @@
             <div class="topic-card" style="margin-bottom: 2rem;">
                 <div class="topic-card-header">
                     <span class="topic-card-icon">⚖️</span>
-                    <span class="topic-card-title">Load Balancer - Traffic Distribution</span>
+                    <span class="topic-card-title">Load Balancer - Traffic Distribution Ka King! 👑</span>
                 </div>
                 <div style="padding: 1.5rem; line-height: 2;">
-                    <p>Jab multiple web servers hain, to traffic ko <strong>evenly distribute</strong> karna padta hai. Ye kaam <strong>Load Balancer</strong> karta hai!</p>
+                    <p><strong>Load Balancer</strong> ek aisa device ya software hai jo <strong>user aur server group ke beech baithta hai</strong> aur incoming traffic ko multiple servers me <strong>intelligently distribute</strong> karta hai. Socho jaise restaurant me manager customers ko different waiters ko assign karta hai — same concept!</p>
+                    
+                    <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #00bcd4;">🍽️ Restaurant Analogy:</strong>
+                        <p style="margin-top: 0.5rem;">Agar customers apne waiters khud choose karein, to kuch waiters overloaded ho jayenge aur baaki idle! Manager (Load Balancer) ensure karta hai ki <strong>sab waiters equally busy</strong> rahein aur customers ko best service mile.</p>
+                    </div>
                     
                     <!-- Figure 1-4: Load Balancer Diagram using Mermaid -->
                     <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
@@ -7177,20 +7445,125 @@
                     
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔑 Key Concepts</h4>
                     <ul style="margin-left: 1.5rem;">
-                        <li><strong>Public IP:</strong> Load balancer ka IP jo users ko dikhta hai</li>
-                        <li><strong>Private IP:</strong> Servers ke internal IPs, directly accessible nahi</li>
-                        <li><strong>Health Checks:</strong> LB regularly servers ko ping karta hai</li>
-                        <li><strong>Failover:</strong> Agar ek server down, traffic dusre ko</li>
+                        <li><strong>Public IP:</strong> Load balancer ka IP jo users ko dikhta hai (internet-facing)</li>
+                        <li><strong>Private IP:</strong> Servers ke internal IPs, directly accessible nahi (security ke liye)</li>
+                        <li><strong>Health Checks:</strong> LB regularly servers ko ping karta hai to check if they're alive</li>
+                        <li><strong>Failover:</strong> Agar ek server down, traffic automatically dusre healthy server ko redirect</li>
                     </ul>
                     
+                    <!-- Load Balancing Algorithms - Deep Dive -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🧮 Load Balancing Algorithms - Kaunsa Method Use Karein?</h4>
+                    <p>Load balancer ko decide karna padta hai ki <strong>kaun si request kis server ko jaaye</strong>. Ye decision different algorithms se hota hai:</p>
+                    
+                    <!-- Static Algorithms -->
+                    <h5 style="margin: 1.5rem 0 1rem; color: #ffd93d;">📊 Static Load Balancing (Fixed Rules)</h5>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">Ye algorithms <strong>server ki current state nahi dekhte</strong> — predefined rules follow karte hain.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <h6 style="color: #667eea;">🔄 Round Robin</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Requests ko <strong>turn by turn</strong> different servers ko bhejta hai. Simple hai but assumes all servers equal capacity ke hain.</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Server 1 → Server 2 → Server 3 → Server 1...</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                            <h6 style="color: #a855f7;">⚖️ Weighted Round Robin</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Powerful servers ko <strong>zyada weight</strong> assign karo! Wo zyada requests handle karenge.</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Server A (weight:3) gets 3x traffic vs Server B (weight:1)</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #00bcd4;">
+                            <h6 style="color: #00bcd4;">#️⃣ IP Hash</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Client IP ka hash calculate karo aur <strong>same client hamesha same server</strong> pe jaaye. Session persistence ke liye useful!</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">hash(client_ip) % num_servers = target_server</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Algorithms -->
+                    <h5 style="margin: 1.5rem 0 1rem; color: #00ff88;">⚡ Dynamic Load Balancing (Smart Decisions)</h5>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">Ye algorithms <strong>real-time server state check</strong> karke intelligent decisions lete hain!</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #22c55e;">
+                            <h6 style="color: #22c55e;">🔗 Least Connections</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Jis server pe <strong>sabse kam active connections</strong> hain, usse request bhejo! Smart hai kyunki busy server pe load nahi badhata.</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Best for: Long-lived connections (WebSocket, DB)</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #ff9f43;">
+                            <h6 style="color: #ff9f43;">⏱️ Least Response Time</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Jo server <strong>sabse fast respond</strong> kar raha hai, usse bhejo! Response time + active connections dono consider karta hai.</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Best for: Optimal user experience</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #f5576c;">
+                            <h6 style="color: #f5576c;">📊 Resource-Based</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Server pe agent chalta hai jo <strong>CPU, memory usage report</strong> karta hai. LB sirf unhe traffic bhejta hai jinke paas resources free hain!</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Best for: Heterogeneous server environments</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Types of Load Balancers -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🏷️ Types of Load Balancers - Layer 4 vs Layer 7</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1rem 0;">
+                        <div style="background: linear-gradient(135deg, #3b82f622, #3b82f611); padding: 1.5rem; border-radius: 12px; border: 2px solid #3b82f6;">
+                            <h5 style="color: #3b82f6;">🔌 Layer 4 (Network/Transport)</h5>
+                            <p style="margin-top: 0.75rem;">TCP/UDP level pe kaam karta hai. <strong>IP address aur port</strong> dekh ke routing decision leta hai. Content nahi padh sakta.</p>
+                            <ul style="margin: 0.75rem 0 0 1.5rem; font-size: 0.9rem;">
+                                <li>Fast hai (no content inspection)</li>
+                                <li>Simple configuration</li>
+                                <li>Protocol agnostic</li>
+                            </ul>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;"><strong>Use:</strong> High-performance TCP/UDP load balancing</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #a855f722, #a855f711); padding: 1.5rem; border-radius: 12px; border: 2px solid #a855f7;">
+                            <h5 style="color: #a855f7;">🌐 Layer 7 (Application)</h5>
+                            <p style="margin-top: 0.75rem;">HTTP/HTTPS level pe kaam karta hai. <strong>URL, headers, cookies, SSL</strong> sab padh sakta hai. Smart routing possible!</p>
+                            <ul style="margin: 0.75rem 0 0 1.5rem; font-size: 0.9rem;">
+                                <li>Content-based routing (URL paths)</li>
+                                <li>SSL termination</li>
+                                <li>A/B testing, canary deployments</li>
+                            </ul>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;"><strong>Use:</strong> Web apps, microservices routing</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Popular Load Balancers -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🛠️ Popular Load Balancing Solutions</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">🟢</span>
+                            <h6 style="color: #00ff88; margin-top: 0.5rem;">NGINX</h6>
+                            <p style="font-size: 0.75rem;">Software LB, very popular</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">🔴</span>
+                            <h6 style="color: #ff6b6b; margin-top: 0.5rem;">HAProxy</h6>
+                            <p style="font-size: 0.75rem;">High-performance, reliable</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">☁️</span>
+                            <h6 style="color: #ff9900; margin-top: 0.5rem;">AWS ELB/ALB</h6>
+                            <p style="font-size: 0.75rem;">Managed, auto-scaling</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 2rem;">🔵</span>
+                            <h6 style="color: #00bcd4; margin-top: 0.5rem;">Azure LB</h6>
+                            <p style="font-size: 0.75rem;">Microsoft cloud native</p>
+                        </div>
+                    </div>
+                    
                     <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
-                        <strong style="color: #00ff88;">✅ Benefits of Load Balancer:</strong>
+                        <strong style="color: #00ff88;">✅ Load Balancer Benefits Summary:</strong>
                         <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                            <li>No more single point of failure (for web tier)</li>
-                            <li>Easy to add/remove servers</li>
-                            <li>Better performance through distribution</li>
-                            <li>Security layer (servers are in private network)</li>
+                            <li><strong>High Availability:</strong> Server down? Traffic automatically redirect ho jaata hai</li>
+                            <li><strong>Scalability:</strong> Easily add/remove servers bina downtime ke</li>
+                            <li><strong>Performance:</strong> Traffic evenly distribute = better response times</li>
+                            <li><strong>Security:</strong> Servers private network me, DDoS protection, SSL termination</li>
+                            <li><strong>Flexibility:</strong> Maintenance aur upgrades bina downtime ke</li>
                         </ul>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong style="color: #a855f7;">🎯 Interview Answer:</strong>
+                        <p style="margin-top: 0.5rem;">"Load Balancer ek critical component hai jo traffic ko multiple servers me distribute karta hai. Ye <strong>availability improve</strong> karta hai (failover support), <strong>scalability enable</strong> karta hai (add more servers), aur <strong>security enhance</strong> karta hai (servers private network me). Different algorithms jaise Round Robin, Least Connections ya IP Hash use hote hain based on use case."</p>
                     </div>
                 </div>
             </div>
@@ -7199,10 +7572,15 @@
             <div class="topic-card" style="margin-bottom: 2rem;">
                 <div class="topic-card-header">
                     <span class="topic-card-icon">🔄</span>
-                    <span class="topic-card-title">Database Replication - Master/Slave</span>
+                    <span class="topic-card-title">Database Replication - Master/Slave Architecture Ka Deep Dive 🔥</span>
                 </div>
                 <div style="padding: 1.5rem; line-height: 2;">
                     <p>Ab web tier to fault tolerant ho gaya, but <strong>database abhi bhi single point of failure</strong> hai! Isko solve karne ke liye <strong>database replication</strong> use hota hai.</p>
+                    
+                    <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #00bcd4;">📖 Definition:</strong>
+                        <p style="margin-top: 0.5rem;"><strong>Database Replication</strong> ka matlab hai original database (master) ki copies (slaves) banana taaki data <strong>multiple locations pe available</strong> rahe. Ye technique read performance, reliability, aur availability sabhi improve karti hai!</p>
+                    </div>
                     
                     <!-- Figure 1-5: Master-Slave DB Replication using Mermaid -->
                     <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
@@ -7308,16 +7686,67 @@
                         <li>A web server routes any data-modifying operations to the master database. This includes write, update, and delete operations.</li>
                     </ul>
                     
-                    <h4 style="margin: 1.5rem 0 1rem; color: var(--accent-orange);">⚠️ Failure Scenarios</h4>
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--accent-orange);">⚠️ Failure Scenarios - Production Reality!</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
                         <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; border-left: 4px solid #00bcd4;">
-                            <strong style="color: #00bcd4;">Slave Fails:</strong>
-                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Read traffic remaining slaves pe redirect ho jaata hai. New slave add kar sakte hain.</p>
+                            <strong style="color: #00bcd4;">📖 Slave Fails:</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Read traffic remaining healthy slaves pe redirect ho jaata hai. New slave add karke cluster ko recover kar sakte hain. <strong>No data loss!</strong></p>
                         </div>
                         <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; border-left: 4px solid #ff6f00;">
-                            <strong style="color: #ff6f00;">Master Fails:</strong>
-                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Ek slave promote hokar new master ban jaata hai. Data recovery scripts chalte hain.</p>
+                            <strong style="color: #ff6f00;">👑 Master Fails (Complex!):</strong>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Ek slave <strong>promote</strong> hokar new master ban jaata hai. But ye simple nahi hai — slave ka data outdated ho sakta hai (replication lag). <strong>Data recovery scripts</strong> chalane padte hain!</p>
                         </div>
+                    </div>
+                    
+                    <!-- Replication Types Deep Dive -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🔄 Replication Types - Synchronous vs Asynchronous</h4>
+                    <p>Replication do tarike se ho sakti hai — dono ke apne trade-offs hain:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1rem 0;">
+                        <div style="background: linear-gradient(135deg, #22c55e22, #22c55e11); padding: 1.5rem; border-radius: 12px; border: 2px solid #22c55e;">
+                            <h5 style="color: #22c55e;">✅ Synchronous Replication</h5>
+                            <p style="margin-top: 0.75rem;">Master <strong>wait karta hai</strong> jab tak slave acknowledge nahi karta ki data receive ho gaya. Write tabhi complete hota hai!</p>
+                            <ul style="margin: 0.75rem 0 0 1.5rem; font-size: 0.9rem;">
+                                <li><span style="color: #22c55e;">✓</span> Strong consistency guaranteed</li>
+                                <li><span style="color: #22c55e;">✓</span> Zero data loss possible</li>
+                                <li><span style="color: #ff6b6b;">✗</span> Slower writes (latency adds up)</li>
+                                <li><span style="color: #ff6b6b;">✗</span> Slave down = writes blocked!</li>
+                            </ul>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;"><strong>Use:</strong> Banking, financial systems (data accuracy critical)</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); padding: 1.5rem; border-radius: 12px; border: 2px solid #ffd93d;">
+                            <h5 style="color: #ffd93d;">⚡ Asynchronous Replication</h5>
+                            <p style="margin-top: 0.75rem;">Master <strong>immediately return</strong> karta hai, slaves ko data <strong>background me</strong> milta hai (eventually consistent).</p>
+                            <ul style="margin: 0.75rem 0 0 1.5rem; font-size: 0.9rem;">
+                                <li><span style="color: #22c55e;">✓</span> Fast writes</li>
+                                <li><span style="color: #22c55e;">✓</span> Slave failure doesn't block master</li>
+                                <li><span style="color: #ff6b6b;">✗</span> Replication lag possible</li>
+                                <li><span style="color: #ff6b6b;">✗</span> Data loss risk in master failure</li>
+                            </ul>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;"><strong>Use:</strong> Social media, e-commerce (performance > perfect consistency)</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Replication Benefits -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🏆 Database Replication Ke 3 Major Benefits</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #00ff88;">
+                            <h6 style="color: #00ff88;">🚀 Better Performance</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Writes sirf master pe, but <strong>reads multiple slaves pe parallel</strong> process ho sakte hain. Read throughput dramatically increase hota hai!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <h6 style="color: #3b82f6;">🔒 Reliability</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Data <strong>multiple locations pe replicated</strong> hai. Natural disaster (earthquake, typhoon) bhi data destroy nahi kar sakta — copies safe hain!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                            <h6 style="color: #a855f7;">🌐 High Availability</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Ek database offline? <strong>Dusre servers se data access</strong> possible! Website operational rehti hai even during partial failures.</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #a855f7;">🎯 Interview Pro Tip:</strong>
+                        <p style="margin-top: 0.5rem;">"Master-Slave replication <strong>read-heavy workloads</strong> ke liye ideal hai (most apps 90% reads, 10% writes). Master failover complex hai — production systems use <strong>automatic failover tools</strong> like MySQL MHA, PostgreSQL Patroni, etc. Replication lag handle karna important hai for eventual consistency!"</p>
                     </div>
                 </div>
             </div>
@@ -7438,7 +7867,60 @@ graph LR
                         </ol>
                     </div>
                     
-                    <p style="margin-top: 1rem;">Ye strategy simple hoti hai aur kaafi common hai, lekin data type, size aur access pattern ke hisaab se aur bhi caching strategies hoti hain jaise <strong>write-through</strong>, <strong>write-behind</strong>, <strong>cache-aside</strong> etc.</p>
+                    <p style="margin-top: 1rem;">Ye strategy simple hoti hai aur kaafi common hai, lekin data type, size aur access pattern ke hisaab se aur bhi caching strategies hoti hain:</p>
+                    
+                    <!-- Caching Strategies Deep Dive -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🎯 Caching Strategies - Kaunsi Strategy Kab Use Karein?</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1rem 0;">
+                        <!-- Cache-Aside -->
+                        <div style="background: linear-gradient(135deg, #667eea22, #667eea11); padding: 1.5rem; border-radius: 12px; border: 2px solid #667eea;">
+                            <h5 style="color: #667eea;">📖 Cache-Aside (Lazy Loading)</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;"><strong>Application khud manage karti hai</strong> cache aur DB dono ko. Data cache me nahi? DB se lao, cache me daalo.</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                data = cache.get(key)<br>
+                                if not data:<br>
+                                &nbsp;&nbsp;data = db.query(key)<br>
+                                &nbsp;&nbsp;cache.set(key, data, ttl)
+                            </div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">✅ <strong>Best for:</strong> Read-heavy workloads, unpredictable access patterns</p>
+                        </div>
+                        
+                        <!-- Write-Through -->
+                        <div style="background: linear-gradient(135deg, #22c55e22, #22c55e11); padding: 1.5rem; border-radius: 12px; border: 2px solid #22c55e;">
+                            <h5 style="color: #22c55e;">✏️ Write-Through</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;">Data <strong>pehle cache me write</strong> hota hai, phir <strong>synchronously DB me</strong>. Cache hamesha fresh!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                cache.set(key, data)<br>
+                                db.write(key, data) # sync
+                            </div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">✅ <strong>Best for:</strong> Strong consistency needed, data frequently read after write</p>
+                        </div>
+                        
+                        <!-- Write-Behind -->
+                        <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); padding: 1.5rem; border-radius: 12px; border: 2px solid #ffd93d;">
+                            <h5 style="color: #ffd93d;">⚡ Write-Behind (Write-Back)</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;">Data <strong>sirf cache me write</strong> hota hai initially. DB me <strong>asynchronously batch</strong> me jaata hai!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                cache.set(key, data)<br>
+                                # async batch write to DB<br>
+                                queue.push(key, data)
+                            </div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">✅ <strong>Best for:</strong> Write-heavy workloads, analytics, logs (eventual consistency OK)</p>
+                        </div>
+                        
+                        <!-- Read-Through -->
+                        <div style="background: linear-gradient(135deg, #a855f722, #a855f711); padding: 1.5rem; border-radius: 12px; border: 2px solid #a855f7;">
+                            <h5 style="color: #a855f7;">📚 Read-Through</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;"><strong>Cache khud DB se fetch</strong> karta hai when miss hota hai. Application sirf cache se baat karti hai!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                data = cache.get(key)<br>
+                                # Cache internally fetches<br>
+                                # from DB if miss
+                            </div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">✅ <strong>Best for:</strong> Simplifying application code, consistent data access pattern</p>
+                        </div>
+                    </div>
                     
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--accent-orange);">⚠️ Cache Considerations - Important Points!</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
@@ -7474,23 +7956,82 @@ graph LR
             <div class="topic-card" style="margin-bottom: 2rem;">
                 <div class="topic-card-header">
                     <span class="topic-card-icon">🌍</span>
-                    <span class="topic-card-title">CDN - Content Delivery Network Ka High-Level Concept</span>
+                    <span class="topic-card-title">CDN - Content Delivery Network Ka Complete Deep Dive! 🚀</span>
                 </div>
                 <div style="padding: 1.5rem; line-height: 2;">
-                    <p>Ab cache ke baad next optimization hoti hai <strong>CDN (Content Delivery Network)</strong>. CDN ka kaam hota hai static content ko users ke <strong>geographically closest server</strong> se serve karna.</p>
+                    <p>Ab cache ke baad next optimization hoti hai <strong>CDN (Content Delivery Network)</strong>. CDN ek network hai <strong>geographically dispersed servers ka</strong> jo users ke <strong>nearest location</strong> se static content serve karta hai!</p>
+                    
+                    <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #00bcd4;">📖 CDN Ka Primary Purpose:</strong>
+                        <p style="margin-top: 0.5rem;"><strong>Latency reduce karna!</strong> Internet ki complex nature ki wajah se client aur server ke beech communication me <strong>physical distance matters</strong>. CDN intermediary servers introduce karke is delay ko minimize karta hai.</p>
+                    </div>
                     
                     <p style="margin-top: 1rem;"><strong>Simple language me samjho:</strong> Jo user CDN server ke jitna paas hota hai, usko utni fast website milti hai. Jaise agar CDN server San Francisco me hai, to Los Angeles ke users ko Europe ke users ke comparison me zyada fast content milega.</p>
                     
                     <p style="margin-top: 1rem;">Agar user India me hai aur origin server US me, to har request me <strong>latency high hogi (~120ms)</strong>. CDN is latency ko kaafi reduce kar deta hai (<strong>~30ms</strong>)!</p>
                     
-                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📦 Static Content Examples:</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">📜 JavaScript</span>
-                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🎨 CSS</span>
-                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🖼️ Images</span>
-                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🎥 Videos</span>
-                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">📄 PDFs</span>
-                        <span style="background: var(--bg-code); padding: 0.5rem 1rem; border-radius: 20px;">🔤 Fonts</span>
+                    <!-- CDN Benefits Deep Dive -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🏆 CDN Ke 4 Major Benefits</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #00ff88;">
+                            <h6 style="color: #00ff88;">⚡ Page Load Time ↓</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Website slow? Users bounce! CDN se <strong>content nearby servers se</strong> serve hota hai resulting in <strong>faster page loads</strong> aur better user experience.</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <h6 style="color: #3b82f6;">💰 Bandwidth Cost ↓</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Every request consumes bandwidth = cost! CDN <strong>caching aur optimizations</strong> se origin server se data transfer kam hota hai = <strong>lower hosting bills!</strong></p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                            <h6 style="color: #a855f7;">🌐 Content Availability ↑</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Traffic spike? Hardware failure? CDN <strong>distributed hai</strong> — ek server down bhi ho to <strong>dusre servers content serve</strong> karte rahenge!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #ff6b6b;">
+                            <h6 style="color: #ff6b6b;">🔒 Security Enhanced</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>DDoS attacks</strong> me attackers millions of fake requests bhejte hain. CDN in attacks ko <strong>distribute karke absorb</strong> kar leta hai — origin server safe!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Static vs Dynamic Content -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">📦 Static vs Dynamic Content</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1rem 0;">
+                        <div style="background: linear-gradient(135deg, #22c55e22, #22c55e11); padding: 1.5rem; border-radius: 12px; border: 2px solid #22c55e;">
+                            <h5 style="color: #22c55e;">✅ Static Content (CDN Perfect!)</h5>
+                            <p style="margin-top: 0.75rem;">Data jo <strong>user se user change nahi hota</strong>. Same file serve hoti hai sabko!</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem;">
+                                <span style="background: #22c55e33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">📜 JS/CSS</span>
+                                <span style="background: #22c55e33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">🖼️ Images</span>
+                                <span style="background: #22c55e33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">🎥 Videos</span>
+                                <span style="background: #22c55e33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">📄 PDFs</span>
+                                <span style="background: #22c55e33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">🔤 Fonts</span>
+                            </div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); padding: 1.5rem; border-radius: 12px; border: 2px solid #ffd93d;">
+                            <h5 style="color: #ffd93d;">⚡ Dynamic Content (Tricky!)</h5>
+                            <p style="margin-top: 0.75rem;">Data jo <strong>user, location, time ke basis pe change</strong> hota hai. Traditional caching nahi chalti!</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem;">
+                                <span style="background: #ffd93d33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">📰 News Feeds</span>
+                                <span style="background: #ffd93d33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">🌤️ Weather</span>
+                                <span style="background: #ffd93d33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">🔐 Login Status</span>
+                                <span style="background: #ffd93d33; padding: 0.4rem 0.8rem; border-radius: 15px; font-size: 0.85rem;">💬 Chat</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- How CDN Works -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">⚙️ CDN Kaise Kaam Karta Hai? - 3 Key Mechanisms</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px;">
+                            <h6 style="color: #667eea;">📦 1. Caching</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Static content ki <strong>copies store</strong> karti hai CDN edge servers pe. First request origin se, baaki requests <strong>cache se instant!</strong></p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px;">
+                            <h6 style="color: #00bcd4;">⚡ 2. Dynamic Acceleration</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Dynamic content ke liye CDN-to-origin ke beech <strong>optimized connections</strong> maintain karti hai — intelligent routing, already-open connections!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px;">
+                            <h6 style="color: #a855f7;">🧠 3. Edge Logic</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">CDN edge servers pe <strong>custom logic run</strong> kar sakte ho — request validation, content modification, A/B testing, etc. Origin load kam!</p>
+                        </div>
                     </div>
                     
                     <!-- Figure 1-9: CDN Latency Comparison -->
@@ -8426,6 +8967,174 @@ graph LR
                     </div>
                 </div>
             </div>
+            
+            <!-- MESSAGE QUEUE DEEP DIVE - Enhanced Section -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🔬</span>
+                    <span class="topic-card-title">Message Queue Deep Dive - Technology Comparison & Patterns</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p style="font-size: 1.1rem;"><strong>Message Queue choose karte waqt bahut sare factors consider karne padte hain. Har technology ke apne strengths hain!</strong></p>
+                    
+                    <!-- Message Queue Benefits from AWS/IBM -->
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">✅ Message Queue Ke 6 Major Benefits (AWS + IBM Research)</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                        <div style="background: linear-gradient(135deg, #22c55e22, #22c55e11); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #22c55e;">
+                            <h5 style="color: #22c55e;">1️⃣ Reliable Message Delivery</h5>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Business-critical messages <strong>kabhi lost nahi honge</strong>! Queue ensure karti hai ki message <strong>exactly once deliver</strong> ho. De-duplication logic likhne ki zaroorat nahi!</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #667eea22, #667eea11); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <h5 style="color: #667eea;">2️⃣ Asynchronous Communication</h5>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Producer ko consumer ka wait <strong>nahi karna padta</strong>! Message queue pe dal diya, response de diya. Background me processing hoti rahegi!</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #ffd93d;">
+                            <h5 style="color: #ffd93d;">3️⃣ Resilience & Fault Tolerance</h5>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Agar consumer down bhi ho jaye, messages <strong>safely stored</strong> rahenge! System ka ek part fail hone pe <strong>pura system crash nahi hoga</strong>!</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #a855f722, #a855f711); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #a855f7;">
+                            <h5 style="color: #a855f7;">4️⃣ Inter-Application Connectivity</h5>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Different languages (Java, Python, Node.js) aur different architectures ko <strong>seamlessly connect</strong> kar sakte ho! MQTT, AMQP, REST protocols support!</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #00bcd4;">
+                            <h5 style="color: #00bcd4;">5️⃣ Traffic Smoothing</h5>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Spiky workloads</strong> ko smooth karne me madad! Peak traffic me messages queue me buffer hote hain, consumer apni pace pe process karta hai.</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ff6b6b22, #ff6b6b11); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #ff6b6b;">
+                            <h5 style="color: #ff6b6b;">6️⃣ Enhanced Security</h5>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Messages ko <strong>encrypt</strong> kar sakte ho - at rest, in transit, ya end-to-end! Message authentication ensure karta hai ki sirf valid messages process ho!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Messaging Patterns -->
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">📡 Messaging Patterns - Point-to-Point vs Pub/Sub</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                        <div style="background: linear-gradient(135deg, #667eea22, #667eea11); padding: 1.5rem; border-radius: 12px; border: 2px solid #667eea;">
+                            <h5 style="color: #667eea; margin-bottom: 1rem;">📬 Point-to-Point (P2P)</h5>
+                            <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+                                <p style="font-size: 0.85rem; font-family: monospace;">Producer → Queue → <strong>Single</strong> Consumer</p>
+                            </div>
+                            <ul style="margin-left: 1rem; font-size: 0.9rem;">
+                                <li><strong>One message = One consumer</strong></li>
+                                <li>Message consumed hone ke baad <strong>delete</strong> ho jata hai</li>
+                                <li>Order processing, task distribution</li>
+                                <li><strong>Use case:</strong> Email sending, payment processing</li>
+                            </ul>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #a855f722, #a855f711); padding: 1.5rem; border-radius: 12px; border: 2px solid #a855f7;">
+                            <h5 style="color: #a855f7; margin-bottom: 1rem;">📢 Publish/Subscribe (Pub/Sub)</h5>
+                            <div style="background: var(--bg-code); padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+                                <p style="font-size: 0.85rem; font-family: monospace;">Publisher → Topic → <strong>Multiple</strong> Subscribers</p>
+                            </div>
+                            <ul style="margin-left: 1rem; font-size: 0.9rem;">
+                                <li><strong>One message = Multiple consumers</strong></li>
+                                <li>Har subscriber ko <strong>copy</strong> milti hai</li>
+                                <li>Event broadcasting, notifications</li>
+                                <li><strong>Use case:</strong> News feeds, stock price updates</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Delivery Guarantees -->
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🎯 Delivery Guarantees - Interview Must-Know!</h4>
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <tr style="background: #667eea33;">
+                                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #667eea;">Guarantee Type</th>
+                                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #667eea;">Meaning</th>
+                                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #667eea;">Use Case</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid #333;"><strong style="color: #22c55e;">At-most-once</strong></td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid #333;">Message 0 ya 1 baar deliver hoga (loss possible)</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid #333;">Metrics, logs (loss acceptable)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid #333;"><strong style="color: #ffd93d;">At-least-once</strong></td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid #333;">Message 1 ya zyada baar deliver hoga (duplicates possible)</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid #333;">Notifications, emails</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem;"><strong style="color: #ff6b6b;">Exactly-once</strong></td>
+                                <td style="padding: 0.75rem;">Message exactly 1 baar deliver hoga (hardest to achieve!)</td>
+                                <td style="padding: 0.75rem;">Financial transactions, payments</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Technology Comparison -->
+                    <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">⚔️ Technology Comparison - Kab Kaunsa Use Karein?</h4>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 600px;">
+                            <tr style="background: #00bcd433;">
+                                <th style="padding: 0.6rem; text-align: left; border: 1px solid #333;">Feature</th>
+                                <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">🐰 RabbitMQ</th>
+                                <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">📊 Apache Kafka</th>
+                                <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">☁️ AWS SQS</th>
+                                <th style="padding: 0.6rem; text-align: center; border: 1px solid #333;">🔴 Redis Streams</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Best For</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Traditional messaging</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Event streaming</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Serverless apps</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Low-latency needs</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Throughput</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">~10K msg/sec</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;"><strong>Millions/sec</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">~3K msg/sec</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">~100K msg/sec</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Latency</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Low (ms)</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Medium (ms)</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Medium</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;"><strong>Ultra-low (μs)</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Message Retention</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Until consumed</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;"><strong>Configurable (days/weeks)</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">14 days max</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Memory-limited</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.6rem; border: 1px solid #333;"><strong>Operations</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Self-managed</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Complex setup</td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center; color: #22c55e;"><strong>Fully managed</strong></td>
+                                <td style="padding: 0.6rem; border: 1px solid #333; text-align: center;">Simple</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <!-- Decision Guide -->
+                    <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); border-left: 4px solid #ffd93d; padding: 1rem 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <strong style="color: #ffd93d;">🎯 Quick Decision Guide:</strong>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li><strong>Simple task queue chahiye?</strong> → <span style="color: #ff6f00;">RabbitMQ</span> (easy setup, reliable)</li>
+                            <li><strong>High-throughput event streaming?</strong> → <span style="color: #00bcd4;">Apache Kafka</span> (millions of events/sec)</li>
+                            <li><strong>AWS ecosystem me ho?</strong> → <span style="color: #ff9900;">AWS SQS</span> (zero ops, pay-per-use)</li>
+                            <li><strong>Ultra-low latency chahiye?</strong> → <span style="color: #dc382d;">Redis Streams</span> (microseconds)</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Interview Tips -->
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border: 2px solid #a855f7; padding: 1.25rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <h5 style="color: #a855f7; margin-bottom: 0.75rem;">🎤 Interview Tips - Message Queue</h5>
+                        <ul style="margin-left: 1.5rem; font-size: 0.95rem;">
+                            <li><strong>"Why use message queue?"</strong> → Decoupling, async processing, fault tolerance, traffic smoothing!</li>
+                            <li><strong>"Point-to-Point vs Pub/Sub?"</strong> → P2P = one consumer per message, Pub/Sub = broadcast to all subscribers!</li>
+                            <li><strong>"How to handle message failures?"</strong> → Dead Letter Queue (DLQ) me failed messages route karo!</li>
+                            <li><strong>"Kafka vs RabbitMQ?"</strong> → Kafka = event streaming/replay, RabbitMQ = traditional messaging/routing!</li>
+                            <li><strong>"Exactly-once delivery?"</strong> → Hardest guarantee! Requires idempotent consumers + transaction support!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- SD-BOOK: LOGGING, METRICS, AUTOMATION SECTION -->
@@ -8886,19 +9595,41 @@ graph LR
             <div class="topic-card" style="margin-bottom: 2rem;">
                 <div class="topic-card-header">
                     <span class="topic-card-icon">🔀</span>
-                    <span class="topic-card-title">Horizontal Scaling (SHARDING) - The Long-Term Strategy!</span>
+                    <span class="topic-card-title">Horizontal Scaling (SHARDING) - Database Ko Todne Ki Art! 🔥</span>
                 </div>
                 <div style="padding: 1.5rem; line-height: 2;">
                     <p style="font-size: 1.1rem;"><strong>Horizontal scaling</strong> ka matlab database ko <strong>multiple servers me todna</strong> — isko <strong>SHARDING</strong> bolte hain!</p>
+                    
+                    <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #00bcd4;">📖 Sharding Definition:</strong>
+                        <p style="margin-top: 0.5rem;"><strong>Sharding</strong> ek method hai large database ko <strong>multiple smaller databases (shards)</strong> me distribute karne ka. Each shard <strong>independent machine</strong> pe run karta hai, allowing <strong>near-unlimited scalability</strong>!</p>
+                    </div>
                     
                     <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
                         <strong style="color: #00ff88;">💡 Sharding Ka Core Idea:</strong>
                         <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
                             <li>Har <strong>shard ek independent database</strong> hota hai</li>
-                            <li>Sab shards ka <strong>schema SAME</strong> hota hai</li>
-                            <li>But <strong>data DIFFERENT</strong> hota hai — subset of total data</li>
-                            <li>Read/Write operations <strong>parallel</strong> ho jaate hain!</li>
+                            <li>Sab shards ka <strong>schema SAME</strong> hota hai (same table structure)</li>
+                            <li>But <strong>data DIFFERENT</strong> hota hai — subset of total data per shard</li>
+                            <li>Read/Write operations <strong>parallel</strong> ho jaate hain multiple machines pe!</li>
                         </ul>
+                    </div>
+                    
+                    <!-- Why Sharding Benefits -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🏆 Sharding Ke 3 Major Benefits</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #00ff88;">
+                            <h6 style="color: #00ff88;">🚀 Read/Write Throughput ↑</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Data distribute ho jaata hai = <strong>parallel queries</strong> multiple shards pe! Single DB pe 10K QPS, sharded DB pe <strong>100K+ QPS</strong> possible!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <h6 style="color: #3b82f6;">💾 Storage Capacity ↑</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Single machine ki <strong>disk limit hai</strong>. Sharding se <strong>add more shards = add more storage</strong>! Near-infinite scalability!</p>
+                        </div>
+                        <div style="background: var(--bg-code); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                            <h6 style="color: #a855f7;">🛡️ High Availability</h6>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Ek shard down? <strong>Baaki shards work karte rahenge!</strong> Partial system availability maintained. Each shard can be replicated too!</p>
+                        </div>
                     </div>
                     
                     <!-- Sharding Diagram -->
@@ -9000,7 +9731,61 @@ graph TB
                     </div>
                     
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔑 Sharding Key - The Most Critical Decision!</h4>
-                    <p><strong>Sharding key</strong> decide karti hai ki data kaunse shard me jayega. <strong>Ye decision galat ho gayi to system pain ban jaata hai!</strong></p>
+                    <p><strong>Sharding key</strong> (partition key) decide karti hai ki data kaunse shard me jayega. <strong>Ye decision galat ho gayi to system pain ban jaata hai!</strong></p>
+                    
+                    <!-- Sharding Methods -->
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🎯 Sharding Methods - 4 Popular Approaches</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1rem 0;">
+                        <!-- Range-based -->
+                        <div style="background: linear-gradient(135deg, #667eea22, #667eea11); padding: 1.5rem; border-radius: 12px; border: 2px solid #667eea;">
+                            <h5 style="color: #667eea;">📊 1. Range-Based Sharding</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;">Rows ko <strong>value ranges</strong> ke basis pe divide karo. Simple aur easy to understand!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                user_id 1-1M → Shard A<br>
+                                user_id 1M-2M → Shard B<br>
+                                user_id 2M-3M → Shard C
+                            </div>
+                            <p style="font-size: 0.85rem; color: #ff6b6b; margin-top: 0.75rem;">⚠️ Risk: <strong>Hotspots!</strong> Recent users always Shard C pe!</p>
+                        </div>
+                        
+                        <!-- Hash-based -->
+                        <div style="background: linear-gradient(135deg, #22c55e22, #22c55e11); padding: 1.5rem; border-radius: 12px; border: 2px solid #22c55e;">
+                            <h5 style="color: #22c55e;">#️⃣ 2. Hash-Based Sharding</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;">Hash function apply karo key pe. <strong>Even distribution</strong> guaranteed!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                shard = hash(user_id) % 4<br>
+                                // Even distribution across shards
+                            </div>
+                            <p style="font-size: 0.85rem; color: #ff6b6b; margin-top: 0.75rem;">⚠️ Risk: <strong>Resharding expensive!</strong> Add shard = most data moves</p>
+                        </div>
+                        
+                        <!-- Directory-based -->
+                        <div style="background: linear-gradient(135deg, #ffd93d22, #ffd93d11); padding: 1.5rem; border-radius: 12px; border: 2px solid #ffd93d;">
+                            <h5 style="color: #ffd93d;">📖 3. Directory-Based Sharding</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;"><strong>Lookup table</strong> maintain karo jo bataye kaunsa data kahan hai. Flexible!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                category=electronics → Shard A<br>
+                                category=clothing → Shard B<br>
+                                category=food → Shard C
+                            </div>
+                            <p style="font-size: 0.85rem; color: #ff6b6b; margin-top: 0.75rem;">⚠️ Risk: <strong>Lookup table bottleneck!</strong> SPOF ban sakti hai</p>
+                        </div>
+                        
+                        <!-- Geo-based -->
+                        <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); padding: 1.5rem; border-radius: 12px; border: 2px solid #00bcd4;">
+                            <h5 style="color: #00bcd4;">🌍 4. Geo-Based Sharding</h5>
+                            <p style="margin-top: 0.75rem; font-size: 0.95rem;"><strong>Geographic location</strong> ke basis pe shard karo. Latency kam, compliance easy!</p>
+                            <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-size: 0.8rem; font-family: monospace;">
+                                region=USA → US Shard<br>
+                                region=EU → EU Shard<br>
+                                region=Asia → Asia Shard
+                            </div>
+                            <p style="font-size: 0.85rem; color: #ff6b6b; margin-top: 0.75rem;">⚠️ Risk: <strong>Uneven distribution!</strong> US shard overloaded</p>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 2rem 0 1rem; color: var(--bytebytego-primary);">🔍 Good vs Bad Sharding Key</h4>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
                         <div style="background: linear-gradient(135deg, #22c55e22, #22c55e11); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #22c55e;">
