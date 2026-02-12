@@ -903,6 +903,12 @@
                 <a href="#sd-book-ch2-latency" class="nav-item">→ Latency Numbers</a>
                 <a href="#sd-book-ch2-availability" class="nav-item">→ Availability Nines</a>
                 <a href="#sd-book-ch2-estimation" class="nav-item">→ Twitter Example</a>
+                <a href="#sd-book-ch3" class="nav-item">Ch 3: Interview Framework</a>
+                <a href="#sd-book-ch3-step1" class="nav-item">→ Step 1: Scope Define</a>
+                <a href="#sd-book-ch3-step2" class="nav-item">→ Step 2: High-Level Design</a>
+                <a href="#sd-book-ch3-step3" class="nav-item">→ Step 3: Deep Dive</a>
+                <a href="#sd-book-ch3-step4" class="nav-item">→ Step 4: Wrap Up</a>
+                <a href="#sd-book-ch3-dos-donts" class="nav-item">→ DOs & DON'Ts</a>
             </div>
         </div>
 
@@ -7254,7 +7260,16 @@
                     <span class="topic-card-title">Database Tier - Separate Karna Zaroori!</span>
                 </div>
                 <div style="padding: 1.5rem; line-height: 2;">
-                    <p>Jaise traffic badhta hai, <strong>web server aur database ko alag karna</strong> first optimization step hai. Dono ko independently scale kar sakte hain!</p>
+                    <p>Jaise traffic badhta hai, <strong>web tier (server) aur data tier (database) ko alag-alag servers par separate karna</strong> sabse pehla aur sabse important optimization step hai. Isko separate karne se dono tiers ko <strong>independently scale</strong> kar sakte hain, matlab web servers alag se badhao aur databases alag se badhao - dono ek doosre ko limit nahi karte!</p>
+                    
+                    <div style="background: linear-gradient(135deg, #00bcd411, #00bcd422); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #00bcd4;">🎯 Core Concept - Web Tier vs Data Tier:</strong>
+                        <p style="margin-top: 0.5rem;">Single server setup mein web server aur database <strong>same machine par</strong> hote hain, jo ek bottleneck create karta hai. Separation karne se:</p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li><strong>Web Tier:</strong> Handles HTTP requests, business logic, response generation - ye independently scale hota hai (multiple web servers add karo)</li>
+                            <li><strong>Data Tier:</strong> Handles data storage, retrieval, persistence - ye independently scale hota hai (replicas, sharding add karo)</li>
+                        </ul>
+                    </div>
                     
                     <!-- Figure 1-3: Database Separation Diagram using Mermaid -->
                     <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0;">
@@ -7265,61 +7280,149 @@
                                 MA["📱 Mobile app"]
                             end
                             
-                            DNS(("🌐 DNS<br/>IP address"))
+                            DNS(("🌐 DNS"))
                             
-                            WS["🖥️ Web server"]
-                            DB[("🗄️ Database")]
+                            subgraph WebTier["🖥️ Web Tier (Independently Scalable)"]
+                                WS["🖥️ Web Server"]
+                            end
                             
-                            User -->|"www.mysite.com"| DNS
-                            DNS --> User
-                            User -->|"www.mysite.com"| WS
-                            User -->|"api.mysite.com"| WS
-                            WS <-->|"read/write/update<br/>return data"| DB
+                            subgraph DataTier["🗄️ Data Tier (Independently Scalable)"]
+                                DB[("🗄️ Database")]
+                            end
+                            
+                            User -.->|"1. resolve IP"| DNS
+                            User -->|"2. HTTP Request"| WS
+                            WS <-->|"3. read/write data"| DB
                             
                             style DNS fill:#4a90d9,stroke:#357abd,color:#fff
                             style WS fill:#22c55e,stroke:#16a34a,color:#fff
                             style DB fill:#3b82f6,stroke:#1d4ed8,color:#fff
                             style User fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style WebTier fill:#22c55e11,stroke:#22c55e,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                            style DataTier fill:#3b82f611,stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
                         </div>
-                        <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem; font-style: italic;">Figure 1-3</p>
+                        <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem; font-style: italic;">Figure 1-3: Web Tier aur Data Tier ka Separation</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #00ff88;">💡 Separation Ka Biggest Benefit:</strong>
+                        <p style="margin-top: 0.5rem;">Web tier aur data tier ko separate karne se dono ko <strong>independently scale</strong> kar sakte hain. Agar web traffic zyada hai to sirf web servers add karo. Agar database slow hai to sirf database optimize karo (replicas, sharding, caching). Ye flexibility <strong>single server architecture mein bilkul nahi milti!</strong></p>
                     </div>
                     
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">⚔️ SQL vs NoSQL - Kab Kya Use Karein?</h4>
                     
+                    <p>Database choose karna ek critical decision hai. Book ke according, tum <strong>relational databases (SQL)</strong> ya <strong>non-relational databases (NoSQL)</strong> mein se choose kar sakte ho. Dono ke apne strengths aur use cases hain.</p>
+                    
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
                         <!-- SQL -->
                         <div style="background: linear-gradient(135deg, #00bcd422, #00bcd411); padding: 1.5rem; border-radius: 12px; border: 2px solid #00bcd4;">
-                            <h5 style="color: #00bcd4; font-size: 1.2rem;">🔵 SQL (Relational)</h5>
-                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><em>MySQL, PostgreSQL, Oracle</em></p>
+                            <h5 style="color: #00bcd4; font-size: 1.2rem;">🔵 Relational Databases (RDBMS)</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><em>MySQL, PostgreSQL, Oracle, SQL Server</em></p>
+                            <p style="margin-top: 0.5rem;">Relational databases data ko <strong>tables aur rows</strong> mein represent karte hain. Tum different tables ke data par <strong>SQL language use karke JOIN operations</strong> perform kar sakte ho.</p>
                             <ul style="margin: 1rem 0 0 1.5rem;">
-                                <li>Data structured hai (tables, rows, columns)</li>
-                                <li>ACID transactions zaroori hain</li>
-                                <li>Complex JOINs chahiye</li>
-                                <li>Relationships clear hain</li>
+                                <li>Data structured hai (tables, rows, columns mein organized)</li>
+                                <li>ACID transactions support karta hai (Atomicity, Consistency, Isolation, Durability)</li>
+                                <li>Complex JOINs perform kar sakte ho across multiple tables</li>
+                                <li>Data relationships clearly defined hain (foreign keys, constraints)</li>
+                                <li><strong>40+ saal se proven technology hai</strong> - most popular choice</li>
                             </ul>
                             <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 1rem;">
-                                <strong style="color: #00bcd4;">Best for:</strong> Banking, E-commerce, ERP
+                                <strong style="color: #00bcd4;">Best for:</strong> Banking, E-commerce, ERP, Traditional web apps, Inventory management
                             </div>
                         </div>
                         
                         <!-- NoSQL -->
                         <div style="background: linear-gradient(135deg, #ff6f0022, #ff6f0011); padding: 1.5rem; border-radius: 12px; border: 2px solid #ff6f00;">
-                            <h5 style="color: #ff6f00; font-size: 1.2rem;">🟠 NoSQL (Non-Relational)</h5>
-                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><em>MongoDB, Cassandra, DynamoDB, Redis</em></p>
+                            <h5 style="color: #ff6f00; font-size: 1.2rem;">🟠 Non-Relational Databases (NoSQL)</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;"><em>MongoDB, CouchDB, Cassandra, DynamoDB, Neo4j, HBase</em></p>
+                            <p style="margin-top: 0.5rem;">NoSQL databases ko <strong>4 major categories</strong> mein divide kiya jata hai. Ye databases <strong>JOIN operations generally support nahi karte</strong>.</p>
                             <ul style="margin: 1rem 0 0 1.5rem;">
-                                <li>Super low latency chahiye</li>
-                                <li>Unstructured/semi-structured data</li>
-                                <li>Massive data (petabytes)</li>
-                                <li>JOINs ki zaroorat nahi</li>
+                                <li>Super low latency requirements ke liye best</li>
+                                <li>Unstructured ya semi-structured data store karna ho</li>
+                                <li>Massive amounts of data (petabytes) handle karna ho</li>
+                                <li>JOINs ki zaroorat nahi hoti - denormalized data</li>
+                                <li>Schema flexibility chahiye (data structure change ho sakti hai)</li>
                             </ul>
                             <div style="background: var(--bg-code); padding: 0.75rem; border-radius: 8px; margin-top: 1rem;">
-                                <strong style="color: #ff6f00;">Best for:</strong> Social media, IoT, Real-time analytics
+                                <strong style="color: #ff6f00;">Best for:</strong> Social media, IoT, Real-time analytics, Caching, Session management
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NoSQL 4 Types -->
+                    <h4 style="margin: 1.5rem 0 1rem; color: #ff6f00;">📦 NoSQL Ke 4 Major Types</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <!-- Key-Value Stores -->
+                        <div style="background: linear-gradient(135deg, #2d3748, #1a202c); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #00ff88;">
+                            <h5 style="color: #00ff88; font-size: 1rem;">🔑 Key-Value Stores</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Data ko simple <strong>key-value pairs</strong> mein store karta hai. Fastest lookups!</p>
+                            <div style="background: var(--bg-code); padding: 0.5rem; border-radius: 6px; margin-top: 0.5rem; font-family: 'Fira Code', monospace; font-size: 0.8rem;">
+                                <span style="color: #ffd93d;">key:</span> "user:123" → <span style="color: #00ff88;">value:</span> "{name, age...}"
+                            </div>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">Examples: <strong>Redis, DynamoDB, Memcached</strong></p>
+                        </div>
+
+                        <!-- Graph Stores -->
+                        <div style="background: linear-gradient(135deg, #2d3748, #1a202c); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #a855f7;">
+                            <h5 style="color: #a855f7; font-size: 1rem;">🔗 Graph Stores</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Data ko <strong>nodes aur edges (relationships)</strong> mein store karta hai. Best for relationship-heavy data!</p>
+                            <div style="background: var(--bg-code); padding: 0.5rem; border-radius: 6px; margin-top: 0.5rem; font-family: 'Fira Code', monospace; font-size: 0.8rem;">
+                                <span style="color: #a855f7;">(User A)</span> --follows--> <span style="color: #a855f7;">(User B)</span>
+                            </div>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">Examples: <strong>Neo4j, Amazon Neptune</strong></p>
+                        </div>
+
+                        <!-- Column Stores -->
+                        <div style="background: linear-gradient(135deg, #2d3748, #1a202c); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #00bcd4;">
+                            <h5 style="color: #00bcd4; font-size: 1rem;">📊 Column Stores</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Data ko <strong>columns mein group</strong> karke store karta hai instead of rows. Best for analytics!</p>
+                            <div style="background: var(--bg-code); padding: 0.5rem; border-radius: 6px; margin-top: 0.5rem; font-family: 'Fira Code', monospace; font-size: 0.8rem;">
+                                <span style="color: #00bcd4;">column_family:</span> {row_key → {col1, col2...}}
+                            </div>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">Examples: <strong>Cassandra, HBase</strong></p>
+                        </div>
+
+                        <!-- Document Stores -->
+                        <div style="background: linear-gradient(135deg, #2d3748, #1a202c); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #ff6f00;">
+                            <h5 style="color: #ff6f00; font-size: 1rem;">📄 Document Stores</h5>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Data ko <strong>JSON/BSON documents</strong> mein store karta hai. Flexible schema!</p>
+                            <div style="background: var(--bg-code); padding: 0.5rem; border-radius: 6px; margin-top: 0.5rem; font-family: 'Fira Code', monospace; font-size: 0.8rem;">
+                                <span style="color: #ff6f00;">{</span>"_id": 1, "name": "Kundan", "skills": [...]<span style="color: #ff6f00;">}</span>
+                            </div>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">Examples: <strong>MongoDB, CouchDB</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- When to use NoSQL - Book's 4 conditions -->
+                    <h4 style="margin: 1.5rem 0 1rem; color: #f5576c;">⚠️ NoSQL Kab Use Karna Chahiye? (Book Ki 4 Conditions)</h4>
+                    
+                    <div style="background: linear-gradient(135deg, #f5576c11, #f5576c22); border: 2px solid #f5576c; border-radius: 12px; padding: 1.5rem;">
+                        <p>Book ke according, <strong>NoSQL tab right choice ho sakta hai</strong> jab tumhari application ko in mein se koi bhi condition match kare:</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <div style="background: rgba(245, 87, 108, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #f5576c;">
+                                <strong style="color: #f5576c;">①</strong> Tumhari application ko <strong>super-low latency</strong> chahiye, matlab response time extremely fast hona chahiye.
+                            </div>
+                            <div style="background: rgba(245, 87, 108, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #f5576c;">
+                                <strong style="color: #f5576c;">②</strong> Tumhara data <strong>unstructured hai</strong>, ya tumhare paas koi relational data nahi hai jo tables mein fit ho sake.
+                            </div>
+                            <div style="background: rgba(245, 87, 108, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #f5576c;">
+                                <strong style="color: #f5576c;">③</strong> Tumhe sirf data ko <strong>serialize aur deserialize</strong> karna hai (JSON, XML, YAML, etc.), complex queries nahi chahiye.
+                            </div>
+                            <div style="background: rgba(245, 87, 108, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid #f5576c;">
+                                <strong style="color: #f5576c;">④</strong> Tumhe <strong>massive amount of data</strong> store karna hai jo traditional RDBMS ki capacity se zyada hai.
                             </div>
                         </div>
                     </div>
                     
                     <div style="background: linear-gradient(135deg, #00ff8822, #00ff8811); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
-                        <strong style="color: #00ff88;">💡 Pro Tip:</strong> Most applications start with SQL because structured data aur ACID important hote hain. NoSQL tab use karo jab specific requirements ho jaise high write throughput, flexible schema, ya global distribution.
+                        <strong style="color: #00ff88;">💡 Pro Tip:</strong> Most applications ke liye <strong>relational databases (SQL) best choice hain</strong> kyunki structured data aur ACID transactions important hote hain. NoSQL tab use karo jab tumhari specific requirements match karein - jaise high write throughput, flexible schema, ya massive scale. <strong>Galat database choose karna ek costly mistake hai!</strong>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #a855f722, #a855f711); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong style="color: #a855f7;">🎯 Interview Mein Aise Bolo:</strong>
+                        <p style="margin-top: 0.5rem; font-style: italic;">"Web tier aur data tier ko separate karna is design ka first step hai. Isse dono tiers independently scale ho sakte hain. Database selection context-dependent hai - relational databases tabse best hain jab data structured ho aur ACID transactions zaroori hain, jabki NoSQL tab prefer karte hain jab super-low latency, massive scale, ya flexible schema ki requirement ho."</p>
                     </div>
                 </div>
             </div>
@@ -8142,9 +8245,9 @@ graph TB
         Slave[(🗄️ Slave DB)]
     end
     
-    U1 & U2 --> DNS
+    U1 & U2 -.->|"resolve IP"| DNS
     U1 & U2 -->|"Static assets"| CDN
-    DNS --> LB
+    U1 & U2 --> LB
     LB --> S1 & S2
     S1 & S2 --> Cache
     S1 & S2 --> Master
@@ -9392,11 +9495,11 @@ graph TB
     DNS(("🌐 DNS"))
     CDN["☁️ CDN"]
     
-    User --- DNS
+    User -.->|"resolve IP"| DNS
     User --- CDN
     
     LB["⚖️ Load balancer"]
-    DNS --> LB
+    User --> LB
     
     subgraph DC1["DC1"]
         subgraph WebServers["Web servers"]
@@ -9911,11 +10014,11 @@ graph TB
     DNS(("🌐 DNS"))
     CDN["☁️ CDN"]
     
-    User --- DNS
+    User -.->|"resolve IP"| DNS
     User --- CDN
     
     LB["⚖️ Load balancer"]
-    DNS --> LB
+    User --> LB
     
     subgraph DC1["DC1"]
         subgraph WebServers["Web servers"]
@@ -11020,6 +11123,946 @@ graph TB
                 </div>
             </div>
         </section>
+
+        <!-- ==================== SD-BOOK: CHAPTER 3 - SYSTEM DESIGN INTERVIEW FRAMEWORK ==================== -->
+        
+        <section class="section" id="sd-book-ch3" data-topic-id="sd-book-ch3">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <h2 class="section-title">Chapter 3: System Design Interview Framework</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch3', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <!-- Chapter 3 Overview -->
+            <div class="topic-card">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, #00bcd4, #ff6f00);">
+                    <span class="topic-card-icon">🎯</span>
+                    <span class="topic-card-title">Chapter 3 Ka Overview - 4-Step Interview Framework!</span>
+                </div>
+                <div class="topic-card-body" style="padding: 1.5rem; line-height: 2;">
+                    
+                    <div style="background: linear-gradient(135deg, #00bcd411, #00bcd422); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #00bcd4;">📖 Chapter 3 Ka Core Message:</strong>
+                        <p style="margin-top: 0.5rem;">System design interview mein tumhe ek <strong>structured 4-step process</strong> follow karna chahiye taaki tum apna design clearly present kar sako aur interviewer ke saath effectively collaborate kar sako. Ye chapter tumhe sikhata hai ki kaise interview ko systematically approach karna hai, kaise clarification leni hai, kaise high-level design propose karna hai, kaise deep dive karna hai, aur kaise strong finish karna hai.</p>
+                    </div>
+
+                    <h4 style="color: #ff6f00; margin-bottom: 1rem;">🔷 System Design Interview Ka 4-Step Framework</h4>
+                    
+                    <div class="mermaid" style="background: #0d1117; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                    graph TD
+                        subgraph "⏱️ 45-Minute Interview Flow"
+                            A["🔷 Step 1: Problem Samjho<br/>Scope Define Karo<br/>(3-10 min)"] --> B["🔷 Step 2: High-Level Design<br/>Blueprint + Buy-in Lo<br/>(10-15 min)"]
+                            B --> C["🔷 Step 3: Deep Dive<br/>Critical Components Detail<br/>(10-25 min)"]
+                            C --> D["🔷 Step 4: Wrap Up<br/>Summary + Improvements<br/>(3-5 min)"]
+                        end
+                        
+                        style A fill:#2d3748,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                        style B fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                        style C fill:#2d3748,stroke:#a855f7,stroke-width:2px,color:#e4e4e7
+                        style D fill:#2d3748,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #ff6f0011, #ff6f0022); border-left: 4px solid #ff6f00; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #ff6f00;">⚠️ "Don't Be Like Jimmy" Warning:</strong>
+                        <p style="margin-top: 0.5rem;">Book ka famous example "Don't be like Jimmy" exactly yahi bolta hai. Jimmy jaldi se answer de deta hai bina problem samjhe. System design interview mein aisa karna <strong>major red flag</strong> hota hai, kyunki interviewer ko lagta hai ki tum requirements ko samjhe bina design kar rahe ho. <strong>Interview intentionally ambiguous hota hai</strong> - question jaan-bujhkar vague diya jata hai taaki tumhara <strong>clarification skill</strong> test ho sake!</p>
+                    </div>
+
+                    <h4 style="color: #a855f7; margin-top: 1.5rem; margin-bottom: 1rem;">📊 Time Allocation Strategy (45-min Interview)</h4>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #00bcd4, #ff6f00);">
+                                <th style="padding: 12px; text-align: left; color: white; border-radius: 8px 0 0 0;">Step</th>
+                                <th style="padding: 12px; text-align: left; color: white;">Activity</th>
+                                <th style="padding: 12px; text-align: center; color: white;">Time</th>
+                                <th style="padding: 12px; text-align: left; color: white; border-radius: 0 8px 0 0;">Goal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: rgba(0, 188, 212, 0.1);">
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);"><strong>Step 1</strong></td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">Problem + Scope Define</td>
+                                <td style="padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color);"><strong>3-10 min</strong></td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">Clear requirements, scale, constraints</td>
+                            </tr>
+                            <tr style="background: rgba(255, 111, 0, 0.1);">
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);"><strong>Step 2</strong></td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">High-Level Design + Buy-in</td>
+                                <td style="padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color);"><strong>10-15 min</strong></td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">Blueprint diagram, interviewer alignment</td>
+                            </tr>
+                            <tr style="background: rgba(168, 85, 247, 0.1);">
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);"><strong>Step 3</strong></td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">Deep Dive</td>
+                                <td style="padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color);"><strong>10-25 min</strong></td>
+                                <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">Critical components detail, tradeoffs</td>
+                            </tr>
+                            <tr style="background: rgba(0, 255, 136, 0.1);">
+                                <td style="padding: 12px;"><strong>Step 4</strong></td>
+                                <td style="padding: 12px;">Wrap Up</td>
+                                <td style="padding: 12px; text-align: center;"><strong>3-5 min</strong></td>
+                                <td style="padding: 12px;">Summary, bottlenecks, future improvements</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">💡 Key Mindset Reminder:</strong>
+                        <p style="margin-top: 0.5rem;">System design interview ka koi <strong>"one best answer" nahi hota</strong>. Ye interview tumhari <strong>thinking process, communication skills, collaboration ability, aur technical depth</strong> test karta hai. Interviewer ko teammate ki tarah treat karo aur continuously think aloud karo!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 1: Problem Samjho aur Scope Define Karo -->
+        <section class="section" id="sd-book-ch3-step1" data-topic-id="sd-book-ch3-step1">
+            <div class="section-header">
+                <span class="section-icon">🔷</span>
+                <h2 class="section-title">Step 1: Problem Samjho aur Design Scope Establish Karo</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch3-step1', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, #00bcd4, #0097a7);">
+                    <span class="topic-card-icon">🔷</span>
+                    <span class="topic-card-title">Step 1: Problem Clearly Samjho aur Scope Define Karo (3-10 minutes)</span>
+                </div>
+                <div class="topic-card-body" style="padding: 1.5rem; line-height: 2;">
+
+                    <div style="background: linear-gradient(135deg, #00bcd411, #00bcd422); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #00bcd4;">🎯 Step 1 Ka Core Purpose:</strong>
+                        <p style="margin-top: 0.5rem;">System design interview mein sabse pehla aur sabse important step ye hota hai ki tum <strong>problem ko clearly samjho</strong> aur <strong>design scope properly define karo</strong>. Ye interview intentionally ambiguous hota hai, matlab question jaan-bujhkar vague diya jata hai jaise: "Design a news feed" ya "Design Twitter". Iska main purpose tumhara <strong>clarification skill</strong> test karna hota hai.</p>
+                    </div>
+
+                    <h4 style="color: #00bcd4; margin-bottom: 1rem;">✅ Step 1 Ka Golden Rule</h4>
+                    
+                    <div style="background: #1a1a2e; border: 2px solid #00bcd4; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <p style="font-size: 1.1rem; text-align: center; color: #00bcd4; font-weight: bold;">
+                            "Tumhe turant solution par jump nahi karna hai. Tumhe pehle questions puchne hain, assumptions confirm karne hain, aur boundaries clearly set karni hain."
+                        </p>
+                    </div>
+
+                    <h4 style="color: #ff6f00; margin-top: 1.5rem; margin-bottom: 1rem;">📋 Step 1 Mein Tum Kya-Kya Clarify Karoge?</h4>
+
+                    <!-- 1) Functional Requirements -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00ff88;">
+                        <h5 style="color: #00ff88; margin-bottom: 1rem;">1️⃣ Functional Requirements Clear Karo</h5>
+                        <p>Sabse pehle tumhe ye samajhna hota hai ki <strong>system actually kya karega</strong>. Tum interviewer se clearly pucho ki product mein kaunse features <strong>must-have</strong> hain aur kaunse <strong>optional/nice-to-have</strong> hain.</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">Example Questions (News Feed Design):</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li>Kya user post create kar sakta hai?</li>
+                                <li>Kya user apne friends ke posts dekh sakta hai?</li>
+                                <li>Kya feed chronological hoga ya ranked/personalized?</li>
+                                <li>Kya media supported hai (images/videos/text)?</li>
+                                <li>Kya comments/likes/shares scope mein hain ya nahi?</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: rgba(0, 255, 136, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00ff88;">💬 Interview Mein Aise Bolo:</strong>
+                            <p style="font-style: italic; margin-top: 0.5rem;">"Main pehle core features lock karna chahta hoon taaki hum ek realistic scope mein design complete kar paayein. Kya aap bata sakte hain ki primary use cases kya hain?"</p>
+                        </div>
+                    </div>
+
+                    <!-- 2) Non-Functional Requirements -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #a855f7;">
+                        <h5 style="color: #a855f7; margin-bottom: 1rem;">2️⃣ Non-Functional Requirements Clear Karo</h5>
+                        <p>System design sirf features ka design nahi hota, balki <strong>quality attributes</strong> ka design hota hai. Ye attributes decide karte hain ki system kitna reliable, fast, aur scalable hoga.</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">Interviewer Se Ye Pucho:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>Latency:</strong> Expected latency kya honi chahiye? (milliseconds mein)</li>
+                                <li><strong>Availability:</strong> Availability target kya hai? (99.9%? 99.99%?)</li>
+                                <li><strong>Consistency:</strong> Strong consistency chahiye ya eventual consistency chalegi?</li>
+                                <li><strong>Security:</strong> Security aur privacy constraints kya hain?</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: rgba(168, 85, 247, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #a855f7;">💬 Agar Interviewer Strict Answer Na De:</strong>
+                            <p style="font-style: italic; margin-top: 0.5rem;">"Main assume kar raha hoon ki low latency retrieval important hai, aur eventual consistency acceptable hogi news feed ke liye. Kya ye assumption sahi hai?"</p>
+                        </div>
+                    </div>
+
+                    <!-- 3) Scale aur Traffic Numbers -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #ff6f00;">
+                        <h5 style="color: #ff6f00; margin-bottom: 1rem;">3️⃣ Scale aur Traffic Numbers Pucho</h5>
+                        <p>Agar tum scale nahi puchoge, to tumhara design generic aur shallow ho jayega. <strong>Interviewer exactly yahi dekhna chahta hai</strong> ki tum design ko numbers se justify kar sakte ho ya nahi.</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">Essential Scale Questions:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>DAU:</strong> Daily Active Users kitne hain? (10M? 100M?)</li>
+                                <li><strong>Peak Traffic:</strong> Peak traffic kaisa hota hai?</li>
+                                <li><strong>Read/Write Ratio:</strong> Read-to-write ratio kya hai?</li>
+                                <li><strong>Social Graph:</strong> Per user average friends/followers kitne hain?</li>
+                                <li><strong>Growth:</strong> System growth expectation kya hai 3/6/12 months mein?</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: rgba(255, 111, 0, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #ff6f00;">📊 Example Numbers (News Feed):</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li>DAU = 10 million users</li>
+                                <li>Friends per user = 5000 (worst case celebrity)</li>
+                                <li>Read heavy system (10:1 read to write ratio)</li>
+                            </ul>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Isse tum architecture decisions jaise <strong>caching, fanout strategy, sharding, queueing</strong> ko properly justify kar paoge!</p>
+                        </div>
+                    </div>
+
+                    <!-- 4) Constraints aur Assumptions -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00d4ff;">
+                        <h5 style="color: #00d4ff; margin-bottom: 1rem;">4️⃣ Constraints aur Assumptions Document Karo</h5>
+                        <p>System design interview mein tumhe apne <strong>assumptions whiteboard par likhne chahiye</strong>. Ye tumhe later mein help karta hai aur interviewer ko confidence deta hai ki tum disciplined approach follow kar rahe ho.</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">Example Documented Assumptions:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li>"Feed will be reverse chronological order mein display hoga."</li>
+                                <li>"Users mostly feed read karenge, writes comparatively kam honge."</li>
+                                <li>"System images aur videos dono ko support karega."</li>
+                                <li>"Mobile aur web clients dono ko support karna hai."</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">✅ Step 1 End Karte Time Aise Bolo:</strong>
+                        <p style="margin-top: 0.5rem; font-style: italic;">"Great, ab humare paas <strong>scope + scale + constraints</strong> clearly defined hain. Ab main high-level design propose karta hoon aur aapka buy-in le leta hoon before diving deeper."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: High-Level Design -->
+        <section class="section" id="sd-book-ch3-step2" data-topic-id="sd-book-ch3-step2">
+            <div class="section-header">
+                <span class="section-icon">🔷</span>
+                <h2 class="section-title">Step 2: High-Level Design Propose Karo aur Buy-in Lo</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch3-step2', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, #ff6f00, #e65100);">
+                    <span class="topic-card-icon">🔷</span>
+                    <span class="topic-card-title">Step 2: High-Level Blueprint Draw Karo aur Interviewer Alignment Lo (10-15 minutes)</span>
+                </div>
+                <div class="topic-card-body" style="padding: 1.5rem; line-height: 2;">
+
+                    <div style="background: linear-gradient(135deg, #ff6f0011, #ff6f0022); border-left: 4px solid #ff6f00; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #ff6f00;">🎯 Step 2 Ka Core Purpose:</strong>
+                        <p style="margin-top: 0.5rem;">Is step mein tumhe ek <strong>big picture blueprint</strong> draw karna hota hai. Tumhe immediately deep-level details mein nahi ghusna hai abhi. High-level design ka goal hota hai: <strong>components identify karna, data flow establish karna, aur interviewer se alignment lena</strong>.</p>
+                    </div>
+
+                    <h4 style="color: #ff6f00; margin-bottom: 1rem;">✅ Step 2 Ka Mindset</h4>
+                    
+                    <div style="background: #1a1a2e; border: 2px solid #ff6f00; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <p style="font-size: 1.1rem; text-align: center; color: #ff6f00; font-weight: bold;">
+                            "Main ek initial architecture propose karta hoon. Agar aap agree karein, to phir hum specific components mein deep dive karenge."
+                        </p>
+                    </div>
+
+                    <h4 style="color: #00bcd4; margin-top: 1.5rem; margin-bottom: 1rem;">📐 High-Level Design Mein Generally Kya Draw Karoge?</h4>
+
+                    <p style="margin-bottom: 1rem;">Book ke according, News Feed system ke <strong>2 main flows</strong> hote hain:</p>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+                        <li><strong>Feed Publishing:</strong> Jab user post create karta hai, data cache/database mein store hota hai aur friends' news feed mein populate hota hai.</li>
+                        <li><strong>Newsfeed Building:</strong> News feed friends' posts ko reverse chronological order mein aggregate karke build hota hai.</li>
+                    </ul>
+
+                    <h4 style="color: #a855f7; margin-top: 1.5rem; margin-bottom: 1rem;">📰 Figure 3-1: Feed Publishing Flow (High-Level)</h4>
+
+                    <!-- Figure 3-1: Feed Publishing High-Level -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00ff88;">
+                        <h5 style="color: #00ff88; margin-bottom: 1rem;">1️⃣ Feed Publishing Flow (Write Path) - Figure 3-1</h5>
+                        <p>Jab user post create karta hai (v1/me/feed? content=Hello& auth_token={auth_token}):</p>
+                        
+                        <div class="mermaid" style="background: #0d1117; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        graph TB
+                            subgraph "👤 User"
+                                WB["💻 Web browser"]
+                                MA["📱 Mobile app"]
+                            end
+                            
+                            DNS["🌍 DNS"]
+                            
+                            LB["⚖️ Load balancer"]
+                            
+                            WS["🖥️ Web servers"]
+                            
+                            PS["📝 Post Service"]
+                            FOS["📤 Fanout Service"]
+                            NS["🔔 Notification<br/>Service"]
+                            
+                            PC["🗂️ Post Cache"]
+                            NFC["🗂️ News Feed<br/>Cache"]
+                            
+                            PDB[("📊 Post DB")]
+                            
+                            WB & MA -.->|"resolve IP"| DNS
+                            WB & MA -->|"v1/me/feed?<br/>content=Hello&<br/>auth_token={auth_token}"| LB
+                            LB --> WS
+                            WS --> PS & FOS & NS
+                            PS --> PC --> PDB
+                            FOS --> NFC
+                            
+                            style DNS fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style LB fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style WS fill:#2d5a3d,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                            style PS fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                            style FOS fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                            style NS fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                            style PC fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style NFC fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style PDB fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                        </div>
+                    </div>
+
+                    <h4 style="color: #00bcd4; margin-top: 1.5rem; margin-bottom: 1rem;">📰 Figure 3-2: News Feed Retrieval Flow (High-Level)</h4>
+
+                    <!-- Figure 3-2: News Feed Retrieval High-Level -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00bcd4;">
+                        <h5 style="color: #00bcd4; margin-bottom: 1rem;">2️⃣ News Feed Retrieval Flow (Read Path) - Figure 3-2</h5>
+                        <p>Jab user apna feed open karta hai (v1/me/feed):</p>
+                        
+                        <div class="mermaid" style="background: #0d1117; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        graph TB
+                            subgraph "👤 User"
+                                WB2["💻 Web browser"]
+                                MA2["📱 Mobile app"]
+                            end
+                            
+                            DNS2["🌍 DNS"]
+                            
+                            LB2["⚖️ Load balancer"]
+                            
+                            WS2["🖥️ Web servers"]
+                            
+                            NFS["📰 News Feed Service"]
+                            
+                            NFC2["🗂️ News Feed<br/>Cache"]
+                            
+                            WB2 & MA2 -.->|"resolve IP"| DNS2
+                            WB2 & MA2 -->|"v1/me/feed"| LB2
+                            LB2 --> WS2
+                            WS2 --> NFS
+                            NFS --> NFC2
+                            
+                            style DNS2 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style LB2 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style WS2 fill:#2d5a3d,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                            style NFS fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                            style NFC2 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                        </div>
+
+                        <div style="background: rgba(0, 188, 212, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">🎯 High-Level Design Ka Purpose:</strong>
+                            <p style="margin-top: 0.5rem;">Ye simple diagrams interviewer ko tumhara <strong>basic understanding</strong> dikhate hain. Iske baad tum interviewer ka buy-in leke <strong>Step 3 mein detailed deep dive</strong> karoge!</p>
+                        </div>
+                    </div>
+
+                    <h4 style="color: #ff6f00; margin-top: 1.5rem; margin-bottom: 1rem;">🧮 Back-of-the-Envelope Calculation (Step 2 Mein Mention Karna Strong Signal!)</h4>
+
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <p>Tum ek rough calculation kar sakte ho is stage par:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #ff6f00;">Quick Estimates:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>10M DAU:</strong> Peak concurrency roughly 10% = ~1M concurrent users</li>
+                                <li><strong>Read Heavy:</strong> 10:1 read to write ratio expected</li>
+                                <li><strong>Cache Sizing:</strong> Feed cache per user ~500 post IDs × 8 bytes × 10M users = ~40 GB</li>
+                                <li><strong>Storage Growth:</strong> Daily posts × avg size × retention period</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: rgba(255, 111, 0, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #ff6f00;">💡 Important Note:</strong>
+                            <p style="margin-top: 0.5rem;">Tumhe super exact precise math nahi chahiye yahan. Interviewer ko bas <strong>signal chahiye ki tum capacity planning samajhte ho</strong> aur numbers se design decisions justify kar sakte ho. Order of magnitude correctness sufficient hai!</p>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">✅ Step 2 End Karte Time Aise Bolo:</strong>
+                        <p style="margin-top: 0.5rem; font-style: italic;">"High-level design ready hai aur main aapko main components aur data flows explain kar chuka hoon. Ab main <strong>deep dive</strong> mein jaake sabse critical components ko detail mein design karta hoon. Kya aap chahenge ki main kisi specific component se start karoon?"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Deep Dive -->
+        <section class="section" id="sd-book-ch3-step3" data-topic-id="sd-book-ch3-step3">
+            <div class="section-header">
+                <span class="section-icon">🔷</span>
+                <h2 class="section-title">Step 3: Design Deep Dive - Critical Components Detail Mein</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch3-step3', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                    <span class="topic-card-icon">🔷</span>
+                    <span class="topic-card-title">Step 3: Important Parts Ko Detail Mein Design Karo (10-25 minutes)</span>
+                </div>
+                <div class="topic-card-body" style="padding: 1.5rem; line-height: 2;">
+
+                    <div style="background: linear-gradient(135deg, #a855f711, #a855f722); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #a855f7;">🎯 Step 3 Ka Core Purpose:</strong>
+                        <p style="margin-top: 0.5rem;">Ab tum detail mein jaoge, lekin yahan bhi tumhe <strong>selective rehna hai</strong>. Interviewer har system ka ek-do areas choose karke tumhe deep dive karne ko bolega. Tumhe har cheez equally cover karne ki zaroorat nahi hai - focus on what matters most!</p>
+                    </div>
+
+                    <h4 style="color: #a855f7; margin-bottom: 1rem;">✅ Step 3 Ka Goal</h4>
+                    
+                    <div style="background: #1a1a2e; border: 2px solid #a855f7; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <ul style="margin-left: 1.5rem; line-height: 2.2;">
+                            <li><strong>Bottlenecks identify karna</strong> aur unko address karna</li>
+                            <li><strong>Core data models define karna</strong> jo system ko power karenge</li>
+                            <li><strong>Scaling strategy explain karna</strong> jo growth ko handle karega</li>
+                            <li><strong>Tradeoffs clearly justify karna</strong> with reasoning</li>
+                        </ul>
+                    </div>
+
+                    <!-- Figure 3-3: Detailed Feed Publishing (Fanout) -->
+                    <h4 style="color: #00ff88; margin-top: 1.5rem; margin-bottom: 1rem;">📊 Figure 3-3: Detailed Fanout Service Design (Feed Publishing)</h4>
+                    
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00ff88;">
+                        <p>Ye detailed architecture Figure 3-3 se hai - Fanout service ka complete flow with numbered steps:</p>
+                        
+                        <div class="mermaid" style="background: #0d1117; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        graph TB
+                            subgraph "👤 User"
+                                WB3["💻 Web browser"]
+                                MA3["📱 Mobile app"]
+                            end
+                            
+                            DNS3["🌍 DNS"]
+                            
+                            LB3["⚖️ Load balancer"]
+                            
+                            subgraph WS3["🖥️ Web servers"]
+                                AUTH["🔐 Authentication<br/>Rate Limiting"]
+                            end
+                            
+                            PS3["📝 Post Service"]
+                            NS3["🔔 Notification<br/>Service"]
+                            
+                            FOS3["📤 Fanout Service"]
+                            
+                            GDB3[("🔗 Graph DB")]
+                            
+                            UC3["👤 User Cache"]
+                            UDB3[("👥 User DB")]
+                            
+                            PC3["🗂️ Post Cache"]
+                            PDB3[("📊 Post DB")]
+                            
+                            MQ3["📬 Message Queue"]
+                            
+                            FW3["⚙️ Fanout Workers"]
+                            
+                            NFC3["🗂️ News Feed<br/>Cache"]
+                            
+                            WB3 & MA3 -.->|"resolve IP"| DNS3
+                            WB3 & MA3 -->|"v1/me/feed?<br/>content=Hello&<br/>auth_token={auth_token}"| LB3
+                            LB3 --> WS3
+                            WS3 --> PS3
+                            WS3 --> NS3
+                            PS3 --> PC3 --> PDB3
+                            PS3 --> FOS3
+                            FOS3 -->|"① get friend ids"| GDB3
+                            FOS3 -->|"② get friends data"| UC3 --> UDB3
+                            FOS3 -->|"③"| MQ3
+                            MQ3 -->|"④"| FW3
+                            FW3 -->|"⑤"| NFC3
+                            
+                            style DNS3 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style LB3 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style WS3 fill:#2d5a3d,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                            style FOS3 fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                            style MQ3 fill:#2d3748,stroke:#a855f7,stroke-width:2px,color:#e4e4e7
+                            style FW3 fill:#2d5a3d,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                            style GDB3 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                        </div>
+
+                        <div style="background: rgba(0, 255, 136, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00ff88;">📋 Numbered Steps Explanation:</strong>
+                            <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li><strong>① Get friend IDs:</strong> Fanout service Graph DB se user ke friends/followers list fetch karta hai</li>
+                                <li><strong>② Get friends data:</strong> User Cache se friends ka metadata (username, profile pic etc.) retrieve karta hai</li>
+                                <li><strong>③ Queue tasks:</strong> Fanout tasks Message Queue mein push karta hai (async processing ke liye)</li>
+                                <li><strong>④ Process fanout:</strong> Fanout Workers queue se consume karke process karte hain</li>
+                                <li><strong>⑤ Update feed cache:</strong> Workers har friend ke News Feed Cache mein new post_id push kar dete hain</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Figure 3-4: Detailed News Feed Retrieval -->
+                    <h4 style="color: #00bcd4; margin-top: 1.5rem; margin-bottom: 1rem;">📊 Figure 3-4: Detailed News Feed Retrieval Design</h4>
+                    
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00bcd4;">
+                        <p>Ye detailed architecture Figure 3-4 se hai - News Feed retrieval ka complete flow with numbered steps:</p>
+                        
+                        <div class="mermaid" style="background: #0d1117; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                        graph TB
+                            subgraph "👤 User"
+                                WB4["💻 Web browser"]
+                                MA4["📱 Mobile app"]
+                            end
+                            
+                            DNS4["🌍 DNS"]
+                            CDN4["☁️ CDN"]
+                            
+                            LB4["⚖️ Load balancer"]
+                            
+                            subgraph WS4["🖥️ Web servers"]
+                                AUTH4["🔐 Authentication<br/>Rate Limiting"]
+                            end
+                            
+                            NFS4["📰 News Feed Service"]
+                            
+                            NFC4["🗂️ News Feed<br/>Cache"]
+                            
+                            UC4["👤 User Cache"]
+                            UDB4[("👥 User DB")]
+                            
+                            PC4["🗂️ Post Cache"]
+                            PDB4[("📊 Post DB")]
+                            
+                            WB4 & MA4 -.->|"resolve IP"| DNS4
+                            WB4 & MA4 --> CDN4
+                            WB4 & MA4 -->|"①"| LB4
+                            LB4 -->|"②"| WS4
+                            WS4 -->|"③"| NFS4
+                            NFS4 -->|"④"| NFC4
+                            NFS4 -->|"⑤"| UC4 --> UDB4
+                            NFS4 --> PC4 --> PDB4
+                            
+                            style DNS4 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style CDN4 fill:#1e5a3a,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                            style LB4 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                            style WS4 fill:#2d5a3d,stroke:#00ff88,stroke-width:2px,color:#e4e4e7
+                            style NFS4 fill:#2d3748,stroke:#ff6f00,stroke-width:2px,color:#e4e4e7
+                            style NFC4 fill:#1e3a5f,stroke:#00bcd4,stroke-width:2px,color:#e4e4e7
+                        </div>
+
+                        <div style="background: rgba(0, 188, 212, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">📋 Numbered Steps Explanation:</strong>
+                            <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li><strong>① Load Balancer:</strong> Request DNS ke through Load Balancer ko jaati hai</li>
+                                <li><strong>② Web Servers:</strong> Authentication + Rate Limiting apply hota hai</li>
+                                <li><strong>③ News Feed Service:</strong> Feed retrieval logic execute hota hai</li>
+                                <li><strong>④ News Feed Cache:</strong> Pre-computed post IDs list retrieve hoti hai</li>
+                                <li><strong>⑤ User/Post Data:</strong> User metadata + Post content caches/DBs se fetch hota hai</li>
+                            </ol>
+                            <p style="margin-top: 0.5rem;"><strong>Note:</strong> Static media (images/videos) directly CDN se serve hota hai for low latency!</p>
+                        </div>
+                    </div>
+
+                    <h4 style="color: #00bcd4; margin-top: 1.5rem; margin-bottom: 1rem;">📊 Deep Dive Topics - Usually Kis Cheez Par Hota Hai?</h4>
+
+                    <!-- A) Data Model / Storage Design -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00ff88;">
+                        <h5 style="color: #00ff88; margin-bottom: 1rem;">A) Data Model / Storage Design</h5>
+                        <p>Interviewer aksar tumse data model define karne ko bolega. Tum clearly tables/collections define karo:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-family: 'Fira Code', monospace; font-size: 0.9rem;">
+                            <strong style="color: #00bcd4;">📊 Core Tables:</strong>
+<pre style="margin-top: 0.5rem; color: #e4e4e7;">
+<span style="color: #00ff88;">// Post Table</span>
+{
+  post_id: UUID (PK),
+  user_id: UUID (FK),
+  content: TEXT,
+  media_urls: ARRAY[VARCHAR],
+  created_at: TIMESTAMP,
+  updated_at: TIMESTAMP
+}
+
+<span style="color: #00ff88;">// User Table</span>
+{
+  user_id: UUID (PK),
+  username: VARCHAR,
+  profile_metadata: JSONB,
+  created_at: TIMESTAMP
+}
+
+<span style="color: #00ff88;">// Graph Store (Friendship/Follower edges)</span>
+{
+  user_id: UUID,
+  friend_id: UUID,
+  relationship_type: ENUM('friend', 'follower'),
+  created_at: TIMESTAMP
+  PRIMARY KEY (user_id, friend_id)
+}
+</pre>
+                        </div>
+                    </div>
+
+                    <!-- B) Feed Generation Strategy -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #ff6f00;">
+                        <h5 style="color: #ff6f00; margin-bottom: 1rem;">B) Feed Generation Strategy - Critical Tradeoff!</h5>
+                        <p>Yahan tum <strong>2 approaches compare karte ho</strong> aur best solution propose karte ho:</p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                            <div style="background: rgba(0, 255, 136, 0.1); border-radius: 8px; padding: 1rem;">
+                                <strong style="color: #00ff88;">1️⃣ Fanout-on-Write (Push Model)</strong>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                                    <li>Write time par followers ke feed mein push kar do</li>
+                                    <li>✅ Reads super fast (pre-computed)</li>
+                                    <li>❌ Celebrity users ka fanout expensive</li>
+                                    <li>❌ High write amplification</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(255, 111, 0, 0.1); border-radius: 8px; padding: 1rem;">
+                                <strong style="color: #ff6f00;">2️⃣ Fanout-on-Read (Pull Model)</strong>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                                    <li>Read time par graph se posts fetch karke build karo</li>
+                                    <li>✅ Write cheap aur simple</li>
+                                    <li>❌ Reads slow (compute at read time)</li>
+                                    <li>❌ High read latency for users with many friends</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(168, 85, 247, 0.15); border: 2px solid #a855f7; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #a855f7;">🌟 Strong Answer: Hybrid Approach!</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>Normal users (< 10K followers):</strong> Push model - fanout to all followers</li>
+                                <li><strong>Celebrity users (> 10K followers):</strong> Pull model ya partial precompute</li>
+                                <li>At read time: Merge precomputed feed + pull celebrity posts on-demand</li>
+                            </ul>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #a855f7;">Is approach se tum both extremes ka best le sakte ho - normal cases fast hain, aur celebrities system ko overload nahi karte!</p>
+                        </div>
+                    </div>
+
+                    <!-- C) Cache Strategy -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00bcd4;">
+                        <h5 style="color: #00bcd4; margin-bottom: 1rem;">C) Cache Strategy - Multi-Layer Caching</h5>
+                        <p>Caching system design ka core hai. Tum multiple cache layers define karo:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: rgba(0, 188, 212, 0.2);">
+                                        <th style="padding: 8px; text-align: left;">Cache Name</th>
+                                        <th style="padding: 8px; text-align: left;">Key → Value</th>
+                                        <th style="padding: 8px; text-align: left;">Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid var(--border-color);">
+                                        <td style="padding: 8px;"><strong style="color: #00ff88;">NewsFeedCache</strong></td>
+                                        <td style="padding: 8px; font-family: 'Fira Code', monospace; font-size: 0.85rem;">user_id → list[post_ids]</td>
+                                        <td style="padding: 8px;">Recent post IDs for user's feed</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--border-color);">
+                                        <td style="padding: 8px;"><strong style="color: #ff6f00;">PostCache</strong></td>
+                                        <td style="padding: 8px; font-family: 'Fira Code', monospace; font-size: 0.85rem;">post_id → post_object</td>
+                                        <td style="padding: 8px;">Full post content + metadata</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px;"><strong style="color: #a855f7;">UserCache</strong></td>
+                                        <td style="padding: 8px; font-family: 'Fira Code', monospace; font-size: 0.85rem;">user_id → user_metadata</td>
+                                        <td style="padding: 8px;">User profile info for display</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="background: rgba(0, 188, 212, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">🔧 Cache Details Explain Karo:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>Eviction Policy:</strong> LRU (Least Recently Used) for feed cache</li>
+                                <li><strong>TTL:</strong> News feed cache = 24 hours, Post cache = 7 days</li>
+                                <li><strong>Cache Warm-up:</strong> Pre-populate popular users' caches on service startup</li>
+                                <li><strong>Cache Miss Handling:</strong> Fallback to DB, then async populate cache</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- D) Queue + Async Processing -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #ffd93d;">
+                        <h5 style="color: #ffd93d; margin-bottom: 1rem;">D) Queue + Async Processing</h5>
+                        <p>Fanout workers queue se consume karte hain. Ye architecture async processing ka core hai:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #ffd93d;">⚙️ Queue Processing Details:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>Retry Strategy:</strong> Exponential backoff with max 3 retries</li>
+                                <li><strong>Idempotency:</strong> Use unique message IDs to avoid duplicate pushes</li>
+                                <li><strong>Dead-Letter Queue (DLQ):</strong> Failed messages after all retries go to DLQ for manual review</li>
+                                <li><strong>Ordering:</strong> Per-user ordering guarantee for consistent feed</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- E) Consistency vs Availability -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #f5576c;">
+                        <h5 style="color: #f5576c; margin-bottom: 1rem;">E) Consistency vs Availability Tradeoff</h5>
+                        <p>CAP theorem ke context mein tumhara stance clearly explain karo:</p>
+                        
+                        <div style="background: rgba(245, 87, 108, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #f5576c;">💬 Interview Mein Aise Bolo:</strong>
+                            <p style="font-style: italic; margin-top: 0.5rem;">"News feed ke context mein, <strong>eventual consistency acceptable hai</strong>. Post immediately sabke feed mein na dikhne ka small delay (few seconds) acceptable hai, lekin system <strong>highly available hona chahiye</strong> - users ko kabhi bhi 'service unavailable' nahi dikhna chahiye."</p>
+                        </div>
+
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">📊 Consistency Levels by Use Case:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; font-size: 0.95rem;">
+                                <li><strong>Feed reads:</strong> Eventual consistency ✅</li>
+                                <li><strong>Post writes:</strong> Strong consistency for author's view</li>
+                                <li><strong>Like/Comment counts:</strong> Eventual consistency ✅</li>
+                                <li><strong>Friend requests:</strong> Strong consistency needed</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">✅ Step 3 End Karte Time Aise Bolo:</strong>
+                        <p style="margin-top: 0.5rem; font-style: italic;">"Ab main wrap up karke <strong>summary, bottlenecks identification, aur potential improvements</strong> discuss karta hoon taaki design complete ho jaye."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 4: Wrap Up -->
+        <section class="section" id="sd-book-ch3-step4" data-topic-id="sd-book-ch3-step4">
+            <div class="section-header">
+                <span class="section-icon">🔷</span>
+                <h2 class="section-title">Step 4: Wrap Up - Strong Finish + Senior Signals</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch3-step4', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, #00ff88, #10b981);">
+                    <span class="topic-card-icon">🔷</span>
+                    <span class="topic-card-title">Step 4: Interview Ko Strong Finish Do (3-5 minutes)</span>
+                </div>
+                <div class="topic-card-body" style="padding: 1.5rem; line-height: 2;">
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #00ff88;">🎯 Step 4 Ka Core Purpose:</strong>
+                        <p style="margin-top: 0.5rem;">Most candidates yahan <strong>weak ho jaate hain</strong>, lekin tum yahan se apna impression solid kar sakte ho! Wrap up mein tum apni <strong>senior-level thinking</strong> demonstrate karte ho - bottlenecks awareness, operational readiness, aur future growth planning.</p>
+                    </div>
+
+                    <h4 style="color: #00ff88; margin-bottom: 1rem;">✅ Wrap Up Mein Tumhe Kya Cover Karna Chahiye?</h4>
+
+                    <!-- 1) Summary Recap -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00bcd4;">
+                        <h5 style="color: #00bcd4; margin-bottom: 1rem;">1️⃣ Summary Recap Do (30-45 seconds)</h5>
+                        <p>Tum apna entire design quickly summarize karo:</p>
+                        
+                        <div style="background: rgba(0, 188, 212, 0.1); border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: #00bcd4;">💬 Example Summary:</strong>
+                            <p style="font-style: italic; margin-top: 0.5rem;">"To summarize, humne request routing DNS se load balancer ke through web servers tak setup kiya. Read path ko <strong>cache-heavy architecture</strong> se optimize kiya jahan feed pre-computed hai. Write path mein <strong>async fanout</strong> use kiya message queues ke saath. Media content <strong>CDN se serve</strong> ho raha hai for global low latency. Aur humne <strong>hybrid fanout strategy</strong> use ki to handle celebrity users efficiently."</p>
+                        </div>
+                    </div>
+
+                    <!-- 2) Bottlenecks Identify -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #ff6f00;">
+                        <h5 style="color: #ff6f00; margin-bottom: 1rem;">2️⃣ Bottlenecks Identify Karo + Solutions Suggest Karo</h5>
+                        <p>Tum openly potential issues bolo aur unke solutions mention karo:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: rgba(255, 111, 0, 0.2);">
+                                        <th style="padding: 10px; text-align: left;">Bottleneck</th>
+                                        <th style="padding: 10px; text-align: left;">Mitigation Strategy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid var(--border-color);">
+                                        <td style="padding: 10px;"><strong>DB Hotspots</strong></td>
+                                        <td style="padding: 10px;">Sharding by user_id, read replicas</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--border-color);">
+                                        <td style="padding: 10px;"><strong>Celebrity Fanout</strong></td>
+                                        <td style="padding: 10px;">Hybrid push/pull, background precompute</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--border-color);">
+                                        <td style="padding: 10px;"><strong>Cache Stampede</strong></td>
+                                        <td style="padding: 10px;">Request coalescing, staggered TTLs</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px;"><strong>Queue Backlog</strong></td>
+                                        <td style="padding: 10px;">Auto-scaling workers, priority queues</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3) Failure Cases -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #f5576c;">
+                        <h5 style="color: #f5576c; margin-bottom: 1rem;">3️⃣ Failure Cases Discuss Karo (Senior Signal! 🌟)</h5>
+                        <p>Production systems fail hote hain. Tum mention karo ki system failures ko kaise handle karega:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <ul style="margin-left: 1.5rem; line-height: 2.2;">
+                                <li><strong style="color: #f5576c;">Cache Down:</strong> Fallback to DB + rate limiting to prevent DB overload</li>
+                                <li><strong style="color: #f5576c;">DB Partition Issue:</strong> Automatic replica failover + connection retry logic</li>
+                                <li><strong style="color: #f5576c;">Worker Crash:</strong> Message retry mechanism + Dead Letter Queue for investigation</li>
+                                <li><strong style="color: #f5576c;">Network Partition:</strong> Graceful degradation - show cached/stale content</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 4) Monitoring + Ops -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #a855f7;">
+                        <h5 style="color: #a855f7; margin-bottom: 1rem;">4️⃣ Monitoring + Ops (Production Readiness Signal! 🌟)</h5>
+                        <p>Ye operational maturity ka strong signal deta hai:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <ul style="margin-left: 1.5rem; line-height: 2.2;">
+                                <li><strong style="color: #a855f7;">Key Metrics:</strong> Latency (p50, p99), QPS, error rate, cache hit rate, queue lag</li>
+                                <li><strong style="color: #a855f7;">Logging + Tracing:</strong> Distributed tracing for request flow debugging</li>
+                                <li><strong style="color: #a855f7;">Alerts:</strong> PagerDuty/OpsGenie alerts on SLA breaches</li>
+                                <li><strong style="color: #a855f7;">Deployment Strategy:</strong> Canary releases, blue-green deployments</li>
+                                <li><strong style="color: #a855f7;">Rollback Plan:</strong> Quick rollback mechanism if issues detected</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 5) Scaling Next Curve -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #00d4ff;">
+                        <h5 style="color: #00d4ff; margin-bottom: 1rem;">5️⃣ Scaling Next Curve (1M → 10M → 100M Users)</h5>
+                        <p>Tum high level changes bolo jo scale ke saath required honge:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <ul style="margin-left: 1.5rem; line-height: 2.2;">
+                                <li><strong>Data Layer:</strong> Sharding + partitioning strategy (consistent hashing)</li>
+                                <li><strong>Cache Layer:</strong> Distributed cache clusters (Redis Cluster)</li>
+                                <li><strong>CDN:</strong> Multi-CDN strategy for global reach</li>
+                                <li><strong>Async Pipelines:</strong> Auto-scaling worker pools</li>
+                                <li><strong>Multi-Region:</strong> Active-active deployment for lower latency</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 6) Future Refinements -->
+                    <div style="background: linear-gradient(135deg, #2d3748, #1a202c); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid #ffd93d;">
+                        <h5 style="color: #ffd93d; margin-bottom: 1rem;">6️⃣ Future Refinements (Agar Time Ho)</h5>
+                        <p>Agar time bachta hai to additional improvements mention karo:</p>
+                        
+                        <div style="background: #0d1117; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                            <ul style="margin-left: 1.5rem; line-height: 2.2;">
+                                <li><strong>Ranking Algorithm:</strong> Move from chronological to relevance-based ranking</li>
+                                <li><strong>Personalization:</strong> User preference-based content filtering</li>
+                                <li><strong>ML Recommendations:</strong> Collaborative filtering for content discovery</li>
+                                <li><strong>Storage Optimization:</strong> Better compression, tiered storage (hot/cold)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #00ff88;">✅ Wrap Up End Line:</strong>
+                        <p style="margin-top: 0.5rem; font-style: italic;">"Is design mein main key bottlenecks <strong>celebrity fanout aur cache stampede</strong> dekhta hoon, aur scale ke saath main <strong>sharding + multi-region deployment</strong> improvements apply karunga. <strong>Kya aap chahenge main kisi specific component mein aur deep dive karoon?</strong>"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOs and DON'Ts -->
+        <section class="section" id="sd-book-ch3-dos-donts" data-topic-id="sd-book-ch3-dos-donts">
+            <div class="section-header">
+                <span class="section-icon">📋</span>
+                <h2 class="section-title">System Design Interview: DOs & DON'Ts</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('sd-book-ch3-dos-donts', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, #00ff88, #f5576c);">
+                    <span class="topic-card-icon">📋</span>
+                    <span class="topic-card-title">DOs aur DON'Ts - Interview Success Ke Liye Must-Know Rules!</span>
+                </div>
+                <div class="topic-card-body" style="padding: 1.5rem; line-height: 2;">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        
+                        <!-- DOs Section -->
+                        <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border: 2px solid #00ff88; border-radius: 12px; padding: 1.5rem;">
+                            <h4 style="color: #00ff88; margin-bottom: 1rem; text-align: center;">✅ DOs (Ye Definitely Karo!)</h4>
+                            
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #00ff88;">1.</strong> Tumhe <strong>always clarification puchni chahiye</strong> aur assumptions blindly nahi leni chahiye. Questions puchna weakness nahi, strength hai!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #00ff88;">2.</strong> Tumhe <strong>requirements clearly samajhni chahiye</strong>, kyunki system design ka "one best answer" nahi hota - context matters!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #00ff88;">3.</strong> Tumhe interviewer ko <strong>continuously batana chahiye</strong> ki tum kya think kar rahe ho - "think aloud" karna zaroori hai!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #00ff88;">4.</strong> Tum <strong>multiple approaches suggest kar sakte ho</strong> aur tradeoffs explain kar sakte ho - ye senior thinking dikhata hai!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #00ff88;">5.</strong> Tum <strong>blueprint finalize karne ke baad sabse critical components</strong> ko pehle design karna chahiye - prioritize wisely!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #00ff88;">6.</strong> Tumhe <strong>interviewer ko teammate ki tarah treat</strong> karna chahiye, aur unke ideas par bounce back karna chahiye - collaborate!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(0, 255, 136, 0.1); border-radius: 8px;">
+                                    <strong style="color: #00ff88;">7.</strong> Tumhe <strong>stuck hone par give up nahi karna chahiye</strong> - hints maango, different angle try karo, but keep going!
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- DON'Ts Section -->
+                        <div style="background: linear-gradient(135deg, #f5576c11, #f5576c22); border: 2px solid #f5576c; border-radius: 12px; padding: 1.5rem;">
+                            <h4 style="color: #f5576c; margin-bottom: 1rem; text-align: center;">❌ DON'Ts (Ye Avoid Karo!)</h4>
+                            
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.75rem; background: rgba(245, 87, 108, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #f5576c;">1.</strong> Tumhe <strong>unprepared nahi rehna chahiye</strong> - typical system design patterns ka exposure hona chahiye before interview!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(245, 87, 108, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #f5576c;">2.</strong> Tumhe <strong>bina requirements clarify kiye solution par jump nahi karna chahiye</strong> - ye major red flag hai!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(245, 87, 108, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #f5576c;">3.</strong> Tumhe <strong>start mein hi ek single component mein too much detail</strong> mein nahi ghusna chahiye - pehle high-level, phir drill down!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(245, 87, 108, 0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                                    <strong style="color: #f5576c;">4.</strong> Tumhe <strong>stuck hone par silent nahi hona chahiye</strong> - hints maangna allowed hai, silence is a negative signal!
+                                </li>
+                                <li style="padding: 0.75rem; background: rgba(245, 87, 108, 0.1); border-radius: 8px;">
+                                    <strong style="color: #f5576c;">5.</strong> Tumhe interview ko <strong>"design deke done" nahi samajhna chahiye</strong> - interviewer jab tak bole tab tak iterate karte rehna chahiye aur feedback actively lena chahiye!
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #a855f711, #a855f722); border-left: 4px solid #a855f7; padding: 1rem 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <strong style="color: #a855f7;">📚 Chapter 3: System Design Interview Framework COMPLETE! 🎉</strong>
+                        <p style="margin-top: 0.5rem;">Ab tum confidently <strong>4-step framework</strong> use kar sakte ho system design interviews mein. Remember: <strong>Step 1 mein scope lock karo, Step 2 mein high-level blueprint banao, Step 3 mein critical components deep dive karo, aur Step 4 mein strong finish do!</strong></p>
+                        <p style="margin-top: 0.5rem;"><strong>Key Takeaway:</strong> System design interview ka koi "perfect answer" nahi hota - interviewer tumhari <strong>thinking process, communication, collaboration, aur technical depth</strong> evaluate kar raha hai. Practice karo, think aloud karo, aur interviewer ko teammate ki tarah treat karo!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="section" id="references" data-topic-id="references">
             <div class="section-header">
                 <span class="section-icon">📚</span>
@@ -11069,6 +12112,7 @@ graph TB
             'sd-book-ch1', 'sd-book-ch1-cache', 'sd-book-ch1-stateless', 'sd-book-ch1-datacenter',
             'sd-book-ch1-messagequeue', 'sd-book-ch1-observability', 'sd-book-ch1-dbscaling', 'sd-book-ch1-final',
             'sd-book-ch2', 'sd-book-ch2-latency', 'sd-book-ch2-availability', 'sd-book-ch2-estimation',
+            'sd-book-ch3', 'sd-book-ch3-step1', 'sd-book-ch3-step2', 'sd-book-ch3-step3', 'sd-book-ch3-step4', 'sd-book-ch3-dos-donts',
             'references'
         ];
         

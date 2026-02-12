@@ -297,6 +297,18 @@
             box-shadow: 0 0 10px rgba(251, 188, 4, 0.4);
         }
 
+        /* Algorithm section problem items with checkboxes */
+        .algo-problem-item {
+            transition: all 0.3s ease;
+        }
+        .algo-problem-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .algo-problem-item .ug-checkbox {
+            min-width: 22px;
+        }
+
         .google-gradient {
             background: linear-gradient(135deg, #4285f4, #34a853, #fbbc04, #ea4335);
             -webkit-background-clip: text;
@@ -30271,10 +30283,18 @@ class Solution:
                     const problemId = checkbox.dataset.id;
                     checkbox.checked = !!this.problems[problemId]?.completed;
                     
-                    // Mark row as completed
+                    // Mark row as completed (table section)
                     const row = checkbox.closest('tr');
                     if (checkbox.checked && row) {
                         row.classList.add('completed');
+                    }
+                    
+                    // Mark algo section item as completed
+                    const algoItem = checkbox.closest('.algo-problem-item');
+                    if (checkbox.checked && algoItem) {
+                        algoItem.style.opacity = '0.6';
+                        const link = algoItem.querySelector('a');
+                        if (link) link.style.textDecoration = 'line-through';
                     }
                     
                     checkbox.addEventListener('change', async (e) => {
@@ -30286,7 +30306,38 @@ class Solution:
                             row.classList.toggle('completed', completed);
                         }
                         
+                        // Sync ALL checkboxes with the same data-id across both sections
+                        document.querySelectorAll(`.ug-checkbox[data-id="${problemId}"]`).forEach(cb => {
+                            if (cb !== e.target) {
+                                cb.checked = completed;
+                                // Update algo section item styling
+                                const item = cb.closest('.algo-problem-item');
+                                if (item) {
+                                    item.style.opacity = completed ? '0.6' : '1';
+                                    const link = item.querySelector('a');
+                                    if (link) link.style.textDecoration = completed ? 'line-through' : 'none';
+                                }
+                                // Update table row styling
+                                const syncRow = cb.closest('tr');
+                                if (syncRow) {
+                                    syncRow.classList.toggle('completed', completed);
+                                }
+                            }
+                        });
+                        
+                        // Update algo section styling for current element
+                        if (algoItem) {
+                            algoItem.style.opacity = completed ? '0.6' : '1';
+                            const link = algoItem.querySelector('a');
+                            if (link) link.style.textDecoration = completed ? 'line-through' : 'none';
+                        }
+                        
                         this.updateUI();
+                        
+                        // Update algo category progress counts
+                        if (typeof updateAlgoCategoryCounts === 'function') {
+                            updateAlgoCategoryCounts();
+                        }
                         
                         if (completed) {
                             this.createConfetti(e.target);
@@ -30433,6 +30484,11 @@ class Solution:
                 if (hiddenCountEl) {
                     hiddenCountEl.textContent = completed;
                 }
+                
+                // Update algorithm section category progress
+                if (typeof updateAlgoCategoryCounts === 'function') {
+                    updateAlgoCategoryCounts();
+                }
             },
             
             updateStreak() {
@@ -30572,6 +30628,122 @@ class Solution:
             }
         };
 
+        // ==================== ALGORITHM SECTION CHECKBOXES ====================
+        function initAlgoSectionCheckboxes() {
+            const algoSection = document.getElementById('google-541-by-algorithm');
+            if (!algoSection) return;
+            
+            const problemLinks = algoSection.querySelectorAll('.algo-problem-link');
+            
+            problemLinks.forEach(link => {
+                // Extract problem slug from URL to create matching data-id
+                const href = link.getAttribute('href') || '';
+                const match = href.match(/\/problems\/([^\/]+)/);
+                if (!match) return;
+                
+                const slug = match[1];
+                const dataId = 'ug-' + slug;
+                
+                // Create wrapper div
+                const wrapper = document.createElement('div');
+                wrapper.className = 'algo-problem-item';
+                wrapper.dataset.problemId = dataId;
+                wrapper.style.cssText = 'display: flex; align-items: center; gap: 0.5rem;';
+                
+                // Create checkbox
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'ug-checkbox algo-section-cb';
+                checkbox.dataset.id = dataId;
+                checkbox.style.cssText = 'cursor: pointer; accent-color: #4285f4; flex-shrink: 0;';
+                
+                // Copy styles from link to wrapper
+                const computedBorderLeft = link.style.borderLeft;
+                const computedBg = link.style.background;
+                wrapper.style.background = computedBg || 'var(--bg-code)';
+                wrapper.style.padding = '0.6rem 1rem';
+                wrapper.style.borderRadius = '8px';
+                wrapper.style.borderLeft = computedBorderLeft || '3px solid #666';
+                wrapper.style.transition = 'all 0.3s ease';
+                
+                // Strip styles from link that are now on wrapper
+                link.style.background = 'none';
+                link.style.padding = '0';
+                link.style.borderRadius = '0';
+                link.style.borderLeft = 'none';
+                link.style.flex = '1';
+                
+                // Insert wrapper before link, move link inside
+                link.parentNode.insertBefore(wrapper, link);
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(link);
+            });
+            
+            // Update category badge counts
+            updateAlgoCategoryCounts();
+        }
+        
+        function updateAlgoCategoryCounts() {
+            const algoSection = document.getElementById('google-541-by-algorithm');
+            if (!algoSection) return;
+            
+            // Find top-level <details> sections (each is an algorithm category)
+            // Using :scope > to avoid nested <details> inside categories
+            const contentDiv = algoSection.querySelector('.guide-card-content');
+            if (!contentDiv) return;
+            const categories = contentDiv.querySelectorAll(':scope > details');
+            
+            categories.forEach(detail => {
+                const summary = detail.querySelector('summary');
+                if (!summary) return;
+                
+                const checkboxes = detail.querySelectorAll('.algo-section-cb');
+                const total = checkboxes.length;
+                const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+                
+                // Find or create the count badge
+                let badge = summary.querySelector('.algo-cat-progress');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'algo-cat-progress';
+                    badge.style.cssText = 'font-size: 0.8rem; padding: 2px 10px; border-radius: 12px; margin-left: 8px; font-weight: 600; background: rgba(66,133,244,0.2); color: #4285f4;';
+                    // Insert before the arrow span
+                    const arrow = summary.querySelector('span:last-child');
+                    if (arrow) {
+                        summary.insertBefore(badge, arrow);
+                    } else {
+                        summary.appendChild(badge);
+                    }
+                }
+                
+                badge.textContent = `${completed}/${total}`;
+                
+                // Change color based on progress
+                if (completed === total && total > 0) {
+                    badge.style.background = 'rgba(34,197,94,0.2)';
+                    badge.style.color = '#22c55e';
+                } else if (completed > 0) {
+                    badge.style.background = 'rgba(251,188,4,0.2)';
+                    badge.style.color = '#fbbc04';
+                } else {
+                    badge.style.background = 'rgba(66,133,244,0.2)';
+                    badge.style.color = '#4285f4';
+                }
+            });
+            
+            // Also update the top summary cards
+            const summaryCards = algoSection.querySelectorAll('.algo-cat-summary-count');
+            summaryCards.forEach(card => {
+                const catName = card.dataset.category;
+                if (!catName) return;
+                const detail = algoSection.querySelector(`details[data-algo-cat="${catName}"]`);
+                if (!detail) return;
+                const cbs = detail.querySelectorAll('.algo-section-cb');
+                const done = Array.from(cbs).filter(cb => cb.checked).length;
+                card.textContent = `${done}/${cbs.length}`;
+            });
+        }
+
         // ==================== INITIALIZATION ====================
         function init() {
             initTheme();
@@ -30582,6 +30754,7 @@ class Solution:
             initCollapsibleProblems(); // Make problems collapsible (runs first)
             initCollapsibleSections(); // Make approach sections collapsible
             initPatternPracticeCheckboxes(); // Initialize pattern practice checkboxes
+            initAlgoSectionCheckboxes(); // Inject checkboxes into algorithm section
             updateProgressUI();
             updateStreak();
             

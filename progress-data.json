@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-02-05T11:01:52.770Z",
+    "lastUpdated": "2026-02-12T10:45:32.270Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -707,7 +707,7 @@
             "difficulty": "Easy",
             "leetcode": 217,
             "completed": true,
-            "completedAt": "2026-01-21T18:46:56.236Z"
+            "completedAt": "2026-02-12T09:31:05.633Z"
           },
           "valid-anagram": {
             "id": "valid-anagram",
@@ -886,6 +886,11 @@
         "id": "ug-longest-substring-without-repeating-characters",
         "completed": true,
         "completedAt": "2026-02-02T15:40:05.087Z"
+      },
+      "ug-duplicate-zeros": {
+        "id": "ug-duplicate-zeros",
+        "completed": false,
+        "completedAt": null
       }
     }
   },
