@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-02-12T10:45:32.270Z",
+    "lastUpdated": "2026-02-12T12:45:02.212Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -28,8 +28,8 @@
     },
     "ultimateGoogle": {
       "totalProblems": 541,
-      "completedProblems": 3,
-      "percentage": 1
+      "completedProblems": 9,
+      "percentage": 2
     },
     "bytebytego": {
       "totalTopics": 52,
@@ -884,13 +884,48 @@
       },
       "ug-longest-substring-without-repeating-characters": {
         "id": "ug-longest-substring-without-repeating-characters",
-        "completed": true,
-        "completedAt": "2026-02-02T15:40:05.087Z"
+        "completed": false,
+        "completedAt": null
       },
       "ug-duplicate-zeros": {
         "id": "ug-duplicate-zeros",
         "completed": false,
         "completedAt": null
+      },
+      "ug-two-sum-ii-input-array-is-sorted": {
+        "id": "ug-two-sum-ii-input-array-is-sorted",
+        "completed": true,
+        "completedAt": "2026-02-12T11:16:57.461Z"
+      },
+      "ug-3sum": {
+        "id": "ug-3sum",
+        "completed": true,
+        "completedAt": "2026-02-12T11:18:16.975Z"
+      },
+      "ug-3sum-closest": {
+        "id": "ug-3sum-closest",
+        "completed": true,
+        "completedAt": "2026-02-12T12:24:44.578Z"
+      },
+      "ug-container-with-most-water": {
+        "id": "ug-container-with-most-water",
+        "completed": true,
+        "completedAt": "2026-02-12T12:25:35.168Z"
+      },
+      "ug-valid-palindrome": {
+        "id": "ug-valid-palindrome",
+        "completed": true,
+        "completedAt": "2026-02-12T12:25:52.106Z"
+      },
+      "ug-valid-palindrome-ii": {
+        "id": "ug-valid-palindrome-ii",
+        "completed": true,
+        "completedAt": "2026-02-12T12:34:31.853Z"
+      },
+      "ug-remove-duplicates-from-sorted-array": {
+        "id": "ug-remove-duplicates-from-sorted-array",
+        "completed": true,
+        "completedAt": "2026-02-12T12:44:07.458Z"
       }
     }
   },
