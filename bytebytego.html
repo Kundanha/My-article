@@ -783,6 +783,7 @@
                 <a href="#mapreduce" class="nav-item">MapReduce</a>
                 <a href="#replication" class="nav-item">Database Replication</a>
                 <a href="#caching" class="nav-item">Caching Strategies</a>
+                <a href="#cache-hld" class="nav-item">Cache + CDN HLD 🏗️</a>
             </div>
         </div>
 
@@ -943,7 +944,7 @@
         <!-- Progress Stats -->
         <div class="progress-stats">
             <div class="progress-stats-text">
-                📊 Progress: <strong id="completedCount">0</strong> / <strong id="totalCount">40</strong> topics completed
+                📊 Progress: <strong id="completedCount">0</strong> / <strong id="totalCount">41</strong> topics completed
             </div>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
@@ -3516,6 +3517,511 @@
                                 <li>Redis for real-time features (trends)</li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CACHE KYUN ZAROORI HAI - FULL HLD ==================== -->
+        <section class="section" id="cache-hld" data-topic-id="cache-hld">
+            <div class="section-header">
+                <span class="section-icon">🏗️</span>
+                <h2 class="section-title">Cache Kyun Zaroori Hai? — The "WHY" Behind Caching</h2>
+                <label class="topic-checkbox" title="Mark as completed">
+                    <input type="checkbox" onchange="toggleTopicComplete('cache-hld', this.checked)">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <!-- Figure 1-6 Recap WITHOUT Cache -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">📐</span>
+                    <span class="topic-card-title">Figure 1-6 Recap: LB + DB Replication (No Cache)</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid #ef4444;">
+                        <p style="font-size: 1.1rem;"><strong>📖 ByteByteGo Chapter 1 — Figure 1-6</strong></p>
+                        <p style="color: var(--text-secondary);">Ye design Load Balancer + DB Replication use karta hai. Strong hai, but <strong>ek CRITICAL layer missing hai — CACHE + CDN!</strong></p>
+                    </div>
+
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph TD
+                            Users["👤👤👤 Users<br/>Millions!"] --> DNS["🌐 DNS Server<br/>Domain → IP"]
+                            DNS --> LB["⚖️ Load Balancer<br/>NGINX / ALB"]
+                            LB --> WS1["🖥️ Web Server 1"]
+                            LB --> WS2["🖥️ Web Server 2"]
+                            LB --> WS3["🖥️ Web Server 3"]
+                            WS1 --> |"ALL reads + writes"| PRIMARY[("🐘 Primary DB<br/>Master")]
+                            WS2 --> |"ALL reads + writes"| PRIMARY
+                            WS3 --> |"ALL reads + writes"| PRIMARY
+                            PRIMARY --> |"Replication"| R1[("📖 Replica 1<br/>Read-only")]
+                            PRIMARY --> |"Replication"| R2[("📖 Replica 2<br/>Read-only")]
+
+                            style Users fill:#a855f7,color:#fff,stroke:#a855f7
+                            style DNS fill:#3b82f6,color:#fff,stroke:#3b82f6
+                            style LB fill:#f59e0b,color:#000,stroke:#f59e0b
+                            style WS1 fill:#6366f1,color:#fff,stroke:#6366f1
+                            style WS2 fill:#6366f1,color:#fff,stroke:#6366f1
+                            style WS3 fill:#6366f1,color:#fff,stroke:#6366f1
+                            style PRIMARY fill:#ef4444,color:#fff,stroke:#ef4444
+                            style R1 fill:#22c55e,color:#000,stroke:#22c55e
+                            style R2 fill:#22c55e,color:#000,stroke:#22c55e
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: 12px; margin-top: 1rem; border-left: 4px solid #ef4444;">
+                        <h5 style="color: #ef4444; margin-bottom: 0.75rem;">⚠️ PROBLEMS WITH THIS DESIGN:</h5>
+                        <ul style="margin-left: 1.5rem;">
+                            <li>❌ EVERY request hits the database!</li>
+                            <li>❌ Static assets (JS/CSS/images) origin se serve</li>
+                            <li>❌ Hot data = repeated identical queries to DB</li>
+                            <li>❌ DB connection pool exhaustion under spike</li>
+                            <li>❌ Latency: 50-500ms per DB query</li>
+                            <li>❌ Users far from server = high latency</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(255, 107, 107, 0.1); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; border-left: 4px solid #ef4444;">
+                        <p><strong>😱 Real Problem:</strong> 10 lakh users ek hi trending post dekhein → <strong>10 lakh queries for SAME data!</strong></p>
+                        <p style="margin-top: 0.5rem;">DB: <em>"Bhai same cheez 10 lakh baar kyun pooch rahe ho?!"</em> 😤</p>
+                        <p style="margin-top: 0.5rem;">Static assets bhi har request pe origin server se download → bandwidth waste + slow!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Figure 1-6 EVOLVED with Cache + CDN -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🚀</span>
+                    <span class="topic-card-title">Figure 1-6 EVOLVED: Complete HLD with Cache + CDN! 🏗️</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <div style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.15), rgba(255, 111, 0, 0.1)); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <p style="font-size: 1.2rem; text-align: center;"><strong>📖 ByteByteGo Book: "Add a cache layer + CDN to Figure 1-6"</strong></p>
+                        <p style="text-align: center; color: var(--text-secondary);">CDN static content serve karta hai, Cache (Redis) dynamic data serve karta hai — Database breathes! 🎯</p>
+                    </div>
+
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph TD
+                            Users["👤👤👤 Users<br/>Millions!"] --> DNS["🌐 DNS Server<br/>Route53 / Azure DNS"]
+                            DNS --> |"Static Requests"| CDN["🌐 CDN Layer<br/>CloudFront / Azure CDN<br/>⏱️ 5-20ms | 📊 95% Hit"]
+                            DNS --> |"Dynamic API Calls"| LB["⚖️ Load Balancer<br/>NGINX / ALB"]
+                            CDN --> |"✅ Instant!<br/>Edge Served"| Users
+                            LB --> API1["🖥️ API Server 1"]
+                            LB --> API2["🖥️ API Server 2"]
+                            LB --> API3["🖥️ API Server 3"]
+                            API1 --> REDIS
+                            API2 --> REDIS
+                            API3 --> REDIS
+                            REDIS["🔴 Redis Cache<br/>ElastiCache / Azure Redis<br/>⏱️ 1-5ms | 📊 80-95% Hit"] --> |"⚡ Cache HIT"| API1
+                            REDIS --> |"❌ Cache MISS"| PRIMARY[("🐘 Primary DB<br/>Master")]
+                            PRIMARY --> |"Store in Cache"| REDIS
+                            API1 --> |"Writes"| PRIMARY
+                            API2 --> |"Writes"| PRIMARY
+                            API3 --> |"Writes"| PRIMARY
+                            PRIMARY --> |"Replication"| R1[("📖 Replica 1")]
+                            PRIMARY --> |"Replication"| R2[("📖 Replica 2")]
+
+                            style Users fill:#a855f7,color:#fff,stroke:#a855f7
+                            style DNS fill:#3b82f6,color:#fff,stroke:#3b82f6
+                            style CDN fill:#06b6d4,color:#000,stroke:#06b6d4
+                            style LB fill:#f59e0b,color:#000,stroke:#f59e0b
+                            style API1 fill:#6366f1,color:#fff,stroke:#6366f1
+                            style API2 fill:#6366f1,color:#fff,stroke:#6366f1
+                            style API3 fill:#6366f1,color:#fff,stroke:#6366f1
+                            style REDIS fill:#ef4444,color:#fff,stroke:#ef4444
+                            style PRIMARY fill:#22c55e,color:#000,stroke:#22c55e
+                            style R1 fill:#22c55e,color:#000,stroke:#22c55e
+                            style R2 fill:#22c55e,color:#000,stroke:#22c55e
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 188, 212, 0.05)); padding: 1.5rem; border-radius: 12px; margin-top: 1rem; border-left: 4px solid var(--bytebytego-primary);">
+                        <h5 style="color: var(--bytebytego-primary); margin-bottom: 0.75rem;">📊 Data Flow Paths:</h5>
+                        <ul style="margin-left: 1.5rem;">
+                            <li><strong>STATIC:</strong> User → DNS → CDN (Edge) → ✅ Served! (DB never touched)</li>
+                            <li><strong>READ HIT:</strong> User → DNS → LB → API → Redis → ✅ Cache HIT (DB not touched)</li>
+                            <li><strong>READ MISS:</strong> User → DNS → LB → API → Redis Miss → DB → Store in Redis → ✅</li>
+                            <li><strong>WRITE:</strong> User → DNS → LB → API → DB Primary → Invalidate Redis → Async Replicate</li>
+                        </ul>
+                    </div>
+
+                    <!-- Before vs After Comparison Table -->
+                    <h4 style="color: var(--bytebytego-primary); margin: 2rem 0 1rem;">📊 Before vs After: Impact of Adding Cache + CDN</h4>
+                    <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                        <tr style="background: var(--bg-code);">
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Metric</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">❌ Figure 1-6 (No Cache)</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">✅ With Cache + CDN</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Static Asset Latency</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">200-500ms (origin server)</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">5-20ms (CDN edge) ⚡</td>
+                        </tr>
+                        <tr style="background: var(--bg-code);">
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>API Read Latency</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">50-500ms (DB query)</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">1-5ms (Redis cache) ⚡</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>DB Load</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">100% traffic hits DB</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">~10-20% hits DB</td>
+                        </tr>
+                        <tr style="background: var(--bg-code);">
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Bandwidth Cost</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">💰💰💰💰 (all from origin)</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">💰 (CDN absorbs 90%+)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Throughput</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">~5K req/sec (DB bound)</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">~100K+ req/sec 🚀</td>
+                        </tr>
+                        <tr style="background: var(--bg-code);">
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Trending Content</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">DB melts under load 🔥</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Cache absorbs! 🛡️</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Global Reach</strong></td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">Slow for distant users</td>
+                            <td style="padding: 12px; border: 1px solid var(--border-color);">CDN PoPs everywhere! 🌍</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CDN Deep Dive in Context -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🌐</span>
+                    <span class="topic-card-title">CDN Layer — How It Fits in the HLD</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>ByteByteGo book mein CDN ka role simple hai: <strong>"Static content ko users ke paas serve karo, origin server ko mat chheddo!"</strong></p>
+
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph TD
+                            USER["👤 User - Mumbai<br/>myapp.com/logo.png"] --> DNS_CDN["🌐 DNS Resolves to<br/>Nearest CDN Edge"]
+                            DNS_CDN --> MUMBAI_POP["📍 Mumbai PoP<br/>CDN Edge Server"]
+                            MUMBAI_POP --> CHECK{"🔍 Cache<br/>Check?"}
+                            CHECK --> |"✅ HIT (95% of time!)"| RETURN_FAST["⚡ Return to User<br/>Latency: 5ms!"]
+                            CHECK --> |"❌ MISS"| ORIGIN["🏠 Origin Server<br/>US-East"]
+                            ORIGIN --> |"Fetch + Cache"| CACHE_STORE["💾 Store in Mumbai PoP<br/>+ Return to User"]
+                            CACHE_STORE --> |"Next Mumbai user"| RETURN_FAST
+
+                            style USER fill:#a855f7,color:#fff,stroke:#a855f7
+                            style DNS_CDN fill:#3b82f6,color:#fff,stroke:#3b82f6
+                            style MUMBAI_POP fill:#06b6d4,color:#000,stroke:#06b6d4
+                            style CHECK fill:#f59e0b,color:#000,stroke:#f59e0b
+                            style RETURN_FAST fill:#22c55e,color:#000,stroke:#22c55e
+                            style ORIGIN fill:#ef4444,color:#fff,stroke:#ef4444
+                            style CACHE_STORE fill:#06b6d4,color:#000,stroke:#06b6d4
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <h5 style="color: var(--bytebytego-primary); margin-bottom: 0.75rem;">🔑 CDN Cache Rules (Cache-Control Headers):</h5>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <tr style="background: rgba(0, 188, 212, 0.1);">
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);"><code>Cache-Control: public, max-age=31536000</code></td>
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);">← Static assets (1 year)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);"><code>Cache-Control: public, max-age=3600</code></td>
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);">← Semi-dynamic (1 hr)</td>
+                            </tr>
+                            <tr style="background: rgba(0, 188, 212, 0.1);">
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);"><code>Cache-Control: no-cache, no-store</code></td>
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);">← Never cache (API)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);"><code>Cache-Control: s-maxage=60</code></td>
+                                <td style="padding: 8px 12px; border: 1px solid var(--border-color);">← CDN only (60s)</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h4 style="color: var(--bytebytego-primary); margin: 1.5rem 0 1rem;">📦 Kya CDN Pe Cache Hota Hai vs Kya Nahi?</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #22c55e;">
+                            <h5 style="color: #22c55e; margin-bottom: 0.75rem;">✅ CDN PE CACHE KARO</h5>
+                            <ul style="margin-left: 1rem;">
+                                <li>JavaScript bundles</li>
+                                <li>CSS stylesheets</li>
+                                <li>Images / Videos</li>
+                                <li>Fonts</li>
+                                <li>Static HTML pages</li>
+                                <li>Public API responses (GET)</li>
+                                <li>Product images (e-commerce)</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ef4444;">
+                            <h5 style="color: #ef4444; margin-bottom: 0.75rem;">❌ CDN PE CACHE MAT KARO</h5>
+                            <ul style="margin-left: 1rem;">
+                                <li>User-specific data (profiles)</li>
+                                <li>Authentication tokens</li>
+                                <li>Payment/financial data</li>
+                                <li>Real-time data (stock prices)</li>
+                                <li>POST/PUT/DELETE requests</li>
+                                <li>Personalized content</li>
+                                <li>Admin/private APIs</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 188, 212, 0.05)); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; border-left: 4px solid var(--bytebytego-primary);">
+                        <p><strong>💡 CDN Invalidation:</strong> Jab content update ho toh CDN cache clear karna padta hai!</p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li><strong>Versioned URLs:</strong> <code>app.v2.3.js</code> → Deploy pe new version = new URL = auto fresh!</li>
+                            <li><strong>Cache Purge API:</strong> CloudFront/Cloudflare API se specific paths purge karo</li>
+                            <li><strong>Short TTL for dynamic:</strong> Frequently changing content = short TTL (60s)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Redis Cache Layer Deep Dive -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">🔴</span>
+                    <span class="topic-card-title">Redis Cache Layer — How It Fits in the HLD</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <p>CDN static content handle karta hai. Par <strong>dynamic data (user profiles, sessions, feed)</strong> ke liye <strong>Redis Cache</strong> use hota hai — ye DB ke aage baith ke guard karta hai!</p>
+
+                    <h5 style="color: var(--bytebytego-primary); margin: 1rem 0 0.5rem;">📖 READ PATH (Cache-Aside / Lazy Loading):</h5>
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph TD
+                            REQ["🖥️ API Server receives<br/>GET /api/user/123"] --> CHECK_CACHE["🔴 Check Redis<br/>GET user:123"]
+                            CHECK_CACHE --> HIT_CHECK{"Cache<br/>Result?"}
+                            HIT_CHECK --> |"✅ HIT"| RETURN_CACHE["⚡ Return Cached Data<br/>Latency: 1ms!"]
+                            HIT_CHECK --> |"❌ MISS"| QUERY_DB[("🐘 Query Database<br/>SELECT * FROM users<br/>WHERE id=123")]
+                            QUERY_DB --> STORE_CACHE["🔴 Store in Redis<br/>SET user:123 data EX 3600<br/>TTL = 1 hour"]
+                            STORE_CACHE --> RETURN_USER["📤 Return Data to User"]
+
+                            style REQ fill:#6366f1,color:#fff,stroke:#6366f1
+                            style CHECK_CACHE fill:#ef4444,color:#fff,stroke:#ef4444
+                            style HIT_CHECK fill:#f59e0b,color:#000,stroke:#f59e0b
+                            style RETURN_CACHE fill:#22c55e,color:#000,stroke:#22c55e
+                            style QUERY_DB fill:#3b82f6,color:#fff,stroke:#3b82f6
+                            style STORE_CACHE fill:#ef4444,color:#fff,stroke:#ef4444
+                            style RETURN_USER fill:#22c55e,color:#000,stroke:#22c55e
+                        </div>
+                    </div>
+
+                    <h5 style="color: var(--bytebytego-secondary); margin: 1.5rem 0 0.5rem;">✏️ WRITE PATH (Invalidation):</h5>
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph TD
+                            WREQ["🖥️ API Server receives<br/>PUT /api/user/123"] --> WRITE_DB[("🐘 Write to DB<br/>UPDATE users<br/>SET name='Rahul Kumar'")]
+                            WRITE_DB --> INVALIDATE["🔴 Invalidate Cache<br/>DEL user:123"]
+                            INVALIDATE --> NEXT_READ["📖 Next READ →<br/>Cache Miss →<br/>Fresh data from DB!"]
+
+                            style WREQ fill:#6366f1,color:#fff,stroke:#6366f1
+                            style WRITE_DB fill:#3b82f6,color:#fff,stroke:#3b82f6
+                            style INVALIDATE fill:#ef4444,color:#fff,stroke:#ef4444
+                            style NEXT_READ fill:#22c55e,color:#000,stroke:#22c55e
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(245, 158, 11, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <p><strong>⚠️ WHY "Delete" not "Update" cache?</strong></p>
+                        <p style="margin-top: 0.5rem;">→ Race condition avoid karna hai! Delete simple + safe. Let next read populate fresh data.</p>
+                    </div>
+
+                    <h4 style="color: var(--bytebytego-primary); margin: 1.5rem 0 1rem;">🔴 Redis Cache Cluster Setup in HLD</h4>
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph TD
+                            subgraph CLUSTER["🔴 Redis Cluster - Production Setup"]
+                                subgraph S1["Shard 1<br/>user:1-1000"]
+                                    P1["🔴 Primary 1"]
+                                    R1_C["📖 Replica 1"]
+                                    P1 --> |"Replication"| R1_C
+                                end
+                                subgraph S2["Shard 2<br/>user:1001-2000"]
+                                    P2["🔴 Primary 2"]
+                                    R2_C["📖 Replica 2"]
+                                    P2 --> |"Replication"| R2_C
+                                end
+                                subgraph S3["Shard 3<br/>user:2001-3000"]
+                                    P3["🔴 Primary 3"]
+                                    R3_C["📖 Replica 3"]
+                                    P3 --> |"Replication"| R3_C
+                                end
+                            end
+
+                            style P1 fill:#ef4444,color:#fff,stroke:#ef4444
+                            style P2 fill:#ef4444,color:#fff,stroke:#ef4444
+                            style P3 fill:#ef4444,color:#fff,stroke:#ef4444
+                            style R1_C fill:#22c55e,color:#000,stroke:#22c55e
+                            style R2_C fill:#22c55e,color:#000,stroke:#22c55e
+                            style R3_C fill:#22c55e,color:#000,stroke:#22c55e
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">✅ Primary down? Replica auto-promotes!</div>
+                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">✅ Shard full? Add more shards!</div>
+                    </div>
+                    <p style="margin-top: 0.75rem; color: var(--text-secondary); font-size: 0.9rem;">Services: <strong>AWS ElastiCache</strong> | <strong>Azure Cache for Redis</strong> | <strong>Redis Cloud</strong></p>
+
+                    <h4 style="color: var(--bytebytego-primary); margin: 1.5rem 0 1rem;">📦 Kya Redis Mein Cache Karo vs Kya Nahi?</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div style="background: rgba(34, 197, 94, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #22c55e;">
+                            <h5 style="color: #22c55e; margin-bottom: 0.75rem;">✅ REDIS MEIN CACHE KARO</h5>
+                            <ul style="margin-left: 1rem;">
+                                <li>User sessions / JWT tokens</li>
+                                <li>User profiles (read-heavy)</li>
+                                <li>Feed / Timeline data</li>
+                                <li>Product catalog (e-commerce)</li>
+                                <li>Rate limiting counters</li>
+                                <li>Leaderboards (Sorted Sets)</li>
+                                <li>Shopping cart (temporary)</li>
+                                <li>Config / Feature flags</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ef4444;">
+                            <h5 style="color: #ef4444; margin-bottom: 0.75rem;">❌ REDIS MEIN CACHE MAT KARO</h5>
+                            <ul style="margin-left: 1rem;">
+                                <li>Payment / Financial data</li>
+                                <li>Data that changes every second</li>
+                                <li>Large blobs (files, images)</li>
+                                <li>Data requiring strong consistency</li>
+                                <li>Regulatory / Audit trail data</li>
+                                <li>Sensitive PII without encryption</li>
+                                <li>Rarely accessed (long-tail) data</li>
+                                <li>Data larger than RAM budget</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cache Considerations for Architect -->
+            <div class="topic-card" style="margin-bottom: 2rem;">
+                <div class="topic-card-header">
+                    <span class="topic-card-icon">⚖️</span>
+                    <span class="topic-card-title">ByteByteGo Cache + CDN Considerations</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <div style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(255, 111, 0, 0.1)); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <p style="font-size: 1.1rem; text-align: center;"><strong>📖 ByteByteGo Book Key Points — Cache + CDN Design Considerations</strong></p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+
+                        <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                            <h5 style="color: #3b82f6; margin-bottom: 0.75rem;">1️⃣ When to Use Cache</h5>
+                            <p>Data <strong>frequently read but infrequently modified</strong> ho tab cache use karo. Cache volatile memory (RAM) mein rehta hai — <strong>important data sirf database mein rakho</strong>, cache mein nahi!</p>
+                            <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;"><em>"Cache is NOT a database. It can be lost anytime. Always have DB as source of truth!"</em></p>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(168, 85, 247, 0.05)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #a855f7;">
+                            <h5 style="color: #a855f7; margin-bottom: 0.75rem;">2️⃣ Expiration Policy (TTL)</h5>
+                            <p><strong>TTL bahut short?</strong> → Cache se baar baar data expire hoga, DB pe load badhega (defeats the purpose!)</p>
+                            <p><strong>TTL bahut long?</strong> → Stale data serve hoga, users ko purana data dikhega!</p>
+                            <p style="margin-top: 0.5rem; color: var(--accent-green);">✅ Sweet spot: Depends on use case. User profiles = 1hr, Feed = 5min, Session = 30min</p>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #22c55e;">
+                            <h5 style="color: #22c55e; margin-bottom: 0.75rem;">3️⃣ Consistency — DB aur Cache Sync</h5>
+                            <p>Database aur cache mein data <strong>inconsistent ho sakta hai</strong> kyunki dono update ek atomic operation mein nahi hota. Ye distributed systems mein inevitable hai.</p>
+                            <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;"><em>Facebook paper: "Scaling Memcache at Facebook" — eventual consistency acceptable for most social features!</em></p>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(255, 159, 67, 0.1), rgba(255, 159, 67, 0.05)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ff9f43;">
+                            <h5 style="color: #ff9f43; margin-bottom: 0.75rem;">4️⃣ Mitigating Failures — Single Cache ≠ SPOF</h5>
+                            <p><strong>Single cache server = Single Point of Failure!</strong> Agar Redis crash ho toh poora system slow ho jayega.</p>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Multiple cache servers across different data centers</li>
+                                <li>Redis Sentinel / Cluster for auto-failover</li>
+                                <li>Overprovision memory to handle traffic spikes</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ef4444;">
+                            <h5 style="color: #ef4444; margin-bottom: 0.75rem;">5️⃣ Eviction Policy</h5>
+                            <p>Cache full ho jaye toh <strong>kya remove karein?</strong></p>
+                            <p style="margin-top: 0.5rem;"><strong>LRU (Least Recently Used)</strong> = Most popular choice! Jo data sabse lamba time se access nahi hua, use hataao.</p>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;"><em>Other options: LFU (frequency-based), FIFO (first-in-first-out), Random</em></p>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 212, 255, 0.05)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #00d4ff;">
+                            <h5 style="color: #00d4ff; margin-bottom: 0.75rem;">6️⃣ CDN Considerations from the Book</h5>
+                            <ul style="margin-left: 1.5rem;">
+                                <li><strong>Cost:</strong> CDN third-party providers chalate hain — data transfer in/out ka cost hota hai. Infrequently used assets CDN se hataao!</li>
+                                <li><strong>Setting TTL:</strong> Too long = stale, Too short = origin pe repeated hits. Content type ke hisaab se set karo.</li>
+                                <li><strong>CDN Fallback:</strong> CDN down ho toh clients directly origin server se fetch kar sakein — resilient design!</li>
+                                <li><strong>Invalidating files:</strong> CDN API se object invalidate karo ya versioning use karo (e.g., <code>image_v2.png</code>)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Golden Rules Summary -->
+            <div class="topic-card" style="margin-bottom: 2rem; border: 2px solid var(--bytebytego-primary);">
+                <div class="topic-card-header" style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(255, 111, 0, 0.15));">
+                    <span class="topic-card-icon">🏆</span>
+                    <span class="topic-card-title">Complete HLD Summary — 7 Golden Rules</span>
+                </div>
+                <div style="padding: 1.5rem; line-height: 2;">
+                    <h5 style="color: var(--bytebytego-primary); margin-bottom: 1rem;">⚠️ BEFORE (Figure 1-6 Only):</h5>
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 0.5rem 0 1.5rem;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph LR
+                            U1["👤 Users"] --> LB1["⚖️ LB"] --> API_B["🖥️ API"] --> DB1[("🐘 DB + Replicas")]
+                            style U1 fill:#a855f7,color:#fff,stroke:#a855f7
+                            style LB1 fill:#f59e0b,color:#000,stroke:#f59e0b
+                            style API_B fill:#6366f1,color:#fff,stroke:#6366f1
+                            style DB1 fill:#ef4444,color:#fff,stroke:#ef4444
+                        </div>
+                        <p style="text-align: center; color: #ef4444; margin-top: 0.5rem;">⚠️ Every request hits DB. Static from origin.</p>
+                    </div>
+
+                    <h5 style="color: var(--bytebytego-primary); margin-bottom: 1rem;">✅ AFTER (Evolved with Cache + CDN):</h5>
+                    <div style="background: var(--bg-code); padding: 1.5rem; border-radius: 12px; margin: 0.5rem 0 1.5rem;">
+                        <div class="mermaid" style="background: transparent;">
+                        graph LR
+                            U2["👤 Users"] --> CDN2["🌐 CDN<br/>L1"] --> LB2["⚖️ LB"] --> API_A["🖥️ API"] --> REDIS2["🔴 Redis<br/>L2"] --> DB2[("🐘 DB + Replicas")]
+                            style U2 fill:#a855f7,color:#fff,stroke:#a855f7
+                            style CDN2 fill:#06b6d4,color:#000,stroke:#06b6d4
+                            style LB2 fill:#f59e0b,color:#000,stroke:#f59e0b
+                            style API_A fill:#6366f1,color:#fff,stroke:#6366f1
+                            style REDIS2 fill:#ef4444,color:#fff,stroke:#ef4444
+                            style DB2 fill:#22c55e,color:#000,stroke:#22c55e
+                        </div>
+                        <p style="text-align: center; color: #22c55e; margin-top: 0.5rem;">✅ 80-95% reads from cache. Static from CDN edge.</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(255, 111, 0, 0.1)); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--bytebytego-primary);">
+                        <h5 style="color: var(--bytebytego-primary); margin-bottom: 1rem;">🔑 7 GOLDEN RULES:</h5>
+                        <ol style="margin-left: 1.5rem; line-height: 2.2;">
+                            <li>Cache is NOT a database — can be lost, always have DB!</li>
+                            <li>CDN for STATIC, Redis for DYNAMIC — clear separation!</li>
+                            <li>TTL wisely set karo — too short = useless, too long = stale</li>
+                            <li>Cache-Aside = safest default for most read-heavy apps</li>
+                            <li>On WRITE → Update DB first, then invalidate (DEL) cache</li>
+                            <li>Redis Cluster/Sentinel for HA — single cache = SPOF!</li>
+                            <li>Monitor hit rate — below 60%? Cache strategy review karo!</li>
+                        </ol>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(255, 111, 0, 0.1)); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; text-align: center;">
+                        <p style="font-size: 1.1rem;"><strong>📖 ByteByteGo Takeaway:</strong></p>
+                        <p style="font-size: 1rem; margin-top: 0.5rem; color: var(--text-secondary);">
+                            <em>"The fastest database query is the one you never have to make.<br>
+                            The fastest network request is the one served from the edge.<br>
+                            That's the power of Cache + CDN."</em> 🚀
+                        </p>
                     </div>
                 </div>
             </div>
@@ -7304,6 +7810,175 @@
                         <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem; font-style: italic;">Figure 1-3: Web Tier aur Data Tier ka Separation</p>
                     </div>
 
+                    <!-- Figure 1-3b: Web Server Offline / Failover Diagram -->
+                    <div style="background: linear-gradient(135deg, #ff6b6b11, #ff6b6b22); border-left: 4px solid #ff6b6b; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #ff6b6b;">⚠️ Problem - Single Web Server Offline Ho Jaye To?</strong>
+                        <p style="margin-top: 0.5rem;">Agar sirf ek hi web server hai aur wo <strong>crash ho jaye ya offline ho jaye</strong>, to users ka koi bhi request handle nahi hoga. Ye <strong>Single Point of Failure (SPOF)</strong> hai. Iska matlab hai ki poori website/app down ho jayegi jab tak server wapas online nahi aata.</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0; border: 2px solid #ff6b6b44;">
+                        <div class="mermaid" style="display: flex; justify-content: center;">
+                        flowchart TB
+                            subgraph User["👤 User"]
+                                WB["💻 Web browser"]
+                                MA["📱 Mobile app"]
+                            end
+                            
+                            DNS(("🌐 DNS"))
+                            
+                            subgraph WebTier["🖥️ Web Tier - OFFLINE ❌"]
+                                WS["🖥️ Web Server<br/>❌ OFFLINE / CRASHED"]
+                            end
+                            
+                            subgraph DataTier["🗄️ Data Tier"]
+                                DB[("🗄️ Database")]
+                            end
+                            
+                            User -.->|"1. resolve IP"| DNS
+                            User -->|"2. HTTP Request ❌ FAILED"| WS
+                            WS <-.->|"3. No Connection ❌"| DB
+                            
+                            style DNS fill:#4a90d9,stroke:#357abd,color:#fff
+                            style WS fill:#dc2626,stroke:#b91c1c,color:#fff
+                            style DB fill:#3b82f6,stroke:#1d4ed8,color:#fff
+                            style User fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style WebTier fill:#dc262611,stroke:#dc2626,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                            style DataTier fill:#3b82f611,stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                        </div>
+                        <p style="text-align: center; color: #ff6b6b; margin-top: 1rem; font-style: italic; font-weight: 600;">Figure 1-3b: Web Server Offline - Single Point of Failure (SPOF)</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                            <div style="background: rgba(220, 38, 38, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #ff6b6b44;">
+                                <strong style="color: #ff6b6b;">❌ Kya Hota Hai:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li>Users ko <strong>timeout errors</strong> milte hain</li>
+                                    <li>Website completely <strong>unreachable</strong> ho jati hai</li>
+                                    <li>Database accessible hai but <strong>koi query nahi aa rahi</strong></li>
+                                    <li>Revenue loss aur user trust damage</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0, 255, 136, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #00ff8844;">
+                                <strong style="color: #00ff88;">✅ Solution - Failover:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li><strong>Multiple web servers</strong> deploy karo</li>
+                                    <li><strong>Load Balancer</strong> add karo jo traffic distribute kare</li>
+                                    <li>Ek server down ho to <strong>doosra handle kare</strong></li>
+                                    <li>Auto-scaling se demand ke hisaab se servers add/remove ho</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Figure 1-3c: Server Overloaded by Multiple Users -->
+                    <div style="background: linear-gradient(135deg, #ff9f4311, #ff9f4322); border-left: 4px solid #ff9f43; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #ff9f43;">🔥 Problem - Traffic Spike / Server Overload:</strong>
+                        <p style="margin-top: 0.5rem;">Jab <strong>bohot saare users ek hi time pe</strong> website access karte hain, to single web server ki CPU, RAM aur network bandwidth <strong>limit tak pahunch jati hai</strong>. Server slow ho jata hai ya completely <strong>crash</strong> ho jata hai — ye hai <strong>scalability problem</strong>.</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0; border: 2px solid #ff9f4344;">
+                        <div class="mermaid" style="display: flex; justify-content: center;">
+                        flowchart TB
+                            U1["👤 User 1<br/>💻 Browser"]
+                            U2["👤 User 2<br/>📱 Mobile"]
+                            U3["👤 User 3<br/>💻 Browser"]
+                            U4["👤 User 4<br/>📱 Mobile"]
+                            U5["👤 User 5<br/>💻 Browser"]
+                            U6["👤 ... Thousands<br/>more users"]
+                            
+                            DNS(("🌐 DNS"))
+                            
+                            subgraph WebTier["🖥️ Web Tier - OVERLOADED 🔥"]
+                                WS["🖥️ Single Web Server<br/>⚠️ CPU: 98% | RAM: 95%<br/>🔥 REACHING LOAD LIMIT"]
+                            end
+                            
+                            subgraph DataTier["🗄️ Data Tier"]
+                                DB[("🗄️ Database<br/>⏳ Queries Queued")]
+                            end
+                            
+                            U1 & U2 & U3 -.->|"resolve IP"| DNS
+                            U4 & U5 & U6 -.->|"resolve IP"| DNS
+                            
+                            U1 -->|"⚡ Request"| WS
+                            U2 -->|"⚡ Request"| WS
+                            U3 -->|"⚡ Request"| WS
+                            U4 -->|"⚡ Request"| WS
+                            U5 -->|"⚡ Request"| WS
+                            U6 -->|"⚡⚡⚡ Thousands of Requests"| WS
+                            
+                            WS <-->|"Slow Queries ⏳"| DB
+                            
+                            style DNS fill:#4a90d9,stroke:#357abd,color:#fff
+                            style WS fill:#e67e22,stroke:#d35400,color:#fff
+                            style DB fill:#3b82f6,stroke:#1d4ed8,color:#fff
+                            style U1 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U2 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U3 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U4 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U5 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U6 fill:#dc2626,stroke:#b91c1c,color:#fff
+                            style WebTier fill:#e67e2211,stroke:#e67e22,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                            style DataTier fill:#3b82f611,stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                        </div>
+                        <p style="text-align: center; color: #ff9f43; margin-top: 1rem; font-style: italic; font-weight: 600;">Figure 1-3c: Multiple Users Simultaneously Accessing Server — Load Limit Reached 🔥</p>
+                        
+                        <!-- Server Load Meter Visual -->
+                        <div style="background: rgba(15, 15, 35, 0.8); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                            <p style="text-align: center; font-weight: 600; color: #ff9f43; margin-bottom: 1rem;">📊 Server Resource Usage</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                                        <span style="font-size: 0.85rem;">🔲 CPU Usage</span>
+                                        <span style="font-size: 0.85rem; color: #ff6b6b; font-weight: 700;">98%</span>
+                                    </div>
+                                    <div style="background: #1a1a2e; border-radius: 8px; height: 12px; overflow: hidden;">
+                                        <div style="background: linear-gradient(90deg, #ff9f43, #ff6b6b); width: 98%; height: 100%; border-radius: 8px; animation: pulse 1.5s ease-in-out infinite;"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                                        <span style="font-size: 0.85rem;">💾 RAM Usage</span>
+                                        <span style="font-size: 0.85rem; color: #ff6b6b; font-weight: 700;">95%</span>
+                                    </div>
+                                    <div style="background: #1a1a2e; border-radius: 8px; height: 12px; overflow: hidden;">
+                                        <div style="background: linear-gradient(90deg, #ff9f43, #ff6b6b); width: 95%; height: 100%; border-radius: 8px; animation: pulse 1.5s ease-in-out infinite;"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                                        <span style="font-size: 0.85rem;">🌐 Network I/O</span>
+                                        <span style="font-size: 0.85rem; color: #ff6b6b; font-weight: 700;">92%</span>
+                                    </div>
+                                    <div style="background: #1a1a2e; border-radius: 8px; height: 12px; overflow: hidden;">
+                                        <div style="background: linear-gradient(90deg, #ff9f43, #ff6b6b); width: 92%; height: 100%; border-radius: 8px; animation: pulse 1.5s ease-in-out infinite;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                            <div style="background: rgba(230, 126, 34, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #ff9f4344;">
+                                <strong style="color: #ff9f43;">⚠️ Kya Hota Hai:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li>Response time <strong>seconds se minutes</strong> mein badh jata hai</li>
+                                    <li>Users ko <strong>503 Service Unavailable</strong> errors milte hain</li>
+                                    <li>Database queries <strong>queue mein atki</strong> reh jati hain</li>
+                                    <li>Server <strong>crash</strong> ho sakta hai — sab users affected</li>
+                                    <li>Peak hours mein (sales, events) problem aur bhi worse</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0, 255, 136, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #00ff8844;">
+                                <strong style="color: #00ff88;">✅ Solution - Horizontal Scaling:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li><strong>Load Balancer</strong> add karo — traffic multiple servers pe distribute ho</li>
+                                    <li><strong>Horizontal Scaling</strong> — zyada servers add karo (scale out)</li>
+                                    <li><strong>Auto-scaling</strong> — traffic ke hisaab se automatically servers add/remove</li>
+                                    <li><strong>CDN + Caching</strong> — static content cache karo, server load kam ho</li>
+                                    <li><strong>Database replicas</strong> — read queries distribute karo</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     <div style="background: linear-gradient(135deg, #00ff8811, #00ff8822); border-left: 4px solid #00ff88; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
                         <strong style="color: #00ff88;">💡 Separation Ka Biggest Benefit:</strong>
                         <p style="margin-top: 0.5rem;">Web tier aur data tier ko separate karne se dono ko <strong>independently scale</strong> kar sakte hain. Agar web traffic zyada hai to sirf web servers add karo. Agar database slow hai to sirf database optimize karo (replicas, sharding, caching). Ye flexibility <strong>single server architecture mein bilkul nahi milti!</strong></p>
@@ -7545,7 +8220,233 @@
                         </div>
                         <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem; font-style: italic;">Figure 1-4</p>
                     </div>
+
+                    <!-- Figure 1-4b: Load Balancer Failover - Server Goes Offline -->
+                    <div style="background: linear-gradient(135deg, #ff6b6b11, #ff6b6b22); border-left: 4px solid #ff6b6b; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #ff6b6b;">🔄 Failover in Action - Server 1 Goes Offline!</strong>
+                        <p style="margin-top: 0.5rem;">Load Balancer regularly <strong>health checks</strong> karta hai (har kuch seconds mein ping). Jab Server 1 respond karna band kare, LB usse <strong>unhealthy mark</strong> kar deta hai aur <strong>saara traffic Server 2 pe reroute</strong> kar deta hai. Users ko pata bhi nahi chalta ki kuch hua tha — <strong>zero downtime!</strong></p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0; border: 2px solid #ff6b6b44;">
+                        <div class="mermaid" style="display: flex; justify-content: center;">
+                        flowchart TB
+                            subgraph User["👤 Users"]
+                                WB["💻 Web browser"]
+                                MA["📱 Mobile app"]
+                            end
+                            
+                            LB["⚖️ Load Balancer<br/>Public IP: 88.88.88.1<br/>🔍 Health Check Active"]
+                            
+                            subgraph Servers["Web Servers (Private Network)"]
+                                S1["🖥️ Server 1<br/>10.0.0.1<br/>❌ OFFLINE"]
+                                S2["🖥️ Server 2<br/>10.0.0.2<br/>✅ HEALTHY"]
+                            end
+                            
+                            subgraph DataTier["🗄️ Data Tier"]
+                                DB[("🗄️ Database")]
+                            end
+                            
+                            User -->|"Public IP: 88.88.88.1"| LB
+                            LB -.->|"❌ Health Check Failed<br/>No Traffic Sent"| S1
+                            LB ==>|"✅ ALL Traffic Rerouted<br/>Private IP: 10.0.0.2"| S2
+                            S2 <-->|"read/write"| DB
+                            S1 -.-x|"❌ No Connection"| DB
+                            
+                            style LB fill:#00bcd4,stroke:#0097a7,color:#fff
+                            style S1 fill:#dc2626,stroke:#b91c1c,color:#fff
+                            style S2 fill:#22c55e,stroke:#16a34a,color:#fff
+                            style DB fill:#3b82f6,stroke:#1d4ed8,color:#fff
+                            style User fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style Servers fill:transparent,stroke:#4a5568,stroke-dasharray: 5 5
+                            style DataTier fill:#3b82f611,stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                        </div>
+                        <p style="text-align: center; color: #ff6b6b; margin-top: 1rem; font-style: italic; font-weight: 600;">Figure 1-4b: Load Balancer Failover — Server 1 Offline, Traffic Rerouted to Server 2</p>
+                        
+                        <!-- Step-by-step Failover Process -->
+                        <div style="background: rgba(15, 15, 35, 0.8); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                            <p style="text-align: center; font-weight: 600; color: #00bcd4; margin-bottom: 1rem;">⏱️ Failover Process — Step by Step</p>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span style="background: #22c55e; color: #fff; padding: 0.3rem 0.7rem; border-radius: 50%; font-weight: 700; font-size: 0.85rem; min-width: 28px; text-align: center;">1</span>
+                                    <span style="font-size: 0.9rem;">LB har <strong>5-10 seconds</strong> mein Server 1 aur Server 2 ko <strong>health check ping</strong> bhejta hai</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span style="background: #ff9f43; color: #fff; padding: 0.3rem 0.7rem; border-radius: 50%; font-weight: 700; font-size: 0.85rem; min-width: 28px; text-align: center;">2</span>
+                                    <span style="font-size: 0.9rem;">Server 1 <strong>respond nahi karta</strong> — LB 2-3 retries karta hai to confirm</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span style="background: #dc2626; color: #fff; padding: 0.3rem 0.7rem; border-radius: 50%; font-weight: 700; font-size: 0.85rem; min-width: 28px; text-align: center;">3</span>
+                                    <span style="font-size: 0.9rem;">Server 1 ko <strong>unhealthy mark</strong> karta hai — server pool se <strong>remove</strong> kar deta hai</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span style="background: #00bcd4; color: #fff; padding: 0.3rem 0.7rem; border-radius: 50%; font-weight: 700; font-size: 0.85rem; min-width: 28px; text-align: center;">4</span>
+                                    <span style="font-size: 0.9rem;"><strong>Saara traffic Server 2 pe reroute</strong> — users ko koi downtime feel nahi hoti ✅</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span style="background: #22c55e; color: #fff; padding: 0.3rem 0.7rem; border-radius: 50%; font-weight: 700; font-size: 0.85rem; min-width: 28px; text-align: center;">5</span>
+                                    <span style="font-size: 0.9rem;">Jab Server 1 <strong>wapas online aaye</strong>, LB health check pass hone pe usse <strong>pool mein add</strong> kar deta hai</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                            <div style="background: rgba(0, 188, 212, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #00bcd444;">
+                                <strong style="color: #00bcd4;">🔍 Health Check Types:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li><strong>TCP Check:</strong> Server ke port pe connection try karo</li>
+                                    <li><strong>HTTP Check:</strong> /health endpoint pe GET request bhejo</li>
+                                    <li><strong>Custom Check:</strong> Specific API call karke app status verify karo</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(0, 255, 136, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #00ff8844;">
+                                <strong style="color: #00ff88;">✅ Without vs With Load Balancer:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li><strong>Without LB:</strong> Server down = <span style="color: #ff6b6b;">website down ❌</span></li>
+                                    <li><strong>With LB:</strong> Server down = <span style="color: #22c55e;">traffic rerouted, zero downtime ✅</span></li>
+                                    <li>Ye hai <strong>High Availability</strong> ka magic! 🪄</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     
+                    <!-- Figure 1-4c: Horizontal Scaling - Adding a Third Server -->
+                    <div style="background: linear-gradient(135deg, #22c55e11, #22c55e22); border-left: 4px solid #22c55e; padding: 1rem 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong style="color: #22c55e;">📈 Horizontal Scaling — Traffic Badha? Simply Ek Aur Server Add Karo!</strong>
+                        <p style="margin-top: 0.5rem;">Jab traffic <strong>badhne lage</strong> aur existing 2 servers load handle nahi kar pa rahe, to developer simply <strong>ek naya Server 3 add</strong> karta hai. Load Balancer <strong>automatically detect</strong> karta hai naya server aur traffic ko <strong>teeno servers mein equally distribute</strong> kar deta hai. Koi downtime nahi, koi disruption nahi — ye hai <strong>Horizontal Scaling (Scale Out)</strong> ka power! 💪</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 16px; margin: 1.5rem 0; border: 2px solid #22c55e44;">
+                        <div class="mermaid" style="display: flex; justify-content: center;">
+                        flowchart TB
+                            subgraph Users["👥 High Traffic - Many Users"]
+                                U1["👤 User 1<br/>💻 Browser"]
+                                U2["👤 User 2<br/>📱 Mobile"]
+                                U3["👤 User 3<br/>💻 Browser"]
+                                U4["👤 User 4<br/>📱 Mobile"]
+                                U5["👤 User 5<br/>💻 Browser"]
+                                U6["👤 User 6<br/>📱 Mobile"]
+                            end
+                            
+                            LB["⚖️ Load Balancer<br/>Public IP: 88.88.88.1<br/>📊 Round Robin Distribution"]
+                            
+                            subgraph Servers["Web Servers (Private Network) — Scaled Out! 🚀"]
+                                S1["🖥️ Server 1<br/>10.0.0.1<br/>✅ CPU: 35%"]
+                                S2["🖥️ Server 2<br/>10.0.0.2<br/>✅ CPU: 32%"]
+                                S3["🖥️ Server 3<br/>10.0.0.3<br/>✅ CPU: 33%<br/>🆕 NEW"]
+                            end
+                            
+                            subgraph DataTier["🗄️ Data Tier"]
+                                DB[("🗄️ Database")]
+                            end
+                            
+                            Users -->|"All Requests"| LB
+                            LB -->|"33% Traffic"| S1
+                            LB -->|"33% Traffic"| S2
+                            LB ==>|"33% Traffic 🆕"| S3
+                            S1 & S2 & S3 <-->|"read/write"| DB
+                            
+                            style LB fill:#00bcd4,stroke:#0097a7,color:#fff
+                            style S1 fill:#22c55e,stroke:#16a34a,color:#fff
+                            style S2 fill:#22c55e,stroke:#16a34a,color:#fff
+                            style S3 fill:#10b981,stroke:#059669,color:#fff
+                            style DB fill:#3b82f6,stroke:#1d4ed8,color:#fff
+                            style Users fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U1 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U2 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U3 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U4 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U5 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style U6 fill:#2a2a4e,stroke:#4a5568,color:#fff
+                            style Servers fill:transparent,stroke:#22c55e,stroke-width:2px,stroke-dasharray: 5 5
+                            style DataTier fill:#3b82f611,stroke:#3b82f6,stroke-width:2px,stroke-dasharray: 5 5,color:#e4e4e7
+                        </div>
+                        <p style="text-align: center; color: #22c55e; margin-top: 1rem; font-style: italic; font-weight: 600;">Figure 1-4c: Horizontal Scaling — New Server 3 Added, Load Balancer Distributes Traffic Evenly 🚀</p>
+                        
+                        <!-- Before vs After Comparison -->
+                        <div style="background: rgba(15, 15, 35, 0.8); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                            <p style="text-align: center; font-weight: 600; color: #00bcd4; margin-bottom: 1rem;">📊 Before vs After — Server 3 Add Karne Ka Impact</p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                                <!-- Before -->
+                                <div style="background: rgba(255, 159, 67, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #ff9f4344;">
+                                    <p style="text-align: center; font-weight: 700; color: #ff9f43; margin-bottom: 0.75rem;">⚠️ BEFORE (2 Servers)</p>
+                                    <div style="margin-bottom: 0.5rem;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                                            <span style="font-size: 0.8rem;">Server 1 CPU</span>
+                                            <span style="font-size: 0.8rem; color: #ff9f43; font-weight: 700;">72%</span>
+                                        </div>
+                                        <div style="background: #1a1a2e; border-radius: 6px; height: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #ff9f43, #ff6b6b); width: 72%; height: 100%; border-radius: 6px;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                                            <span style="font-size: 0.8rem;">Server 2 CPU</span>
+                                            <span style="font-size: 0.8rem; color: #ff9f43; font-weight: 700;">68%</span>
+                                        </div>
+                                        <div style="background: #1a1a2e; border-radius: 6px; height: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #ff9f43, #ff6b6b); width: 68%; height: 100%; border-radius: 6px;"></div>
+                                        </div>
+                                    </div>
+                                    <p style="text-align: center; margin-top: 0.75rem; font-size: 0.85rem; color: #ff9f43;">Avg Load: <strong>~70%</strong> ⚠️</p>
+                                </div>
+                                <!-- After -->
+                                <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #22c55e44;">
+                                    <p style="text-align: center; font-weight: 700; color: #22c55e; margin-bottom: 0.75rem;">✅ AFTER (3 Servers)</p>
+                                    <div style="margin-bottom: 0.5rem;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                                            <span style="font-size: 0.8rem;">Server 1 CPU</span>
+                                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: 700;">35%</span>
+                                        </div>
+                                        <div style="background: #1a1a2e; border-radius: 6px; height: 10px; overflow: hidden;">
+                                            <div style="background: #22c55e; width: 35%; height: 100%; border-radius: 6px;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 0.5rem;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                                            <span style="font-size: 0.8rem;">Server 2 CPU</span>
+                                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: 700;">32%</span>
+                                        </div>
+                                        <div style="background: #1a1a2e; border-radius: 6px; height: 10px; overflow: hidden;">
+                                            <div style="background: #22c55e; width: 32%; height: 100%; border-radius: 6px;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                                            <span style="font-size: 0.8rem;">Server 3 CPU 🆕</span>
+                                            <span style="font-size: 0.8rem; color: #22c55e; font-weight: 700;">33%</span>
+                                        </div>
+                                        <div style="background: #1a1a2e; border-radius: 6px; height: 10px; overflow: hidden;">
+                                            <div style="background: #10b981; width: 33%; height: 100%; border-radius: 6px;"></div>
+                                        </div>
+                                    </div>
+                                    <p style="text-align: center; margin-top: 0.75rem; font-size: 0.85rem; color: #22c55e;">Avg Load: <strong>~33%</strong> ✅</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                            <div style="background: rgba(0, 188, 212, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #00bcd444;">
+                                <strong style="color: #00bcd4;">🔧 Developer Kya Karta Hai:</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li>Naya server <strong>provision</strong> karo (same config)</li>
+                                    <li>App <strong>deploy</strong> karo naye server pe</li>
+                                    <li>Server ko LB ke <strong>server pool mein register</strong> karo</li>
+                                    <li>LB <strong>health check pass</strong> hone pe traffic bhejta hai</li>
+                                    <li><strong>Zero downtime</strong> — existing users ko koi impact nahi!</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(168, 85, 247, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid #a855f744;">
+                                <strong style="color: #a855f7;">🤖 Auto-Scaling (Cloud Magic):</strong>
+                                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem;">
+                                    <li>Cloud platforms (AWS, Azure, GCP) ye <strong>automatically</strong> karte hain</li>
+                                    <li>Rule set karo: <em>"CPU > 70% ho to naya server add karo"</em></li>
+                                    <li>Traffic kam ho to <strong>extra servers remove</strong> ho jate hain (cost saving 💰)</li>
+                                    <li>Ye hai <strong>Elastic Scaling</strong> — demand ke hisaab se grow/shrink</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     <h4 style="margin: 1.5rem 0 1rem; color: var(--bytebytego-primary);">🔑 Key Concepts</h4>
                     <ul style="margin-left: 1.5rem;">
                         <li><strong>Public IP:</strong> Load balancer ka IP jo users ko dikhta hai (internet-facing)</li>

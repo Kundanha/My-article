@@ -300,6 +300,7 @@
         /* Algorithm section problem items with checkboxes */
         .algo-problem-item {
             transition: all 0.3s ease;
+            position: relative;
         }
         .algo-problem-item:hover {
             transform: translateX(4px);
@@ -307,6 +308,105 @@
         }
         .algo-problem-item .ug-checkbox {
             min-width: 22px;
+        }
+
+        /* Tooltip system for algorithm hints */
+        .algo-problem-item {
+            position: relative;
+            overflow: visible;
+        }
+        .algo-problems-grid {
+            overflow: visible !important;
+        }
+        .algo-hint-btn {
+            background: rgba(66,133,244,0.15);
+            border: 1px solid rgba(66,133,244,0.3);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+            opacity: 0.7;
+            transition: all 0.25s ease;
+            user-select: none;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .algo-hint-btn:hover {
+            opacity: 1;
+            background: rgba(66,133,244,0.3);
+            border-color: rgba(66,133,244,0.6);
+        }
+        .algo-tooltip-box {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            right: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid rgba(66,133,244,0.4);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            width: 360px;
+            max-width: 90vw;
+            z-index: 99999;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(66,133,244,0.15);
+            pointer-events: none;
+        }
+        .algo-tooltip-box::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: 14px;
+            border: 7px solid transparent;
+            border-top-color: #16213e;
+        }
+        .algo-hint-btn:hover + .algo-tooltip-box,
+        .algo-hint-btn:focus + .algo-tooltip-box {
+            display: block;
+            animation: ttFadeIn 0.18s ease;
+        }
+        @keyframes ttFadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .algo-tt-algo {
+            display: inline-block;
+            background: rgba(66,133,244,0.25);
+            color: #4285f4;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+        .algo-tt-hint {
+            color: #e2e8f0;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .algo-tt-code {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            line-height: 1.55;
+            color: #79c0ff;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 0;
+        }
+        .algo-tt-lbl {
+            font-size: 0.65rem;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+            font-weight: 600;
         }
 
         .google-gradient {
@@ -30628,6 +30728,338 @@ class Solution:
             }
         };
 
+        // ==================== HTML ESCAPE HELPER ====================
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // ==================== ALGORITHM TOOLTIP HINTS DATA ====================
+        // Format: slug -> [algorithm, hint, python_code_key_lines]
+        const PROBLEM_HINTS = {
+            // ===== TWO POINTER =====
+            'two-sum-ii-input-array-is-sorted': ['Two Pointer', 'Converging pointers on sorted array. Move left if sum<target, right if sum>target', 'l, r = 0, len(nums)-1\nwhile l < r:\n  s = nums[l]+nums[r]\n  if s==target: return [l+1,r+1]\n  elif s<target: l+=1\n  else: r-=1'],
+            '3sum': ['Two Pointer', 'Sort + fix one num, use 2-pointer on rest. Skip duplicates to avoid repeats', 'nums.sort()\nfor i in range(len(nums)-2):\n  if i>0 and nums[i]==nums[i-1]: continue\n  l, r = i+1, len(nums)-1\n  # two-pointer for target = -nums[i]'],
+            '3sum-closest': ['Two Pointer', 'Sort + fix one, 2-pointer. Track closest sum by min abs difference', 'nums.sort()\nclosest = float("inf")\nfor i in range(len(nums)-2):\n  l, r = i+1, len(nums)-1\n  # update closest if abs(s-target) < abs(closest-target)'],
+            'container-with-most-water': ['Two Pointer', 'Converging pointers. Move the shorter height pointer inward (greedy)', 'l, r = 0, len(h)-1\nwhile l < r:\n  area = min(h[l],h[r]) * (r-l)\n  res = max(res, area)\n  if h[l]<h[r]: l+=1\n  else: r-=1'],
+            'trapping-rain-water': ['Two Pointer', 'Track left_max and right_max. Water at i = min(left_max,right_max) - height[i]', 'l, r = 0, len(h)-1\nlmax = rmax = 0\nwhile l < r:\n  if h[l]<h[r]:\n    lmax=max(lmax,h[l]); res+=lmax-h[l]; l+=1\n  else:\n    rmax=max(rmax,h[r]); res+=rmax-h[r]; r-=1'],
+            'valid-palindrome': ['Two Pointer', 'Converging pointers, skip non-alphanumeric, compare lowercase', 'l, r = 0, len(s)-1\nwhile l < r:\n  while l<r and not s[l].isalnum(): l+=1\n  while l<r and not s[r].isalnum(): r-=1\n  if s[l].lower()!=s[r].lower(): return False\n  l+=1; r-=1'],
+            'valid-palindrome-ii': ['Two Pointer', 'When mismatch found, try skipping left OR right char and check remaining', 'def check(s, l, r):\n  while l<r:\n    if s[l]!=s[r]: return False\n    l+=1; r-=1\n  return True\n# On mismatch: check(s,l+1,r) or check(s,l,r-1)'],
+            'remove-duplicates-from-sorted-array': ['Two Pointer', 'Read-write pointer. Write only when new element differs from previous', 'w = 1\nfor r in range(1, len(nums)):\n  if nums[r] != nums[r-1]:\n    nums[w] = nums[r]\n    w += 1\nreturn w'],
+            'remove-duplicates-from-sorted-array-ii': ['Two Pointer', 'Allow at most 2 duplicates. Write if nums[r] != nums[w-2]', 'w = 2\nfor r in range(2, len(nums)):\n  if nums[r] != nums[w-2]:\n    nums[w] = nums[r]\n    w += 1\nreturn w'],
+            'move-zeroes': ['Two Pointer', 'Write pointer places non-zeros, then fill rest with zeros', 'w = 0\nfor r in range(len(nums)):\n  if nums[r] != 0:\n    nums[w], nums[r] = nums[r], nums[w]\n    w += 1'],
+            'sort-colors': ['Two Pointer', 'Dutch National Flag: 3 pointers (lo, mid, hi). Swap 0s left, 2s right', 'lo = mid = 0; hi = len(nums)-1\nwhile mid <= hi:\n  if nums[mid]==0: swap(lo,mid); lo+=1; mid+=1\n  elif nums[mid]==1: mid+=1\n  else: swap(mid,hi); hi-=1'],
+            'squares-of-a-sorted-array': ['Two Pointer', 'Converging pointers, compare abs values, fill result array from end', 'l, r = 0, len(nums)-1\nres = [0]*len(nums); pos = r\nwhile l <= r:\n  if abs(nums[l])>abs(nums[r]):\n    res[pos]=nums[l]**2; l+=1\n  else: res[pos]=nums[r]**2; r-=1\n  pos-=1'],
+            'backspace-string-compare': ['Two Pointer', 'Traverse both strings from right, skip chars after #', 'def next_char(s, i):\n  skip = 0\n  while i>=0:\n    if s[i]=="#": skip+=1\n    elif skip>0: skip-=1\n    else: break\n    i-=1\n  return i'],
+            'longest-palindromic-substring': ['Expand Around Center', 'Try each index (and between pairs) as center, expand outward while palindrome', 'def expand(s, l, r):\n  while l>=0 and r<len(s) and s[l]==s[r]:\n    l-=1; r+=1\n  return s[l+1:r]\n# Check expand(s,i,i) and expand(s,i,i+1)'],
+            'merge-sorted-array': ['Two Pointer', 'Fill from the end. Compare largest elements, place at position m+n-1', 'p1, p2, p = m-1, n-1, m+n-1\nwhile p2 >= 0:\n  if p1>=0 and nums1[p1]>nums2[p2]:\n    nums1[p]=nums1[p1]; p1-=1\n  else: nums1[p]=nums2[p2]; p2-=1\n  p-=1'],
+            'interval-list-intersections': ['Two Pointer', 'Two pointers on both lists. Intersection = [max(starts), min(ends)]', 'i = j = 0\nwhile i<len(A) and j<len(B):\n  lo = max(A[i][0], B[j][0])\n  hi = min(A[i][1], B[j][1])\n  if lo<=hi: res.append([lo,hi])\n  if A[i][1]<B[j][1]: i+=1\n  else: j+=1'],
+            'reverse-string': ['Two Pointer', 'Swap chars from both ends moving inward', 'l, r = 0, len(s)-1\nwhile l < r:\n  s[l], s[r] = s[r], s[l]\n  l += 1; r -= 1'],
+            'reverse-words-in-a-string': ['Two Pointer', 'Split by spaces, reverse list, join. Or reverse whole then reverse each word', 'return " ".join(s.split()[::-1])'],
+            'rotate-array': ['Reverse Trick', 'Reverse all, reverse first k, reverse rest. O(1) space', 'k %= len(nums)\nnums.reverse()\nnums[:k] = reversed(nums[:k])\nnums[k:] = reversed(nums[k:])'],
+            'next-permutation': ['Two Pointer', 'Find rightmost ascending pair, swap with next larger, reverse suffix', 'i = len(nums)-2\nwhile i>=0 and nums[i]>=nums[i+1]: i-=1\nif i>=0:\n  j = len(nums)-1\n  while nums[j]<=nums[i]: j-=1\n  nums[i],nums[j]=nums[j],nums[i]\nnums[i+1:] = reversed(nums[i+1:])'],
+            'partition-labels': ['Two Pointer + Hash', 'Record last occurrence of each char. Extend partition end greedily', 'last = {c:i for i,c in enumerate(s)}\nstart = end = 0\nfor i,c in enumerate(s):\n  end = max(end, last[c])\n  if i==end: res.append(end-start+1); start=i+1'],
+            'minimum-window-substring': ['Sliding Window', 'Expand right to cover all chars, shrink left to minimize. Track freq with Counter', 'need = Counter(t); have = 0\nfor r in range(len(s)):\n  need[s[r]] -= 1\n  if need[s[r]] >= 0: have += 1\n  while have == len(t):\n    # update min, shrink from left'],
+            'longest-mountain-in-array': ['Two Pointer', 'For each peak, expand left and right. Mountain needs both ascending and descending', 'for i in range(1, len(arr)-1):\n  if arr[i-1]<arr[i]>arr[i+1]:\n    l=r=i\n    while l>0 and arr[l-1]<arr[l]: l-=1\n    while r<n-1 and arr[r]>arr[r+1]: r+=1\n    res = max(res, r-l+1)'],
+            'swap-adjacent-in-lr-string': ['Two Pointer', 'L can only move left, R can only move right. Match positions with constraints', 'i = j = 0\nwhile i<len(s) and j<len(t):\n  while i<len(s) and s[i]=="_": i+=1\n  while j<len(t) and t[j]=="_": j+=1\n  if s[i]!=t[j]: return False\n  if s[i]=="L" and i<j: return False'],
+            'move-pieces-to-obtain-a-string': ['Two Pointer', 'Skip blanks, match L/R. L can only go left (i>=j), R can only go right (i<=j)', 'i = j = 0\n# Skip "_", match chars\n# L: i>=j (can only move left)\n# R: i<=j (can only move right)'],
+            'merge-strings-alternately': ['Two Pointer', 'Alternate chars from both strings, append remaining', 'i = j = 0; res = []\nwhile i<len(a) and j<len(b):\n  res.append(a[i]); res.append(b[j])\n  i+=1; j+=1\nreturn "".join(res) + a[i:] + b[j:]'],
+            'sort-array-by-parity': ['Two Pointer', 'Swap even to front, odd to back using converging pointers', 'l, r = 0, len(nums)-1\nwhile l < r:\n  if nums[l]%2 > nums[r]%2:\n    nums[l],nums[r]=nums[r],nums[l]\n  if nums[l]%2==0: l+=1\n  if nums[r]%2==1: r-=1'],
+            'rearrange-array-elements-by-sign': ['Two Pointer', 'Separate positives and negatives, interleave', 'pos = neg = []\nfor n in nums:\n  if n>0: pos.append(n)\n  else: neg.append(n)\nres = []\nfor p,n in zip(pos,neg): res+=[p,n]'],
+            'sentence-similarity-iii': ['Two Pointer', 'Match words from start and end. Middle can be inserted', 'a, b = s1.split(), s2.split()\ni = j = 0\nwhile i<len(a) and i<len(b) and a[i]==b[i]: i+=1\nwhile j<len(a)-i and j<len(b)-i and a[-1-j]==b[-1-j]: j+=1\nreturn i+j >= min(len(a),len(b))'],
+            'duplicate-zeros': ['Two Pointer', 'Count zeros to find final length, then fill from right to left', 'zeros = nums.count(0)\nn = len(nums)\nj = n + zeros - 1\nfor i in range(n-1, -1, -1):\n  if j < n: nums[j] = nums[i]\n  if nums[i]==0: j-=1\n    if j<n: nums[j]=0\n  j-=1'],
+            // ===== SLIDING WINDOW =====
+            'longest-substring-without-repeating-characters': ['Sliding Window', 'Expand right, when duplicate found move left past the duplicate', 'seen = {}\nl = res = 0\nfor r, c in enumerate(s):\n  if c in seen and seen[c]>=l:\n    l = seen[c]+1\n  seen[c] = r\n  res = max(res, r-l+1)'],
+            'sliding-window-maximum': ['Monotonic Deque', 'Maintain decreasing deque of indices. Front is always the max', 'from collections import deque\ndq = deque()  # decreasing indices\nfor i in range(len(nums)):\n  while dq and nums[dq[-1]]<=nums[i]: dq.pop()\n  dq.append(i)\n  if dq[0]<=i-k: dq.popleft()\n  if i>=k-1: res.append(nums[dq[0]])'],
+            'find-all-anagrams-in-a-string': ['Sliding Window + Hash', 'Fixed window of len(p). Track char freq, compare with target freq', 'from collections import Counter\nneed = Counter(p)\nwindow = Counter(s[:len(p)])\nfor i in range(len(p), len(s)):\n  if window==need: res.append(i-len(p))\n  window[s[i]]+=1\n  window[s[i-len(p)]]-=1'],
+            'permutation-in-string': ['Sliding Window', 'Fixed window of len(s1). Check if window char counts match s1 counts', 'from collections import Counter\nif Counter(s1)==Counter(s2[:len(s1)]): return True\n# Slide window, add right char, remove left char'],
+            'longest-repeating-character-replacement': ['Sliding Window', 'Track max freq char in window. Shrink if window_size - max_freq > k', 'l = maxf = 0\ncount = {}\nfor r in range(len(s)):\n  count[s[r]] = count.get(s[r],0)+1\n  maxf = max(maxf, count[s[r]])\n  if (r-l+1)-maxf > k:\n    count[s[l]]-=1; l+=1'],
+            'fruit-into-baskets': ['Sliding Window', 'Longest subarray with at most 2 distinct elements', 'freq = {}; l = res = 0\nfor r in range(len(fruits)):\n  freq[fruits[r]] = freq.get(fruits[r],0)+1\n  while len(freq)>2:\n    freq[fruits[l]]-=1\n    if freq[fruits[l]]==0: del freq[fruits[l]]\n    l+=1\n  res = max(res, r-l+1)'],
+            'max-consecutive-ones-iii': ['Sliding Window', 'Track zeros in window. Shrink left when zeros > k', 'l = zeros = 0\nfor r in range(len(nums)):\n  if nums[r]==0: zeros+=1\n  while zeros>k:\n    if nums[l]==0: zeros-=1\n    l+=1\n  res = max(res, r-l+1)'],
+            'subarrays-with-k-different-integers': ['Sliding Window', 'Exact K = atMost(K) - atMost(K-1)', 'def atMost(k):\n  freq={}; l=res=0\n  for r in range(len(nums)):\n    freq[nums[r]]=freq.get(nums[r],0)+1\n    while len(freq)>k: ...\n    res += r-l+1\n  return res\nreturn atMost(k)-atMost(k-1)'],
+            'shortest-subarray-with-sum-at-least-k': ['Prefix Sum + Deque', 'Prefix sums + monotonic deque. Check if prefix[r]-prefix[dq[0]] >= k', 'from collections import deque\nprefix = [0]*(n+1)\nfor i in range(n): prefix[i+1]=prefix[i]+nums[i]\ndq = deque()\nfor i in range(n+1):\n  while dq and prefix[i]-prefix[dq[0]]>=k:\n    res=min(res,i-dq.popleft())'],
+            'binary-subarrays-with-sum': ['Sliding Window', 'Count subarrays with sum=goal. Use atMost(goal)-atMost(goal-1)', 'def atMost(goal):\n  if goal<0: return 0\n  l=s=res=0\n  for r in range(len(nums)):\n    s+=nums[r]\n    while s>goal: s-=nums[l]; l+=1\n    res+=r-l+1\n  return res'],
+            'count-number-of-nice-subarrays': ['Sliding Window', 'Replace odd->1, even->0. Find subarrays with sum=k', 'def atMost(k):\n  l=cnt=res=0\n  for r in range(len(nums)):\n    if nums[r]%2: cnt+=1\n    while cnt>k: \n      if nums[l]%2: cnt-=1\n      l+=1\n    res+=r-l+1\n  return res\nreturn atMost(k)-atMost(k-1)'],
+            'number-of-substrings-containing-all-three-characters': ['Sliding Window', 'Expand until all 3 chars present, then all substrings from r to end are valid', 'last = {a:-1, b:-1, c:-1}\nres = 0\nfor i,c in enumerate(s):\n  last[c] = i\n  res += 1 + min(last.values())'],
+            'maximum-points-you-can-obtain-from-cards': ['Sliding Window', 'Take total - min subarray of size (n-k)', 'total = sum(cardPoints)\nwindow = sum(cardPoints[:n-k])\nmin_sum = window\nfor i in range(n-k, n):\n  window += cardPoints[i] - cardPoints[i-(n-k)]\n  min_sum = min(min_sum, window)\nreturn total - min_sum'],
+            'longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit': ['Sliding Window + Deque', 'Maintain monotonic deques for min and max in window', 'from collections import deque\nmaxd, mind = deque(), deque()\nl = 0\nfor r in range(len(nums)):\n  while maxd and nums[maxd[-1]]<=nums[r]: maxd.pop()\n  while mind and nums[mind[-1]]>=nums[r]: mind.pop()\n  maxd.append(r); mind.append(r)\n  if nums[maxd[0]]-nums[mind[0]]>limit: l+=1'],
+            'minimum-operations-to-reduce-x-to-zero': ['Sliding Window', 'Find longest subarray with sum = total-x (complement approach)', 'target = sum(nums) - x\nif target<0: return -1\nl = s = 0; maxLen = -1\nfor r in range(len(nums)):\n  s += nums[r]\n  while s > target: s-=nums[l]; l+=1\n  if s==target: maxLen=max(maxLen,r-l+1)'],
+            'frequency-of-the-most-frequent-element': ['Sliding Window + Sort', 'Sort, expand window. Cost = target*window_size - window_sum <= k', 'nums.sort()\nl = s = 0\nfor r in range(len(nums)):\n  s += nums[r]\n  if nums[r]*(r-l+1) - s > k:\n    s -= nums[l]; l += 1\nreturn len(nums) - l'],
+            'maximum-sum-of-distinct-subarrays-with-length-k': ['Sliding Window + Set', 'Fixed window k. Track sum and distinct count with hashmap', 'freq = {}; s = 0\nfor i in range(len(nums)):\n  freq[nums[i]] = freq.get(nums[i],0)+1\n  s += nums[i]\n  if i>=k:\n    freq[nums[i-k]]-=1\n    if freq[nums[i-k]]==0: del freq[nums[i-k]]\n    s -= nums[i-k]\n  if i>=k-1 and len(freq)==k: res=max(res,s)'],
+            'take-k-of-each-character-from-left-and-right': ['Sliding Window', 'Find max removable middle window where remaining has k of each', 'total = Counter(s)\nif any(total[c]<k for c in "abc"): return -1\n# Find longest window to remove\n# such that remaining has >= k of each'],
+            'find-the-longest-substring-containing-vowels-in-even-counts': ['Bitmask + Hash', 'XOR bitmask for vowel parity. Same mask = even counts between', 'mask = 0; first = {0:-1}\nfor i,c in enumerate(s):\n  if c in "aeiou": mask ^= 1<<("aeiou".index(c))\n  if mask in first: res=max(res,i-first[mask])\n  else: first[mask]=i'],
+            'substring-with-concatenation-of-all-words': ['Sliding Window', 'Window of total_len. Check all word-length chunks against word count', 'wlen = len(words[0])\nneed = Counter(words)\nfor i in range(wlen):\n  # slide window of size len(words)*wlen\n  # compare word chunks with need'],
+            'count-substrings-with-k-frequency-characters-i': ['Sliding Window', 'Expand window, count when any char freq >= k', 'freq = {}; l = res = 0\nfor r in range(len(s)):\n  freq[s[r]] = freq.get(s[r],0)+1\n  while any(v>=k for v in freq.values()):\n    res += len(s)-r  # all extensions valid\n    freq[s[l]]-=1; l+=1'],
+            'alternating-groups-ii': ['Sliding Window', 'Circular array. Check alternating in window of size k', '# Extend array: colors + colors[:k-1]\n# Count windows where all adjacent differ'],
+            'find-the-power-of-k-size-subarrays-i': ['Sliding Window', 'Check if window is consecutive and sorted. Track streak length', 'streak = 1\nfor i in range(1, len(nums)):\n  if nums[i]==nums[i-1]+1: streak+=1\n  else: streak=1\n  if i>=k-1:\n    res.append(nums[i] if streak>=k else -1)'],
+            // ===== BINARY SEARCH =====
+            'binary-search': ['Binary Search', 'Classic binary search. Compare mid with target', 'l, r = 0, len(nums)-1\nwhile l <= r:\n  m = (l+r)//2\n  if nums[m]==target: return m\n  elif nums[m]<target: l=m+1\n  else: r=m-1'],
+            'search-insert-position': ['Binary Search', 'Find leftmost position where target would be inserted', 'l, r = 0, len(nums)\nwhile l < r:\n  m = (l+r)//2\n  if nums[m] < target: l=m+1\n  else: r=m\nreturn l'],
+            'search-in-rotated-sorted-array': ['Binary Search', 'One half is always sorted. Check if target is in sorted half', 'l, r = 0, len(nums)-1\nwhile l<=r:\n  m=(l+r)//2\n  if nums[m]==target: return m\n  if nums[l]<=nums[m]:  # left sorted\n    if nums[l]<=target<nums[m]: r=m-1\n    else: l=m+1\n  else:  # right sorted\n    if nums[m]<target<=nums[r]: l=m+1\n    else: r=m-1'],
+            'search-in-rotated-sorted-array-ii': ['Binary Search', 'Handle duplicates: when nums[l]==nums[m]==nums[r], shrink both sides', 'if nums[l]==nums[m]==nums[r]:\n  l+=1; r-=1; continue\n# Rest same as rotated search'],
+            'find-minimum-in-rotated-sorted-array': ['Binary Search', 'Compare mid with right. If mid>right, min is in right half', 'l, r = 0, len(nums)-1\nwhile l < r:\n  m = (l+r)//2\n  if nums[m] > nums[r]: l = m+1\n  else: r = m\nreturn nums[l]'],
+            'find-minimum-in-rotated-sorted-array-ii': ['Binary Search', 'When nums[m]==nums[r], just do r-=1 to handle duplicates', 'while l < r:\n  m = (l+r)//2\n  if nums[m]>nums[r]: l=m+1\n  elif nums[m]<nums[r]: r=m\n  else: r-=1'],
+            'find-peak-element': ['Binary Search', 'If nums[m]>nums[m+1], peak is on left/at m. Else on right', 'l, r = 0, len(nums)-1\nwhile l < r:\n  m = (l+r)//2\n  if nums[m] > nums[m+1]: r = m\n  else: l = m+1\nreturn l'],
+            'peak-index-in-a-mountain-array': ['Binary Search', 'Same as find peak element. Move towards ascending side', 'l, r = 0, len(arr)-1\nwhile l < r:\n  m = (l+r)//2\n  if arr[m] < arr[m+1]: l = m+1\n  else: r = m\nreturn l'],
+            'find-first-and-last-position-of-element-in-sorted-array': ['Binary Search', 'Two binary searches: one for leftmost, one for rightmost occurrence', 'def findLeft(nums, target):\n  l, r = 0, len(nums)-1\n  while l<=r:\n    m=(l+r)//2\n    if nums[m]>=target: r=m-1\n    else: l=m+1\n  return l  # leftmost position'],
+            'median-of-two-sorted-arrays': ['Binary Search', 'Binary search on shorter array. Partition both so left halves = right halves', 'l, r = 0, len(A)\nwhile l <= r:\n  i = (l+r)//2; j = half-i\n  if A[i-1]>B[j]: r=i-1\n  elif B[j-1]>A[i]: l=i+1\n  else: return median from partitions'],
+            'koko-eating-bananas': ['Binary Search on Answer', 'Binary search on speed. Check if can finish in h hours at speed mid', 'l, r = 1, max(piles)\nwhile l < r:\n  m = (l+r)//2\n  if sum((p+m-1)//m for p in piles) <= h:\n    r = m\n  else: l = m+1\nreturn l'],
+            'capacity-to-ship-packages-within-d-days': ['Binary Search on Answer', 'Binary search on capacity. Check if can ship in d days', 'l, r = max(weights), sum(weights)\nwhile l < r:\n  m = (l+r)//2\n  days = 1; curr = 0\n  for w in weights:\n    if curr+w>m: days+=1; curr=0\n    curr+=w\n  if days<=d: r=m\n  else: l=m+1'],
+            'split-array-largest-sum': ['Binary Search on Answer', 'Binary search on max subarray sum. Check if can split into k groups', 'l, r = max(nums), sum(nums)\nwhile l < r:\n  m = (l+r)//2\n  # count groups needed with max sum = m\n  if groups <= k: r = m\n  else: l = m+1'],
+            'search-a-2d-matrix': ['Binary Search', 'Treat 2D matrix as 1D sorted array. row=mid//cols, col=mid%cols', 'rows, cols = len(mat), len(mat[0])\nl, r = 0, rows*cols-1\nwhile l<=r:\n  m=(l+r)//2\n  val = mat[m//cols][m%cols]\n  if val==target: return True\n  elif val<target: l=m+1\n  else: r=m-1'],
+            'search-a-2d-matrix-ii': ['Search from Corner', 'Start top-right. Go left if val>target, down if val<target', 'r, c = 0, len(mat[0])-1\nwhile r<len(mat) and c>=0:\n  if mat[r][c]==target: return True\n  elif mat[r][c]>target: c-=1\n  else: r+=1'],
+            'time-based-key-value-store': ['Binary Search + Hash', 'HashMap of key -> [(timestamp, value)]. Binary search for largest ts <= target', 'import bisect\nclass TimeMap:\n  def __init__(self): self.d = {}\n  def set(self,k,v,t): self.d.setdefault(k,[]).append((t,v))\n  def get(self,k,t):\n    vals = self.d.get(k,[])\n    i = bisect.bisect_right(vals,(t,chr(127)))\n    return vals[i-1][1] if i else ""'],
+            'snapshot-array': ['Binary Search', 'Store changes as (snap_id, val) per index. Binary search for snap_id', 'self.arr = {}\nself.snap_id = 0\ndef set(i,v): self.arr.setdefault(i,[]).append((self.snap_id,v))\ndef get(i,snap):\n  # bisect for largest snap_id <= snap'],
+            'kth-missing-positive-number': ['Binary Search', 'Missing count at i = arr[i]-(i+1). Binary search for position', 'l, r = 0, len(arr)-1\nwhile l <= r:\n  m = (l+r)//2\n  missing = arr[m] - (m+1)\n  if missing < k: l = m+1\n  else: r = m-1\nreturn l + k  # answer'],
+            'kth-smallest-element-in-a-sorted-matrix': ['Binary Search on Value', 'Binary search on value range. Count elements <= mid in matrix', 'lo, hi = mat[0][0], mat[-1][-1]\nwhile lo < hi:\n  mid = (lo+hi)//2\n  count = sum(bisect_right(row,mid) for row in mat)\n  if count < k: lo=mid+1\n  else: hi=mid'],
+            'find-k-closest-elements': ['Binary Search', 'Binary search for starting index of window of size k', 'l, r = 0, len(arr)-k\nwhile l < r:\n  m = (l+r)//2\n  if x-arr[m] > arr[m+k]-x: l=m+1\n  else: r=m\nreturn arr[l:l+k]'],
+            'minimized-maximum-of-products-distributed-to-any-store': ['Binary Search on Answer', 'Binary search on max products per store. Check if distributeable', 'l, r = 1, max(quantities)\nwhile l < r:\n  m = (l+r)//2\n  stores = sum((q+m-1)//m for q in quantities)\n  if stores <= n: r=m\n  else: l=m+1'],
+            'most-beautiful-item-for-each-query': ['Sort + Binary Search', 'Sort items by price, precompute max beauty prefix, binary search each query', 'items.sort()\nfor i in range(1,len(items)):\n  items[i][1]=max(items[i][1],items[i-1][1])\n# For each query: bisect_right by price'],
+            'count-the-number-of-fair-pairs': ['Sort + Binary Search', 'Sort array. For each num, binary search for valid pair range [lo-num, up-num]', 'nums.sort()\nfor i in range(len(nums)):\n  lo = bisect_left(nums, lower-nums[i], i+1)\n  hi = bisect_right(nums, upper-nums[i], i+1)\n  count += hi - lo'],
+            'prime-subtraction-operation': ['Greedy + Binary Search', 'For each element, subtract largest prime to keep array strictly increasing', 'primes = sieve(1000)\nfor i in range(len(nums)-1, -1, -1):\n  # Find largest prime < nums[i] to subtract\n  # Keep nums[i] > nums[i+1] after subtraction'],
+            'path-with-minimum-effort': ['Binary Search + BFS', 'Binary search on max effort. BFS/DFS to check if path exists with that effort', 'l, r = 0, 10**6\nwhile l < r:\n  m = (l+r)//2\n  if canReach(m):  # BFS with max diff = m\n    r = m\n  else: l = m+1'],
+            'minimum-time-to-visit-a-cell-in-a-grid': ['Dijkstra', 'Modified Dijkstra. If cant move, wait (add 1 if parity differs)', 'import heapq\nheap = [(0,0,0)]  # (time, r, c)\nwhile heap:\n  t,r,c = heapq.heappop(heap)\n  # For each neighbor: adjust time for parity'],
+            'find-beautiful-indices-in-the-given-array-ii': ['KMP + Binary Search', 'Find all occurrences of a and b using KMP, then binary search for close pairs', '# Find indices_a and indices_b using KMP\n# For each idx in indices_a:\n#   binary search indices_b for |idx-j| <= k'],
+            'zero-array-transformation-ii': ['Binary Search + Diff Array', 'Binary search on number of queries. Check with difference array technique', 'def check(k):\n  diff = [0]*(n+1)\n  for l,r,v in queries[:k]:\n    diff[l]+=v; diff[r+1]-=v\n  # prefix sum, check all nums[i]<=prefix[i]'],
+            // ===== DYNAMIC PROGRAMMING =====
+            'climbing-stairs': ['DP (Fibonacci)', 'dp[i] = dp[i-1] + dp[i-2]. Each step: 1 or 2', 'a, b = 1, 1\nfor i in range(2, n+1):\n  a, b = b, a+b\nreturn b'],
+            'house-robber': ['DP (Linear)', 'dp[i] = max(dp[i-1], dp[i-2]+nums[i]). Rob or skip', 'prev2 = prev1 = 0\nfor n in nums:\n  prev2, prev1 = prev1, max(prev1, prev2+n)\nreturn prev1'],
+            'house-robber-ii': ['DP (Circular)', 'Run house robber twice: [0..n-2] and [1..n-1], take max', 'def rob_linear(nums):\n  p2=p1=0\n  for n in nums: p2,p1=p1,max(p1,p2+n)\n  return p1\nreturn max(rob_linear(nums[:-1]),rob_linear(nums[1:]))'],
+            'unique-paths': ['DP (Grid)', 'dp[r][c] = dp[r-1][c] + dp[r][c-1]. Or math: C(m+n-2, m-1)', 'dp = [[1]*n for _ in range(m)]\nfor r in range(1,m):\n  for c in range(1,n):\n    dp[r][c] = dp[r-1][c] + dp[r][c-1]'],
+            'unique-paths-ii': ['DP (Grid)', 'Same as unique paths but dp[r][c]=0 if obstacle', 'if grid[r][c]==1: dp[r][c]=0\nelse: dp[r][c]=dp[r-1][c]+dp[r][c-1]'],
+            'minimum-path-sum': ['DP (Grid)', 'dp[r][c] = grid[r][c] + min(dp[r-1][c], dp[r][c-1])', 'for r in range(m):\n  for c in range(n):\n    if r>0 and c>0: dp[r][c]=grid[r][c]+min(dp[r-1][c],dp[r][c-1])\n    elif r>0: dp[r][c]=grid[r][c]+dp[r-1][c]\n    elif c>0: dp[r][c]=grid[r][c]+dp[r][c-1]'],
+            'coin-change': ['DP (Unbounded Knapsack)', 'dp[amount] = min coins. For each coin: dp[a] = min(dp[a], dp[a-coin]+1)', 'dp = [float("inf")]*(amount+1)\ndp[0] = 0\nfor coin in coins:\n  for a in range(coin, amount+1):\n    dp[a] = min(dp[a], dp[a-coin]+1)'],
+            'coin-change-ii': ['DP (Unbounded Knapsack)', 'Count combinations. Process coins in outer loop to avoid permutations', 'dp = [0]*(amount+1); dp[0]=1\nfor coin in coins:\n  for a in range(coin, amount+1):\n    dp[a] += dp[a-coin]'],
+            'longest-increasing-subsequence': ['DP + Binary Search', 'Maintain sorted tails array. Binary search for insertion position', 'import bisect\ntails = []\nfor n in nums:\n  pos = bisect.bisect_left(tails, n)\n  if pos == len(tails): tails.append(n)\n  else: tails[pos] = n\nreturn len(tails)'],
+            'longest-common-subsequence': ['DP (2D String)', 'If chars match: dp[i][j]=dp[i-1][j-1]+1. Else: max(dp[i-1][j],dp[i][j-1])', 'dp = [[0]*(n+1) for _ in range(m+1)]\nfor i in range(1,m+1):\n  for j in range(1,n+1):\n    if s1[i-1]==s2[j-1]: dp[i][j]=dp[i-1][j-1]+1\n    else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])'],
+            'edit-distance': ['DP (2D String)', 'Match: dp[i-1][j-1]. Insert/Delete/Replace: 1 + min of 3 neighbors', 'if w1[i-1]==w2[j-1]: dp[i][j]=dp[i-1][j-1]\nelse: dp[i][j]=1+min(\n  dp[i-1][j],    # delete\n  dp[i][j-1],    # insert\n  dp[i-1][j-1])  # replace'],
+            'decode-ways': ['DP (Linear)', 'dp[i] += dp[i-1] if valid single digit, dp[i-2] if valid two digits', 'dp = [0]*(n+1); dp[0]=1\nfor i in range(1,n+1):\n  if s[i-1]!="0": dp[i]+=dp[i-1]\n  if i>1 and 10<=int(s[i-2:i])<=26: dp[i]+=dp[i-2]'],
+            'word-break': ['DP + Trie/Set', 'dp[i] = True if s[:i] can be segmented. Check all words ending at i', 'dp = [False]*(n+1); dp[0]=True\nfor i in range(1,n+1):\n  for w in wordDict:\n    if i>=len(w) and dp[i-len(w)] and s[i-len(w):i]==w:\n      dp[i]=True; break'],
+            'word-break-ii': ['DP + Backtracking', 'Backtrack with memoization. At each position try all matching words', 'def bt(start):\n  if start==len(s): return [""]\n  res = []\n  for w in wordDict:\n    if s[start:start+len(w)]==w:\n      for rest in bt(start+len(w)):\n        res.append(w+(" "+rest if rest else ""))'],
+            'jump-game': ['Greedy', 'Track max reachable index. If i > max_reach, return False', 'reach = 0\nfor i in range(len(nums)):\n  if i > reach: return False\n  reach = max(reach, i+nums[i])\nreturn True'],
+            'jump-game-ii': ['Greedy (BFS)', 'Track current end and farthest. Increment jumps when i reaches current end', 'jumps = end = far = 0\nfor i in range(len(nums)-1):\n  far = max(far, i+nums[i])\n  if i == end:\n    jumps += 1; end = far'],
+            'jump-game-vi': ['DP + Monotonic Deque', 'dp[i] = nums[i] + max(dp[i-k:i]). Use deque to track max in window', 'from collections import deque\ndp = [0]*n; dp[0]=nums[0]\ndq = deque([0])\nfor i in range(1,n):\n  dp[i]=nums[i]+dp[dq[0]]\n  while dq and dp[dq[-1]]<=dp[i]: dq.pop()\n  dq.append(i)\n  if dq[0]<=i-k: dq.popleft()'],
+            'best-time-to-buy-and-sell-stock': ['Greedy', 'Track min price so far. Profit = price - min_price', 'min_price = float("inf")\nmax_profit = 0\nfor p in prices:\n  min_price = min(min_price, p)\n  max_profit = max(max_profit, p-min_price)'],
+            'best-time-to-buy-and-sell-stock-ii': ['Greedy', 'Add every positive price difference (buy low, sell high repeatedly)', 'profit = 0\nfor i in range(1, len(prices)):\n  if prices[i] > prices[i-1]:\n    profit += prices[i] - prices[i-1]'],
+            'best-time-to-buy-and-sell-stock-with-cooldown': ['DP (State Machine)', 'Three states: hold, sold, rest. Transitions between states', 'hold = -prices[0]; sold = 0; rest = 0\nfor p in prices[1:]:\n  hold, sold, rest = \\\n    max(hold, rest-p),\\\n    hold+p,\\\n    max(rest, sold)'],
+            'maximal-square': ['DP (2D)', 'dp[i][j] = min(left, top, diagonal) + 1 if cell is 1', 'for r in range(1,m):\n  for c in range(1,n):\n    if mat[r][c]=="1":\n      dp[r][c]=min(dp[r-1][c],dp[r][c-1],dp[r-1][c-1])+1\n      res=max(res,dp[r][c])'],
+            'count-square-submatrices-with-all-ones': ['DP (2D)', 'Same as maximal square. Sum all dp values for total count', 'for r in range(1,m):\n  for c in range(1,n):\n    if mat[r][c]:\n      mat[r][c]=min(mat[r-1][c],mat[r][c-1],mat[r-1][c-1])+1\nreturn sum(sum(row) for row in mat)'],
+            'partition-equal-subset-sum': ['DP (0/1 Knapsack)', 'Target = sum//2. dp[j] = can we make sum j?', 'target = sum(nums)//2\ndp = [False]*(target+1); dp[0]=True\nfor n in nums:\n  for j in range(target, n-1, -1):\n    dp[j] = dp[j] or dp[j-n]\nreturn dp[target]'],
+            'target-sum': ['DP (Subset Sum)', 'Convert to subset sum: find subset with sum=(total+target)//2', 'target = (sum(nums)+target)//2\ndp = [0]*(target+1); dp[0]=1\nfor n in nums:\n  for j in range(target, n-1, -1):\n    dp[j] += dp[j-n]'],
+            'regular-expression-matching': ['DP (2D String)', 'Handle . (any char) and * (zero or more of prev)', 'dp[i][j] = True if s[:i] matches p[:j]\nif p[j-1]=="*":\n  dp[i][j] = dp[i][j-2]  # zero matches\n  or (match and dp[i-1][j])  # one+ matches'],
+            'wildcard-matching': ['DP (2D String)', '? matches any single char, * matches any sequence', 'dp[0][0]=True\nfor j: if p[j]=="*": dp[0][j+1]=dp[0][j]\nfor i,j:\n  if p[j]=="*": dp[i+1][j+1]=dp[i+1][j] or dp[i][j+1]\n  elif p[j]=="?" or s[i]==p[j]: dp[i+1][j+1]=dp[i][j]'],
+            'palindrome-partitioning-ii': ['DP (Linear)', 'dp[i] = min cuts for s[:i]. Expand palindromes from each center', 'dp = list(range(n))\nfor c in range(n):\n  # odd length palindromes\n  l=r=c\n  while l>=0 and r<n and s[l]==s[r]:\n    dp[r]=min(dp[r], (dp[l-1]+1 if l>0 else 0))\n    l-=1; r+=1'],
+            'interleaving-string': ['DP (2D)', 'dp[i][j] = can s3[:i+j] be formed by interleaving s1[:i] and s2[:j]', 'dp[i][j] = (\n  (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or\n  (dp[i][j-1] and s2[j-1]==s3[i+j-1]))'],
+            'distinct-subsequences': ['DP (2D String)', 'Match: dp[i-1][j-1]+dp[i-1][j]. No match: dp[i-1][j]', 'dp[i][j] = dp[i-1][j]  # skip s[i]\nif s[i-1]==t[j-1]:\n  dp[i][j] += dp[i-1][j-1]  # use s[i]'],
+            'minimum-cost-for-tickets': ['DP (Linear)', 'dp[i] = min cost to travel up to day i. Try 1/7/30 day passes', 'dp[0]=0\nfor i in range(1,last_day+1):\n  if i not in travel: dp[i]=dp[i-1]\n  else: dp[i]=min(\n    dp[max(0,i-1)]+costs[0],\n    dp[max(0,i-7)]+costs[1],\n    dp[max(0,i-30)]+costs[2])'],
+            'number-of-dice-rolls-with-target-sum': ['DP (2D)', 'dp[d][t] = ways using d dice to reach target t', 'dp = [[0]*(target+1) for _ in range(n+1)]\ndp[0][0] = 1\nfor d in range(1,n+1):\n  for t in range(1,target+1):\n    for f in range(1,k+1):\n      if t>=f: dp[d][t]+=dp[d-1][t-f]'],
+            'filling-bookcase-shelves': ['DP (Linear)', 'dp[i] = min height for first i books. Try grouping last j books on same shelf', 'dp = [0]+[inf]*n\nfor i in range(1,n+1):\n  w=h=0; j=i\n  while j>0:\n    w+=books[j-1][0]; h=max(h,books[j-1][1])\n    if w>shelfWidth: break\n    dp[i]=min(dp[i],dp[j-1]+h); j-=1'],
+            'partition-array-for-maximum-sum': ['DP (Linear)', 'dp[i] = max sum for first i elements. Try partitions of size 1..k', 'dp = [0]*(n+1)\nfor i in range(1,n+1):\n  mx = 0\n  for j in range(1,min(k,i)+1):\n    mx = max(mx, arr[i-j])\n    dp[i] = max(dp[i], dp[i-j]+mx*j)'],
+            'longest-arithmetic-subsequence-of-given-difference': ['DP + HashMap', 'dp[val] = length of longest subsequence ending with val', 'dp = {}\nfor n in arr:\n  dp[n] = dp.get(n-difference, 0) + 1\nreturn max(dp.values())'],
+            'extra-characters-in-a-string': ['DP + Set', 'dp[i] = min extra chars for s[:i]. Try matching dictionary words', 'words = set(dictionary)\ndp = [0]*(n+1)\nfor i in range(1,n+1):\n  dp[i] = dp[i-1]+1  # skip char\n  for j in range(i):\n    if s[j:i] in words:\n      dp[i] = min(dp[i], dp[j])'],
+            'maximum-number-of-moves-in-a-grid': ['DP (Grid)', 'From each cell, move to 3 adjacent cells in next column if value increases', 'dp = set(range(m))  # start from col 0\nfor c in range(1,n):\n  new = set()\n  for r in dp:\n    for nr in [r-1,r,r+1]:\n      if 0<=nr<m and grid[nr][c]>grid[r][c-1]:\n        new.add(nr)'],
+            'minimum-total-distance-traveled': ['DP + Sort', 'Sort robots and factories. dp[i][j] = min dist for robots[:i] and factories[:j]', '# Sort both arrays\n# dp[i][j] = min cost assigning first i robots\n# to first j factory slots'],
+            'longest-increasing-subsequence-ii': ['Segment Tree + DP', 'Segment tree for range max query on dp values', '# dp[v] = LIS length ending at value v\n# For each num: query max(dp[num-k..num-1])+1\n# Update segment tree'],
+            'sum-of-good-subsequences': ['DP + Hash', 'dp[v] = (count, sum) of good subsequences ending with v', 'cnt = {}; total = {}\nfor n in nums:\n  c = cnt.get(n-1,0)+cnt.get(n+1,0)+1\n  s = total.get(n-1,0)+total.get(n+1,0)+n*c\n  cnt[n]=cnt.get(n,0)+c\n  total[n]=total.get(n,0)+s'],
+            // ===== GRAPH / BFS / DFS =====
+            'number-of-islands': ['DFS/BFS', 'For each "1", DFS/BFS to mark entire island as visited', 'def dfs(r, c):\n  if r<0 or r>=m or c<0 or c>=n or grid[r][c]!="1": return\n  grid[r][c]="0"\n  for dr,dc in [(0,1),(0,-1),(1,0),(-1,0)]:\n    dfs(r+dr, c+dc)'],
+            'max-area-of-island': ['DFS', 'DFS from each "1", return area count. Track max area', 'def dfs(r, c):\n  if r<0 or r>=m or c<0 or c>=n or grid[r][c]!=1: return 0\n  grid[r][c]=0\n  return 1+dfs(r+1,c)+dfs(r-1,c)+dfs(r,c+1)+dfs(r,c-1)'],
+            'clone-graph': ['DFS + HashMap', 'Use hashmap old->new node. DFS clone neighbors recursively', 'clones = {}\ndef dfs(node):\n  if node in clones: return clones[node]\n  copy = Node(node.val)\n  clones[node] = copy\n  for n in node.neighbors:\n    copy.neighbors.append(dfs(n))\n  return copy'],
+            'course-schedule': ['Topological Sort', 'Build graph + indegree. BFS from indegree=0 nodes. Check if all visited', 'indegree = [0]*n; graph = defaultdict(list)\nfor a,b in prereqs: graph[b].append(a); indegree[a]+=1\nq = deque(i for i in range(n) if indegree[i]==0)\nwhile q: ...\nreturn count==n'],
+            'course-schedule-ii': ['Topological Sort', 'Same as course schedule but track order of completed courses', 'order = []\nwhile q:\n  node = q.popleft(); order.append(node)\n  for nb in graph[node]:\n    indegree[nb]-=1\n    if indegree[nb]==0: q.append(nb)'],
+            'pacific-atlantic-water-flow': ['Multi-source DFS', 'DFS from ocean borders inward. Intersection of both reachable sets', 'pac, atl = set(), set()\ndef dfs(r,c,visit,prevH):\n  if (r,c) in visit or r<0...: return\n  if grid[r][c]<prevH: return\n  visit.add((r,c)); # dfs 4 dirs\n# Start DFS from all border cells'],
+            'rotting-oranges': ['Multi-source BFS', 'Start BFS from all rotten oranges simultaneously. Count minutes', 'q = deque()\nfor r,c: if grid[r][c]==2: q.append((r,c,0))\nwhile q:\n  r,c,t = q.popleft()\n  for dr,dc in dirs:\n    if grid[nr][nc]==1: grid[nr][nc]=2; q.append((nr,nc,t+1))'],
+            'walls-and-gates': ['Multi-source BFS', 'Start BFS from all gates (0s). Fill distances outward', 'q = deque()\nfor r,c: if grid[r][c]==0: q.append((r,c))\nwhile q:\n  r,c = q.popleft()\n  for dr,dc in dirs:\n    if grid[nr][nc]==INF: grid[nr][nc]=grid[r][c]+1; q.append(...)'],
+            'word-ladder': ['BFS', 'BFS level by level. Try changing each char position to a-z', 'q = deque([(beginWord, 1)])\nvisited = {beginWord}\nwhile q:\n  word, steps = q.popleft()\n  for i in range(len(word)):\n    for c in "abcdefghijklmnopqrstuvwxyz":\n      new_word = word[:i]+c+word[i+1:]'],
+            'word-search': ['DFS + Backtracking', 'DFS from each cell matching first char. Mark visited, backtrack', 'def dfs(r,c,idx):\n  if idx==len(word): return True\n  if r<0 or ...: return False\n  if board[r][c]!=word[idx]: return False\n  board[r][c]="#"  # mark visited\n  found = dfs(r+1,c,idx+1) or ...\n  board[r][c]=word[idx]  # backtrack'],
+            'word-search-ii': ['Trie + DFS', 'Build Trie from words. DFS on board matching Trie paths', 'class TrieNode: ...\nroot = build_trie(words)\ndef dfs(r,c,node):\n  if node.word: res.append(node.word)\n  for dr,dc in dirs:\n    if board[nr][nc] in node.children: dfs(...)'],
+            'surrounded-regions': ['DFS from Border', 'DFS from border Os to mark safe. Then flip remaining Os to X', 'for border cells:\n  if board[r][c]=="O": dfs(r,c)  # mark as safe\nfor all cells:\n  if board[r][c]=="O": board[r][c]="X"\n  if board[r][c]=="#": board[r][c]="O"'],
+            'graph-valid-tree': ['Union Find / DFS', 'Tree = connected graph with n-1 edges and no cycles', 'if len(edges)!=n-1: return False\n# Union-Find: check no cycle\nfor u,v in edges:\n  if find(u)==find(v): return False\n  union(u,v)\nreturn True'],
+            'number-of-connected-components-in-an-undirected-graph': ['Union Find', 'Union all edges. Count unique roots', 'parent = list(range(n))\nfor u,v in edges: union(u,v)\nreturn len(set(find(i) for i in range(n)))'],
+            'is-graph-bipartite': ['BFS + Coloring', 'Try 2-coloring with BFS. If neighbor has same color, not bipartite', 'color = [-1]*n\nfor i in range(n):\n  if color[i]==-1:\n    q = deque([i]); color[i]=0\n    while q:\n      node = q.popleft()\n      for nb in graph[node]:\n        if color[nb]==color[node]: return False'],
+            'all-nodes-distance-k-in-binary-tree': ['BFS + Parent Map', 'Build parent pointers. BFS from target node k levels', 'parent = {}  # node -> parent\n# DFS to build parent map\n# BFS from target, k levels\nq = deque([(target, 0)])\nvisited = {target}'],
+            'bus-routes': ['BFS on Routes', 'BFS on route level (not stop level). Map stop->routes', 'stop_to_routes = defaultdict(set)\nfor i,route in enumerate(routes):\n  for stop in route: stop_to_routes[stop].add(i)\n# BFS: start from source stops\' routes'],
+            'race-car': ['BFS', 'State = (position, speed). BFS with Accelerate and Reverse actions', 'q = deque([(0, 1, 0)])  # pos, speed, steps\nwhile q:\n  pos, spd, steps = q.popleft()\n  # Accelerate: (pos+spd, spd*2)\n  # Reverse: (pos, -1 if spd>0 else 1)'],
+            'sliding-puzzle': ['BFS', 'Serialize board as string. BFS with swap states', 'start = "".join(str(c) for row in board for c in row)\ntarget = "123450"\nq = deque([(start, start.index("0"), 0)])\n# BFS: swap 0 with neighbors'],
+            'critical-connections-in-a-network': ['Tarjan Algorithm', 'Find bridges using DFS discovery and low times', 'disc = low = [-1]*n; timer=[0]\ndef dfs(u, parent):\n  disc[u]=low[u]=timer[0]; timer[0]+=1\n  for v in graph[u]:\n    if disc[v]==-1:\n      dfs(v,u); low[u]=min(low[u],low[v])\n      if low[v]>disc[u]: bridges.append([u,v])'],
+            'the-earliest-moment-when-everyone-become-friends': ['Union Find + Sort', 'Sort by time. Union friends. Return time when all connected', 'logs.sort()\nfor t,a,b in logs:\n  union(a,b)\n  if components==1: return t\nreturn -1'],
+            'parallel-courses': ['Topological Sort + BFS', 'BFS level order. Max levels = semesters needed', 'indeg = [0]*(n+1)\n# BFS from indeg==0\nsemesters = 0\nwhile q:\n  for _ in range(len(q)):\n    node = q.popleft(); ...\n  semesters += 1'],
+            'parallel-courses-iii': ['Topological Sort + DP', 'dp[i] = max(dp[prereqs]) + time[i]', 'for node in topo_order:\n  for nb in graph[node]:\n    dp[nb] = max(dp[nb], dp[node]+time[nb])'],
+            'find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance': ['Floyd-Warshall / Dijkstra', 'All-pairs shortest path. Count reachable cities within threshold', 'for k in range(n):\n  for i in range(n):\n    for j in range(n):\n      dist[i][j]=min(dist[i][j],dist[i][k]+dist[k][j])'],
+            'number-of-ways-to-arrive-at-destination': ['Dijkstra + DP', 'Modified Dijkstra tracking count of shortest paths', 'dist = [inf]*n; ways = [0]*n\ndist[0]=0; ways[0]=1\nwhile heap:\n  d,u = heappop(heap)\n  for v,w in graph[u]:\n    if d+w<dist[v]: dist[v]=d+w; ways[v]=ways[u]\n    elif d+w==dist[v]: ways[v]+=ways[u]'],
+            'detonate-the-maximum-bombs': ['DFS/BFS', 'Build directed graph: bomb i can trigger j if distance <= radius_i. DFS from each', 'for i in range(n):\n  for j in range(n):\n    if dist(i,j) <= bombs[i][2]:\n      graph[i].append(j)\n# DFS from each bomb, track max reachable'],
+            'find-all-possible-recipes-from-given-supplies': ['Topological Sort', 'Build dependency graph. Start BFS from available supplies', '# Map recipe -> ingredients as graph\n# indegree = non-supply ingredients count\n# BFS from supplies, unlock recipes'],
+            'maximum-employees-to-be-invited-to-a-meeting': ['Graph Cycle + DFS', 'Find cycles and longest chains into 2-cycles', '# Find all cycles using visited/in_stack\n# For 2-cycles: add longest chains from both ends\n# For longer cycles: take max cycle length'],
+            'find-the-safest-path-in-a-grid': ['Multi-source BFS + Binary Search', 'BFS from all thieves for distances. Binary search on safety factor', '# Step 1: Multi-source BFS from all 1s\n# Step 2: Binary search on min safety\n# Step 3: BFS/DFS to check path exists'],
+            'find-a-safe-walk-through-a-grid': ['BFS/Dijkstra', 'Track remaining health. BFS with state (r,c,health)', 'q = deque([(0,0,health-grid[0][0])])\nvisited = set()\nwhile q:\n  r,c,h = q.popleft()\n  if r==m-1 and c==n-1 and h>=1: return True'],
+            'minimum-obstacle-removal-to-reach-corner': ['0-1 BFS', 'Deque BFS: 0 cost for empty cell (front), 1 cost for obstacle (back)', 'dq = deque([(0,0,0)])  # cost, r, c\nwhile dq:\n  cost,r,c = dq.popleft()\n  if grid[nr][nc]==0: dq.appendleft((cost,nr,nc))\n  else: dq.append((cost+1,nr,nc))'],
+            'check-if-dfs-strings-are-palindromes': ['DFS + Manacher', 'Build DFS string, use Manacher for palindrome check per subtree', '# DFS to build euler tour string\n# Use Manacher for O(n) palindrome detection\n# Check each subtree range'],
+            // ===== TREES =====
+            'binary-tree-inorder-traversal': ['DFS (Inorder)', 'Left -> Node -> Right. Iterative: use stack', 'def inorder(root):\n  res, stack = [], []\n  curr = root\n  while curr or stack:\n    while curr: stack.append(curr); curr=curr.left\n    curr=stack.pop(); res.append(curr.val)\n    curr=curr.right'],
+            'binary-tree-level-order-traversal': ['BFS', 'Use queue. Process level by level', 'q = deque([root])\nwhile q:\n  level = []\n  for _ in range(len(q)):\n    node = q.popleft()\n    level.append(node.val)\n    if node.left: q.append(node.left)\n    if node.right: q.append(node.right)\n  res.append(level)'],
+            'binary-tree-zigzag-level-order-traversal': ['BFS', 'Level order but reverse alternate levels', 'q = deque([root]); zigzag = False\nwhile q:\n  level = [node.val for node in q]\n  if zigzag: level.reverse()\n  res.append(level); zigzag = not zigzag'],
+            'maximum-depth-of-binary-tree': ['DFS', 'Depth = 1 + max(left_depth, right_depth)', 'def maxDepth(root):\n  if not root: return 0\n  return 1 + max(maxDepth(root.left), maxDepth(root.right))'],
+            'same-tree': ['DFS', 'Compare both trees recursively. Both None=True, one None=False', 'def isSame(p, q):\n  if not p and not q: return True\n  if not p or not q: return False\n  return p.val==q.val and isSame(p.left,q.left) and isSame(p.right,q.right)'],
+            'invert-binary-tree': ['DFS', 'Swap left and right children recursively', 'def invert(root):\n  if not root: return None\n  root.left, root.right = invert(root.right), invert(root.left)\n  return root'],
+            'symmetric-tree': ['DFS', 'Check if left subtree mirrors right subtree', 'def isMirror(l, r):\n  if not l and not r: return True\n  if not l or not r: return False\n  return l.val==r.val and isMirror(l.left,r.right) and isMirror(l.right,r.left)'],
+            'construct-binary-tree-from-preorder-and-inorder-traversal': ['DFS + Hash', 'Preorder first = root. Find root in inorder to split left/right', 'idx = {v:i for i,v in enumerate(inorder)}\ndef build(pre_l, in_l, in_r):\n  root = TreeNode(preorder[pre_l])\n  mid = idx[root.val]\n  root.left = build(pre_l+1, in_l, mid-1)\n  root.right = build(...)'],
+            'validate-binary-search-tree': ['DFS', 'Pass min/max bounds. Node must be within (lo, hi)', 'def isValid(node, lo, hi):\n  if not node: return True\n  if node.val<=lo or node.val>=hi: return False\n  return isValid(node.left,lo,node.val) and isValid(node.right,node.val,hi)'],
+            'kth-smallest-element-in-a-bst': ['Inorder DFS', 'Inorder traversal gives sorted order. Return kth element', 'def inorder(node):\n  if not node: return\n  inorder(node.left)\n  self.k -= 1\n  if self.k == 0: self.res = node.val; return\n  inorder(node.right)'],
+            'lowest-common-ancestor-of-a-binary-search-tree': ['BST Property', 'If both < root go left. If both > root go right. Else root is LCA', 'while root:\n  if p.val<root.val and q.val<root.val: root=root.left\n  elif p.val>root.val and q.val>root.val: root=root.right\n  else: return root'],
+            'lowest-common-ancestor-of-a-binary-tree': ['DFS', 'If node is p or q, return it. If found in both subtrees, node is LCA', 'def lca(root, p, q):\n  if not root or root==p or root==q: return root\n  l = lca(root.left, p, q)\n  r = lca(root.right, p, q)\n  if l and r: return root\n  return l or r'],
+            'binary-tree-right-side-view': ['BFS', 'Level order traversal. Take last element of each level', 'q = deque([root])\nwhile q:\n  for i in range(len(q)):\n    node = q.popleft()\n    if i==len(q_size)-1: res.append(node.val)\n    if node.left: q.append(node.left)\n    if node.right: q.append(node.right)'],
+            'count-good-nodes-in-binary-tree': ['DFS', 'Track max value from root to current node. Good if node.val >= max_so_far', 'def dfs(node, max_val):\n  if not node: return 0\n  good = 1 if node.val >= max_val else 0\n  max_val = max(max_val, node.val)\n  return good + dfs(node.left,max_val) + dfs(node.right,max_val)'],
+            'balanced-binary-tree': ['DFS', 'Return -1 if unbalanced. Height = 1 + max(left, right)', 'def height(node):\n  if not node: return 0\n  l, r = height(node.left), height(node.right)\n  if l==-1 or r==-1 or abs(l-r)>1: return -1\n  return 1 + max(l, r)'],
+            'diameter-of-binary-tree': ['DFS', 'Diameter = max(left_height + right_height) across all nodes', 'self.res = 0\ndef depth(node):\n  if not node: return 0\n  l, r = depth(node.left), depth(node.right)\n  self.res = max(self.res, l+r)\n  return 1 + max(l, r)'],
+            'subtree-of-another-tree': ['DFS', 'For each node in s, check if subtree matches t using isSame', 'def isSubtree(s, t):\n  if not s: return False\n  if isSame(s, t): return True\n  return isSubtree(s.left, t) or isSubtree(s.right, t)'],
+            'path-sum': ['DFS', 'Subtract node val from target. At leaf check if target==0', 'def hasPath(node, target):\n  if not node: return False\n  target -= node.val\n  if not node.left and not node.right: return target==0\n  return hasPath(node.left,target) or hasPath(node.right,target)'],
+            'path-sum-ii': ['DFS + Backtracking', 'Track current path. At leaf, if sum matches add path copy', 'def dfs(node, target, path):\n  if not node: return\n  path.append(node.val)\n  if not node.left and not node.right and target==node.val:\n    res.append(path[:])\n  dfs(node.left,target-node.val,path)\n  dfs(node.right,...); path.pop()'],
+            'path-sum-iii': ['Prefix Sum + DFS', 'Track prefix sums in hash. Count paths where prefix_sum - target exists', 'prefix = {0:1}\ndef dfs(node, curr_sum):\n  curr_sum += node.val\n  count = prefix.get(curr_sum-target, 0)\n  prefix[curr_sum] = prefix.get(curr_sum,0)+1\n  # dfs children, then remove from prefix'],
+            'binary-tree-maximum-path-sum': ['DFS', 'At each node: max_gain = val + max(left,0) + max(right,0). Return val+max(one_side,0)', 'self.res = float("-inf")\ndef maxGain(node):\n  if not node: return 0\n  l = max(maxGain(node.left), 0)\n  r = max(maxGain(node.right), 0)\n  self.res = max(self.res, node.val+l+r)\n  return node.val + max(l, r)'],
+            'serialize-and-deserialize-binary-tree': ['BFS/DFS', 'Preorder serialization. Use "null" for None nodes', 'def serialize(root):\n  if not root: return "null"\n  return f"{root.val},{serialize(root.left)},{serialize(root.right)}"\ndef deserialize(data):\n  vals = iter(data.split(","))\n  # Recursive build from preorder'],
+            'flatten-binary-tree-to-linked-list': ['DFS', 'Morris traversal or reverse postorder. Connect right to flattened left', 'def flatten(root):\n  curr = root\n  while curr:\n    if curr.left:\n      rightmost = curr.left\n      while rightmost.right: rightmost=rightmost.right\n      rightmost.right=curr.right\n      curr.right=curr.left; curr.left=None\n    curr=curr.right'],
+            'populating-next-right-pointers-in-each-node': ['BFS', 'Level order. Connect each node.next to next node in queue', 'while leftmost:\n  curr = leftmost\n  while curr:\n    curr.left.next = curr.right\n    if curr.next: curr.right.next = curr.next.left\n    curr = curr.next\n  leftmost = leftmost.left'],
+            'sum-root-to-leaf-numbers': ['DFS', 'Pass current number * 10 + val down. Sum at leaves', 'def dfs(node, num):\n  if not node: return 0\n  num = num*10 + node.val\n  if not node.left and not node.right: return num\n  return dfs(node.left,num) + dfs(node.right,num)'],
+            'house-robber-iii': ['DFS + DP', 'Return (rob_this, skip_this) for each node', 'def dfs(node):\n  if not node: return (0, 0)\n  l, r = dfs(node.left), dfs(node.right)\n  rob = node.val + l[1] + r[1]\n  skip = max(l) + max(r)\n  return (rob, skip)'],
+            'delete-nodes-and-return-forest': ['DFS', 'Post-order DFS. If node in delete set, add children as new roots', 'to_del = set(to_delete)\ndef dfs(node, is_root):\n  if not node: return None\n  deleted = node.val in to_del\n  if is_root and not deleted: res.append(node)\n  node.left=dfs(node.left,deleted)\n  node.right=dfs(node.right,deleted)\n  return None if deleted else node'],
+            'flip-equivalent-binary-trees': ['DFS', 'Two trees equivalent if: same val AND (children match OR flipped children match)', 'def flip(r1, r2):\n  if not r1 and not r2: return True\n  if not r1 or not r2 or r1.val!=r2.val: return False\n  return (flip(r1.left,r2.left) and flip(r1.right,r2.right)) or\\\n    (flip(r1.left,r2.right) and flip(r1.right,r2.left))'],
+            'cousins-in-binary-tree-ii': ['BFS', 'Level order BFS. Replace each node val with level_sum - sibling_sum', '# BFS level by level\n# For each level: compute total sum\n# Each node val = level_sum - parent_children_sum'],
+            'height-of-binary-tree-after-subtree-removal-queries': ['DFS + Precompute', 'Precompute depth and height. For each removal use second-max height at that depth', '# Precompute: height[], depth[]\n# For each depth level: track top 2 heights\n# Removing node: use other max height at same depth'],
+            // ===== HASH TABLE =====
+            'two-sum': ['Hash Map', 'Store complement. One-pass: check if target-num exists in map', 'seen = {}\nfor i, n in enumerate(nums):\n  if target-n in seen: return [seen[target-n], i]\n  seen[n] = i'],
+            'valid-anagram': ['Hash Map', 'Compare character frequency counts of both strings', 'return Counter(s) == Counter(t)\n# Or: return sorted(s) == sorted(t)'],
+            'group-anagrams': ['Hash Map', 'Group by sorted string as key. Or use char frequency tuple as key', 'groups = defaultdict(list)\nfor s in strs:\n  key = tuple(sorted(s))\n  groups[key].append(s)\nreturn list(groups.values())'],
+            'contains-duplicate': ['Hash Set', 'Add to set. If already exists, duplicate found', 'seen = set()\nfor n in nums:\n  if n in seen: return True\n  seen.add(n)\n# Or: return len(nums) != len(set(nums))'],
+            'contains-duplicate-ii': ['Hash Map', 'Store last index of each num. Check if abs(i-j) <= k', 'last = {}\nfor i, n in enumerate(nums):\n  if n in last and i-last[n]<=k: return True\n  last[n] = i'],
+            'top-k-frequent-elements': ['Hash Map + Bucket Sort', 'Count freq, then bucket sort or use heap for top k', 'freq = Counter(nums)\nbuckets = [[] for _ in range(len(nums)+1)]\nfor n,f in freq.items(): buckets[f].append(n)\nres = []\nfor i in range(len(buckets)-1,-1,-1):\n  res.extend(buckets[i])\n  if len(res)>=k: return res[:k]'],
+            'subarray-sum-equals-k': ['Prefix Sum + Hash', 'prefix_sum - k exists in map means subarray with sum k found', 'prefix = {0:1}; curr = count = 0\nfor n in nums:\n  curr += n\n  count += prefix.get(curr-k, 0)\n  prefix[curr] = prefix.get(curr,0)+1'],
+            'longest-consecutive-sequence': ['Hash Set', 'Put all in set. For each num without num-1 (start of sequence), count chain', 'nums_set = set(nums)\nfor n in nums_set:\n  if n-1 not in nums_set:  # start of sequence\n    length = 1\n    while n+length in nums_set: length+=1\n    res = max(res, length)'],
+            'encode-and-decode-tinyurl': ['Hash Map', 'Two hashmaps: long->short and short->long. Generate random short code', 'import random, string\nlong_to_short = {}; short_to_long = {}\ndef encode(url):\n  code = "".join(random.choices(string.ascii_letters,k=6))\n  short_to_long[code]=url; return "http://tinyurl.com/"+code'],
+            'lru-cache': ['OrderedDict / HashMap+DLL', 'OrderedDict: move_to_end on get, popitem(last=False) when full', 'from collections import OrderedDict\nclass LRUCache:\n  def __init__(self, cap): self.d=OrderedDict(); self.cap=cap\n  def get(self,k): \n    if k not in self.d: return -1\n    self.d.move_to_end(k); return self.d[k]\n  def put(self,k,v):\n    self.d[k]=v; self.d.move_to_end(k)\n    if len(self.d)>self.cap: self.d.popitem(last=False)'],
+            'lfu-cache': ['HashMap + Double HashMap', 'Track freq of each key. Maintain min_freq. Evict least frequent, then LRU', '# key->val, key->freq, freq->OrderedDict\n# On get/put: increase freq, move key\n# On evict: remove from min_freq bucket'],
+            'insert-delete-getrandom-o1': ['HashMap + Array', 'Array for O(1) random. HashMap for O(1) lookup. Swap with last on delete', 'self.vals = []; self.idx = {}\ndef insert(v): self.vals.append(v); self.idx[v]=len(self.vals)-1\ndef remove(v):\n  i=self.idx[v]; last=self.vals[-1]\n  self.vals[i]=last; self.idx[last]=i\n  self.vals.pop(); del self.idx[v]'],
+            'copy-list-with-random-pointer': ['Hash Map', 'Map old nodes to new nodes. Two passes: create copies, then set pointers', 'old_to_new = {}\ncurr = head\nwhile curr: old_to_new[curr]=Node(curr.val); curr=curr.next\ncurr = head\nwhile curr:\n  old_to_new[curr].next=old_to_new.get(curr.next)\n  old_to_new[curr].random=old_to_new.get(curr.random)\n  curr=curr.next'],
+            'first-missing-positive': ['Cyclic Sort', 'Place each num at index num-1. First index where nums[i]!=i+1 is answer', 'for i in range(len(nums)):\n  while 1<=nums[i]<=len(nums) and nums[nums[i]-1]!=nums[i]:\n    nums[nums[i]-1], nums[i] = nums[i], nums[nums[i]-1]\nfor i in range(len(nums)):\n  if nums[i]!=i+1: return i+1'],
+            '4sum-ii': ['Hash Map', 'Compute all A+B sums in map. For each C+D sum, check if -(C+D) exists', 'ab = {}\nfor a in A:\n  for b in B: ab[a+b]=ab.get(a+b,0)+1\ncount = 0\nfor c in C:\n  for d in D: count+=ab.get(-(c+d),0)'],
+            'unique-number-of-occurrences': ['Hash Map + Set', 'Count freq. Check if all freq values are unique', 'freq = Counter(arr)\nreturn len(freq.values()) == len(set(freq.values()))'],
+            'find-the-difference-of-two-arrays': ['Hash Set', 'Convert both to sets. Set difference for each direction', 'set1, set2 = set(nums1), set(nums2)\nreturn [list(set1-set2), list(set2-set1)]'],
+            'make-sum-divisible-by-p': ['Prefix Sum + Hash', 'Find shortest subarray with sum % p == total % p', 'target = sum(nums) % p\nif target==0: return 0\nprefix = {0:-1}; curr = 0\nfor i,n in enumerate(nums):\n  curr = (curr+n)%p\n  need = (curr-target)%p\n  if need in prefix: res=min(res,i-prefix[need])\n  prefix[curr]=i'],
+            'longest-square-streak-in-an-array': ['Hash Set + Chain', 'Put all in set. For each num, follow square chain: n, n², n⁴...', 'nums_set = set(nums)\nfor n in sorted(nums):\n  length = 0; curr = n\n  while curr in nums_set:\n    length += 1; curr = curr*curr\n  if length>=2: res=max(res,length)'],
+            'find-the-prefix-common-array-of-two-arrays': ['Hash Set', 'Maintain running sets for A and B. Count intersection size', 'sA = set(); sB = set()\nfor i in range(n):\n  sA.add(A[i]); sB.add(B[i])\n  res.append(len(sA & sB))'],
+            'count-vowel-strings-in-ranges': ['Prefix Sum', 'Precompute prefix sum of strings starting AND ending with vowel', 'vowels = set("aeiou")\npre = [0]*(n+1)\nfor i,w in enumerate(words):\n  pre[i+1]=pre[i]+(1 if w[0] in vowels and w[-1] in vowels else 0)\nfor l,r in queries: res.append(pre[r+1]-pre[l])'],
+            // ===== STACK & QUEUE =====
+            'valid-parentheses': ['Stack', 'Push open brackets. Pop and match on close brackets', 'stack = []\nmatch = {")":"(","]":"[","}":"{"}\nfor c in s:\n  if c in match:\n    if not stack or stack[-1]!=match[c]: return False\n    stack.pop()\n  else: stack.append(c)\nreturn not stack'],
+            'min-stack': ['Stack', 'Two stacks: one for values, one for current minimum', 'class MinStack:\n  def __init__(self): self.stack=[]; self.min_stack=[]\n  def push(self,v): self.stack.append(v); self.min_stack.append(min(v, self.getMin() if self.min_stack else v))\n  def getMin(self): return self.min_stack[-1]'],
+            'daily-temperatures': ['Monotonic Stack', 'Decreasing stack of indices. Pop when warmer day found', 'stack = []; res = [0]*len(T)\nfor i,t in enumerate(T):\n  while stack and T[stack[-1]]<t:\n    j = stack.pop()\n    res[j] = i-j\n  stack.append(i)'],
+            'next-greater-element-i': ['Monotonic Stack + Hash', 'Build next greater map using monotonic stack on nums2', 'stack = []; nge = {}\nfor n in nums2:\n  while stack and stack[-1]<n:\n    nge[stack.pop()] = n\n  stack.append(n)\nreturn [nge.get(n,-1) for n in nums1]'],
+            'largest-rectangle-in-histogram': ['Monotonic Stack', 'Increasing stack of indices. On pop: width = i - stack[-1] - 1', 'stack = [-1]; res = 0\nfor i,h in enumerate(heights):\n  while stack[-1]!=-1 and heights[stack[-1]]>=h:\n    height = heights[stack.pop()]\n    width = i-stack[-1]-1\n    res = max(res, height*width)\n  stack.append(i)'],
+            'evaluate-reverse-polish-notation': ['Stack', 'Push numbers. On operator: pop 2, compute, push result', 'stack = []\nfor t in tokens:\n  if t in "+-*/":\n    b, a = stack.pop(), stack.pop()\n    stack.append(int(eval(f"{a}{t}{b}")))\n  else: stack.append(int(t))'],
+            'generate-parentheses': ['Backtracking', 'Track open and close count. Add ( if open<n, add ) if close<open', 'def bt(s, open, close):\n  if len(s)==2*n: res.append(s); return\n  if open<n: bt(s+"(",open+1,close)\n  if close<open: bt(s+")",open,close+1)'],
+            'car-fleet': ['Stack + Sort', 'Sort by position desc. If car behind arrives earlier, it joins fleet', 'cars = sorted(zip(position,speed), reverse=True)\nstack = []\nfor pos,spd in cars:\n  time = (target-pos)/spd\n  if not stack or time>stack[-1]:\n    stack.append(time)\nreturn len(stack)'],
+            'asteroid-collision': ['Stack', 'Push positive. On negative: pop smaller positives, check equal', 'stack = []\nfor a in asteroids:\n  alive = True\n  while stack and a<0 and stack[-1]>0:\n    if stack[-1]<-a: stack.pop()\n    elif stack[-1]==-a: stack.pop(); alive=False; break\n    else: alive=False; break\n  if alive: stack.append(a)'],
+            'decode-string': ['Stack', 'Push current string and number on [. Build inner string until ]', 'stack = []; curr = ""; num = 0\nfor c in s:\n  if c.isdigit(): num = num*10+int(c)\n  elif c=="[": stack.append((curr,num)); curr=""; num=0\n  elif c=="]": prev,n=stack.pop(); curr=prev+curr*n\n  else: curr+=c'],
+            'online-stock-span': ['Monotonic Stack', 'Stack of (price, span). Pop and accumulate spans of smaller prices', 'def next(self, price):\n  span = 1\n  while self.stack and self.stack[-1][0]<=price:\n    span += self.stack.pop()[1]\n  self.stack.append((price, span))\n  return span'],
+            'trapping-rain-water': ['Monotonic Stack', 'Decreasing stack. On pop: water = min(left,right)*width - height', 'stack = []\nfor i,h in enumerate(height):\n  while stack and height[stack[-1]]<h:\n    mid = stack.pop()\n    if stack:\n      w = i-stack[-1]-1\n      bounded_h = min(h,height[stack[-1]])-height[mid]\n      water += w*bounded_h\n  stack.append(i)'],
+            'maximum-width-ramp': ['Monotonic Stack', 'Build decreasing stack from left. Scan from right for max width', 'stack = []\nfor i,n in enumerate(nums):\n  if not stack or nums[stack[-1]]>n: stack.append(i)\nres = 0\nfor j in range(len(nums)-1,-1,-1):\n  while stack and nums[stack[-1]]<=nums[j]:\n    res=max(res,j-stack.pop())'],
+            // ===== HEAP / PRIORITY QUEUE =====
+            'kth-largest-element-in-an-array': ['Min Heap', 'Maintain min-heap of size k. Top is kth largest', 'import heapq\nheap = nums[:k]\nheapq.heapify(heap)\nfor n in nums[k:]:\n  if n > heap[0]:\n    heapq.heapreplace(heap, n)\nreturn heap[0]'],
+            'merge-k-sorted-lists': ['Min Heap', 'Push first node of each list. Pop min, push its next', 'heap = [(node.val, i, node) for i,node in enumerate(lists) if node]\nheapq.heapify(heap)\nwhile heap:\n  val, i, node = heapq.heappop(heap)\n  # add to result, push node.next if exists'],
+            'find-median-from-data-stream': ['Two Heaps', 'Max-heap for lower half, min-heap for upper half. Balance sizes', 'self.lo = []  # max-heap (negate)\nself.hi = []  # min-heap\ndef addNum(n):\n  heappush(self.lo, -n)\n  heappush(self.hi, -heappop(self.lo))\n  if len(self.hi)>len(self.lo):\n    heappush(self.lo, -heappop(self.hi))'],
+            'task-scheduler': ['Greedy + Heap', 'Process most frequent tasks first. Wait during cooldown', 'freq = Counter(tasks)\nmaxf = max(freq.values())\nmax_count = sum(1 for f in freq.values() if f==maxf)\nreturn max(len(tasks), (maxf-1)*(n+1)+max_count)'],
+            'reorganize-string': ['Greedy + Heap', 'Always place most frequent char. Alternate with heap', 'freq = Counter(s)\nheap = [(-f,c) for c,f in freq.items()]\nheapq.heapify(heap)\nprev = None\nwhile heap:\n  f,c = heapq.heappop(heap)\n  res.append(c)\n  if prev: heapq.heappush(heap, prev)\n  prev = (f+1,c) if f+1<0 else None'],
+            'k-closest-points-to-origin': ['Min Heap / Quickselect', 'Use heap of size k by distance, or quickselect for O(n) avg', 'return sorted(points, key=lambda p: p[0]**2+p[1]**2)[:k]\n# Or: heapq.nsmallest(k, points, key=lambda p: p[0]**2+p[1]**2)'],
+            'top-k-frequent-words': ['Heap', 'Count freq. Heap sort by (-freq, word) for top k', 'freq = Counter(words)\nreturn [w for w,_ in sorted(freq.items(), key=lambda x: (-x[1],x[0]))[:k]]\n# Or: heapq.nsmallest(k, freq, key=lambda w: (-freq[w], w))'],
+            'smallest-range-covering-elements-from-k-lists': ['Min Heap', 'Maintain one element from each list in heap. Track range', 'heap = [(lst[0],i,0) for i,lst in enumerate(lists)]\nheapq.heapify(heap)\ncur_max = max(lst[0] for lst in lists)\nwhile True:\n  cur_min,i,j = heapq.heappop(heap)\n  # update best range\n  if j+1==len(lists[i]): break\n  heapq.heappush(heap,(lists[i][j+1],i,j+1))'],
+            'design-twitter': ['Heap + Hash', 'User feeds: merge k sorted lists of tweets using heap', 'self.tweets = defaultdict(list)  # userId -> [(time, tweetId)]\nself.follows = defaultdict(set)\ndef getNewsFeed(userId):\n  # Merge sorted: heap of latest from each followed user'],
+            // ===== OTHER PATTERNS =====
+            'reverse-linked-list': ['Linked List', 'Iterate: track prev, curr, next. Reverse pointer direction', 'prev, curr = None, head\nwhile curr:\n  nxt = curr.next\n  curr.next = prev\n  prev, curr = curr, nxt\nreturn prev'],
+            'merge-two-sorted-lists': ['Linked List', 'Dummy head. Compare and attach smaller node', 'dummy = ListNode(0); curr = dummy\nwhile l1 and l2:\n  if l1.val<=l2.val: curr.next=l1; l1=l1.next\n  else: curr.next=l2; l2=l2.next\n  curr=curr.next\ncurr.next = l1 or l2'],
+            'linked-list-cycle': ['Fast-Slow Pointer', 'Floyd cycle detection. Slow moves 1, fast moves 2. If they meet, cycle exists', 'slow = fast = head\nwhile fast and fast.next:\n  slow = slow.next\n  fast = fast.next.next\n  if slow == fast: return True\nreturn False'],
+            'linked-list-cycle-ii': ['Fast-Slow Pointer', 'After detection, reset one to head. Move both by 1 until they meet', 'slow=fast=head\nwhile fast and fast.next:\n  slow=slow.next; fast=fast.next.next\n  if slow==fast:\n    slow=head\n    while slow!=fast: slow=slow.next; fast=fast.next\n    return slow'],
+            'add-two-numbers': ['Linked List', 'Add digit by digit with carry. Create new nodes', 'carry = 0; dummy = ListNode(0); curr = dummy\nwhile l1 or l2 or carry:\n  s = carry\n  if l1: s+=l1.val; l1=l1.next\n  if l2: s+=l2.val; l2=l2.next\n  carry, val = divmod(s, 10)\n  curr.next=ListNode(val); curr=curr.next'],
+            'remove-nth-node-from-end-of-list': ['Two Pointer', 'Fast pointer n+1 ahead. When fast reaches end, slow is at target', 'dummy = ListNode(0, head)\nfast = slow = dummy\nfor _ in range(n+1): fast=fast.next\nwhile fast: fast=fast.next; slow=slow.next\nslow.next = slow.next.next'],
+            'reorder-list': ['Linked List', 'Find middle, reverse second half, merge alternately', '# 1. Find middle (slow-fast)\n# 2. Reverse second half\n# 3. Merge: 1->n->2->n-1->...'],
+            'reverse-nodes-in-k-group': ['Linked List', 'Reverse each k-group. Track prev_group_end for linking', 'def reverseK(head, k):\n  prev, curr = None, head\n  for _ in range(k):\n    nxt=curr.next; curr.next=prev\n    prev,curr=curr,nxt\n  head.next=curr  # link to next group\n  return prev'],
+            'subsets': ['Backtracking', 'Include or exclude each element. Or iteratively build', 'def bt(start, path):\n  res.append(path[:])\n  for i in range(start, len(nums)):\n    path.append(nums[i])\n    bt(i+1, path)\n    path.pop()'],
+            'subsets-ii': ['Backtracking', 'Sort first. Skip duplicates: if nums[i]==nums[i-1] and i>start, skip', 'nums.sort()\ndef bt(start, path):\n  res.append(path[:])\n  for i in range(start, len(nums)):\n    if i>start and nums[i]==nums[i-1]: continue\n    bt(i+1, path+[nums[i]])'],
+            'permutations': ['Backtracking', 'Try each unused element at current position', 'def bt(path, used):\n  if len(path)==len(nums): res.append(path[:]); return\n  for i in range(len(nums)):\n    if used[i]: continue\n    used[i]=True; path.append(nums[i])\n    bt(path, used)\n    path.pop(); used[i]=False'],
+            'permutations-ii': ['Backtracking', 'Sort + skip duplicates: if nums[i]==nums[i-1] and not used[i-1], skip', 'nums.sort()\ndef bt(path, used):\n  ...\n  if i>0 and nums[i]==nums[i-1] and not used[i-1]: continue'],
+            'combination-sum': ['Backtracking', 'Can reuse elements. Start from same index (not i+1)', 'def bt(start, path, remain):\n  if remain==0: res.append(path[:]); return\n  for i in range(start, len(candidates)):\n    if candidates[i]>remain: break\n    bt(i, path+[candidates[i]], remain-candidates[i])'],
+            'combination-sum-ii': ['Backtracking', 'Sort + skip duplicates. Use each element at most once (start from i+1)', 'candidates.sort()\ndef bt(start, path, remain):\n  if remain==0: res.append(path[:]); return\n  for i in range(start, len(candidates)):\n    if i>start and candidates[i]==candidates[i-1]: continue\n    if candidates[i]>remain: break\n    bt(i+1, path+[candidates[i]], remain-candidates[i])'],
+            'palindrome-partitioning': ['Backtracking', 'Try all partitions. If prefix is palindrome, recurse on suffix', 'def bt(start, path):\n  if start==len(s): res.append(path[:]); return\n  for end in range(start+1, len(s)+1):\n    if s[start:end]==s[start:end][::-1]:\n      bt(end, path+[s[start:end]])'],
+            'letter-combinations-of-a-phone-number': ['Backtracking', 'Map digit->letters. Build combinations recursively', 'phone = {"2":"abc","3":"def","4":"ghi",...}\ndef bt(idx, path):\n  if idx==len(digits): res.append(path); return\n  for c in phone[digits[idx]]:\n    bt(idx+1, path+c)'],
+            'n-queens': ['Backtracking', 'Place queens row by row. Track columns, diagonals, anti-diagonals', 'cols = set(); diag = set(); anti = set()\ndef bt(row):\n  if row==n: res.append(board[:]); return\n  for col in range(n):\n    if col in cols or row-col in diag or row+col in anti: continue\n    # place queen, recurse, remove'],
+            'sudoku-solver': ['Backtracking', 'Try 1-9 in empty cells. Validate row, col, box constraints', 'def solve(board):\n  for r in range(9):\n    for c in range(9):\n      if board[r][c]==".":\n        for d in "123456789":\n          if isValid(r,c,d):\n            board[r][c]=d\n            if solve(board): return True\n            board[r][c]="."'],
+            'single-number': ['Bit XOR', 'XOR all numbers. Duplicate pairs cancel out, single remains', 'res = 0\nfor n in nums:\n  res ^= n\nreturn res'],
+            'number-of-1-bits': ['Bit Manipulation', 'Count set bits. Use n & (n-1) to clear lowest set bit', 'count = 0\nwhile n:\n  n &= (n-1)  # clear lowest set bit\n  count += 1\nreturn count'],
+            'counting-bits': ['DP + Bit', 'dp[i] = dp[i>>1] + (i&1). Or dp[i] = dp[i&(i-1)] + 1', 'res = [0]*(n+1)\nfor i in range(1, n+1):\n  res[i] = res[i>>1] + (i&1)\nreturn res'],
+            'reverse-bits': ['Bit Manipulation', 'Extract each bit and place at reversed position', 'res = 0\nfor i in range(32):\n  res = (res<<1) | (n&1)\n  n >>= 1\nreturn res'],
+            'missing-number': ['XOR / Math', 'XOR 0..n with all nums. Missing number remains. Or sum formula', 'return sum(range(n+1)) - sum(nums)\n# Or: XOR all indices and values'],
+            'sum-of-two-integers': ['Bit Manipulation', 'XOR for sum without carry. AND<<1 for carry. Repeat until no carry', '# Python needs mask for negative numbers\nwhile b:\n  carry = (a & b) << 1\n  a = a ^ b\n  b = carry'],
+            'powx-n': ['Binary Exponentiation', 'x^n: if n even, (x²)^(n/2). If n odd, x * x^(n-1)', 'def myPow(x, n):\n  if n < 0: x, n = 1/x, -n\n  res = 1\n  while n:\n    if n%2: res *= x\n    x *= x; n //= 2\n  return res'],
+            'multiply-strings': ['Math (Grade School)', 'Multiply digit by digit. Place result at position i+j+1', 'res = [0]*(len(num1)+len(num2))\nfor i in range(len(num1)-1,-1,-1):\n  for j in range(len(num2)-1,-1,-1):\n    mul = int(num1[i])*int(num2[j])\n    p1,p2 = i+j, i+j+1\n    total = mul + res[p2]\n    res[p2]=total%10; res[p1]+=total//10'],
+            'happy-number': ['Fast-Slow / Set', 'Compute digit square sum repeatedly. Detect cycle with Floyd or set', 'def next_num(n):\n  return sum(int(d)**2 for d in str(n))\nseen = set()\nwhile n!=1 and n not in seen:\n  seen.add(n)\n  n = next_num(n)\nreturn n==1'],
+            'plus-one': ['Math', 'Add 1 from last digit. Handle carry propagation', 'for i in range(len(digits)-1, -1, -1):\n  if digits[i] < 9:\n    digits[i] += 1; return digits\n  digits[i] = 0\nreturn [1] + digits'],
+            'merge-intervals': ['Sort + Merge', 'Sort by start. Merge if current start <= prev end', 'intervals.sort()\nres = [intervals[0]]\nfor s,e in intervals[1:]:\n  if s <= res[-1][1]:\n    res[-1][1] = max(res[-1][1], e)\n  else: res.append([s,e])'],
+            'insert-interval': ['Intervals', 'Add all before, merge overlapping, add all after', 'res = []\nfor s,e in intervals:\n  if e < newInterval[0]: res.append([s,e])\n  elif s > newInterval[1]: res.append(newInterval); newInterval=[s,e]; res.append([s,e])\n  else: newInterval=[min(s,newInterval[0]),max(e,newInterval[1])]'],
+            'non-overlapping-intervals': ['Greedy + Sort', 'Sort by end. Greedily keep intervals that end earliest', 'intervals.sort(key=lambda x: x[1])\ncount = 0; end = float("-inf")\nfor s,e in intervals:\n  if s >= end: end = e\n  else: count += 1\nreturn count'],
+            'meeting-rooms': ['Sort', 'Sort by start. Check if any overlap (start < prev end)', 'intervals.sort()\nfor i in range(1, len(intervals)):\n  if intervals[i][0] < intervals[i-1][1]:\n    return False\nreturn True'],
+            'minimum-number-of-arrows-to-burst-balloons': ['Greedy + Sort', 'Sort by end. Shoot at each balloon end. Skip covered balloons', 'points.sort(key=lambda x: x[1])\narrows = 1; end = points[0][1]\nfor s,e in points[1:]:\n  if s > end:\n    arrows += 1; end = e\nreturn arrows'],
+            'implement-trie-prefix-tree': ['Trie', 'Node with children dict and is_end flag. Insert/Search char by char', 'class TrieNode:\n  def __init__(self): self.children={}; self.is_end=False\ndef insert(word):\n  node = root\n  for c in word:\n    if c not in node.children: node.children[c]=TrieNode()\n    node = node.children[c]\n  node.is_end = True'],
+            'design-add-and-search-words-data-structure': ['Trie + DFS', 'Trie insert. Search with DFS for . wildcard matching', 'def search(word, node=root):\n  for i,c in enumerate(word):\n    if c==".":\n      return any(search(word[i+1:],child) for child in node.children.values())\n    if c not in node.children: return False\n    node = node.children[c]\n  return node.is_end'],
+            'redundant-connection': ['Union Find', 'Process edges. First edge that creates a cycle (same root) is answer', 'parent = list(range(n+1))\nfor u,v in edges:\n  if find(u)==find(v): return [u,v]\n  union(u,v)'],
+            'accounts-merge': ['Union Find', 'Union accounts sharing same email. Group by root', 'email_to_id = {}\nfor i, acct in enumerate(accounts):\n  for email in acct[1:]:\n    if email in email_to_id:\n      union(i, email_to_id[email])\n    email_to_id[email] = i'],
+            'min-cost-to-connect-all-points': ['MST (Kruskal/Prim)', 'Kruskal: sort all edges by distance. Union until n-1 edges', '# Kruskal: Sort all point pairs by Manhattan distance\nedges.sort(key=lambda x: x[2])\nfor u,v,w in edges:\n  if find(u)!=find(v): union(u,v); cost+=w'],
+            'maximum-subarray': ['Kadane Algorithm', 'Track current sum. Reset to 0 if negative. Track max', 'max_sum = curr = nums[0]\nfor n in nums[1:]:\n  curr = max(n, curr+n)\n  max_sum = max(max_sum, curr)\nreturn max_sum'],
+            'gas-station': ['Greedy', 'If total gas >= total cost, answer exists. Start where deficit resets', 'total = deficit = start = 0\nfor i in range(len(gas)):\n  total += gas[i]-cost[i]\n  deficit += gas[i]-cost[i]\n  if deficit < 0:\n    start = i+1; deficit = 0\nreturn start if total>=0 else -1'],
+            'hand-of-straights': ['Greedy + Hash', 'Sort. For each smallest card, try to form group of groupSize', 'freq = Counter(hand)\nfor card in sorted(freq):\n  while freq[card]>0:\n    for i in range(groupSize):\n      if freq[card+i]<=0: return False\n      freq[card+i]-=1\nreturn True'],
+            'valid-parenthesis-string': ['Greedy', 'Track min and max possible open count. * can be (, ), or empty', 'lo = hi = 0\nfor c in s:\n  lo += 1 if c=="(" else -1\n  hi += 1 if c!=")" else -1\n  if hi < 0: return False\n  lo = max(lo, 0)\nreturn lo == 0'],
+            'palindromic-substrings': ['Expand Around Center', 'Try each index as center (odd+even length). Count palindromes', 'count = 0\nfor i in range(len(s)):\n  # Odd length\n  l=r=i\n  while l>=0 and r<len(s) and s[l]==s[r]: count+=1; l-=1; r+=1\n  # Even length\n  l,r=i,i+1\n  while l>=0 and r<len(s) and s[l]==s[r]: count+=1; l-=1; r+=1'],
+            'string-to-integer-atoi': ['String Parsing', 'Handle whitespace, sign, digits, overflow', 'i = 0; sign = 1; res = 0\nwhile i<len(s) and s[i]==" ": i+=1\nif i<len(s) and s[i] in "+-": sign=-1 if s[i]=="-" else 1; i+=1\nwhile i<len(s) and s[i].isdigit():\n  res = res*10+int(s[i]); i+=1\nreturn max(-2**31, min(2**31-1, sign*res))'],
+            'encode-and-decode-strings': ['String Design', 'Encode: length + # + string. Decode: read length, extract', 'def encode(strs):\n  return "".join(f"{len(s)}#{s}" for s in strs)\ndef decode(s):\n  res=[]; i=0\n  while i<len(s):\n    j=s.index("#",i); length=int(s[i:j])\n    res.append(s[j+1:j+1+length]); i=j+1+length'],
+            'design-hit-counter': ['Queue / Deque', 'Use deque. Remove hits older than 300 seconds', 'self.hits = deque()\ndef hit(t): self.hits.append(t)\ndef getHits(t):\n  while self.hits and self.hits[0]<=t-300:\n    self.hits.popleft()\n  return len(self.hits)'],
+            'design-a-leaderboard': ['Hash + Sort', 'HashMap for scores. Sort values for top k', 'self.scores = {}\ndef addScore(id, score): self.scores[id]=self.scores.get(id,0)+score\ndef top(k): return sum(sorted(self.scores.values(),reverse=True)[:k])'],
+            'design-browser-history': ['Stack / Array', 'Use array with pointer. Visit clears forward history', 'self.history = [homepage]; self.pos = 0\ndef visit(url): self.history=self.history[:self.pos+1]; self.history.append(url); self.pos+=1\ndef back(steps): self.pos=max(0,self.pos-steps); return self.history[self.pos]'],
+            'implement-queue-using-stacks': ['Two Stacks', 'Push to stack1. On pop: if stack2 empty, pour stack1 into stack2', 'self.s1 = []; self.s2 = []\ndef push(x): self.s1.append(x)\ndef pop(self):\n  if not self.s2:\n    while self.s1: self.s2.append(self.s1.pop())\n  return self.s2.pop()'],
+            'implement-stack-using-queues': ['Queue', 'On push: add to queue, then rotate all previous elements behind it', 'self.q = deque()\ndef push(x):\n  self.q.append(x)\n  for _ in range(len(self.q)-1):\n    self.q.append(self.q.popleft())'],
+            'maximal-score-after-applying-k-operations': ['Max Heap', 'Always pick max element. Replace with ceil(val/3)', 'heap = [-n for n in nums]\nheapq.heapify(heap)\nfor _ in range(k):\n  val = -heapq.heappop(heap)\n  score += val\n  heapq.heappush(heap, -math.ceil(val/3))'],
+            'divide-intervals-into-minimum-number-of-groups': ['Min Heap / Sweep Line', 'Sort by start. Heap tracks end times of groups. Reuse if possible', 'intervals.sort()\nheap = []\nfor s,e in intervals:\n  if heap and heap[0]<s:\n    heapq.heapreplace(heap, e)\n  else: heapq.heappush(heap, e)\nreturn len(heap)'],
+            'construct-string-with-repeat-limit': ['Max Heap + Greedy', 'Use max char up to repeatLimit times, then use next char once', 'heap = [(-ord(c),c,f) for c,f in Counter(s).items()]\nheapq.heapify(heap)\nwhile heap:\n  _,c,f = heapq.heappop(heap)\n  use = min(f, repeatLimit)\n  res.append(c*use)'],
+            'minimum-operations-to-halve-array-sum': ['Max Heap', 'Always halve the largest element. Count operations', 'total = sum(nums)\ntarget = total/2; heap = [-n for n in nums]\nheapq.heapify(heap); ops = 0\nwhile total > target:\n  val = -heapq.heappop(heap)\n  half = val/2; total-=half; ops+=1\n  heapq.heappush(heap,-half)'],
+        };
+
+        // Category fallback hints for problems not in the data
+        const CATEGORY_FALLBACKS = {
+            'two-pointer': ['Two Pointer', 'Use two pointers converging or same direction to optimize traversal', 'l, r = 0, len(arr)-1\nwhile l < r:\n  # process and move pointers'],
+            'sliding-window': ['Sliding Window', 'Maintain a window with left/right pointers. Expand right, shrink left', 'l = 0\nfor r in range(len(arr)):\n  # expand window, shrink when condition breaks'],
+            'binary-search': ['Binary Search', 'Divide search space in half each step. O(log n)', 'l, r = 0, len(arr)-1\nwhile l <= r:\n  m = (l+r)//2\n  # compare and adjust l or r'],
+            'dynamic-programming': ['Dynamic Programming', 'Define state, transition, base case. Build solution bottom-up', 'dp = [0]*(n+1)\nfor i in range(1,n+1):\n  dp[i] = max/min of transitions'],
+            'graph': ['Graph (BFS/DFS)', 'Build adjacency list. BFS for shortest path, DFS for exploration', 'graph = defaultdict(list)\nvisited = set()\nq = deque([start])'],
+            'tree': ['Tree (DFS/BFS)', 'Recursive DFS for most tree problems. BFS for level order', 'def dfs(node):\n  if not node: return\n  dfs(node.left)\n  dfs(node.right)'],
+            'hash-table': ['Hash Table', 'Use dict/set for O(1) lookup. Frequency counting, complement search', 'seen = {}\nfor item in arr:\n  if complement in seen: found!'],
+            'stack': ['Stack', 'LIFO structure. Use for matching brackets, monotonic patterns', 'stack = []\nfor item in arr:\n  while stack and condition: stack.pop()\n  stack.append(item)'],
+            'heap': ['Heap / Priority Queue', 'Use for top-k, merge sorted, or schedule problems', 'import heapq\nheapq.heappush(heap, val)\ntop = heapq.heappop(heap)'],
+            'other': ['Multiple Patterns', 'Analyze the problem constraints to identify the right pattern', '# Identify pattern from constraints\n# Apply appropriate technique'],
+        };
+
+        function getCategoryForLink(link) {
+            // Walk up to find the parent category <details>
+            let el = link.closest('details');
+            if (!el) return 'other';
+            const summary = el.querySelector('summary');
+            if (!summary) return 'other';
+            const text = summary.textContent.toLowerCase();
+            if (text.includes('two pointer')) return 'two-pointer';
+            if (text.includes('sliding window')) return 'sliding-window';
+            if (text.includes('binary search')) return 'binary-search';
+            if (text.includes('dynamic programming')) return 'dynamic-programming';
+            if (text.includes('graph') || text.includes('bfs') || text.includes('dfs')) return 'graph';
+            if (text.includes('tree')) return 'tree';
+            if (text.includes('hash')) return 'hash-table';
+            if (text.includes('stack') || text.includes('queue')) return 'stack';
+            if (text.includes('heap') || text.includes('priority')) return 'heap';
+            return 'other';
+        }
+
         // ==================== ALGORITHM SECTION CHECKBOXES ====================
         function initAlgoSectionCheckboxes() {
             const algoSection = document.getElementById('google-541-by-algorithm');
@@ -30677,6 +31109,36 @@ class Solution:
                 link.parentNode.insertBefore(wrapper, link);
                 wrapper.appendChild(checkbox);
                 wrapper.appendChild(link);
+
+                // Add tooltip hint button + popup (pure CSS hover - no JS needed)
+                const hintData = PROBLEM_HINTS[slug];
+                const category = getCategoryForLink(link);
+                const fallback = CATEGORY_FALLBACKS[category] || CATEGORY_FALLBACKS['other'];
+                const data = hintData || fallback;
+                
+                const safeAlgo = escapeHtml(data[0]);
+                const safeHint = escapeHtml(data[1]);
+                const safeCode = escapeHtml(data[2]);
+
+                // Create hint button (sibling approach for CSS hover)
+                const hintBtn = document.createElement('span');
+                hintBtn.className = 'algo-hint-btn';
+                hintBtn.textContent = '💡';
+                hintBtn.setAttribute('tabindex', '0');
+                hintBtn.title = 'Hover for hint';
+                wrapper.appendChild(hintBtn);
+
+                // Create tooltip box (must be next sibling of button for CSS + selector)
+                const tooltipBox = document.createElement('div');
+                tooltipBox.className = 'algo-tooltip-box';
+                tooltipBox.innerHTML = 
+                    '<div class="algo-tt-lbl">Algorithm</div>' +
+                    '<div class="algo-tt-algo">' + safeAlgo + '</div>' +
+                    '<div class="algo-tt-lbl">Approach</div>' +
+                    '<div class="algo-tt-hint">' + safeHint + '</div>' +
+                    '<div class="algo-tt-lbl">Key Code</div>' +
+                    '<pre class="algo-tt-code">' + safeCode + '</pre>';
+                wrapper.appendChild(tooltipBox);
             });
             
             // Update category badge counts

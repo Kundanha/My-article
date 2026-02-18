@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "2.2",
-    "lastUpdated": "2026-02-12T12:45:02.212Z",
+    "lastUpdated": "2026-02-12T17:39:23.805Z",
     "description": "Progress tracker for System Design, DSA, Reel Scripts & Three Months Plan learning materials - Individual concept tracking"
   },
   "summary": {
@@ -13,8 +13,8 @@
     },
     "dsa": {
       "totalProblems": 17,
-      "completedProblems": 9,
-      "percentage": 53
+      "completedProblems": 8,
+      "percentage": 47
     },
     "scripts": {
       "totalScripts": 12,
@@ -28,7 +28,7 @@
     },
     "ultimateGoogle": {
       "totalProblems": 541,
-      "completedProblems": 9,
+      "completedProblems": 10,
       "percentage": 2
     },
     "bytebytego": {
@@ -706,8 +706,8 @@
             "name": "Contains Duplicate",
             "difficulty": "Easy",
             "leetcode": 217,
-            "completed": true,
-            "completedAt": "2026-02-12T09:31:05.633Z"
+            "completed": false,
+            "completedAt": null
           },
           "valid-anagram": {
             "id": "valid-anagram",
@@ -884,8 +884,8 @@
       },
       "ug-longest-substring-without-repeating-characters": {
         "id": "ug-longest-substring-without-repeating-characters",
-        "completed": false,
-        "completedAt": null
+        "completed": true,
+        "completedAt": "2026-02-12T16:36:44.937Z"
       },
       "ug-duplicate-zeros": {
         "id": "ug-duplicate-zeros",
